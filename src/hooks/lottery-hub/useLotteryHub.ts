@@ -17,7 +17,7 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  // Refs para evitar conexiones duplicadas en React 18 Strict Mode
+  // Refs para evitar conexiones duplicadas
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(false);
@@ -117,28 +117,11 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
 
   // ========== MÉTODOS DEL HUB ==========
 
-  const reserveNumber = useCallback(
-    async (number: number, quantity: number = 1) => {
-      const connection = connectionRef.current;
-
-      if (connection?.state !== signalR.HubConnectionState.Connected) {
-        setError('No hay conexión con el servidor');
-        return;
-      }
-
-      try {
-        setError(null);
-        await connection.invoke('ReserveNumber', lotteryId, number, quantity);
-      } catch (e) {
-        console.error('Error en ReserveNumber:', e);
-        setError('Error al reservar el número');
-      }
-    },
-    [lotteryId]
-  );
-
   /**
-   * Reservar números Y crear/agregar a orden automáticamente (RECOMENDADO)
+   * Reservar números Y crear/agregar a orden automáticamente (MÉTODO PRINCIPAL)
+   * NOTA: El método ReserveNumber individual NO existe en el backend.
+   * Use siempre ReserveNumbersWithOrder.
+   *
    * @param items - Lista de items del carrito (número y cantidad de series)
    * @param existingOrderId - (Opcional) ID de orden existente para agregar números
    */
@@ -166,6 +149,20 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
       }
     },
     [lotteryId]
+  );
+
+  /**
+   * Reservar un solo número (wrapper de ReserveNumbersWithOrder)
+   * @param number - El número a reservar
+   * @param quantity - Cantidad de series a reservar (default: 1)
+   * @param existingOrderId - (Opcional) ID de orden existente
+   */
+  const reserveNumber = useCallback(
+    async (number: number, quantity: number = 1, existingOrderId?: string) => {
+      const items: CartItemDto[] = [{ number, quantity }];
+      await reserveNumbersWithOrder(items, existingOrderId);
+    },
+    [reserveNumbersWithOrder]
   );
 
   const clearError = useCallback(() => {

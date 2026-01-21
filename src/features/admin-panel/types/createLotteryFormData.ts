@@ -5,7 +5,6 @@ export const initialFormData: CreateLotteryRequest = {
   description: '',
   minNumber: 1,
   maxNumber: 49,
-  totalSeries: 1,
   ticketPrice: 0,
   maxTickets: 1000,
   startDate: '',

@@ -13,8 +13,9 @@ export interface AvailableNumberDto {
 }
 
 export interface NumberReservationDto {
-  numberId: string;
-  lotteryId: string;
+  numberId: number;
+  lotteryNumberGuid: string;
+  lotteryGuid: string;
   number: number;
   series: number;
   reservationExpiresAt: string;
@@ -22,7 +23,8 @@ export interface NumberReservationDto {
 }
 
 export interface NumberStatusDto {
-  numberId: string;
+  numberId: number;
+  lotteryNumberGuid: string;
   number: number;
   series: number;
   status: NumberStatus;
@@ -30,7 +32,7 @@ export interface NumberStatusDto {
 
 export interface ReservationWithOrderDto {
   orderId: string;
-  lotteryId: string;
+  lotteryGuid: string;
   totalAmount: number;
   ticketPrice: number;
   expiresAt: string;

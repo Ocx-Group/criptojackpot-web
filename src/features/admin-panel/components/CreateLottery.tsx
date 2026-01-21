@@ -94,6 +94,45 @@ const CreateLottery: React.FC = () => {
                 />
               </div>
 
+              {/* Número Mínimo y Máximo */}
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.minNumber', 'Número Mínimo')} <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="minNumber"
+                  className="form-control"
+                  value={formData.minNumber}
+                  onChange={handleInputChange}
+                  placeholder="1"
+                  min="0"
+                  required
+                />
+                <div className="form-text">
+                  {t('LOTTERIES_ADMIN.help.minNumber', 'El número más bajo disponible en la lotería')}
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.maxNumber', 'Número Máximo')} <span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="maxNumber"
+                  className="form-control"
+                  value={formData.maxNumber}
+                  onChange={handleInputChange}
+                  placeholder="49"
+                  min="1"
+                  required
+                />
+                <div className="form-text">
+                  {t('LOTTERIES_ADMIN.help.maxNumber', 'El número más alto disponible en la lotería')}
+                </div>
+              </div>
+
               {/* Premio Asociado */}
               <div className="col-md-12">
                 <label className="form-label fw-semibold">

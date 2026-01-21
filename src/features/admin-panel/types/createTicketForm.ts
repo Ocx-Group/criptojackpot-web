@@ -16,7 +16,6 @@ export interface CreateTicketFormData {
   // Campos adicionales para lottery
   minNumber: number;
   maxNumber: number;
-  totalSeries: number;
   terms: string;
   type: LotteryType;
   hasAgeRestriction: boolean;

@@ -37,7 +37,6 @@ export interface CreateLotteryRequest {
   description: string;
   minNumber: number;
   maxNumber: number;
-  totalSeries: number;
   ticketPrice: number;
   maxTickets: number;
   startDate: string;

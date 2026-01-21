@@ -28,33 +28,42 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
   const { setAvailableNumbers, setReservations, setError, setIsConnected, setCurrentOrder } = callbacks;
 
   // Recibir números disponibles al unirse
-  connection.on('ReceiveAvailableNumbers', (_lotId: string, numbers: AvailableNumberDto[]) => {
+  connection.on('ReceiveAvailableNumbers', (_lotteryGuid: string, numbers: AvailableNumberDto[]) => {
     setAvailableNumbers(numbers);
   });
 
   // Número reservado (individual)
-  connection.on('NumberReserved', (_lotId: string, _numberId: string, number: number, series: number) => {
-    setAvailableNumbers(prev => updateNumberOnReserve(prev, number));
-    console.log(`El servidor asignó la serie ${series} para el número ${number}`);
-  });
+  connection.on(
+    'NumberReserved',
+    (_lotteryGuid: string, _numberId: number, _numberGuid: string, number: number, series: number) => {
+      setAvailableNumbers(prev => updateNumberOnReserve(prev, number));
+      console.log(`El servidor asignó la serie ${series} para el número ${number}`);
+    }
+  );
 
   // Número liberado (individual)
-  connection.on('NumberReleased', (_lotId: string, _numberId: string, number: number) => {
-    setAvailableNumbers(prev => updateNumberOnRelease(prev, number));
-  });
+  connection.on(
+    'NumberReleased',
+    (_lotteryGuid: string, _numberId: number, _numberGuid: string, number: number, _series: number) => {
+      setAvailableNumbers(prev => updateNumberOnRelease(prev, number));
+    }
+  );
 
   // Número vendido (individual)
-  connection.on('NumberSold', (_lotId: string, _numberId: string, number: number) => {
-    setAvailableNumbers(prev => updateNumberOnSold(prev, number));
-  });
+  connection.on(
+    'NumberSold',
+    (_lotteryGuid: string, _numberId: number, _numberGuid: string, number: number, _series: number) => {
+      setAvailableNumbers(prev => updateNumberOnSold(prev, number));
+    }
+  );
 
   // Múltiples números liberados
-  connection.on('NumbersReleased', (_lotId: string, numbers: NumberStatusDto[]) => {
+  connection.on('NumbersReleased', (_lotteryGuid: string, numbers: NumberStatusDto[]) => {
     setAvailableNumbers(prev => updateNumbersOnBulkRelease(prev, numbers));
   });
 
   // Múltiples números vendidos
-  connection.on('NumbersSold', (_lotId: string, numbers: NumberStatusDto[]) => {
+  connection.on('NumbersSold', (_lotteryGuid: string, numbers: NumberStatusDto[]) => {
     setAvailableNumbers(prev => updateNumbersOnBulkSold(prev, numbers));
   });
 
