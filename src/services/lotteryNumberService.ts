@@ -15,21 +15,6 @@ interface CheckNumberResponse {
   series: string;
 }
 
-interface ReserveNumbersRequest {
-  numbers: Array<{
-    number: number;
-    series: string;
-  }>;
-}
-
-interface ReserveNumbersResponse {
-  ticketId: string;
-  reservedNumbers: Array<{
-    number: number;
-    series: string;
-  }>;
-}
-
 interface NumberStatsResponse {
   lotteryId: string;
   totalNumbers: number;
@@ -70,14 +55,6 @@ class LotteryNumberService extends BaseService {
       path: `${lotteryId}/check`,
       params: { number: number.toString(), series },
     }) as any;
-  }
-
-  /**
-   * Reservar números para una lotería
-   * POST /api/v1/lottery-numbers/{lotteryId}/reserve
-   */
-  async reserveNumbers(lotteryId: string, request: ReserveNumbersRequest): Promise<ReserveNumbersResponse> {
-    return this.create<ReserveNumbersRequest, ReserveNumbersResponse>(request, `${lotteryId}/reserve`);
   }
 
   /**

@@ -79,6 +79,8 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
 
   // ✨ NUEVO: Confirmación de reserva con información de orden
   connection.on('ReservationWithOrderConfirmed', (reservationWithOrder: ReservationWithOrderDto) => {
+    console.log('📥 ReservationWithOrderConfirmed recibido:', reservationWithOrder);
+
     // Agregar las reservaciones al estado
     setReservations(prev => [...prev, ...reservationWithOrder.reservations]);
 
@@ -96,7 +98,7 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
       return reservationWithOrder;
     });
 
-    console.log(`Orden ${reservationWithOrder.orderId} - Total: $${reservationWithOrder.totalAmount}`);
+    console.log(`✅ Orden ${reservationWithOrder.orderId} - Total: $${reservationWithOrder.totalAmount}`);
   });
 
   // Error del servidor

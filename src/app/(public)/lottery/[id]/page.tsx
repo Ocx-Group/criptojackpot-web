@@ -386,8 +386,8 @@ const LotteryDetailsPage = () => {
   const ticketQuantity = selectedEntries.reduce((sum, [, qty]) => sum + qty, 0);
   const totalPrice = (lottery.ticketPrice * ticketQuantity).toFixed(2);
 
-  // Generar números del 00 al 99
-  const allNumbers = Array.from({ length: 100 }, (_, i) => i);
+  // Generar números según el rango de la lotería (minNumber a maxNumber)
+  const allNumbers = Array.from({ length: lottery.maxNumber - lottery.minNumber + 1 }, (_, i) => lottery.minNumber + i);
 
   return (
     <div>

@@ -70,9 +70,10 @@
 | ----------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | GET         | `/api/v1/lottery-numbers/{lotteryId}/available?count=10`          | `lotteryNumberService.getAvailableNumbers(lotteryId, count)`              | [lotteryNumberService.ts](src/services/lotteryNumberService.ts) |
 | GET         | `/api/v1/lottery-numbers/{lotteryId}/check?number={n}&series={s}` | `lotteryNumberService.checkNumberAvailability(lotteryId, number, series)` | [lotteryNumberService.ts](src/services/lotteryNumberService.ts) |
-| POST        | `/api/v1/lottery-numbers/{lotteryId}/reserve`                     | `lotteryNumberService.reserveNumbers(lotteryId, request)`                 | [lotteryNumberService.ts](src/services/lotteryNumberService.ts) |
 | DELETE      | `/api/v1/lottery-numbers/release/{ticketId}`                      | `lotteryNumberService.releaseNumbers(ticketId)`                           | [lotteryNumberService.ts](src/services/lotteryNumberService.ts) |
 | GET         | `/api/v1/lottery-numbers/{lotteryId}/stats`                       | `lotteryNumberService.getNumberStats(lotteryId)`                          | [lotteryNumberService.ts](src/services/lotteryNumberService.ts) |
+
+> **Nota:** La reserva de números se realiza via SignalR (`ReserveNumbersWithOrder`) en lugar de REST.
 
 ---
 
@@ -97,13 +98,9 @@ const lotteryNumberService = getLotteryNumberService();
 // Ejemplo: Obtener usuario
 const user = await userService.getUserById(123);
 
-// Ejemplo: Reservar números de lotería
-const result = await lotteryNumberService.reserveNumbers('lottery-123', {
-  numbers: [
-    { number: 42, series: 'A' },
-    { number: 15, series: 'B' },
-  ],
-});
+// Ejemplo: Reservar números de lotería (via SignalR)
+// La reserva se hace a través del hook useLotteryHub:
+// await reserveNumbersWithOrder([{ number: 42, quantity: 1 }], existingOrderId);
 ```
 
 ---
