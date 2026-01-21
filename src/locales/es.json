@@ -384,5 +384,23 @@
       "invalidImageType": "Formato de imagen no válido. Use JPG, PNG o WEBP",
       "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB"
     }
+  },
+  "CART": {
+    "title": "Carrito de Compras",
+    "empty": "Tu carrito está vacío",
+    "removeItem": "Eliminar",
+    "ticket": "ticket",
+    "tickets": "tickets",
+    "reserved": "Reservado",
+    "reservationMessage": "Los números se reservan por 5 minutos",
+    "total": "Total",
+    "checkout": "Proceder al Pago",
+    "clearCart": "Vaciar Carrito",
+    "addedSuccess": "Agregado al carrito",
+    "itemExpired": "El tiempo de reserva ha expirado",
+    "reservationError": "Error al reservar números",
+    "noConnection": "No hay conexión con el servidor",
+    "numbersReserved": "Números reservados por 5 minutos",
+    "tryAgain": "Intenta nuevamente"
   }
 }

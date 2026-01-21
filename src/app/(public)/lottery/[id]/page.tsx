@@ -36,6 +36,9 @@ import Jewellery1Footer from '@/components/landing-jewellery1/Jewellery1Footer';
 import MotionFade from '@/components/motionEffect/MotionFade';
 import { useLotteryHub } from '@/hooks/lottery-hub';
 import { useAuthStore } from '@/store/authStore';
+import { useCartStore } from '@/store/cartStore';
+import { CartSidebar, CartButton } from '@/components/cart';
+import { useNotificationStore } from '@/store/notificationStore';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -54,16 +57,25 @@ const LotteryDetailsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<Record<number, number>>({});
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
+  // Cart store
+  const { addItem: addCartItem, setIsOpen: setCartOpen } = useCartStore();
+  const showNotification = useNotificationStore(state => state.show);
+
   // Conexión WebSocket al LotteryHub (solo si hay token)
   const {
     availableNumbers,
     reservations,
+    currentOrder,
     error: hubError,
     isConnected,
-    reserveNumber: _reserveNumber, // Para uso futuro en el flujo de compra
+    reserveNumbersWithOrder,
     clearError,
     clearReservations: _clearReservations, // Para uso futuro
+    clearCurrentOrder: _clearCurrentOrder, // Para uso futuro
   } = useLotteryHub(lotteryId, token || '');
+
+  // Estado de carga para reservas
+  const [isReserving, setIsReserving] = useState(false);
 
   // Log de conexión WebSocket para debug
   useEffect(() => {
@@ -146,8 +158,23 @@ const LotteryDetailsPage = () => {
     }
   };
 
+  // Obtener series disponibles para un número
+  const getAvailableSeries = (num: number): number => {
+    const hubNumber = availableNumbers.find(n => n.number === num);
+    // Si hay info del hub, usar availableSeries; sino, usar totalSeries de la lotería
+    return hubNumber?.availableSeries ?? lottery?.totalSeries ?? 1;
+  };
+
   // Manejar click en número (toggle selección)
   const handleNumberClick = (num: number) => {
+    const available = getAvailableSeries(num);
+
+    // Si no hay series disponibles, no permitir seleccionar
+    if (available <= 0) {
+      showNotification('warning', t('LOTTERY_DETAILS.noSeriesAvailable', 'No hay series disponibles'), '');
+      return;
+    }
+
     setSelectedNumbers(prev => {
       const newState = { ...prev };
       if (newState[num]) {
@@ -161,9 +188,24 @@ const LotteryDetailsPage = () => {
 
   // Aumentar cantidad de un número
   const increaseQuantity = (num: number) => {
+    const available = getAvailableSeries(num);
+    const current = selectedNumbers[num] || 0;
+
+    // Validar que no exceda las series disponibles
+    if (current >= available) {
+      showNotification(
+        'warning',
+        t('LOTTERY_DETAILS.maxSeriesReached', 'Límite alcanzado'),
+        t('LOTTERY_DETAILS.onlyXSeriesAvailable', 'Solo hay {{count}} series disponibles para este número', {
+          count: available,
+        })
+      );
+      return;
+    }
+
     setSelectedNumbers(prev => ({
       ...prev,
-      [num]: (prev[num] || 0) + 1,
+      [num]: current + 1,
     }));
   };
 
@@ -192,6 +234,69 @@ const LotteryDetailsPage = () => {
   // Limpiar selección
   const clearSelection = () => {
     setSelectedNumbers({});
+  };
+
+  // Agregar al carrito y reservar números via SignalR
+  const handleAddToCart = async () => {
+    if (!lottery || ticketQuantity === 0) return;
+
+    // Verificar conexión al hub
+    if (!isConnected) {
+      showNotification(
+        'error',
+        t('CART.reservationError', 'Error al reservar'),
+        t('CART.noConnection', 'No hay conexión con el servidor')
+      );
+      return;
+    }
+
+    const numbers = Object.entries(selectedNumbers).map(([num, qty]) => ({
+      number: Number(num),
+      quantity: qty,
+    }));
+
+    setIsReserving(true);
+
+    try {
+      // Usar el orderId existente si hay una orden en progreso
+      const existingOrderId = currentOrder?.orderId;
+
+      // Reservar todos los números de una sola vez via SignalR
+      await reserveNumbersWithOrder(numbers, existingOrderId);
+
+      // Si la reserva fue exitosa, agregar al carrito
+      addCartItem({
+        lotteryId: lottery.lotteryGuid,
+        lotteryName: lottery.title,
+        lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
+        ticketPrice: lottery.ticketPrice,
+        numbers,
+      });
+
+      // Limpiar selección y mostrar notificación
+      clearSelection();
+      showNotification(
+        'success',
+        t('CART.addedSuccess', 'Agregado al carrito'),
+        t('CART.numbersReserved', 'Números reservados por 5 minutos')
+      );
+      setCartOpen(true);
+    } catch (error) {
+      console.error('Error al reservar números:', error);
+      showNotification(
+        'error',
+        t('CART.reservationError', 'Error al reservar'),
+        t('CART.tryAgain', 'Intenta nuevamente')
+      );
+    } finally {
+      setIsReserving(false);
+    }
+  };
+
+  // Comprar ahora (agregar y abrir carrito)
+  const handleBuyNow = () => {
+    handleAddToCart();
+    // Aquí podrías redirigir al checkout directamente
   };
 
   // Formatear número con dos dígitos
@@ -708,41 +813,60 @@ const LotteryDetailsPage = () => {
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             {selectedEntries
                               .toSorted(([a], [b]) => Number(a) - Number(b))
-                              .map(([num, qty]) => (
-                                <div
-                                  key={num}
-                                  className="d-flex align-items-center justify-content-between"
-                                  style={{ fontSize: '12px' }}
-                                >
-                                  <span className="fw_700 act4-clr">{formatNumber(Number(num))}</span>
-                                  <div className="d-flex align-items-center gap-1">
-                                    <button
-                                      className="btn p-0 n4-clr"
-                                      onClick={() => decreaseQuantity(Number(num))}
-                                      style={{ width: '20px', height: '20px', fontSize: '14px', lineHeight: 1 }}
-                                    >
-                                      −
-                                    </button>
-                                    <span className="fw_600 n4-clr" style={{ minWidth: '20px', textAlign: 'center' }}>
-                                      {qty}
-                                    </span>
-                                    <button
-                                      className="btn p-0 n4-clr"
-                                      onClick={() => increaseQuantity(Number(num))}
-                                      style={{ width: '20px', height: '20px', fontSize: '14px', lineHeight: 1 }}
-                                    >
-                                      +
-                                    </button>
-                                    <button
-                                      className="btn p-0 n3-clr ms-1"
-                                      onClick={() => removeNumber(Number(num))}
-                                      style={{ width: '20px', height: '20px', fontSize: '12px', lineHeight: 1 }}
-                                    >
-                                      ✕
-                                    </button>
+                              .map(([num, qty]) => {
+                                const available = getAvailableSeries(Number(num));
+                                const isAtMax = qty >= available;
+
+                                return (
+                                  <div
+                                    key={num}
+                                    className="d-flex align-items-center justify-content-between"
+                                    style={{ fontSize: '12px' }}
+                                  >
+                                    <div className="d-flex align-items-center gap-2">
+                                      <span className="fw_700 act4-clr">{formatNumber(Number(num))}</span>
+                                      <span className="text-muted" style={{ fontSize: '10px' }}>
+                                        ({qty}/{available})
+                                      </span>
+                                    </div>
+                                    <div className="d-flex align-items-center gap-1">
+                                      <button
+                                        className="btn p-0 n4-clr"
+                                        onClick={() => decreaseQuantity(Number(num))}
+                                        style={{ width: '20px', height: '20px', fontSize: '14px', lineHeight: 1 }}
+                                      >
+                                        −
+                                      </button>
+                                      <span className="fw_600 n4-clr" style={{ minWidth: '20px', textAlign: 'center' }}>
+                                        {qty}
+                                      </span>
+                                      <button
+                                        className="btn p-0"
+                                        onClick={() => increaseQuantity(Number(num))}
+                                        disabled={isAtMax}
+                                        style={{
+                                          width: '20px',
+                                          height: '20px',
+                                          fontSize: '14px',
+                                          lineHeight: 1,
+                                          opacity: isAtMax ? 0.3 : 1,
+                                          cursor: isAtMax ? 'not-allowed' : 'pointer',
+                                        }}
+                                        title={isAtMax ? t('LOTTERY_DETAILS.maxSeriesReached', 'Límite alcanzado') : ''}
+                                      >
+                                        +
+                                      </button>
+                                      <button
+                                        className="btn p-0 n3-clr ms-1"
+                                        onClick={() => removeNumber(Number(num))}
+                                        style={{ width: '20px', height: '20px', fontSize: '12px', lineHeight: 1 }}
+                                      >
+                                        ✕
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
+                                );
+                              })}
                           </div>
                         </div>
                       )}
@@ -770,24 +894,63 @@ const LotteryDetailsPage = () => {
                     {/* Buy Button */}
                     <button
                       className="kewta-btn d-flex align-items-center justify-content-center w-100 mb-3"
-                      disabled={lottery.status !== LotteryStatus.Active || remaining === 0 || ticketQuantity === 0}
+                      disabled={
+                        lottery.status !== LotteryStatus.Active ||
+                        remaining === 0 ||
+                        ticketQuantity === 0 ||
+                        isReserving ||
+                        !isConnected
+                      }
+                      onClick={handleBuyNow}
                     >
                       <span className="kew-text act4-bg n0-clr d-flex align-items-center justify-content-center gap-2 w-100">
-                        <ShoppingCartIcon className="fs-five" weight="bold" />
-                        {t('LOTTERY_DETAILS.buyNow', 'Comprar Ahora')}
+                        {isReserving ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                            {t('LOTTERY_DETAILS.reserving', 'Reservando...')}
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingCartIcon className="fs-five" weight="bold" />
+                            {t('LOTTERY_DETAILS.buyNow', 'Comprar Ahora')}
+                          </>
+                        )}
                       </span>
                     </button>
 
                     {/* Add to Cart Button */}
                     <button
                       className="kewta-btn d-flex align-items-center justify-content-center w-100"
-                      disabled={lottery.status !== LotteryStatus.Active || remaining === 0}
+                      disabled={
+                        lottery.status !== LotteryStatus.Active ||
+                        remaining === 0 ||
+                        ticketQuantity === 0 ||
+                        isReserving ||
+                        !isConnected
+                      }
+                      onClick={handleAddToCart}
                     >
                       <span className="kew-text n0-bg n4-clr border d-flex align-items-center justify-content-center gap-2 w-100">
-                        <TagIcon className="fs-five" weight="bold" />
-                        {t('LOTTERY_DETAILS.addToCart', 'Agregar al Carrito')}
+                        {isReserving ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                            {t('LOTTERY_DETAILS.reserving', 'Reservando...')}
+                          </>
+                        ) : (
+                          <>
+                            <TagIcon className="fs-five" weight="bold" />
+                            {t('LOTTERY_DETAILS.addToCart', 'Agregar al Carrito')}
+                          </>
+                        )}
                       </span>
                     </button>
+
+                    {/* Connection Warning */}
+                    {!isConnected && token && (
+                      <div className="alert alert-warning mt-3 py-2 text-center" style={{ fontSize: '12px' }}>
+                        {t('LOTTERY_DETAILS.connecting', 'Conectando al servidor...')}
+                      </div>
+                    )}
 
                     {/* Sold Out Message */}
                     {remaining === 0 && (
@@ -812,6 +975,10 @@ const LotteryDetailsPage = () => {
       </section>
 
       <Jewellery1Footer />
+
+      {/* Carrito de compras */}
+      <CartButton />
+      <CartSidebar />
     </div>
   );
 };

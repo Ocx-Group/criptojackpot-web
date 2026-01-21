@@ -1,6 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import * as signalR from '@microsoft/signalr';
-import { AvailableNumberDto, NumberReservationDto } from '@/interfaces/lotteryHub';
+import {
+  AvailableNumberDto,
+  CartItemDto,
+  NumberReservationDto,
+  ReservationWithOrderDto,
+} from '@/interfaces/lotteryHub';
 import { createHubConnection, startConnection, stopConnection } from './connectionFactory';
 import { registerHubEventHandlers, unregisterHubEventHandlers } from './hubEventHandlers';
 import type { LotteryHubReturn } from './types';
@@ -8,15 +13,41 @@ import type { LotteryHubReturn } from './types';
 export const useLotteryHub = (lotteryId: string, token: string): LotteryHubReturn => {
   const [availableNumbers, setAvailableNumbers] = useState<AvailableNumberDto[]>([]);
   const [reservations, setReservations] = useState<NumberReservationDto[]>([]);
+  const [currentOrder, setCurrentOrder] = useState<ReservationWithOrderDto | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+
+  // Refs para evitar conexiones duplicadas en React 18 Strict Mode
   const connectionRef = useRef<signalR.HubConnection | null>(null);
+  const isConnectingRef = useRef(false);
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
+    // Marcar como montado
+    isMountedRef.current = true;
+
     // No conectar si no hay token o lotteryId
     if (!token || !lotteryId) {
       console.log('⚠️ LotteryHub: No hay token o lotteryId, omitiendo conexión');
       return;
+    }
+
+    // Evitar conexiones duplicadas
+    if (connectionRef.current?.state === signalR.HubConnectionState.Connected) {
+      console.log('✅ LotteryHub: Ya conectado, omitiendo reconexión');
+      return;
+    }
+
+    if (isConnectingRef.current) {
+      console.log('⏳ LotteryHub: Conexión en progreso, omitiendo');
+      return;
+    }
+
+    // Limpiar conexión anterior si existe (sabemos que no está Connected por el early return anterior)
+    if (connectionRef.current) {
+      console.log('🔄 LotteryHub: Limpiando conexión anterior con estado:', connectionRef.current.state);
+      unregisterHubEventHandlers(connectionRef.current);
+      connectionRef.current = null;
     }
 
     const connection = createHubConnection(token);
@@ -28,23 +59,44 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
       setReservations,
       setError,
       setIsConnected,
+      setCurrentOrder,
     });
 
     // Handler especial para reconexión (necesita lotteryId)
     connection.onreconnected(() => {
-      setIsConnected(true);
-      console.log('Reconectado a LotteryHub');
-      connection.invoke('JoinLottery', lotteryId).catch(console.error);
+      if (isMountedRef.current) {
+        setIsConnected(true);
+        console.log('🔄 Reconectado a LotteryHub');
+        connection.invoke('JoinLottery', lotteryId).catch(console.error);
+      }
+    });
+
+    connection.onclose(() => {
+      if (isMountedRef.current) {
+        setIsConnected(false);
+        console.log('❌ Desconectado de LotteryHub');
+      }
     });
 
     // Iniciar conexión
     const initConnection = async () => {
+      if (!isMountedRef.current) return;
+
+      isConnectingRef.current = true;
+
       try {
         await startConnection(connection, lotteryId);
-        setIsConnected(true);
+        if (isMountedRef.current) {
+          setIsConnected(true);
+          console.log('✅ Conectado a LotteryHub');
+        }
       } catch (err) {
-        console.error('Error al iniciar conexión SignalR:', err);
-        setError('Error al conectar con el servidor');
+        console.error('❌ Error al iniciar conexión SignalR:', err);
+        if (isMountedRef.current) {
+          setError('Error al conectar con el servidor');
+        }
+      } finally {
+        isConnectingRef.current = false;
       }
     };
 
@@ -52,8 +104,14 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
 
     // Cleanup
     return () => {
-      unregisterHubEventHandlers(connection);
-      stopConnection(connection, lotteryId);
+      isMountedRef.current = false;
+
+      if (connectionRef.current) {
+        console.log('🧹 LotteryHub: Limpiando conexión en cleanup');
+        unregisterHubEventHandlers(connectionRef.current);
+        stopConnection(connectionRef.current, lotteryId);
+        connectionRef.current = null;
+      }
     };
   }, [token, lotteryId]);
 
@@ -79,6 +137,37 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
     [lotteryId]
   );
 
+  /**
+   * Reservar números Y crear/agregar a orden automáticamente (RECOMENDADO)
+   * @param items - Lista de items del carrito (número y cantidad de series)
+   * @param existingOrderId - (Opcional) ID de orden existente para agregar números
+   */
+  const reserveNumbersWithOrder = useCallback(
+    async (items: CartItemDto[], existingOrderId?: string) => {
+      const connection = connectionRef.current;
+
+      if (connection?.state !== signalR.HubConnectionState.Connected) {
+        setError('No hay conexión con el servidor');
+        return;
+      }
+
+      if (!items || items.length === 0) {
+        setError('Debe seleccionar al menos un número');
+        return;
+      }
+
+      try {
+        setError(null);
+        await connection.invoke('ReserveNumbersWithOrder', lotteryId, items, existingOrderId ?? null);
+      } catch (e) {
+        console.error('Error en ReserveNumbersWithOrder:', e);
+        setError('Error al reservar los números');
+        throw e;
+      }
+    },
+    [lotteryId]
+  );
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
@@ -87,13 +176,20 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
     setReservations([]);
   }, []);
 
+  const clearCurrentOrder = useCallback(() => {
+    setCurrentOrder(null);
+  }, []);
+
   return {
     availableNumbers,
     reservations,
+    currentOrder,
     error,
     isConnected,
     reserveNumber,
+    reserveNumbersWithOrder,
     clearError,
     clearReservations,
+    clearCurrentOrder,
   };
 };

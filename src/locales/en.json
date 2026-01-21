@@ -384,5 +384,23 @@
       "invalidImageType": "Invalid image format. Use JPG, PNG or WEBP",
       "imageTooLarge": "Image is too large. Maximum 5MB"
     }
+  },
+  "CART": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "removeItem": "Remove",
+    "ticket": "ticket",
+    "tickets": "tickets",
+    "reserved": "Reserved",
+    "reservationMessage": "Numbers are reserved for 5 minutes",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "clearCart": "Clear Cart",
+    "addedSuccess": "Added to cart",
+    "itemExpired": "Reservation time has expired",
+    "reservationError": "Error reserving numbers",
+    "noConnection": "No connection to the server",
+    "numbersReserved": "Numbers reserved for 5 minutes",
+    "tryAgain": "Please try again"
   }
 }

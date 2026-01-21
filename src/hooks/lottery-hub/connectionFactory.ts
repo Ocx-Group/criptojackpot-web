@@ -1,7 +1,7 @@
 import * as signalR from '@microsoft/signalr';
 
 const getHubUrl = (): string => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5020';
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
   // Remover /api si existe al final para construir la URL del hub
   const cleanBaseUrl = baseUrl.replace(/\/api\/?$/, '');
   return `${cleanBaseUrl}/hubs/lottery`;

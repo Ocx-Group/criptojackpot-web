@@ -27,3 +27,19 @@ export interface NumberStatusDto {
   series: number;
   status: NumberStatus;
 }
+
+export interface ReservationWithOrderDto {
+  orderId: string;
+  lotteryId: string;
+  totalAmount: number;
+  ticketPrice: number;
+  expiresAt: string;
+  secondsRemaining: number;
+  reservations: NumberReservationDto[];
+  addedToExistingOrder: boolean;
+}
+
+export interface CartItemDto {
+  number: number;
+  quantity: number;
+}

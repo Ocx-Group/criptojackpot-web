@@ -1,5 +1,10 @@
 import * as signalR from '@microsoft/signalr';
-import { AvailableNumberDto, NumberReservationDto, NumberStatusDto } from '@/interfaces/lotteryHub';
+import {
+  AvailableNumberDto,
+  NumberReservationDto,
+  NumberStatusDto,
+  ReservationWithOrderDto,
+} from '@/interfaces/lotteryHub';
 import {
   updateNumberOnReserve,
   updateNumberOnRelease,
@@ -13,13 +18,14 @@ export interface HubEventCallbacks {
   setReservations: React.Dispatch<React.SetStateAction<NumberReservationDto[]>>;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   setIsConnected: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentOrder: React.Dispatch<React.SetStateAction<ReservationWithOrderDto | null>>;
 }
 
 /**
  * Registra todos los event handlers del hub
  */
 export const registerHubEventHandlers = (connection: signalR.HubConnection, callbacks: HubEventCallbacks): void => {
-  const { setAvailableNumbers, setReservations, setError, setIsConnected } = callbacks;
+  const { setAvailableNumbers, setReservations, setError, setIsConnected, setCurrentOrder } = callbacks;
 
   // Recibir números disponibles al unirse
   connection.on('ReceiveAvailableNumbers', (_lotId: string, numbers: AvailableNumberDto[]) => {
@@ -62,6 +68,28 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
     setReservations(prev => [...prev, ...newReservations]);
   });
 
+  // ✨ NUEVO: Confirmación de reserva con información de orden
+  connection.on('ReservationWithOrderConfirmed', (reservationWithOrder: ReservationWithOrderDto) => {
+    // Agregar las reservaciones al estado
+    setReservations(prev => [...prev, ...reservationWithOrder.reservations]);
+
+    // Actualizar/crear la orden actual
+    setCurrentOrder(prev => {
+      if (prev && reservationWithOrder.addedToExistingOrder) {
+        // Si se agregó a una orden existente, acumular
+        return {
+          ...reservationWithOrder,
+          reservations: [...prev.reservations, ...reservationWithOrder.reservations],
+          totalAmount: prev.totalAmount + reservationWithOrder.totalAmount,
+        };
+      }
+      // Nueva orden
+      return reservationWithOrder;
+    });
+
+    console.log(`Orden ${reservationWithOrder.orderId} - Total: $${reservationWithOrder.totalAmount}`);
+  });
+
   // Error del servidor
   connection.on('ReceiveError', (message: string) => {
     setError(message);
@@ -97,6 +125,7 @@ export const unregisterHubEventHandlers = (connection: signalR.HubConnection): v
     'NumbersSold',
     'ReservationConfirmed',
     'ReservationsConfirmed',
+    'ReservationWithOrderConfirmed',
     'ReceiveError',
   ];
 
