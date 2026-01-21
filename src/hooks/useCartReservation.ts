@@ -34,7 +34,7 @@ export const useCartReservation = ({
   const {
     isConnected,
     error: hubError,
-    reserveNumber,
+    reserveNumbersWithOrder,
     clearError,
     reservations,
   } = useLotteryHub(lotteryId, token || '');
@@ -49,8 +49,8 @@ export const useCartReservation = ({
       pendingReservationsRef.current.forEach((itemId, _key) => {
         const item = items.find(i => i.id === itemId && !i.isReserved);
         if (item) {
-          // Extraer IDs de reservas
-          const reservationIds = reservations.filter(r => r.lotteryId === lotteryId).map(r => r.numberId);
+          // Extraer IDs de reservas (convertir a string para compatibilidad)
+          const reservationIds = reservations.filter(r => r.lotteryGuid === lotteryId).map(r => r.lotteryNumberGuid);
 
           if (reservationIds.length > 0) {
             markAsReserved(itemId, reservationIds);
@@ -102,10 +102,13 @@ export const useCartReservation = ({
         // Marcar como pendiente
         pendingReservationsRef.current.set(itemId, itemId);
 
-        // Reservar cada número del item
-        for (const numData of item.numbers) {
-          await reserveNumber(numData.number, numData.quantity);
-        }
+        // Enviar todos los números del item en una sola transacción
+        const numbersToReserve = item.numbers.map(numData => ({
+          number: numData.number,
+          quantity: numData.quantity,
+        }));
+
+        await reserveNumbersWithOrder(numbersToReserve);
 
         console.log('✅ Reservas enviadas para item:', itemId);
       } catch (error) {
@@ -114,7 +117,7 @@ export const useCartReservation = ({
         onReservationError?.(itemId, errorMessage);
       }
     },
-    [items, isConnected, reserveNumber, onReservationError]
+    [items, isConnected, reserveNumbersWithOrder, onReservationError]
   );
 
   return {

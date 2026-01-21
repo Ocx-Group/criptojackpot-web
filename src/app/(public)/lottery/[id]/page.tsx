@@ -22,7 +22,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -236,9 +236,56 @@ const LotteryDetailsPage = () => {
     setSelectedNumbers({});
   };
 
+  // Referencia para tracking de reservas pendientes
+  const pendingReservationRef = useRef<{
+    numbers: Array<{ number: number; quantity: number }>;
+    resolve: () => void;
+    reject: (error: Error) => void;
+  } | null>(null);
+
+  // Escuchar confirmación del hub para agregar al carrito
+  useEffect(() => {
+    if (currentOrder && pendingReservationRef.current && lottery) {
+      const { numbers, resolve } = pendingReservationRef.current;
+
+      // La orden fue confirmada, ahora sí agregar al carrito
+      addCartItem({
+        lotteryId: lottery.lotteryGuid,
+        lotteryName: lottery.title,
+        lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
+        ticketPrice: lottery.ticketPrice,
+        numbers,
+      });
+
+      // Limpiar selección y mostrar notificación
+      clearSelection();
+      showNotification(
+        'success',
+        t('CART.addedSuccess', 'Agregado al carrito'),
+        t('CART.numbersReserved', 'Números reservados por 5 minutos')
+      );
+      setCartOpen(true);
+      setIsReserving(false);
+
+      // Limpiar la referencia pendiente y resolver la promesa
+      pendingReservationRef.current = null;
+      resolve();
+    }
+  }, [currentOrder, lottery, addCartItem, showNotification, t, setCartOpen]);
+
   // Agregar al carrito y reservar números via SignalR
   const handleAddToCart = async () => {
     if (!lottery || ticketQuantity === 0) return;
+
+    // Verificar autenticación
+    if (!token) {
+      showNotification(
+        'warning',
+        t('AUTH.loginRequired', 'Inicio de sesión requerido'),
+        t('AUTH.loginToBuy', 'Inicie sesión para comprar boletos')
+      );
+      return;
+    }
 
     // Verificar conexión al hub
     if (!isConnected) {
@@ -261,34 +308,32 @@ const LotteryDetailsPage = () => {
       // Usar el orderId existente si hay una orden en progreso
       const existingOrderId = currentOrder?.orderId;
 
+      // Crear promesa que se resolverá cuando llegue la confirmación del hub
+      const reservationPromise = new Promise<void>((resolve, reject) => {
+        pendingReservationRef.current = { numbers, resolve, reject };
+
+        // Timeout de 30 segundos
+        setTimeout(() => {
+          if (pendingReservationRef.current) {
+            pendingReservationRef.current = null;
+            reject(new Error('Timeout esperando confirmación del servidor'));
+          }
+        }, 30000);
+      });
+
       // Reservar todos los números de una sola vez via SignalR
       await reserveNumbersWithOrder(numbers, existingOrderId);
 
-      // Si la reserva fue exitosa, agregar al carrito
-      addCartItem({
-        lotteryId: lottery.lotteryGuid,
-        lotteryName: lottery.title,
-        lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
-        ticketPrice: lottery.ticketPrice,
-        numbers,
-      });
-
-      // Limpiar selección y mostrar notificación
-      clearSelection();
-      showNotification(
-        'success',
-        t('CART.addedSuccess', 'Agregado al carrito'),
-        t('CART.numbersReserved', 'Números reservados por 5 minutos')
-      );
-      setCartOpen(true);
+      // Esperar la confirmación del servidor (evento ReservationWithOrderConfirmed)
+      await reservationPromise;
     } catch (error) {
       console.error('Error al reservar números:', error);
+      pendingReservationRef.current = null;
       showNotification(
         'error',
         t('CART.reservationError', 'Error al reservar'),
         t('CART.tryAgain', 'Intenta nuevamente')
       );
-    } finally {
       setIsReserving(false);
     }
   };
@@ -926,17 +971,25 @@ const LotteryDetailsPage = () => {
                         remaining === 0 ||
                         ticketQuantity === 0 ||
                         isReserving ||
+                        !token ||
                         !isConnected
                       }
                       onClick={handleAddToCart}
                     >
                       <span className="kew-text n0-bg n4-clr border d-flex align-items-center justify-content-center gap-2 w-100">
-                        {isReserving ? (
+                        {isReserving && (
                           <>
                             <span className="spinner-border spinner-border-sm" aria-hidden="true" />
                             {t('LOTTERY_DETAILS.reserving', 'Reservando...')}
                           </>
-                        ) : (
+                        )}
+                        {!isReserving && !token && (
+                          <>
+                            <TagIcon className="fs-five" weight="bold" />
+                            {t('AUTH.loginToBuy', 'Inicie sesión para comprar')}
+                          </>
+                        )}
+                        {!isReserving && token && (
                           <>
                             <TagIcon className="fs-five" weight="bold" />
                             {t('LOTTERY_DETAILS.addToCart', 'Agregar al Carrito')}
@@ -944,6 +997,16 @@ const LotteryDetailsPage = () => {
                         )}
                       </span>
                     </button>
+
+                    {/* Login Required Message */}
+                    {!token && (
+                      <div className="alert alert-info mt-3 py-2 text-center" style={{ fontSize: '12px' }}>
+                        <a href="/login" className="text-decoration-underline">
+                          {t('AUTH.loginRequired', 'Inicie sesión')}
+                        </a>{' '}
+                        {t('AUTH.toBuyTickets', 'para comprar boletos')}
+                      </div>
+                    )}
 
                     {/* Connection Warning */}
                     {!isConnected && token && (
