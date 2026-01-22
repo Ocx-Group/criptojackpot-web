@@ -275,10 +275,21 @@ const LotteryDetailsPage = () => {
 
   // Agregar al carrito y reservar números via SignalR
   const handleAddToCart = async () => {
-    if (!lottery || ticketQuantity === 0) return;
+    console.log('🛒 handleAddToCart called');
+
+    const selectedEntries = Object.entries(selectedNumbers);
+    const ticketQuantity = selectedEntries.reduce((sum, [, qty]) => sum + qty, 0);
+
+    console.log('📊 Selected numbers:', selectedNumbers, 'Quantity:', ticketQuantity);
+
+    if (!lottery || ticketQuantity === 0) {
+      console.log('⚠️ Early return: no lottery or ticketQuantity === 0');
+      return;
+    }
 
     // Verificar autenticación
     if (!token) {
+      console.log('⚠️ No token - showing login notification');
       showNotification(
         'warning',
         t('AUTH.loginRequired', 'Inicio de sesión requerido'),
@@ -289,6 +300,7 @@ const LotteryDetailsPage = () => {
 
     // Verificar conexión al hub
     if (!isConnected) {
+      console.log('⚠️ Not connected to hub');
       showNotification(
         'error',
         t('CART.reservationError', 'Error al reservar'),
@@ -297,16 +309,18 @@ const LotteryDetailsPage = () => {
       return;
     }
 
-    const numbers = Object.entries(selectedNumbers).map(([num, qty]) => ({
+    const numbers = selectedEntries.map(([num, qty]) => ({
       number: Number(num),
       quantity: qty,
     }));
 
+    console.log('📤 Numbers to reserve:', numbers);
     setIsReserving(true);
 
     try {
       // Usar el orderId existente si hay una orden en progreso
       const existingOrderId = currentOrder?.orderId;
+      console.log('📋 Existing order ID:', existingOrderId);
 
       // Crear promesa que se resolverá cuando llegue la confirmación del hub
       const reservationPromise = new Promise<void>((resolve, reject) => {
@@ -315,19 +329,23 @@ const LotteryDetailsPage = () => {
         // Timeout de 30 segundos
         setTimeout(() => {
           if (pendingReservationRef.current) {
+            console.log('⏰ Timeout waiting for server confirmation');
             pendingReservationRef.current = null;
             reject(new Error('Timeout esperando confirmación del servidor'));
           }
         }, 30000);
       });
 
+      console.log('🚀 Calling reserveNumbersWithOrder...');
       // Reservar todos los números de una sola vez via SignalR
       await reserveNumbersWithOrder(numbers, existingOrderId);
+      console.log('✅ reserveNumbersWithOrder completed, waiting for hub confirmation...');
 
       // Esperar la confirmación del servidor (evento ReservationWithOrderConfirmed)
       await reservationPromise;
+      console.log('🎉 Reservation confirmed by server!');
     } catch (error) {
-      console.error('Error al reservar números:', error);
+      console.error('❌ Error al reservar números:', error);
       pendingReservationRef.current = null;
       showNotification(
         'error',
@@ -433,6 +451,32 @@ const LotteryDetailsPage = () => {
 
   // Generar números según el rango de la lotería (minNumber a maxNumber)
   const allNumbers = Array.from({ length: lottery.maxNumber - lottery.minNumber + 1 }, (_, i) => lottery.minNumber + i);
+
+  // Debug: Estado del botón "Agregar al carrito"
+  const isAddToCartDisabled =
+    lottery.status !== LotteryStatus.Active ||
+    remaining === 0 ||
+    ticketQuantity === 0 ||
+    isReserving ||
+    !token ||
+    !isConnected;
+
+  console.log('🔘 Add to Cart button state:', {
+    isDisabled: isAddToCartDisabled,
+    reasons: {
+      notActive: lottery.status !== LotteryStatus.Active,
+      soldOut: remaining === 0,
+      noSelection: ticketQuantity === 0,
+      isReserving,
+      noToken: !token,
+      notConnected: !isConnected,
+    },
+    lotteryStatus: lottery.status,
+    remaining,
+    ticketQuantity,
+    token: token ? 'exists' : 'null',
+    isConnected,
+  });
 
   return (
     <div>
@@ -966,14 +1010,7 @@ const LotteryDetailsPage = () => {
                     {/* Add to Cart Button */}
                     <button
                       className="kewta-btn d-flex align-items-center justify-content-center w-100"
-                      disabled={
-                        lottery.status !== LotteryStatus.Active ||
-                        remaining === 0 ||
-                        ticketQuantity === 0 ||
-                        isReserving ||
-                        !token ||
-                        !isConnected
-                      }
+                      disabled={isAddToCartDisabled}
                       onClick={handleAddToCart}
                     >
                       <span className="kew-text n0-bg n4-clr border d-flex align-items-center justify-content-center gap-2 w-100">

@@ -130,28 +130,30 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
       const connection = connectionRef.current;
 
       if (connection?.state !== signalR.HubConnectionState.Connected) {
-        const error = 'No hay conexión con el servidor';
-        setError(error);
-        throw new Error(error);
+        const errorMsg = 'No hay conexión con el servidor';
+        setError(errorMsg);
+        console.error('❌ SignalR connection is not in the Connected state. Current state:', connection?.state);
+        throw new Error(errorMsg);
       }
 
       if (!items || items.length === 0) {
-        const error = 'Debe seleccionar al menos un número';
-        setError(error);
-        throw new Error(error);
+        const errorMsg = 'Debe seleccionar al menos un número';
+        setError(errorMsg);
+        console.error('❌ No items provided to reserve.');
+        throw new Error(errorMsg);
       }
 
       try {
         setError(null);
-        console.log('📤 Enviando ReserveNumbersWithOrder:', {
+        console.log('📤 Invoking ReserveNumbersWithOrder with:', {
           lotteryId,
           items,
           existingOrderId: existingOrderId ?? null,
         });
         await connection.invoke('ReserveNumbersWithOrder', lotteryId, items, existingOrderId ?? null);
-        console.log('✅ ReserveNumbersWithOrder completado');
+        console.log('✅ ReserveNumbersWithOrder invoked successfully. Waiting for server confirmation...');
       } catch (e) {
-        console.error('❌ Error en ReserveNumbersWithOrder:', e);
+        console.error('❌ Error in ReserveNumbersWithOrder:', e);
         setError('Error al reservar los números');
         throw e;
       }
