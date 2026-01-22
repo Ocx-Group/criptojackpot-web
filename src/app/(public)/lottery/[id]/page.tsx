@@ -280,8 +280,6 @@ const LotteryDetailsPage = () => {
     const selectedEntries = Object.entries(selectedNumbers);
     const ticketQuantity = selectedEntries.reduce((sum, [, qty]) => sum + qty, 0);
 
-    console.log('📊 Selected numbers:', selectedNumbers, 'Quantity:', ticketQuantity);
-
     if (!lottery || ticketQuantity === 0) {
       console.log('⚠️ Early return: no lottery or ticketQuantity === 0');
       return;

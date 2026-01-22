@@ -20,15 +20,16 @@
 
 // CSS Plugin import
 
-@import "./bootstrap.min.css";
+@import './bootstrap.min.css';
 // Scss main
-@import "main/variable";
-@import "main/mixins";
-@import "main/typography";
-@import "main/global";
-@import "main/banner";
+@import 'main/variable';
+@import 'main/mixins';
+@import 'main/typography';
+@import 'main/global';
+@import 'main/banner';
 
 // Scss Pages
-@import "pages/navbar";
-@import "pages/footer";
-@import "pages/section";
+@import 'pages/navbar';
+@import 'pages/footer';
+@import 'pages/section';
+@import 'checkout';

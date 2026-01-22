@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
 import { X, Trash2, Clock, ShoppingCart, CreditCard } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
+import { useCheckoutStore } from '@/store/checkoutStore';
 import { CartItem } from '@/interfaces/cart';
 
 /**
@@ -124,8 +126,10 @@ const CartItemCard: React.FC<{
  */
 const CartSidebar: React.FC = () => {
   const { t } = useTranslation();
+  const router = useRouter();
   const { items, isOpen, setIsOpen, removeItem, clearCart, clearExpiredItems, getTotalItems, getTotalPrice } =
     useCartStore();
+  const initCheckout = useCheckoutStore(state => state.initFromCart);
 
   // Limpiar items expirados al montar
   useEffect(() => {
@@ -137,6 +141,16 @@ const CartSidebar: React.FC = () => {
     removeItem(itemId);
     // Aquí podríamos mostrar una notificación
     console.log('⏰ Item expirado y removido:', itemId);
+  };
+
+  // Manejar ir al checkout
+  const handleGoToCheckout = () => {
+    // Inicializar el store de checkout con los items del carrito
+    initCheckout(items);
+    // Cerrar el sidebar
+    setIsOpen(false);
+    // Navegar al checkout
+    router.push('/checkout');
   };
 
   const totalItems = getTotalItems();
@@ -227,7 +241,10 @@ const CartSidebar: React.FC = () => {
             </div>
 
             {/* Botones de acción */}
-            <button className="btn w-100 act4-bg n0-clr fw-semibold py-2 mb-2 d-flex align-items-center justify-content-center gap-2">
+            <button
+              onClick={handleGoToCheckout}
+              className="btn w-100 act4-bg n0-clr fw-semibold py-2 mb-2 d-flex align-items-center justify-content-center gap-2"
+            >
               <CreditCard size={18} />
               {t('CART.checkout', 'Proceder al Pago')}
             </button>

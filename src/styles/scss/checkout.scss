@@ -1,0 +1,120 @@
+/* Checkout Styles */
+
+/* Animación de spin para loaders */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animación de pulse para timer crítico */
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Ticket card hover effect */
+.lottery-ticket-card:hover .ticket-container {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.lottery-ticket-card .ticket-container {
+  transition: all 0.3s ease;
+}
+
+/* Number badge hover */
+.number-badge {
+  transition: transform 0.2s ease;
+}
+
+.number-badge:hover {
+  transform: scale(1.05);
+}
+
+/* Payment option hover */
+.payment-option {
+  transition: all 0.2s ease !important;
+}
+
+.payment-option:hover:not(.payment-option--disabled) {
+  transform: translateX(4px);
+  border-color: rgba(var(--act4-rgb), 0.3) !important;
+}
+
+.payment-option--selected {
+  transform: translateX(4px);
+}
+
+/* Timer urgency animation */
+.checkout-timer--critical .timer-progress div {
+  animation: urgentPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes urgentPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Order summary animations */
+.order-item {
+  transition: background-color 0.2s ease;
+}
+
+.order-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Button loading state */
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Checkout page responsiveness */
+@media (max-width: 991px) {
+  .checkout-sidebar {
+    position: static !important;
+  }
+
+  .checkout-header .checkout-timer {
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+/* Modal animations */
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.expired-modal {
+  animation: modalSlideIn 0.3s ease-out;
+}
