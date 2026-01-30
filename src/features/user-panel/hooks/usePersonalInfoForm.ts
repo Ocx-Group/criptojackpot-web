@@ -2,14 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { getUserService } from '@/di/serviceLocator';
 import { FormData, ShowPwd, UpdateUserRequest } from '@/features/user-panel/types';
 
 export function usePersonalInfoForm() {
   const { t } = useTranslation();
-  const { user, updateUser } = useAuthStore();
+  const { user, updateUser } = useUserStore();
   const showNotification = useNotificationStore(state => state.show);
   const queryClient = useQueryClient(); // Opcional, para invalidar queries si es necesario
 
@@ -35,7 +35,7 @@ export function usePersonalInfoForm() {
         firstName: user.name || '',
         lastName: user.lastName || '',
         email: user.email || '',
-        phone: user.phone || ''
+        phone: user.phone || '',
       }));
     }
   }, [user]);
@@ -43,13 +43,13 @@ export function usePersonalInfoForm() {
   // Mutación de React Query para actualizar el usuario
   const updateUserMutation = useMutation({
     mutationFn: (userData: { id: number; data: UpdateUserRequest }) =>
-        getUserService().updateUserAsync(userData.id, userData.data),
-    onSuccess: (updatedUserData) => {
+      getUserService().updateUserAsync(userData.id, userData.data),
+    onSuccess: updatedUserData => {
       updateUser(updatedUserData);
       showNotification('success', t('PERSONAL_INFO.notifications.updateSuccess'), '');
 
       // invalidar queries
-      queryClient.invalidateQueries({queryKey:['user', user?.id]}).then();
+      queryClient.invalidateQueries({ queryKey: ['user', user?.id] }).then();
     },
     onError: (error: any) => {
       console.error('Failed to update profile:', error);
@@ -74,7 +74,7 @@ export function usePersonalInfoForm() {
         name: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
-        password: ''
+        password: '',
       };
 
       if (formData.password) {

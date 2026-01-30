@@ -44,7 +44,7 @@ const PrizesList: React.FC = () => {
     if (!prizeToDelete) return;
 
     try {
-      await deletePrize(prizeToDelete.id);
+      await deletePrize(prizeToDelete.prizeGuid);
       show('success', t('COMMON.success', 'Éxito'), t('PRIZES_ADMIN.delete.success', 'Premio eliminado correctamente'));
       setPrizeToDelete(null);
     } catch (error) {
@@ -63,7 +63,7 @@ const PrizesList: React.FC = () => {
   ];
 
   const tableData = prizes.map((prize: Prize) => ({
-    id: prize.id,
+    id: prize.prizeGuid,
     image: (
       <Image
         src={prize.mainImageUrl || '/images/placeholder.jpg'}
@@ -111,13 +111,17 @@ const PrizesList: React.FC = () => {
     actions: (
       <div className="btn-group btn-group-sm">
         <Link
-          href={`/admin/prizes/${prize.id}/edit`}
+          href={`/admin/prizes/${prize.prizeGuid}/edit`}
           className="btn btn-outline-primary"
           title={t('COMMON.edit', 'Editar')}
         >
           <Pencil size={14} />
         </Link>
-        <Link href={`/admin/prizes/${prize.id}`} className="btn btn-outline-secondary" title={t('COMMON.view', 'Ver')}>
+        <Link
+          href={`/admin/prizes/${prize.prizeGuid}`}
+          className="btn btn-outline-secondary"
+          title={t('COMMON.view', 'Ver')}
+        >
           <Eye size={14} />
         </Link>
         <button

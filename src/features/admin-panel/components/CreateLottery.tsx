@@ -149,7 +149,7 @@ const CreateLottery: React.FC = () => {
                     {t('LOTTERIES_ADMIN.placeholders.selectPrize', 'Seleccione un premio')}
                   </option>
                   {prizes?.map(prize => (
-                    <option key={`prize-${prize.id}`} value={prize.id}>
+                    <option key={`prize-${prize.prizeGuid}`} value={prize.prizeGuid}>
                       {prize.name} - ${prize.estimatedValue.toLocaleString()}
                     </option>
                   ))}

@@ -1,15 +1,19 @@
 import { User } from '@/interfaces/user';
-import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '@/store/userStore';
 import { injectable } from 'tsyringe';
 
 @injectable()
 export class TokenService {
+  /**
+   * @deprecated Token is now managed by next-auth. Use session.accessToken instead.
+   */
   static getToken(): string | null {
-    return useAuthStore.getState().token;
+    // Token is now handled by next-auth session
+    return null;
   }
 
   static getUser(): User | null {
-    return useAuthStore.getState().user;
+    return useUserStore.getState().user;
   }
 
   static isAdmin(): boolean {
@@ -22,7 +26,11 @@ export class TokenService {
     return user?.role?.name === 'client';
   }
 
+  /**
+   * @deprecated Authentication is now managed by next-auth. Use useSession() hook.
+   */
   static isAuthenticated(): boolean {
-    return !!this.getToken();
+    // This is deprecated - use useSession() from next-auth/react instead
+    return !!this.getUser();
   }
 }

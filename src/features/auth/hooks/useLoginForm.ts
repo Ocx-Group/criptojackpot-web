@@ -6,16 +6,18 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getAuthService } from '@/di/serviceLocator';
-import { useAuthStore } from '@/store/authStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { AuthRequest, LoginFormData } from '@/features/auth/types';
 import { validateLoginForm } from '@/features/auth/validators/loginValidations';
 
+/**
+ * @deprecated This hook is deprecated. Authentication is now handled by Keycloak via next-auth.
+ * Use signIn('keycloak') from next-auth/react instead.
+ */
 export const useLoginForm = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.show);
-  const setAuthData = useAuthStore(state => state.login);
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
@@ -26,7 +28,6 @@ export const useLoginForm = () => {
   const loginMutation = useMutation({
     mutationFn: (credentials: AuthRequest) => getAuthService().authenticate(credentials),
     onSuccess: data => {
-      setAuthData(data);
       showNotification('success', t('LOGIN.success'), '');
 
       if (data.role?.name === 'admin') {

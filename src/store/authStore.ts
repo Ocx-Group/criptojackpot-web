@@ -1,57 +1,44 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import {AuthState} from "@/interfaces/authState";
+import { signOut } from 'next-auth/react';
+
+// Simplified auth state for Keycloak - most auth is handled by next-auth
+interface AuthState {
+  // Legacy fields for compatibility
+  resetPasswordEmail: string | null;
+
+  // Actions
+  logout: () => void;
+  setResetPasswordEmail: (email: string) => void;
+  clearResetPasswordEmail: () => void;
+}
 
 export const useAuthStore = create<AuthState>()(
-    persist(
-        set => ({
-            user: null,
-            token: null,
-            isAuthenticated: false,
-            resetPasswordEmail: null,
+  persist(
+    set => ({
+      resetPasswordEmail: null,
 
-            login: userData => {
-                set({
-                    user: userData,
-                    token: userData.token,
-                    isAuthenticated: true,
-                });
-            },
+      logout: () => {
+        set({
+          resetPasswordEmail: null,
+        });
+        // Trigger next-auth signOut
+        signOut({ callbackUrl: '/login' });
+      },
 
-            logout: () => {
-                set({
-                    user: null,
-                    token: null,
-                    isAuthenticated: false,
-                    resetPasswordEmail: null,
-                });
-                if (typeof window !== 'undefined') {
-                    localStorage.removeItem('auth-storage');
-                }
-            },
+      setResetPasswordEmail: email => {
+        set({ resetPasswordEmail: email });
+      },
 
-            updateUser: user => {
-                set(state => ({
-                    user: state.user ? { ...state.user, ...user } : user,
-                }));
-            },
-
-            setResetPasswordEmail: email => {
-                set({ resetPasswordEmail: email });
-            },
-
-            clearResetPasswordEmail: () => {
-                set({ resetPasswordEmail: null });
-            },
-        }),
-        {
-            name: 'auth-storage',
-            partialize: state => ({
-                user: state.user,
-                token: state.token,
-                isAuthenticated: state.isAuthenticated,
-                resetPasswordEmail: state.resetPasswordEmail,
-            }),
-        }
-    )
+      clearResetPasswordEmail: () => {
+        set({ resetPasswordEmail: null });
+      },
+    }),
+    {
+      name: 'auth-storage',
+      partialize: state => ({
+        resetPasswordEmail: state.resetPasswordEmail,
+      }),
+    }
+  )
 );

@@ -35,7 +35,7 @@ import NavbarBlack from '@/components/navbar/NavbarBlack';
 import Jewellery1Footer from '@/components/landing-jewellery1/Jewellery1Footer';
 import MotionFade from '@/components/motionEffect/MotionFade';
 import { useLotteryHub } from '@/hooks/lottery-hub';
-import { useAuthStore } from '@/store/authStore';
+import { useSession } from 'next-auth/react';
 import { useCartStore } from '@/store/cartStore';
 import { CartSidebar, CartButton } from '@/components/cart';
 import { useNotificationStore } from '@/store/notificationStore';
@@ -50,8 +50,9 @@ const LotteryDetailsPage = () => {
   const params = useParams();
   const lotteryId = params.id as string;
 
-  // Auth store para obtener el token
-  const token = useAuthStore(state => state.token);
+  // Get access token from next-auth session
+  const { data: session } = useSession();
+  const token = session?.accessToken || '';
 
   // Estado: { número: cantidad }
   const [selectedNumbers, setSelectedNumbers] = useState<Record<number, number>>({});

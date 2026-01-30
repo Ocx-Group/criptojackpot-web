@@ -1,8 +1,8 @@
-import {UpdateImageProfileRequest} from '@/features/user-panel/types/updateImageProfileRequest';
-import React, {useEffect, useRef, useState} from 'react';
-import {useAuthStore} from '@/store/authStore';
+import { UpdateImageProfileRequest } from '@/features/user-panel/types/updateImageProfileRequest';
+import React, { useEffect, useRef, useState } from 'react';
+import { useUserStore } from '@/store/userStore';
 import { getDigitalOceanStorageService, getUserService } from '@/di/serviceLocator';
-import {ProfileImageType, UseProfilePhotoOptions, UseProfilePhotoReturn} from "@/interfaces/profilePhotoReturn";
+import { ProfileImageType, UseProfilePhotoOptions, UseProfilePhotoReturn } from '@/interfaces/profilePhotoReturn';
 
 export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfilePhotoReturn => {
   const {
@@ -14,7 +14,7 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
     onUploadError,
   } = options;
 
-  const { user, updateUser } = useAuthStore();
+  const { user, updateUser } = useUserStore();
   const [profileImage, setProfileImage] = useState<ProfileImageType>(defaultImage || '');
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);

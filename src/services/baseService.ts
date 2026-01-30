@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { getSession, signOut } from 'next-auth/react';
 
 import { Response } from '@/interfaces/response';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { useAuthStore } from '@/store/authStore';
 import { GetAllOptions } from '@/interfaces/getAllOptions';
 
 export abstract class BaseService {
@@ -29,20 +29,10 @@ export abstract class BaseService {
 
   private setupInterceptors(): void {
     this.apiClient.interceptors.request.use(
-      config => {
-        let token = useAuthStore.getState().token;
-
-        if (!token && globalThis.window !== undefined) {
-          const authStorage = localStorage.getItem('auth-storage');
-          if (authStorage) {
-            try {
-              const parsed = JSON.parse(authStorage);
-              token = parsed.state?.token;
-            } catch (e) {
-              console.error('Error parsing auth storage:', e);
-            }
-          }
-        }
+      async config => {
+        // Get access token from next-auth session
+        const session = await getSession();
+        const token = session?.accessToken;
 
         if (token) {
           config.headers.set('Authorization', `Bearer ${token}`);
@@ -66,10 +56,8 @@ export abstract class BaseService {
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && originalRequest.url !== 'auth') {
-          useAuthStore.getState().logout();
-          if (globalThis.window !== undefined) {
-            globalThis.window.location.href = '/login?error=session_expired';
-          }
+          // Trigger next-auth signOut on 401
+          await signOut({ callbackUrl: '/login?error=session_expired' });
         }
         throw error instanceof Error ? error : new Error(String(error));
       }
@@ -91,7 +79,7 @@ export abstract class BaseService {
 
     if (error.response?.status === 401) {
       if (error.config?.url !== this.endpoint) {
-        useAuthStore.getState().logout();
+        // Session expired - signOut is handled by the interceptor
         throw new Error('The session has expired');
       }
     }

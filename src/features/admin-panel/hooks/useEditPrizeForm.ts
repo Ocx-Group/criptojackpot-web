@@ -48,13 +48,13 @@ export const useEditPrizeForm = (prizeId: string) => {
   });
 
   // Encontrar el premio específico de la lista
-  const prize = prizesResponse?.data?.items?.find((p: Prize) => p.id === prizeId);
+  const prize = prizesResponse?.data?.items?.find((p: Prize) => p.prizeGuid === prizeId);
 
   // Actualizar formData cuando se encuentra el premio
   useEffect(() => {
     if (isSuccess && prize) {
       setFormData({
-        id: prize.id,
+        id: prize.prizeGuid,
         name: prize.name || '',
         description: prize.description || '',
         estimatedValue: prize.estimatedValue ?? 0,

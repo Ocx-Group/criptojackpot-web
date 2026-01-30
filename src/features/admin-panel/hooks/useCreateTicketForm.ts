@@ -159,8 +159,8 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
     const startDate = new Date(Date.now() + 10 * 60 * 1000);
     const endDate = drawDateTime;
 
-    // Mapear status del frontend al enum del backend
-    const lotteryStatus = 0;
+    // Mapear status del frontend al enum del backend (active = 1, upcoming/draft = 0)
+    const lotteryStatus = formData.status === 'active' ? 1 : 0;
 
     // Preparar datos
     const submitData: CreateLotteryRequest = {
@@ -178,6 +178,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       hasAgeRestriction: formData.hasAgeRestriction,
       minimumAge: formData.hasAgeRestriction ? formData.minimumAge : undefined,
       restrictedCountries: formData.restrictedCountries,
+      prizeId: formData.prizeId,
     };
 
     console.log('Submitting lottery data:', JSON.stringify(submitData, null, 2));
@@ -189,7 +190,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   return {
     formData,
     prizes,
-    selectedPrize: prizes.find(p => p.id === formData.prizeId),
+    selectedPrize: prizes.find(p => p.prizeGuid === formData.prizeId),
     isSubmitting: createLotteryMutation.isPending,
     handleInputChange,
     handleSubmit,

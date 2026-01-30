@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { navbarData } from 'public/data/navbarData';
 import AllHomePage from './AllHomePage';
 import LanguageSelector from '../languageSelector/LanguageSelector';
-import { useAuthStore } from '@/store/authStore';
+import { useSession, signOut } from 'next-auth/react';
 dynamic(() => import('react-select'), { ssr: false });
 const NavbarBlack = () => {
   const { t } = useTranslation();
@@ -23,7 +23,9 @@ const NavbarBlack = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isOverflowHidden, setIsOverflowHidden] = useState(false);
   const [dropdownId, setDropdownId] = useState('');
-  const { isAuthenticated, logout } = useAuthStore();
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+  const logout = () => signOut({ callbackUrl: '/login' });
 
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);

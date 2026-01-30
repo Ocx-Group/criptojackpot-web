@@ -41,10 +41,11 @@
     "forgetPassword": "¿Olvidaste tu contraseña?",
     "loading": "Cargando...",
     "loginButton": "Iniciar sesión",
+    "loginWithKeycloak": "Iniciar sesión",
     "newUser": "¿Nuevo usuario?",
     "passwordPlaceholder": "Ingresa tu contraseña...",
     "success": "Credenciales correctas",
-    "title": "Iniciar sesión"
+    "title": "Iniciar Sesión"
   },
   "NAVBAR": {
     "About Us": "Acerca de nosotros",

@@ -1,25 +1,33 @@
 'use client';
 
 import miller from 'public/images/man-global/devid-miller.png';
-import { HeadsetIcon, HeartIcon, InfoIcon, LightningIcon, SignOutIcon, TicketIcon, UploadIcon, WalletIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  HeadsetIcon,
+  HeartIcon,
+  InfoIcon,
+  LightningIcon,
+  SignOutIcon,
+  TicketIcon,
+  UploadIcon,
+  WalletIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useAuthStore } from '@/store/authStore';
+import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import { useUserStore } from '@/store/userStore';
 import { useProfilePhoto } from '@/hooks/useProfilePhoto';
 
 const UserPanelSidebar = () => {
   const path = usePathname();
-  const router = useRouter();
-  const { logout, user } = useAuthStore();
+  const { user } = useUserStore();
 
   const { profileImage, uploading, uploadError, fileInputRef, handleFileSelect, openFileSelector, clearError } =
     useProfilePhoto({
       defaultImage: miller,
       maxFileSize: 10 * 1024 * 1024,
       allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
-      onUploadStart: () => {
-      },
+      onUploadStart: () => {},
       onUploadSuccess: url => {
         console.log('Imagen subida exitosamente:', url);
       },
@@ -28,9 +36,8 @@ const UserPanelSidebar = () => {
       },
     });
 
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' });
   };
 
   const getFullName = () => {

@@ -1,13 +1,14 @@
-import {User} from "@/interfaces/user";
-
+/**
+ * @deprecated This interface is deprecated. Authentication is now handled by next-auth/Keycloak.
+ * Use useSession() from next-auth/react for authentication state.
+ * Use useUserStore() for user profile data.
+ */
 export interface AuthState {
-    user: User | null;
-    token: string | null;
-    isAuthenticated: boolean;
-    resetPasswordEmail: string | null;
-    login: (userData: User) => void;
-    logout: () => void;
-    updateUser: (user: User) => void;
-    setResetPasswordEmail: (email: string) => void;
-    clearResetPasswordEmail: () => void;
+  // Legacy fields for password reset functionality
+  resetPasswordEmail: string | null;
+
+  // Actions
+  logout: () => void;
+  setResetPasswordEmail: (email: string) => void;
+  clearResetPasswordEmail: () => void;
 }

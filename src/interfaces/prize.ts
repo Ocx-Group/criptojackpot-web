@@ -20,6 +20,7 @@ export interface PrizeImageRequest {
 
 export interface Prize {
   id: string;
+  prizeGuid: string;
   lotteryId: string;
   tier: number;
   name: string;

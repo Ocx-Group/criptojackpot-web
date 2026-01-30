@@ -1,19 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { sidebarItems } from 'public/data/sidebarItems';
 import { SignOutIcon } from '@phosphor-icons/react';
-import { useAuthStore } from '@/store/authStore';
+import { signOut } from 'next-auth/react';
 
 const AdminPanelSidebar = () => {
   const path = usePathname();
-  const router = useRouter();
-  const { logout } = useAuthStore();
 
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' });
   };
 
   return (

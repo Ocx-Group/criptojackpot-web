@@ -39,6 +39,21 @@ class UserService extends BaseService {
     return this.getById<User>(userId);
   }
 
+  async getUserByEmail(email: string): Promise<User> {
+    return this.getAll<User>({ path: 'by-email', params: { email } }).then(users => users[0]);
+  }
+
+  async getCurrentUser(): Promise<User> {
+    // Get current authenticated user's profile from backend
+    const response = await this.apiClient.get<{ success: boolean; data: User }>(
+      `${this.servicePrefix}/${this.endpoint}/me`
+    );
+    if (!response.data.success || !response.data.data) {
+      throw new Error('Failed to get current user');
+    }
+    return response.data.data;
+  }
+
   async getAllUsers(excludeUserId?: number): Promise<User[]> {
     return this.getAll<User>({ path: 'get-all-users/', params: { excludeUserId } });
   }

@@ -142,7 +142,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                 >
                   <option value="">{t('LOTTERIES_ADMIN.placeholders.selectPrize', 'Seleccione un premio')}</option>
                   {prizes?.map(prize => (
-                    <option key={prize.id} value={prize.id}>
+                    <option key={prize.prizeGuid} value={prize.prizeGuid}>
                       {prize.name} - ${prize.estimatedValue.toLocaleString()}
                     </option>
                   ))}
