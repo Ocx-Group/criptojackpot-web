@@ -1,13 +1,12 @@
-import { getSession } from 'next-auth/react';
+import { getAccessToken as getKeycloakToken } from '@/lib/keycloak';
 
 /**
- * Get the access token from next-auth session
+ * Get the access token from Keycloak
  * This is used for making API calls with authentication
  */
 export async function getAccessToken(): Promise<string | null> {
   try {
-    const session = await getSession();
-    return session?.accessToken || null;
+    return getKeycloakToken() || null;
   } catch (error) {
     console.error('Error getting access token:', error);
     return null;
@@ -15,19 +14,14 @@ export async function getAccessToken(): Promise<string | null> {
 }
 
 /**
- * Get the access token synchronously from stored session
+ * Get the access token synchronously from Keycloak
  * Useful when you need the token immediately without async
  */
 export function getStoredAccessToken(): string | null {
-  if (typeof window === 'undefined') return null;
+  if (globalThis.window === undefined) return null;
 
   try {
-    // next-auth stores session in a cookie, but we can check localStorage fallback
-    const storedSession = sessionStorage.getItem('next-auth.session-token');
-    if (storedSession) {
-      return storedSession;
-    }
-    return null;
+    return getKeycloakToken() || null;
   } catch (error) {
     console.error('Error getting stored access token:', error);
     return null;

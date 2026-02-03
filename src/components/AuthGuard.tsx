@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
@@ -12,13 +12,7 @@ type AuthGuardProps = {
 
 export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProps) => {
   const router = useRouter();
-  const { data: session, status } = useSession();
-  const isLoading = status === 'loading';
-  const isAuthenticated = status === 'authenticated';
-
-  // Extract user role from Keycloak roles
-  const userRoles = session?.user?.roles || [];
-  const userRole = userRoles.includes('admin') ? 'admin' : 'client';
+  const { isAuthenticated, isLoading, userRole, login } = useKeycloakAuth();
 
   useEffect(() => {
     if (isLoading) return;
@@ -26,7 +20,8 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
     const checkAuth = () => {
       // Si requiere autenticación y no está autenticado
       if (requireAuth && !isAuthenticated) {
-        router.push('/login');
+        // Redirect to Keycloak login
+        login();
         return;
       }
 
@@ -55,7 +50,7 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
     };
 
     checkAuth();
-  }, [requireAuth, requiredRole, router, isAuthenticated, isLoading, userRole]);
+  }, [requireAuth, requiredRole, router, isAuthenticated, isLoading, userRole, login]);
 
   // Mostrar loading mientras se carga la sesión
   if (isLoading) {

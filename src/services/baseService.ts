@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { getSession, signOut } from 'next-auth/react';
+import { getAccessToken, keycloakLogout } from '@/lib/keycloak';
 
 import { Response } from '@/interfaces/response';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
@@ -30,9 +30,8 @@ export abstract class BaseService {
   private setupInterceptors(): void {
     this.apiClient.interceptors.request.use(
       async config => {
-        // Get access token from next-auth session
-        const session = await getSession();
-        const token = session?.accessToken;
+        // Get access token from keycloak-js
+        const token = getAccessToken();
 
         if (token) {
           config.headers.set('Authorization', `Bearer ${token}`);
@@ -56,8 +55,8 @@ export abstract class BaseService {
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && originalRequest.url !== 'auth') {
-          // Trigger next-auth signOut on 401
-          await signOut({ callbackUrl: '/login?error=session_expired' });
+          // Trigger keycloak logout on 401
+          keycloakLogout('/login?error=session_expired');
         }
         throw error instanceof Error ? error : new Error(String(error));
       }

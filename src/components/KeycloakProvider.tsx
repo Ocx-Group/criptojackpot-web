@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react';
 import {
-  getKeycloakInstance,
   initKeycloak,
+  getKeycloakInstance,
   keycloakLogin,
   keycloakLogout,
   keycloakRegister,
@@ -14,22 +14,30 @@ import {
   KeycloakUserInfo,
 } from '@/lib/keycloak';
 
-export interface KeycloakUser {
-  id?: string;
-  email?: string | null;
-  name?: string | null;
-  username?: string;
-  roles?: string[];
-  emailVerified?: boolean;
+interface KeycloakContextType {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  user: KeycloakUserInfo | null;
+  accessToken: string | null;
+  userRole: 'admin' | 'client';
+  login: (redirectUri?: string) => Promise<void>;
+  register: (redirectUri?: string) => Promise<void>;
+  logout: (redirectUri?: string) => void;
+  hasRole: (role: string) => boolean;
 }
 
-export function useKeycloakAuth() {
+const KeycloakContext = createContext<KeycloakContextType | null>(null);
+
+interface KeycloakProviderProps {
+  children: ReactNode;
+}
+
+export const KeycloakProvider: React.FC<KeycloakProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<KeycloakUser | null>(null);
+  const [user, setUser] = useState<KeycloakUserInfo | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  // Initialize Keycloak on mount
   useEffect(() => {
     let isMounted = true;
 
@@ -42,8 +50,7 @@ export function useKeycloakAuth() {
         setIsAuthenticated(authenticated);
 
         if (authenticated) {
-          const userInfo = getUserInfo();
-          setUser(userInfo ? mapUserInfo(userInfo) : null);
+          setUser(getUserInfo());
           setAccessToken(getAccessToken() || null);
         }
       } catch (error) {
@@ -69,8 +76,7 @@ export function useKeycloakAuth() {
     const handleTokenUpdate = () => {
       if (isMounted) {
         setAccessToken(keycloak.token || null);
-        const userInfo = getUserInfo();
-        setUser(userInfo ? mapUserInfo(userInfo) : null);
+        setUser(getUserInfo());
       }
     };
 
@@ -94,48 +100,32 @@ export function useKeycloakAuth() {
     };
   }, []);
 
-  const userRole = useMemo(() => {
-    return getUserRole();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+  const contextValue: KeycloakContextType = useMemo(
+    () => ({
+      isAuthenticated,
+      isLoading,
+      user,
+      accessToken,
+      userRole: getUserRole(),
+      login: keycloakLogin,
+      register: keycloakRegister,
+      logout: keycloakLogout,
+      hasRole: checkRole,
+    }),
+    [isAuthenticated, isLoading, user, accessToken]
+  );
 
-  const login = useCallback(async (redirectUri?: string) => {
-    await keycloakLogin(redirectUri);
-  }, []);
+  return <KeycloakContext.Provider value={contextValue}>{children}</KeycloakContext.Provider>;
+};
 
-  const register = useCallback(async (redirectUri?: string) => {
-    await keycloakRegister(redirectUri);
-  }, []);
+export const useKeycloak = (): KeycloakContextType => {
+  const context = useContext(KeycloakContext);
 
-  const logout = useCallback((redirectUri?: string) => {
-    keycloakLogout(redirectUri);
-  }, []);
+  if (!context) {
+    throw new Error('useKeycloak must be used within a KeycloakProvider');
+  }
 
-  const hasRole = useCallback((role: string): boolean => {
-    return checkRole(role);
-  }, []);
+  return context;
+};
 
-  return {
-    user,
-    accessToken,
-    userRole,
-    isAuthenticated,
-    isLoading,
-    login,
-    register,
-    logout,
-    hasRole,
-  };
-}
-
-// Helper to map KeycloakUserInfo to KeycloakUser
-function mapUserInfo(info: KeycloakUserInfo): KeycloakUser {
-  return {
-    id: info.id,
-    email: info.email,
-    name: info.name,
-    username: info.username,
-    roles: info.roles,
-    emailVerified: info.emailVerified,
-  };
-}
+export default KeycloakProvider;

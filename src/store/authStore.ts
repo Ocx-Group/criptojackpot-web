@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { signOut } from 'next-auth/react';
+import { keycloakLogout } from '@/lib/keycloak';
 
-// Simplified auth state for Keycloak - most auth is handled by next-auth
+// Simplified auth state for Keycloak - most auth is handled by keycloak-js
 interface AuthState {
   // Legacy fields for compatibility
   resetPasswordEmail: string | null;
@@ -22,8 +22,8 @@ export const useAuthStore = create<AuthState>()(
         set({
           resetPasswordEmail: null,
         });
-        // Trigger next-auth signOut
-        signOut({ callbackUrl: '/login' });
+        // Trigger keycloak logout
+        keycloakLogout('/landing-page');
       },
 
       setResetPasswordEmail: email => {

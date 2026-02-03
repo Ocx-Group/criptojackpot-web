@@ -146,6 +146,7 @@
       "weakPassword": "La contraseña debe tener al menos 8 caracteres"
     },
     "identificationPlaceholder": "Identificación",
+    "keycloakRedirectMessage": "Serás redirigido a nuestra página de registro segura.",
     "lastNamePlaceholder": "Apellido",
     "loading": "Cargando...",
     "loadingCountries": "Cargando países...",

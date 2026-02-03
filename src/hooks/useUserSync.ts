@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
@@ -11,11 +11,10 @@ import { getUserService } from '@/di/serviceLocator';
  * Should be called in app layout or auth provider to ensure user data is loaded.
  */
 export function useUserSync() {
-  const { data: session, status } = useSession();
+  const { isAuthenticated, isLoading: authLoading, accessToken } = useKeycloakAuth();
   const { setUser, clearUser, user, isProfileLoaded } = useUserStore();
 
-  const isAuthenticated = status === 'authenticated';
-  const hasAccessToken = !!session?.accessToken;
+  const hasAccessToken = !!accessToken;
 
   // Fetch current user profile from backend
   const {
@@ -44,14 +43,14 @@ export function useUserSync() {
 
   // Clear user store on logout
   useEffect(() => {
-    if (status === 'unauthenticated') {
+    if (!isAuthenticated && !authLoading) {
       clearUser();
     }
-  }, [status, clearUser]);
+  }, [isAuthenticated, authLoading, clearUser]);
 
   return {
     user,
-    isLoading: status === 'loading' || isLoading,
+    isLoading: authLoading || isLoading,
     isError,
     isAuthenticated,
     isProfileLoaded,

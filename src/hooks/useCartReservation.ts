@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { useLotteryHub } from '@/hooks/lottery-hub';
-import { useSession } from 'next-auth/react';
+import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
 
 interface UseCartReservationOptions {
   lotteryId: string;
@@ -27,8 +27,8 @@ export const useCartReservation = ({
   onReservationError,
   onItemExpired,
 }: UseCartReservationOptions): UseCartReservationReturn => {
-  const { data: session } = useSession();
-  const token = session?.accessToken || '';
+  const { accessToken } = useKeycloakAuth();
+  const token = accessToken || '';
   const { items, markAsReserved, removeItem, isItemExpired } = useCartStore();
 
   // Conexión al hub de lotería

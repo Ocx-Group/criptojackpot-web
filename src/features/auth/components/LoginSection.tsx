@@ -1,24 +1,21 @@
 'use client';
 import loginImage from 'public/images/background/back-register.png';
 import logoBlack from 'public/images/logo/cripto-jackpot-logo.png';
-import { signIn } from 'next-auth/react';
+import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const LoginSection = () => {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, register } = useKeycloakAuth();
 
   const handleKeycloakLogin = async () => {
-    setIsLoading(true);
-    try {
-      await signIn('keycloak', { callbackUrl: '/user-panel' });
-    } catch (error) {
-      console.error('Login error:', error);
-      setIsLoading(false);
-    }
+    await login('/user-panel');
+  };
+
+  const handleKeycloakRegister = async () => {
+    await register('/user-panel');
   };
 
   return (
@@ -37,9 +34,13 @@ const LoginSection = () => {
                   <h3 className="n3-clr mb-3">{t('LOGIN.title', 'Iniciar Sesión')}</h3>
                   <span className="n3-clr">
                     {t('LOGIN.newUser')}{' '}
-                    <Link href="/register" className="s1-clr s1-texthover">
+                    <button
+                      type="button"
+                      onClick={handleKeycloakRegister}
+                      className="s1-clr s1-texthover bg-transparent border-0 p-0 text-decoration-underline"
+                    >
                       {t('LOGIN.createAccount')}
-                    </Link>
+                    </button>
                   </span>
                 </div>
                 <div className="d-flex flex-column gap-4">
@@ -47,11 +48,8 @@ const LoginSection = () => {
                     type="button"
                     onClick={handleKeycloakLogin}
                     className="cmn-btn s1-bg radius12 w-100 fw_600 justify-content-center d-inline-flex align-items-center gap-2 py-xxl-4 py-3 px-xl-6 px-5 n0-clr"
-                    disabled={isLoading}
                   >
-                    <span className="fw_600 n0-clr">
-                      {isLoading ? t('LOGIN.loading') : t('LOGIN.loginWithKeycloak', 'Iniciar Sesión')}
-                    </span>
+                    <span className="fw_600 n0-clr">{t('LOGIN.loginWithKeycloak', 'Iniciar Sesión')}</span>
                   </button>
                 </div>
               </div>

@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
 import { useUserStore } from '@/store/userStore';
 import { getUserService } from '@/di/serviceLocator';
 import { AxiosError } from 'axios';
 
 /**
  * Validates the user session and keeps user data in sync.
- * Uses next-auth session for authentication state.
+ * Uses keycloak-js for authentication state.
  */
 export function useSessionValidator() {
-  const { status } = useSession();
+  const { isAuthenticated, logout } = useKeycloakAuth();
   const { user, updateUser, clearUser } = useUserStore();
   const userId = user?.id;
 
@@ -24,7 +24,7 @@ export function useSessionValidator() {
       updateUser(freshUserData);
       return freshUserData;
     },
-    enabled: status === 'authenticated' && !!userId,
+    enabled: isAuthenticated && !!userId,
     retry: 1,
     refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,
@@ -33,7 +33,7 @@ export function useSessionValidator() {
   useEffect(() => {
     if (error instanceof AxiosError && error.response?.status === 401) {
       clearUser();
-      signOut({ callbackUrl: '/login' });
+      logout('/login');
     }
-  }, [error, clearUser]);
+  }, [error, clearUser, logout]);
 }
