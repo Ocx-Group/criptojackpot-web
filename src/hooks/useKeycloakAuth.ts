@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   getKeycloakInstance,
   initKeycloak,
+  isAdapterReady,
   keycloakLogin,
   keycloakLogout,
   keycloakRegister,
@@ -28,8 +29,8 @@ export function useKeycloakAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<KeycloakUser | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [initError, setInitError] = useState<string | null>(null);
 
-  // Initialize Keycloak on mount
   useEffect(() => {
     let isMounted = true;
 
@@ -39,6 +40,10 @@ export function useKeycloakAuth() {
 
         if (!isMounted) return;
 
+        if (!isAdapterReady()) {
+          setInitError('Keycloak server not reachable. Login/Register will use fallback redirects.');
+        }
+
         setIsAuthenticated(authenticated);
 
         if (authenticated) {
@@ -47,7 +52,10 @@ export function useKeycloakAuth() {
           setAccessToken(getAccessToken() || null);
         }
       } catch (error) {
-        console.error('Keycloak init error:', error);
+        console.error('[useKeycloakAuth] Init error:', error);
+        if (isMounted) {
+          setInitError(error instanceof Error ? error.message : 'Unknown init error');
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -57,11 +65,9 @@ export function useKeycloakAuth() {
 
     init();
 
-    // Listen for token updates (only on client side)
     const keycloak = getKeycloakInstance();
 
     if (!keycloak) {
-      // Server-side, just mark as not loading
       setIsLoading(false);
       return;
     }
@@ -121,6 +127,7 @@ export function useKeycloakAuth() {
     userRole,
     isAuthenticated,
     isLoading,
+    initError,
     login,
     register,
     logout,
@@ -128,7 +135,6 @@ export function useKeycloakAuth() {
   };
 }
 
-// Helper to map KeycloakUserInfo to KeycloakUser
 function mapUserInfo(info: KeycloakUserInfo): KeycloakUser {
   return {
     id: info.id,

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const LoginSection = () => {
   const { t } = useTranslation();
-  const { login, register } = useKeycloakAuth();
+  const { login, register, isLoading, initError } = useKeycloakAuth();
 
   const handleKeycloakLogin = async () => {
     await login('/user-panel');
@@ -37,19 +37,30 @@ const LoginSection = () => {
                     <button
                       type="button"
                       onClick={handleKeycloakRegister}
+                      disabled={isLoading}
                       className="s1-clr s1-texthover bg-transparent border-0 p-0 text-decoration-underline"
                     >
                       {t('LOGIN.createAccount')}
                     </button>
                   </span>
                 </div>
+
+                {initError && (
+                  <div className="alert alert-warning mb-4" role="alert" style={{ fontSize: '0.85rem' }}>
+                    ⚠️ {initError}
+                  </div>
+                )}
+
                 <div className="d-flex flex-column gap-4">
                   <button
                     type="button"
                     onClick={handleKeycloakLogin}
+                    disabled={isLoading}
                     className="cmn-btn s1-bg radius12 w-100 fw_600 justify-content-center d-inline-flex align-items-center gap-2 py-xxl-4 py-3 px-xl-6 px-5 n0-clr"
                   >
-                    <span className="fw_600 n0-clr">{t('LOGIN.loginWithKeycloak', 'Iniciar Sesión')}</span>
+                    <span className="fw_600 n0-clr">
+                      {isLoading ? t('LOGIN.loading', 'Conectando...') : t('LOGIN.loginWithKeycloak', 'Iniciar Sesión')}
+                    </span>
                   </button>
                 </div>
               </div>
