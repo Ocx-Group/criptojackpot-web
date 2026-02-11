@@ -92,7 +92,7 @@ const installCryptoPolyfill = () => {
 
   if (typeof globalThis.crypto.randomUUID === 'undefined') {
     console.warn('[Keycloak] crypto.randomUUID not available. Installing polyfill.');
-    (globalThis.crypto as Record<string, unknown>).randomUUID =
+    (globalThis.crypto as unknown as Record<string, unknown>).randomUUID =
       (): `${string}-${string}-${string}-${string}-${string}` => {
         const bytes = new Uint8Array(16);
         crypto.getRandomValues(bytes);
@@ -122,7 +122,7 @@ const installCryptoPolyfill = () => {
         return sha256Bytes(input);
       },
     };
-    Object.defineProperty(globalThis.crypto, 'subtle', {
+    Object.defineProperty(globalThis.crypto as unknown as Record<string, unknown>, 'subtle', {
       value: subtlePolyfill,
       writable: false,
       configurable: true,
@@ -342,17 +342,21 @@ export const keycloakLogout = (redirectUri?: string): void => {
     return;
   }
 
+  // Keycloak requires absolute URLs for post_logout_redirect_uri.
+  // Convert relative paths (e.g., '/login') to absolute URLs.
+  const absoluteRedirectUri = redirectUri?.startsWith('/')
+    ? `${globalThis.location.origin}${redirectUri}`
+    : redirectUri || `${globalThis.location.origin}/landing-page`;
+
   if (adapterReady && typeof keycloak.logout === 'function') {
-    keycloak.logout({
-      redirectUri: redirectUri || `${globalThis.location.origin}/landing-page`,
-    });
+    keycloak.logout({ redirectUri: absoluteRedirectUri });
     return;
   }
 
   // Fallback: manual redirect
   console.warn('[Keycloak] Adapter unavailable. Fallback redirect for logout.');
   const logoutUrl = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/protocol/openid-connect/logout`;
-  const postRedirect = encodeURIComponent(redirectUri || `${globalThis.location.origin}/landing-page`);
+  const postRedirect = encodeURIComponent(absoluteRedirectUri);
   globalThis.location.href = `${logoutUrl}?client_id=${keycloakConfig.clientId}&post_logout_redirect_uri=${postRedirect}`;
 };
 
