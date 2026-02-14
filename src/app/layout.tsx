@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import '@/di/init';
-import '@/../node_modules/react-modal-video/scss/modal-video.scss';
 import Bootstrap from '@/components/Bootstrap';
 import Cursor from '@/components/Cursor';
 import Providers from '@/components/Providers';
@@ -8,7 +7,7 @@ import Providers from '@/components/Providers';
 import type { Metadata } from 'next';
 import 'swiper/css';
 import '../styles/scss/style.scss';
-import React from "react";
+import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Criptojackpot App',
