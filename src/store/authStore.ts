@@ -2,11 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface AuthState {
-  token: string | null;
+  isAuthenticated: boolean;
+  rememberMe: boolean;
   resetPasswordEmail: string | null;
 
   // Actions
-  setToken: (token: string | null) => void;
+  setAuthenticated: (value: boolean) => void;
+  setRememberMe: (value: boolean) => void;
   logout: () => void;
   setResetPasswordEmail: (email: string) => void;
   clearResetPasswordEmail: () => void;
@@ -15,19 +17,26 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     set => ({
-      token: null,
+      isAuthenticated: false,
+      rememberMe: false,
       resetPasswordEmail: null,
 
-      setToken: token => {
-        set({ token });
+      setAuthenticated: (value: boolean) => {
+        set({ isAuthenticated: value });
+      },
+
+      setRememberMe: (value: boolean) => {
+        set({ rememberMe: value });
       },
 
       logout: () => {
         set({
-          token: null,
+          isAuthenticated: false,
+          rememberMe: false,
           resetPasswordEmail: null,
         });
         if (typeof globalThis.window !== 'undefined') {
+          localStorage.removeItem('user-profile-storage');
           globalThis.location.href = '/landing-page';
         }
       },
@@ -43,7 +52,8 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       partialize: state => ({
-        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+        rememberMe: state.rememberMe,
         resetPasswordEmail: state.resetPasswordEmail,
       }),
     }

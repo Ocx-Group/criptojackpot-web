@@ -7,6 +7,7 @@ import { AxiosError } from 'axios';
 
 /**
  * Validates the user session and keeps user data in sync.
+ * Uses HttpOnly cookies for authentication (sent automatically by browser).
  */
 export function useSessionValidator() {
   const { isAuthenticated, logout } = useAuth();
@@ -32,7 +33,7 @@ export function useSessionValidator() {
   useEffect(() => {
     if (error instanceof AxiosError && error.response?.status === 401) {
       clearUser();
-      logout('/login');
+      logout();
     }
   }, [error, clearUser, logout]);
 }

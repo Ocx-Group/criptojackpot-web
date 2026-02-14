@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { getAccessToken } from '@/utils/authUtils';
 
 import { Response } from '@/interfaces/response';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
@@ -9,6 +8,8 @@ export abstract class BaseService {
   protected apiClient: AxiosInstance;
   protected abstract endpoint: string;
   protected servicePrefix: string;
+  private static isRefreshing = false;
+  private static refreshSubscribers: Array<() => void> = [];
 
   /**
    * @param servicePrefix - El prefijo del microservicio (ej: "/api/v1/auth", "/api/v1/lotteries")
@@ -22,21 +23,24 @@ export abstract class BaseService {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true,
     });
 
     this.setupInterceptors();
   }
 
+  private static onRefreshed(): void {
+    BaseService.refreshSubscribers.forEach(cb => cb());
+    BaseService.refreshSubscribers = [];
+  }
+
+  private static addRefreshSubscriber(callback: () => void): void {
+    BaseService.refreshSubscribers.push(callback);
+  }
+
   private setupInterceptors(): void {
     this.apiClient.interceptors.request.use(
       async config => {
-        // Get access token from storage
-        const token = await getAccessToken();
-
-        if (token) {
-          config.headers.set('Authorization', `Bearer ${token}`);
-        }
-
         if (globalThis.window !== undefined) {
           const language = localStorage.getItem('i18nextLng') || 'en';
           config.headers.set('Accept-Language', language.split('-')[0]);
@@ -54,11 +58,40 @@ export abstract class BaseService {
       async error => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && originalRequest.url !== 'auth') {
-          // Trigger logout on 401
-          if (typeof globalThis.window !== 'undefined') {
-            localStorage.removeItem('auth-storage');
-            globalThis.location.href = '/login?error=session_expired';
+        // Skip refresh logic for auth endpoints
+        const isAuthEndpoint = originalRequest.url?.includes('/auth/login') ||
+          originalRequest.url?.includes('/auth/google') ||
+          originalRequest.url?.includes('/auth/refresh') ||
+          originalRequest.url?.includes('/auth/2fa/verify');
+
+        if (error.response?.status === 401 && !isAuthEndpoint && !originalRequest._retry) {
+          if (BaseService.isRefreshing) {
+            // Wait for the ongoing refresh to complete, then retry
+            return new Promise(resolve => {
+              BaseService.addRefreshSubscriber(() => {
+                resolve(this.apiClient(originalRequest));
+              });
+            });
+          }
+
+          originalRequest._retry = true;
+          BaseService.isRefreshing = true;
+
+          try {
+            const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+            await axios.post(`${API_BASE_URL}/api/v1/auth/refresh`, {}, { withCredentials: true });
+            BaseService.isRefreshing = false;
+            BaseService.onRefreshed();
+            return this.apiClient(originalRequest);
+          } catch {
+            BaseService.isRefreshing = false;
+            BaseService.refreshSubscribers = [];
+            // Refresh failed - clear auth state and redirect
+            if (typeof globalThis.window !== 'undefined') {
+              localStorage.removeItem('auth-storage');
+              localStorage.removeItem('user-profile-storage');
+              globalThis.location.href = '/login?error=session_expired';
+            }
           }
         }
         throw error instanceof Error ? error : new Error(String(error));

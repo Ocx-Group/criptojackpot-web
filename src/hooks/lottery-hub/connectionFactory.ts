@@ -8,12 +8,13 @@ const getHubUrl = (): string => {
 };
 
 /**
- * Crea una nueva conexión al LotteryHub
+ * Crea una nueva conexión al LotteryHub.
+ * Authentication is handled via HttpOnly cookies (withCredentials).
  */
-export const createHubConnection = (token: string): signalR.HubConnection => {
+export const createHubConnection = (): signalR.HubConnection => {
   return new signalR.HubConnectionBuilder()
     .withUrl(getHubUrl(), {
-      accessTokenFactory: () => token,
+      withCredentials: true,
     })
     .withAutomaticReconnect()
     .build();

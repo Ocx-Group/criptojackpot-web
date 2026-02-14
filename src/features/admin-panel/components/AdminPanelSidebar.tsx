@@ -11,7 +11,7 @@ const AdminPanelSidebar = () => {
   const { logout } = useAuth();
 
   const handleLogout = () => {
-    logout('/login');
+    logout();
   };
 
   return (

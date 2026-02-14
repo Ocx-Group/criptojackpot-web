@@ -50,9 +50,8 @@ const LotteryDetailsPage = () => {
   const params = useParams();
   const lotteryId = params.id as string;
 
-  // Get access token
-  const { accessToken } = useAuth();
-  const token = accessToken || '';
+  // Check authentication status (auth handled via HttpOnly cookies)
+  const { isAuthenticated } = useAuth();
 
   // Estado: { número: cantidad }
   const [selectedNumbers, setSelectedNumbers] = useState<Record<number, number>>({});
@@ -62,7 +61,7 @@ const LotteryDetailsPage = () => {
   const { addItem: addCartItem, setIsOpen: setCartOpen } = useCartStore();
   const showNotification = useNotificationStore(state => state.show);
 
-  // Conexión WebSocket al LotteryHub (solo si hay token)
+  // Conexión WebSocket al LotteryHub (auth via HttpOnly cookies)
   const {
     availableNumbers,
     reservations,
@@ -73,7 +72,7 @@ const LotteryDetailsPage = () => {
     clearError,
     clearReservations: _clearReservations, // Para uso futuro
     clearCurrentOrder: _clearCurrentOrder, // Para uso futuro
-  } = useLotteryHub(lotteryId, token || '');
+  } = useLotteryHub(lotteryId);
 
   // Estado de carga para reservas
   const [isReserving, setIsReserving] = useState(false);
@@ -287,8 +286,8 @@ const LotteryDetailsPage = () => {
     }
 
     // Verificar autenticación
-    if (!token) {
-      console.log('⚠️ No token - showing login notification');
+    if (!isAuthenticated) {
+      console.log('⚠️ Not authenticated - showing login notification');
       showNotification(
         'warning',
         t('AUTH.loginRequired', 'Inicio de sesión requerido'),
@@ -457,25 +456,8 @@ const LotteryDetailsPage = () => {
     remaining === 0 ||
     ticketQuantity === 0 ||
     isReserving ||
-    !token ||
+    !isAuthenticated ||
     !isConnected;
-
-  console.log('🔘 Add to Cart button state:', {
-    isDisabled: isAddToCartDisabled,
-    reasons: {
-      notActive: lottery.status !== LotteryStatus.Active,
-      soldOut: remaining === 0,
-      noSelection: ticketQuantity === 0,
-      isReserving,
-      noToken: !token,
-      notConnected: !isConnected,
-    },
-    lotteryStatus: lottery.status,
-    remaining,
-    ticketQuantity,
-    token: token ? 'exists' : 'null',
-    isConnected,
-  });
 
   return (
     <div>
@@ -787,7 +769,7 @@ const LotteryDetailsPage = () => {
                             {t('LOTTERY_DETAILS.selectNumbers', 'Selecciona tus números')}
                           </label>
                           {/* Indicador de conexión WebSocket */}
-                          {token && (
+                          {isAuthenticated && (
                             <span
                               title={isConnected ? 'Tiempo real activo' : 'Conectando...'}
                               style={{
@@ -987,6 +969,7 @@ const LotteryDetailsPage = () => {
                         remaining === 0 ||
                         ticketQuantity === 0 ||
                         isReserving ||
+                        !isAuthenticated ||
                         !isConnected
                       }
                       onClick={handleBuyNow}
@@ -1019,13 +1002,13 @@ const LotteryDetailsPage = () => {
                             {t('LOTTERY_DETAILS.reserving', 'Reservando...')}
                           </>
                         )}
-                        {!isReserving && !token && (
+                        {!isReserving && !isAuthenticated && (
                           <>
                             <TagIcon className="fs-five" weight="bold" />
                             {t('AUTH.loginToBuy', 'Inicie sesión para comprar')}
                           </>
                         )}
-                        {!isReserving && token && (
+                        {!isReserving && isAuthenticated && (
                           <>
                             <TagIcon className="fs-five" weight="bold" />
                             {t('LOTTERY_DETAILS.addToCart', 'Agregar al Carrito')}
@@ -1035,7 +1018,7 @@ const LotteryDetailsPage = () => {
                     </button>
 
                     {/* Login Required Message */}
-                    {!token && (
+                    {!isAuthenticated && (
                       <div className="alert alert-info mt-3 py-2 text-center" style={{ fontSize: '12px' }}>
                         <a href="/login" className="text-decoration-underline">
                           {t('AUTH.loginRequired', 'Inicie sesión')}
@@ -1045,7 +1028,7 @@ const LotteryDetailsPage = () => {
                     )}
 
                     {/* Connection Warning */}
-                    {!isConnected && token && (
+                    {!isConnected && isAuthenticated && (
                       <div className="alert alert-warning mt-3 py-2 text-center" style={{ fontSize: '12px' }}>
                         {t('LOTTERY_DETAILS.connecting', 'Conectando al servidor...')}
                       </div>

@@ -9,12 +9,11 @@ import { getUserService } from '@/di/serviceLocator';
 /**
  * Hook that syncs user profile from backend after authentication.
  * Should be called in app layout or auth provider to ensure user data is loaded.
+ * Authentication is handled via HttpOnly cookies (sent automatically by browser).
  */
 export function useUserSync() {
-  const { isAuthenticated, isLoading: authLoading, accessToken } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { setUser, clearUser, user, isProfileLoaded } = useUserStore();
-
-  const hasAccessToken = !!accessToken;
 
   // Fetch current user profile from backend
   const {
@@ -25,11 +24,10 @@ export function useUserSync() {
   } = useQuery({
     queryKey: ['current-user-profile'],
     queryFn: async () => {
-      // Get user profile using the access token (handled by interceptor)
       const userData = await getUserService().getCurrentUser();
       return userData;
     },
-    enabled: isAuthenticated && hasAccessToken && !isProfileLoaded,
+    enabled: isAuthenticated && !isProfileLoaded,
     retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

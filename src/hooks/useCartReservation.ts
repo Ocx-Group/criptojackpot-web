@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { useLotteryHub } from '@/hooks/lottery-hub';
-import { useAuth } from '@/hooks/useAuth';
 
 interface UseCartReservationOptions {
   lotteryId: string;
@@ -27,18 +26,16 @@ export const useCartReservation = ({
   onReservationError,
   onItemExpired,
 }: UseCartReservationOptions): UseCartReservationReturn => {
-  const { accessToken } = useAuth();
-  const token = accessToken || '';
   const { items, markAsReserved, removeItem, isItemExpired } = useCartStore();
 
-  // Conexión al hub de lotería
+  // Conexión al hub de lotería (auth via HttpOnly cookies)
   const {
     isConnected,
     error: hubError,
     reserveNumbersWithOrder,
     clearError,
     reservations,
-  } = useLotteryHub(lotteryId, token || '');
+  } = useLotteryHub(lotteryId);
 
   // Referencia para tracking de reservas pendientes
   const pendingReservationsRef = useRef<Map<string, string>>(new Map());

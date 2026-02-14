@@ -10,7 +10,7 @@ import { createHubConnection, startConnection, stopConnection } from './connecti
 import { registerHubEventHandlers, unregisterHubEventHandlers } from './hubEventHandlers';
 import type { LotteryHubReturn } from './types';
 
-export const useLotteryHub = (lotteryId: string, token: string): LotteryHubReturn => {
+export const useLotteryHub = (lotteryId: string): LotteryHubReturn => {
   const [availableNumbers, setAvailableNumbers] = useState<AvailableNumberDto[]>([]);
   const [reservations, setReservations] = useState<NumberReservationDto[]>([]);
   const [currentOrder, setCurrentOrder] = useState<ReservationWithOrderDto | null>(null);
@@ -26,9 +26,9 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
     // Marcar como montado
     isMountedRef.current = true;
 
-    // No conectar si no hay token o lotteryId
-    if (!token || !lotteryId) {
-      console.log('⚠️ LotteryHub: No hay token o lotteryId, omitiendo conexión');
+    // No conectar si no hay lotteryId
+    if (!lotteryId) {
+      console.log('⚠️ LotteryHub: No hay lotteryId, omitiendo conexión');
       return;
     }
 
@@ -50,7 +50,7 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
       connectionRef.current = null;
     }
 
-    const connection = createHubConnection(token);
+    const connection = createHubConnection();
     connectionRef.current = connection;
 
     // Registrar event handlers
@@ -113,7 +113,7 @@ export const useLotteryHub = (lotteryId: string, token: string): LotteryHubRetur
         connectionRef.current = null;
       }
     };
-  }, [token, lotteryId]);
+  }, [lotteryId]);
 
   // ========== MÉTODOS DEL HUB ==========
 

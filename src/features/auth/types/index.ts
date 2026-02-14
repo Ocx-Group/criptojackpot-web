@@ -1,3 +1,5 @@
 export * from './registerFormReturn.interface'
 export * from './loginFormData.interface'
 export * from './authRequest'
+export * from './requestPasswordResetRequest'
+export * from './resetPasswordWithCodeRequest'

@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
+import { getAuthService } from '@/di/serviceLocator';
 
 export interface AuthUser {
   id?: string;
@@ -15,11 +16,11 @@ export interface AuthUser {
 
 export function useAuth() {
   const [isLoading] = useState(false);
-  const token = useAuthStore(state => state.token);
-  const logout = useAuthStore(state => state.logout);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const authLogout = useAuthStore(state => state.logout);
+  const setAuthenticated = useAuthStore(state => state.setAuthenticated);
   const user = useUserStore(state => state.user);
-
-  const isAuthenticated = !!token;
+  const clearUser = useUserStore(state => state.clearUser);
 
   const login = useCallback(async (redirectPath?: string) => {
     console.log('Login not implemented. Redirect to:', redirectPath);
@@ -28,6 +29,16 @@ export function useAuth() {
   const register = useCallback(async (redirectPath?: string) => {
     console.log('Register not implemented. Redirect to:', redirectPath);
   }, []);
+
+  const logout = useCallback(async () => {
+    try {
+      await getAuthService().logout();
+    } catch {
+      // Even if the API call fails, clear local state
+    }
+    clearUser();
+    authLogout();
+  }, [clearUser, authLogout]);
 
   const hasRole = useCallback(
     (role: string) => {
@@ -55,12 +66,12 @@ export function useAuth() {
     isLoading,
     isAuthenticated,
     user: mapUser(),
-    accessToken: token,
     userRole,
     login,
     register,
     logout,
     hasRole,
+    setAuthenticated,
     initError: null,
   };
 }

@@ -38,7 +38,7 @@ const UserPanelSidebar = () => {
     });
 
   const handleLogout = () => {
-    logout('/login');
+    logout();
   };
 
   const getFullName = () => {

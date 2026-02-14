@@ -2,6 +2,8 @@
 import loginImage from 'public/images/background/back-register.png';
 import logoBlack from 'public/images/logo/cripto-jackpot-logo.png';
 import { useLoginForm } from '@/features/auth/hooks/useLoginForm';
+import { GoogleLoginButton } from '@/features/auth/components/GoogleLoginButton';
+import { GOOGLE_CLIENT_ID } from '@/components/Providers';
 import { EyeIcon, EyeSlashIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -61,7 +63,7 @@ const LoginSection = () => {
                         <button
                           type="button"
                           onClick={togglePasswordVisibility}
-                          aria-label={isPasswordShow ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                          aria-label={isPasswordShow ? 'Ocultar contrase\u00f1a' : 'Mostrar contrase\u00f1a'}
                           style={{
                             cursor: 'pointer',
                             position: 'absolute',
@@ -86,12 +88,24 @@ const LoginSection = () => {
                         </button>
                       </div>
                     </div>
-                    <Link
-                      href="/forgot-password"
-                      className="d-flex text-decoration-underline act4-texthover justify-content-end fw_600 fs-eight mt-xxl-6 mt-3 s1-texthover"
-                    >
-                      {t('LOGIN.forgetPassword')}
-                    </Link>
+                    <div className="col-lg-12 d-flex justify-content-between align-items-center mt-xxl-6 mt-3">
+                      <label className="d-flex align-items-center gap-2 n3-clr fs-eight" style={{ cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          name="rememberMe"
+                          checked={formData.rememberMe}
+                          onChange={handleInputChange}
+                          style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                        />
+                        {t('LOGIN.rememberMe', 'Recordarme')}
+                      </label>
+                      <Link
+                        href="/forgot-password"
+                        className="text-decoration-underline act4-texthover fw_600 fs-eight s1-texthover"
+                      >
+                        {t('LOGIN.forgetPassword')}
+                      </Link>
+                    </div>
                     <div className="col-lg-12">
                       <button
                         type="submit"
@@ -101,6 +115,16 @@ const LoginSection = () => {
                         <span className="fw_600 n0-clr">{isLoading ? t('LOGIN.loading') : t('LOGIN.loginButton')}</span>
                       </button>
                     </div>
+                    {GOOGLE_CLIENT_ID && (
+                      <div className="col-lg-12">
+                        <div className="d-flex align-items-center gap-3 my-2">
+                          <hr className="flex-grow-1 border-secondary" />
+                          <span className="n3-clr fs-eight">{t('LOGIN.orContinueWith', 'o continuar con')}</span>
+                          <hr className="flex-grow-1 border-secondary" />
+                        </div>
+                        <GoogleLoginButton />
+                      </div>
+                    )}
                   </div>
                 </form>
               </div>
