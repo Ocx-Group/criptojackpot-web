@@ -1,6 +1,6 @@
 'use client';
 
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
@@ -12,7 +12,7 @@ type AuthGuardProps = {
 
 export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProps) => {
   const router = useRouter();
-  const { isAuthenticated, isLoading, userRole, login } = useKeycloakAuth();
+  const { isAuthenticated, isLoading, userRole, login } = useAuth();
 
   useEffect(() => {
     if (isLoading) return;
@@ -20,8 +20,8 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
     const checkAuth = () => {
       // Si requiere autenticación y no está autenticado
       if (requireAuth && !isAuthenticated) {
-        // Redirect to Keycloak login
-        login();
+        // Redirect to login
+        router.push('/login');
         return;
       }
 

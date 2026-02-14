@@ -35,7 +35,7 @@ import NavbarBlack from '@/components/navbar/NavbarBlack';
 import Jewellery1Footer from '@/components/landing-jewellery1/Jewellery1Footer';
 import MotionFade from '@/components/motionEffect/MotionFade';
 import { useLotteryHub } from '@/hooks/lottery-hub';
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/cartStore';
 import { CartSidebar, CartButton } from '@/components/cart';
 import { useNotificationStore } from '@/store/notificationStore';
@@ -50,8 +50,8 @@ const LotteryDetailsPage = () => {
   const params = useParams();
   const lotteryId = params.id as string;
 
-  // Get access token from keycloak
-  const { accessToken } = useKeycloakAuth();
+  // Get access token
+  const { accessToken } = useAuth();
   const token = accessToken || '';
 
   // Estado: { número: cantidad }

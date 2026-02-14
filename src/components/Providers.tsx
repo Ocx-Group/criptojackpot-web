@@ -8,7 +8,6 @@ import i18n from '@/locales/i18n';
 import { NotificationProvider } from '@/components/notification/NotificationProvider';
 import { DIProvider } from '@/components/DIProvider';
 import { ProvidersProps } from '@/interfaces/providersProps';
-import KeycloakProvider from '@/components/KeycloakProvider';
 
 export default function Providers({ children }: Readonly<ProvidersProps>) {
   const [queryClient] = useState(
@@ -24,15 +23,13 @@ export default function Providers({ children }: Readonly<ProvidersProps>) {
   );
 
   return (
-    <KeycloakProvider>
-      <DIProvider>
-        <QueryClientProvider client={queryClient}>
-          <I18nextProvider i18n={i18n}>
-            <NotificationProvider>{children}</NotificationProvider>
-          </I18nextProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </DIProvider>
-    </KeycloakProvider>
+    <DIProvider>
+      <QueryClientProvider client={queryClient}>
+        <I18nextProvider i18n={i18n}>
+          <NotificationProvider>{children}</NotificationProvider>
+        </I18nextProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </DIProvider>
   );
 }

@@ -41,7 +41,6 @@
     "forgetPassword": "¿Olvidaste tu contraseña?",
     "loading": "Cargando...",
     "loginButton": "Iniciar sesión",
-    "loginWithKeycloak": "Iniciar sesión",
     "newUser": "¿Nuevo usuario?",
     "passwordPlaceholder": "Ingresa tu contraseña...",
     "success": "Credenciales correctas",
@@ -146,7 +145,6 @@
       "weakPassword": "La contraseña debe tener al menos 8 caracteres"
     },
     "identificationPlaceholder": "Identificación",
-    "keycloakRedirectMessage": "Serás redirigido a nuestra página de registro segura.",
     "lastNamePlaceholder": "Apellido",
     "loading": "Cargando...",
     "loadingCountries": "Cargando países...",

@@ -4,7 +4,7 @@ import { useUserSync } from '@/hooks/useUserSync';
 import React from 'react';
 
 /**
- * Session provider that syncs user data after Keycloak authentication.
+ * Session provider that syncs user data after authentication.
  * This component should be placed inside the Providers component.
  */
 export default function SessionProvider({

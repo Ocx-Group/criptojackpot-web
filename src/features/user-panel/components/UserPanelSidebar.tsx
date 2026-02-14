@@ -14,14 +14,14 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/userStore';
 import { useProfilePhoto } from '@/hooks/useProfilePhoto';
 
 const UserPanelSidebar = () => {
   const path = usePathname();
   const { user } = useUserStore();
-  const { logout } = useKeycloakAuth();
+  const { logout } = useAuth();
 
   const { profileImage, uploading, uploadError, fileInputRef, handleFileSelect, openFileSelector, clearError } =
     useProfilePhoto({

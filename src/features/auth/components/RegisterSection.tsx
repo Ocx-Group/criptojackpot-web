@@ -1,7 +1,7 @@
 'use client';
 import registerImage from 'public/images/background/back-register.png';
 import logo from 'public/images/logo/cripto-jackpot-logo.png';
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -13,10 +13,10 @@ interface RegisterSectionProps {
 
 const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
   const { t } = useTranslation();
-  const { register, login } = useKeycloakAuth();
+  const { register, login } = useAuth();
 
-  // Redirect to Keycloak register page on mount (or when button is clicked)
-  const handleKeycloakRegister = async () => {
+  // Redirect to register page on mount (or when button is clicked)
+  const handleRegister = async () => {
     // Store referral code in sessionStorage to use after registration
     if (referralCode) {
       sessionStorage.setItem('referralCode', referralCode);
@@ -24,15 +24,15 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
     await register('/user-panel');
   };
 
-  const handleKeycloakLogin = async () => {
+  const handleLogin = async () => {
     await login('/user-panel');
   };
 
-  // Auto-redirect to Keycloak registration if this page is accessed
+  // Auto-redirect to registration if this page is accessed
   useEffect(() => {
-    // Optional: Auto-redirect to Keycloak register page
+    // Optional: Auto-redirect to register page
     // Uncomment if you want immediate redirect without showing this page
-    // handleKeycloakRegister();
+    // handleRegister();
   }, []);
 
   return (
@@ -65,7 +65,7 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                     {t('REGISTER.alreadyHaveAccount')}
                     <button
                       type="button"
-                      onClick={handleKeycloakLogin}
+                      onClick={handleLogin}
                       className="s1-clr fw_500 s1-texthover bg-transparent border-0 p-0 text-decoration-underline"
                     >
                       {t('REGISTER.signIn')}
@@ -73,19 +73,15 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                   </span>
                 </div>
 
-                {/* Register Button - Redirects to Keycloak */}
+                {/* Register Button */}
                 <div className="d-flex flex-column gap-4">
                   <button
                     type="button"
-                    onClick={handleKeycloakRegister}
+                    onClick={handleRegister}
                     className="cmn-btn s1-bg radius12 w-100 fw_600 justify-content-center d-inline-flex align-items-center gap-2 py-xxl-4 py-3 px-xl-6 px-5 n0-clr"
                   >
                     <span className="fw_600 n0-clr">{t('REGISTER.createAccount', 'Crear Cuenta')}</span>
                   </button>
-
-                  <p className="text-center n3-clr fs-6 mb-0">
-                    {t('REGISTER.keycloakRedirectMessage', 'Serás redirigido a nuestra página de registro segura.')}
-                  </p>
                 </div>
 
                 {/* Terms */}

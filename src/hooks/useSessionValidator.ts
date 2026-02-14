@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/userStore';
 import { getUserService } from '@/di/serviceLocator';
 import { AxiosError } from 'axios';
 
 /**
  * Validates the user session and keeps user data in sync.
- * Uses keycloak-js for authentication state.
  */
 export function useSessionValidator() {
-  const { isAuthenticated, logout } = useKeycloakAuth();
+  const { isAuthenticated, logout } = useAuth();
   const { user, updateUser, clearUser } = useUserStore();
   const userId = user?.id;
 

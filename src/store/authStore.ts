@@ -1,13 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { keycloakLogout } from '@/lib/keycloak';
 
-// Simplified auth state for Keycloak - most auth is handled by keycloak-js
 interface AuthState {
-  // Legacy fields for compatibility
+  token: string | null;
   resetPasswordEmail: string | null;
 
   // Actions
+  setToken: (token: string | null) => void;
   logout: () => void;
   setResetPasswordEmail: (email: string) => void;
   clearResetPasswordEmail: () => void;
@@ -16,14 +15,21 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     set => ({
+      token: null,
       resetPasswordEmail: null,
+
+      setToken: token => {
+        set({ token });
+      },
 
       logout: () => {
         set({
+          token: null,
           resetPasswordEmail: null,
         });
-        // Trigger keycloak logout
-        keycloakLogout('/landing-page');
+        if (typeof globalThis.window !== 'undefined') {
+          globalThis.location.href = '/landing-page';
+        }
       },
 
       setResetPasswordEmail: email => {
@@ -37,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       partialize: state => ({
+        token: state.token,
         resetPasswordEmail: state.resetPasswordEmail,
       }),
     }

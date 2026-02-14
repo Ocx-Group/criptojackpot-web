@@ -14,7 +14,6 @@ interface UserState {
 
 /**
  * Store for user profile data.
- * Authentication is handled by next-auth/Keycloak.
  * This store manages user profile data fetched from the backend.
  */
 export const useUserStore = create<UserState>()(

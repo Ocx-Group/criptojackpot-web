@@ -1,17 +1,17 @@
 'use client';
 
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { getUserService } from '@/di/serviceLocator';
 
 /**
- * Hook that syncs user profile from backend after Keycloak authentication.
+ * Hook that syncs user profile from backend after authentication.
  * Should be called in app layout or auth provider to ensure user data is loaded.
  */
 export function useUserSync() {
-  const { isAuthenticated, isLoading: authLoading, accessToken } = useKeycloakAuth();
+  const { isAuthenticated, isLoading: authLoading, accessToken } = useAuth();
   const { setUser, clearUser, user, isProfileLoaded } = useUserStore();
 
   const hasAccessToken = !!accessToken;

@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { sidebarItems } from 'public/data/sidebarItems';
 import { SignOutIcon } from '@phosphor-icons/react';
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 const AdminPanelSidebar = () => {
   const path = usePathname();
-  const { logout } = useKeycloakAuth();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
     logout('/login');

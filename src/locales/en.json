@@ -41,7 +41,6 @@
     "forgetPassword": "Forget password",
     "loading": "Loading...",
     "loginButton": "Login",
-    "loginWithKeycloak": "Login",
     "newUser": "New user?",
     "passwordPlaceholder": "Enter Your Password...",
     "success": "Successfully authenticated",
@@ -146,7 +145,6 @@
       "weakPassword": "Password must be at least 8 characters"
     },
     "identificationPlaceholder": "Identification",
-    "keycloakRedirectMessage": "You will be redirected to our secure registration page.",
     "lastNamePlaceholder": "Last name",
     "loading": "Loading...",
     "loadingCountries": "Loading countries...",

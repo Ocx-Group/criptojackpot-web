@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { getAccessToken, keycloakLogout } from '@/lib/keycloak';
+import { getAccessToken } from '@/utils/authUtils';
 
 import { Response } from '@/interfaces/response';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
@@ -30,8 +30,8 @@ export abstract class BaseService {
   private setupInterceptors(): void {
     this.apiClient.interceptors.request.use(
       async config => {
-        // Get access token from keycloak-js
-        const token = getAccessToken();
+        // Get access token from storage
+        const token = await getAccessToken();
 
         if (token) {
           config.headers.set('Authorization', `Bearer ${token}`);
@@ -55,8 +55,11 @@ export abstract class BaseService {
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && originalRequest.url !== 'auth') {
-          // Trigger keycloak logout on 401
-          keycloakLogout('/login?error=session_expired');
+          // Trigger logout on 401
+          if (typeof globalThis.window !== 'undefined') {
+            localStorage.removeItem('auth-storage');
+            globalThis.location.href = '/login?error=session_expired';
+          }
         }
         throw error instanceof Error ? error : new Error(String(error));
       }

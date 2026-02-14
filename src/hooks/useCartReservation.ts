@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { useLotteryHub } from '@/hooks/lottery-hub';
-import { useKeycloakAuth } from '@/hooks/useKeycloakAuth';
+import { useAuth } from '@/hooks/useAuth';
 
 interface UseCartReservationOptions {
   lotteryId: string;
@@ -27,7 +27,7 @@ export const useCartReservation = ({
   onReservationError,
   onItemExpired,
 }: UseCartReservationOptions): UseCartReservationReturn => {
-  const { accessToken } = useKeycloakAuth();
+  const { accessToken } = useAuth();
   const token = accessToken || '';
   const { items, markAsReserved, removeItem, isItemExpired } = useCartStore();
 

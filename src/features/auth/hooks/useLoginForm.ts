@@ -11,8 +11,8 @@ import { AuthRequest, LoginFormData } from '@/features/auth/types';
 import { validateLoginForm } from '@/features/auth/validators/loginValidations';
 
 /**
- * @deprecated This hook is deprecated. Authentication is now handled by Keycloak via next-auth.
- * Use signIn('keycloak') from next-auth/react instead.
+ * @deprecated This hook is deprecated. Authentication is now handled via custom auth.
+ * Use the useAuth hook instead.
  */
 export const useLoginForm = () => {
   const { t } = useTranslation();
