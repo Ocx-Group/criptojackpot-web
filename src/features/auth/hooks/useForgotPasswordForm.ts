@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
-import { getUserService } from '@/di/serviceLocator';
+import { userService } from '@/services';
 
 interface ForgotPasswordFormData {
   email: string;
@@ -25,7 +25,7 @@ export const useForgotPasswordForm = () => {
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      await getUserService().requestPasswordReset({ email });
+      await userService.requestPasswordReset({ email });
     },
     onSuccess: () => {
       showNotification('success', t('FORGOT_PASSWORD.success'), '');
@@ -76,4 +76,3 @@ export const useForgotPasswordForm = () => {
     handleSubmit,
   };
 };
-

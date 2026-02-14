@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
-import { getCountryService, getUserService } from '@/di/serviceLocator';
+import { countryService, userService } from '@/services';
 import { Country } from '@/interfaces/country';
 import { User } from '@/interfaces/user';
 import { useNotificationStore } from '@/store/notificationStore';
@@ -29,7 +29,7 @@ export const useCreateUser = (options?: CreateUserOptions) => {
     error: countriesError,
   } = useQuery({
     queryKey: ['countries'],
-    queryFn: () => getCountryService().getAllCountries(),
+    queryFn: () => countryService.getAllCountries(),
     staleTime: Infinity,
     retry: false,
   });
@@ -41,10 +41,14 @@ export const useCreateUser = (options?: CreateUserOptions) => {
   }, [countriesError, showNotification, t, options?.showNotifications]);
 
   const createMutation = useMutation({
-    mutationFn: (userData: User) => getUserService().createUser(userData),
+    mutationFn: (userData: User) => userService.createUser(userData),
     onSuccess: (user: User) => {
       if (options?.showNotifications !== false) {
-        showNotification('success', t('REGISTER.success', 'Usuario creado'), t('REGISTER.successMessage', 'El usuario fue creado correctamente.'));
+        showNotification(
+          'success',
+          t('REGISTER.success', 'Usuario creado'),
+          t('REGISTER.successMessage', 'El usuario fue creado correctamente.')
+        );
       }
       options?.onSuccess?.(user);
     },
@@ -69,4 +73,3 @@ export const useCreateUser = (options?: CreateUserOptions) => {
     findCountryById,
   };
 };
-

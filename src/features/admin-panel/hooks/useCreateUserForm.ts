@@ -11,7 +11,7 @@ import { Country } from '@/interfaces/country';
 import { User } from '@/interfaces/user';
 import { Role } from '@/interfaces/role';
 import { validateRegisterForm } from '@/features/auth/validators/registerValidations';
-import { getRoleService } from '@/di/serviceLocator';
+import { roleService } from '@/services';
 
 interface AdminUserFormData {
   name: string;
@@ -47,7 +47,6 @@ export const useCreateUserForm = () => {
   const { data: roles = [] } = useQuery<Role[], Error>({
     queryKey: ['roles'],
     queryFn: async () => {
-      const roleService = getRoleService();
       return roleService.getAllRoles();
     },
     staleTime: Infinity,
@@ -125,4 +124,3 @@ export const useCreateUserForm = () => {
     handleSubmit,
   };
 };
-

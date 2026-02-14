@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
-import { getUserService } from '@/di/serviceLocator';
+import { userService } from '@/services';
 import { FormData, ShowPwd, UpdateUserRequest } from '@/features/user-panel/types';
 
 export function usePersonalInfoForm() {
@@ -43,7 +43,7 @@ export function usePersonalInfoForm() {
   // Mutación de React Query para actualizar el usuario
   const updateUserMutation = useMutation({
     mutationFn: (userData: { id: number; data: UpdateUserRequest }) =>
-      getUserService().updateUserAsync(userData.id, userData.data),
+      userService.updateUserAsync(userData.id, userData.data),
     onSuccess: updatedUserData => {
       updateUser(updatedUserData);
       showNotification('success', t('PERSONAL_INFO.notifications.updateSuccess'), '');

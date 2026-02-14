@@ -7,7 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { CreatePrizeRequest, PrizeType, PrizeImageRequest } from '@/interfaces/prize';
-import { getPrizeService } from '@/di/serviceLocator';
+import { prizeService } from '@/services';
 import { CreatePrizeFormData } from '../types/createPrizeFormData';
 import { validateCreatePrizeForm } from '../validators/prizeValidations';
 
@@ -34,7 +34,6 @@ export const useCreatePrizeForm = () => {
 
   const createPrizeMutation = useMutation({
     mutationFn: async (data: CreatePrizeRequest) => {
-      const prizeService = getPrizeService();
       return prizeService.createPrize(data);
     },
     onSuccess: () => {

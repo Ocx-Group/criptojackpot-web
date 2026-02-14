@@ -79,20 +79,13 @@
 
 ## 🔄 Cómo Usar los Servicios
 
-### 1. Importar desde Service Locator
+### 1. Importar desde el módulo de servicios
 
 ```typescript
-import { getUserService, getLotteryNumberService } from '@/di/serviceLocator';
+import { userService, lotteryNumberService } from '@/services';
 ```
 
-### 2. Obtener Instancia del Servicio
-
-```typescript
-const userService = getUserService();
-const lotteryNumberService = getLotteryNumberService();
-```
-
-### 3. Usar los Métodos
+### 2. Usar los Métodos
 
 ```typescript
 // Ejemplo: Obtener usuario

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getAuthService } from '@/di/serviceLocator';
+import { authService } from '@/services';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
@@ -25,7 +25,7 @@ export const useVerify2Fa = () => {
   const [useRecoveryCode, setUseRecoveryCode] = useState(false);
 
   const verify2FaMutation = useMutation({
-    mutationFn: (request: Verify2FaRequest) => getAuthService().verify2Fa(request),
+    mutationFn: (request: Verify2FaRequest) => authService.verify2Fa(request),
     onSuccess: data => {
       const userData = data.data;
       setUser({

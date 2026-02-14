@@ -1,8 +1,5 @@
 'use client';
 
-import 'reflect-metadata';
-import '@/di/init';
-
 import defaultImage from '@/../public/images/man-global/nf1.png';
 
 // URL del placeholder para fallback de imágenes
@@ -29,7 +26,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
-import { getLotteryService } from '@/di/serviceLocator';
+import { lotteryService } from '@/services';
 import { Lottery, LotteryStatus } from '@/interfaces/lottery';
 import NavbarBlack from '@/components/navbar/NavbarBlack';
 import Jewellery1Footer from '@/components/landing-jewellery1/Jewellery1Footer';
@@ -106,7 +103,6 @@ const LotteryDetailsPage = () => {
   } = useQuery<Lottery, Error>({
     queryKey: ['lottery', lotteryId],
     queryFn: async () => {
-      const lotteryService = getLotteryService();
       return lotteryService.getLotteryById(lotteryId);
     },
     enabled: !!lotteryId,

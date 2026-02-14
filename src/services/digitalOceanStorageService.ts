@@ -1,5 +1,4 @@
 import { BaseService } from './baseService';
-import { injectable } from 'tsyringe';
 
 interface UploadRequest {
   fileName: string;
@@ -14,9 +13,12 @@ interface UploadResponse {
   cdnUrl: string;
 }
 
-@injectable()
 export class DigitalOceanStorageService extends BaseService {
   protected endpoint: string = 'digitaloceanstorage';
+
+  constructor() {
+    super('/api/v1');
+  }
 
   /**
    * Sube un archivo usando presigned URL del backend

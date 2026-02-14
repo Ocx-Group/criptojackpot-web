@@ -1,5 +1,5 @@
 import { useUserStore } from '@/store/userStore';
-import { getUserService, getUserReferralService } from '@/di/serviceLocator';
+import { userService, userReferralService } from '@/services';
 import { GenerateNewSecurityCodeRequest, UserReferralStats } from '@/features/user-panel/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNotificationStore } from '@/store/notificationStore';
@@ -20,7 +20,7 @@ export const useReferralProgram = () => {
 
   const { data: referralData, isLoading: isReferralsLoading } = useQuery<UserReferralStats>({
     queryKey: ['userReferrals', user?.id],
-    queryFn: () => getUserReferralService().GetUserReferralsAsync(user!.id || 0),
+    queryFn: () => userReferralService.GetUserReferralsAsync(user!.id || 0),
     enabled: !!user?.id,
   });
 
@@ -31,7 +31,7 @@ export const useReferralProgram = () => {
       const request: GenerateNewSecurityCodeRequest = {
         userId: user.id,
       };
-      return getUserService().generateNewSecurityCode(request);
+      return userService.generateNewSecurityCode(request);
     },
     onSuccess: updatedUser => {
       updateUser(updatedUser);

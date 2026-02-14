@@ -4,7 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
-import { getUserService } from '@/di/serviceLocator';
+import { userService } from '@/services';
 
 /**
  * Hook that syncs user profile from backend after authentication.
@@ -24,7 +24,7 @@ export function useUserSync() {
   } = useQuery({
     queryKey: ['current-user-profile'],
     queryFn: async () => {
-      const userData = await getUserService().getCurrentUser();
+      const userData = await userService.getCurrentUser();
       return userData;
     },
     enabled: isAuthenticated && !isProfileLoaded,

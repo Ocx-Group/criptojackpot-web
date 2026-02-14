@@ -19,14 +19,7 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion', 'react-toastify', '@tanstack/react-query'],
   },
 
-  webpack: (config, { isServer }) => {
-    // Asegurar que reflect-metadata se cargue antes que tsyringe
-    if (!isServer) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-      };
-    }
-
+  webpack: config => {
     // Mejorar caché de webpack
     config.cache = {
       type: 'filesystem',

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@/interfaces/user';
-import { getUserService } from '@/di/serviceLocator';
+import { userService } from '@/services';
 import { useUserStore } from '@/store/userStore';
 
 export function useUsers() {
@@ -12,7 +12,7 @@ export function useUsers() {
     error,
   } = useQuery<User[], Error>({
     queryKey: ['users'],
-    queryFn: () => getUserService().getAllUsers(user?.id || 0),
+    queryFn: () => userService.getAllUsers(user?.id || 0),
   });
 
   return {

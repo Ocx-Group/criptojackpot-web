@@ -14,20 +14,13 @@ A **Next.js 15 (App Router)** lottery/giveaway platform with TypeScript, featuri
 
 Each protected layout wraps content with `<AuthGuard requireAuth={true} requiredRole="...">`.
 
-### Dependency Injection (tsyringe)
+### Services (Singleton Instances)
 
-Services use DI with singleton registration. **Critical**: Every layout/entry point must import DI initialization:
-
-```typescript
-import 'reflect-metadata';
-import '@/di/init';
-```
-
-Access services via typed helpers in `src/di/serviceLocator.ts`:
+All services are exported as singleton instances from `src/services/index.ts`. Import them directly:
 
 ```typescript
-import { getLotteryService, getAuthService } from '@/di/serviceLocator';
-const lotteryService = getLotteryService();
+import { lotteryService, authService } from '@/services';
+const lottery = await lotteryService.getLotteryById(id);
 ```
 
 ### State Management
@@ -46,11 +39,22 @@ All services extend `BaseService` which provides:
 Create new services following this pattern:
 
 ```typescript
-@injectable()
 class MyService extends BaseService {
   protected override endpoint = 'my-endpoint';
+
+  constructor() {
+    super('/api/v1');
+  }
   // Custom methods use inherited CRUD methods
 }
+
+export { MyService };
+```
+
+Then add a singleton instance in `src/services/index.ts`:
+
+```typescript
+export const myService = new MyService();
 ```
 
 ## Feature Module Structure
@@ -58,15 +62,17 @@ class MyService extends BaseService {
 Features in `src/features/{feature-name}/` contain:
 
 - `components/` - Feature-specific React components
-- `hooks/` - Custom hooks using TanStack Query + service locator
+- `hooks/` - Custom hooks using TanStack Query + service instances
 - `types/` - TypeScript interfaces
 - `validators/` - Form validation functions
 
 Example hook pattern (see `useLoginForm.ts`):
 
 ```typescript
+import { myService } from '@/services';
+
 const mutation = useMutation({
-  mutationFn: data => getMyService().create(data),
+  mutationFn: data => myService.create(data),
   onSuccess: () => showNotification('success', t('KEY'), ''),
   onError: () => showNotification('error', t('ERROR_KEY'), ''),
 });
@@ -78,7 +84,6 @@ const mutation = useMutation({
 
 - Use `@/` path alias for `src/` directory
 - Public assets: `@/../public/images/...`
-- Always import DI init in new layouts
 
 ### Internationalization
 

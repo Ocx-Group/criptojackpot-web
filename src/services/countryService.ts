@@ -1,8 +1,6 @@
 import { Country } from '@/interfaces/country';
-import { injectable } from 'tsyringe';
 import { BaseService } from './baseService';
 
-@injectable()
 class CountryService extends BaseService {
   protected override endpoint = 'countries';
 

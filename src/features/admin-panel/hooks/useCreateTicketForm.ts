@@ -9,7 +9,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { LotteryType, CreateLotteryRequest } from '@/interfaces/lottery';
 import { Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { getLotteryService, getPrizeService } from '@/di/serviceLocator';
+import { lotteryService, prizeService } from '@/services';
 import { CreateTicketFormData, UseCreateTicketFormReturn } from '../types/createTicketForm';
 
 export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
@@ -22,7 +22,6 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   const { data: prizesResponse } = useQuery<PaginatedResponse<Prize>, Error>({
     queryKey: ['prizes'],
     queryFn: async () => {
-      const prizeService = getPrizeService();
       return prizeService.getAllPrizes({ pageNumber: 1, pageSize: 100 });
     },
   });
@@ -50,7 +49,6 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
 
   const createLotteryMutation = useMutation({
     mutationFn: async (data: CreateLotteryRequest) => {
-      const lotteryService = getLotteryService();
       return lotteryService.createLottery(data);
     },
     onSuccess: () => {

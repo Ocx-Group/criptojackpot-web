@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { CreateLotteryRequest } from '@/interfaces/lottery';
-import { getLotteryService } from '@/di/serviceLocator';
+import { lotteryService } from '@/services';
 import { validateCreateLotteryForm } from '../validators/lotteryValidations';
 import { initialFormData } from '../types/createLotteryFormData';
 
@@ -20,7 +20,6 @@ export const useCreateLotteryForm = () => {
 
   const createLotteryMutation = useMutation({
     mutationFn: async (data: CreateLotteryRequest) => {
-      const lotteryService = getLotteryService();
       return lotteryService.createLottery(data);
     },
     onSuccess: () => {

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Country } from '@/interfaces/country';
-import { getCountryService } from '@/di/serviceLocator';
+import { countryService } from '@/services';
 
 interface AppState {
   countries: Country[];
@@ -28,7 +28,7 @@ export const useAppStore = create<AppState>(set => ({
 
     set({ isLoadingCountries: true, countriesError: null });
     try {
-      const countriesData = await getCountryService().getAllCountries();
+      const countriesData = await countryService.getAllCountries();
       set({ countries: countriesData, isLoadingCountries: false });
     } catch (error: any) {
       set({

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { PaginationRequest } from '@/interfaces/pagination';
-import { getPrizeService } from '@/di/serviceLocator';
+import { prizeService } from '@/services';
 
 export const usePrizes = (initialPagination?: PaginationRequest) => {
   const queryClient = useQueryClient();
@@ -17,14 +17,12 @@ export const usePrizes = (initialPagination?: PaginationRequest) => {
   const { data, isLoading, error, refetch } = useQuery<PaginatedResponse<Prize>, Error>({
     queryKey: ['prizes', pagination],
     queryFn: async () => {
-      const prizeService = getPrizeService();
       return await prizeService.getAllPrizes(pagination);
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const prizeService = getPrizeService();
       return await prizeService.deletePrize(id);
     },
     onSuccess: () => {

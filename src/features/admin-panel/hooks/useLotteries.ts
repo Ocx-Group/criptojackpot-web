@@ -7,7 +7,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { Lottery, LotteryStatus } from '@/interfaces/lottery';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { PaginationRequest } from '@/interfaces/pagination';
-import { getLotteryService } from '@/di/serviceLocator';
+import { lotteryService } from '@/services';
 
 export const useLotteries = (initialPagination?: PaginationRequest) => {
   const { t } = useTranslation();
@@ -28,7 +28,6 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
   } = useQuery<PaginatedResponse<Lottery>, Error>({
     queryKey: ['lotteries', pagination],
     queryFn: async () => {
-      const lotteryService = getLotteryService();
       return lotteryService.getAllLotteries(pagination);
     },
   });
@@ -38,7 +37,6 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
   // Eliminar lotería
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const lotteryService = getLotteryService();
       return lotteryService.deleteLottery(id);
     },
     onSuccess: () => {
@@ -59,7 +57,6 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
   // Actualizar estado de la lotería
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: LotteryStatus }) => {
-      const lotteryService = getLotteryService();
       return lotteryService.updateLotteryStatus(id, status);
     },
     onSuccess: () => {

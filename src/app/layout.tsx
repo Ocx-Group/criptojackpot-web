@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-import '@/di/init';
 import Bootstrap from '@/components/Bootstrap';
 import Cursor from '@/components/Cursor';
 import Providers from '@/components/Providers';

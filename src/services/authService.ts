@@ -1,8 +1,6 @@
 import { AuthRequest, AuthResponse, GoogleLoginRequest, Verify2FaRequest } from '@/features/auth/types/authRequest';
-import { injectable } from 'tsyringe';
 import { BaseService } from './baseService';
 
-@injectable()
 class AuthService extends BaseService {
   protected override endpoint = 'auth';
 

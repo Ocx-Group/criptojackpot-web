@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
-import { getAuthService } from '@/di/serviceLocator';
+import { authService } from '@/services';
 
 export interface AuthUser {
   id?: string;
@@ -32,7 +32,7 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await getAuthService().logout();
+      await authService.logout();
     } catch {
       // Even if the API call fails, clear local state
     }

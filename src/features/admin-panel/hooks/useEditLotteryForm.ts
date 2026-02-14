@@ -9,7 +9,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { Lottery, LotteryStatus, UpdateLotteryRequest } from '@/interfaces/lottery';
 import { Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { getLotteryService, getPrizeService } from '@/di/serviceLocator';
+import { lotteryService, prizeService } from '@/services';
 import { EditLotteryFormData } from '../types/editLotteryFormData';
 import { validateEditLotteryForm } from '../validators/lotteryValidations';
 
@@ -42,7 +42,6 @@ export const useEditLotteryForm = (lotteryId: string) => {
   } = useQuery<Lottery, Error>({
     queryKey: ['lottery', lotteryId],
     queryFn: async () => {
-      const lotteryService = getLotteryService();
       return lotteryService.getLotteryById(lotteryId);
     },
     enabled: !!lotteryId,
@@ -52,7 +51,6 @@ export const useEditLotteryForm = (lotteryId: string) => {
   const { data: prizesResponse } = useQuery<PaginatedResponse<Prize>, Error>({
     queryKey: ['prizes'],
     queryFn: async () => {
-      const prizeService = getPrizeService();
       return prizeService.getAllPrizes({ pageNumber: 1, pageSize: 100 });
     },
   });
@@ -85,7 +83,6 @@ export const useEditLotteryForm = (lotteryId: string) => {
 
   const updateLotteryMutation = useMutation({
     mutationFn: async (data: UpdateLotteryRequest) => {
-      const lotteryService = getLotteryService();
       return lotteryService.updateLottery(lotteryId, data);
     },
     onSuccess: () => {

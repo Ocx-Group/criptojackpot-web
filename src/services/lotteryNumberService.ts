@@ -1,5 +1,4 @@
 import { BaseService } from './baseService';
-import { injectable } from 'tsyringe';
 
 interface AvailableNumbersResponse {
   lotteryId: string;
@@ -23,7 +22,6 @@ interface NumberStatsResponse {
   soldNumbers: number;
 }
 
-@injectable()
 class LotteryNumberService extends BaseService {
   protected endpoint = 'lottery-numbers';
 

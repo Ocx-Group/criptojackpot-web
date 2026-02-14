@@ -7,7 +7,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import i18n from '@/locales/i18n';
 import { NotificationProvider } from '@/components/notification/NotificationProvider';
-import { DIProvider } from '@/components/DIProvider';
 import { ProvidersProps } from '@/interfaces/providersProps';
 
 export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
@@ -34,15 +33,5 @@ export default function Providers({ children }: Readonly<ProvidersProps>) {
     </QueryClientProvider>
   );
 
-  return (
-    <DIProvider>
-      {GOOGLE_CLIENT_ID ? (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          {content}
-        </GoogleOAuthProvider>
-      ) : (
-        content
-      )}
-    </DIProvider>
-  );
+  return GOOGLE_CLIENT_ID ? <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>{content}</GoogleOAuthProvider> : content;
 }

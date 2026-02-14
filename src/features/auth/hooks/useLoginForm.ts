@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getAuthService } from '@/di/serviceLocator';
+import { authService } from '@/services';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
@@ -29,7 +29,7 @@ export const useLoginForm = () => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
 
   const loginMutation = useMutation({
-    mutationFn: (credentials: AuthRequest) => getAuthService().login(credentials),
+    mutationFn: (credentials: AuthRequest) => authService.login(credentials),
     onSuccess: data => {
       // If 2FA is required, redirect to 2FA verification page
       if (data.requiresTwoFactor) {

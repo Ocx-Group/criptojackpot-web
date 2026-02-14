@@ -1,7 +1,7 @@
 import { UpdateImageProfileRequest } from '@/features/user-panel/types/updateImageProfileRequest';
 import React, { useEffect, useRef, useState } from 'react';
 import { useUserStore } from '@/store/userStore';
-import { getDigitalOceanStorageService, getUserService } from '@/di/serviceLocator';
+import { digitalOceanStorageService, userService } from '@/services';
 import { ProfileImageType, UseProfilePhotoOptions, UseProfilePhotoReturn } from '@/interfaces/profilePhotoReturn';
 
 export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfilePhotoReturn => {
@@ -62,7 +62,7 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
     onUploadStart?.();
 
     try {
-      const uploadResult = await getDigitalOceanStorageService().uploadProfilePhoto(file, user?.id ?? 0);
+      const uploadResult = await digitalOceanStorageService.uploadProfilePhoto(file, user?.id ?? 0);
       const url = new URL(uploadResult);
       const imageRelativePath = url.pathname.replace('/cryptojackpot/', '');
 
@@ -74,7 +74,7 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
 
         try {
           if (user?.id !== undefined) {
-            const updatedUser = await getUserService().updateImageProfile(updateImageProfile);
+            const updatedUser = await userService.updateImageProfile(updateImageProfile);
             setProfileImage(updatedUser.imagePath ?? '');
             updateUser(updatedUser);
           }

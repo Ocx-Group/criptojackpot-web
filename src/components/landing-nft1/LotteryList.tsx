@@ -13,7 +13,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { getLotteryService } from '@/di/serviceLocator';
+import { lotteryService } from '@/services';
 import { Lottery } from '@/interfaces/lottery';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import MotionFade from '../motionEffect/MotionFade';
@@ -24,7 +24,6 @@ const LotteryList = () => {
   const { data: lotteriesResponse, isLoading } = useQuery<PaginatedResponse<Lottery>, Error>({
     queryKey: ['lotteries-public'],
     queryFn: async () => {
-      const lotteryService = getLotteryService();
       return lotteryService.getAllLotteries({ pageNumber: 1, pageSize: 6 });
     },
   });

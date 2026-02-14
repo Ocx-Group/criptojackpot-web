@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotificationStore } from '@/store/notificationStore';
 import { UpdatePrizeRequest, PrizeType, PrizeImage, Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { getPrizeService } from '@/di/serviceLocator';
+import { prizeService } from '@/services';
 import { EditPrizeFormData } from '../types/editPrizeFormData';
 import { validateEditPrizeForm } from '../validators/prizeValidations';
 
@@ -41,7 +41,6 @@ export const useEditPrizeForm = (prizeId: string) => {
   } = useQuery<PaginatedResponse<Prize>, Error>({
     queryKey: ['prizes'],
     queryFn: async () => {
-      const prizeService = getPrizeService();
       return prizeService.getAllPrizes({ pageNumber: 1, pageSize: 100 });
     },
     enabled: !!prizeId,
@@ -72,7 +71,6 @@ export const useEditPrizeForm = (prizeId: string) => {
 
   const updatePrizeMutation = useMutation({
     mutationFn: async (data: UpdatePrizeRequest) => {
-      const prizeService = getPrizeService();
       return prizeService.updatePrize(prizeId, data);
     },
     onSuccess: () => {

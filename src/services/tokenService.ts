@@ -1,8 +1,6 @@
 import { User } from '@/interfaces/user';
 import { useUserStore } from '@/store/userStore';
-import { injectable } from 'tsyringe';
 
-@injectable()
 export class TokenService {
   /**
    * @deprecated Token is now managed by next-auth. Use session.accessToken instead.
