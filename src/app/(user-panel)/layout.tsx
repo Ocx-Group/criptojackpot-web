@@ -7,7 +7,7 @@ import NavbarBlack from '@/components/navbar/NavbarBlack';
 import UserPanelSidebar from '@/features/user-panel/components/UserPanelSidebar';
 import SessionProvider from '@/components/SessionProvider';
 
-const layout = ({
+const UserPanelLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -31,4 +31,4 @@ const layout = ({
   );
 };
 
-export default layout;
+export default UserPanelLayout;

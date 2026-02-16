@@ -20,7 +20,7 @@ export const useReferralProgram = () => {
 
   const { data: referralData, isLoading: isReferralsLoading } = useQuery<UserReferralStats>({
     queryKey: ['userReferrals', user?.id],
-    queryFn: () => userReferralService.GetUserReferralsAsync(user!.id || 0),
+    queryFn: () => userReferralService.getUserReferralsAsync(user!.id || 0),
     enabled: !!user?.id,
   });
 

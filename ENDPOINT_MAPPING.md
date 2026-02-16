@@ -38,7 +38,7 @@
 
 | Método HTTP | Ruta Backend                      | Método Frontend                                     | Archivo                                                       |
 | ----------- | --------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
-| GET         | `/api/v1/user-referrals/{userId}` | `userReferralService.GetUserReferralsAsync(userId)` | [userReferralService.ts](src/services/userReferralService.ts) |
+| GET         | `/api/v1/user-referrals/{userId}` | `userReferralService.getUserReferralsAsync(userId)` | [userReferralService.ts](src/services/userReferralService.ts) |
 
 ---
 

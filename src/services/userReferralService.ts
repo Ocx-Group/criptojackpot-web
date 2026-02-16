@@ -12,7 +12,7 @@ class UserReferralService extends BaseService {
     super('/api/v1');
   }
 
-  async GetUserReferralsAsync(userId: number): Promise<UserReferralStats> {
+  async getUserReferralsAsync(userId: number): Promise<UserReferralStats> {
     return this.getById<UserReferralStats>(`${userId}`);
   }
 }
