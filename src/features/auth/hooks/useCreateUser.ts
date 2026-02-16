@@ -11,7 +11,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 
 export interface CreateUserOptions {
   onSuccess?: (user: User) => void;
-  onError?: (error: any) => void;
+  onError?: (error: Error) => void;
   showNotifications?: boolean;
 }
 
@@ -52,7 +52,7 @@ export const useCreateUser = (options?: CreateUserOptions) => {
       }
       options?.onSuccess?.(user);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       if (options?.showNotifications !== false) {
         showNotification('error', t('REGISTER.errors.serverError', 'Error al crear el usuario'), '');
       }

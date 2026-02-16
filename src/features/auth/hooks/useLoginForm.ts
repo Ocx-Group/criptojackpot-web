@@ -20,7 +20,6 @@ export const useLoginForm = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.show);
-  const setAuthenticated = useAuthStore(state => state.setAuthenticated);
   const setRememberMe = useAuthStore(state => state.setRememberMe);
   const setUser = useUserStore(state => state.setUser);
 
@@ -70,7 +69,6 @@ export const useLoginForm = () => {
         roleId: userData.role?.id ?? 0,
         role: userData.role ? { id: userData.role.id, name: userData.role.name } : undefined,
       });
-      setAuthenticated(true);
       showNotification('success', t('LOGIN.success'), '');
 
       if (userData.role?.name === 'admin') {

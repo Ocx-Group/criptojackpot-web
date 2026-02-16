@@ -113,9 +113,9 @@ export const useEditLotteryForm = (lotteryId: string) => {
         router.push('/admin/lotteries');
       }, 1000);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       const errorMessage =
-        error?.message || t('LOTTERIES_ADMIN.edit.error', 'Error al actualizar la lotería. Intente nuevamente.');
+        error.message || t('LOTTERIES_ADMIN.edit.error', 'Error al actualizar la lotería. Intente nuevamente.');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });

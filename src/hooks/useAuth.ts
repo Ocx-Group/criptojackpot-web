@@ -16,10 +16,9 @@ export interface AuthUser {
 
 export function useAuth() {
   const [isLoading] = useState(false);
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-  const authLogout = useAuthStore(state => state.logout);
-  const setAuthenticated = useAuthStore(state => state.setAuthenticated);
   const user = useUserStore(state => state.user);
+  const isAuthenticated = user !== null;
+  const authLogout = useAuthStore(state => state.logout);
   const clearUser = useUserStore(state => state.clearUser);
 
   const login = useCallback(async (redirectPath?: string) => {
@@ -71,7 +70,6 @@ export function useAuth() {
     register,
     logout,
     hasRole,
-    setAuthenticated,
     initError: null,
   };
 }

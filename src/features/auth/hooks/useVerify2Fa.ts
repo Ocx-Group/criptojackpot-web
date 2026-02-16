@@ -18,7 +18,6 @@ export const useVerify2Fa = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.show);
-  const setAuthenticated = useAuthStore(state => state.setAuthenticated);
   const rememberMe = useAuthStore(state => state.rememberMe);
   const setUser = useUserStore(state => state.setUser);
 
@@ -45,7 +44,6 @@ export const useVerify2Fa = () => {
         roleId: userData.role?.id ?? 0,
         role: userData.role ? { id: userData.role.id, name: userData.role.name } : undefined,
       });
-      setAuthenticated(true);
       showNotification('success', t('LOGIN.success'), '');
 
       if (userData.role?.name === 'admin') {

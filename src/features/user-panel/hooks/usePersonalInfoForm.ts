@@ -63,7 +63,7 @@ export function usePersonalInfoForm() {
       // invalidar queries
       queryClient.invalidateQueries({ queryKey: ['user', user?.id] }).then();
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Failed to update profile:', error);
       showNotification('error', t('PERSONAL_INFO.notifications.updateError'), '');
     },

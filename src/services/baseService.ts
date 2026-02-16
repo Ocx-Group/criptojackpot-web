@@ -3,6 +3,8 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { Response } from '@/interfaces/response';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { GetAllOptions } from '@/interfaces/getAllOptions';
+import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '@/store/userStore';
 
 export abstract class BaseService {
   protected apiClient: AxiosInstance;
@@ -87,11 +89,10 @@ export abstract class BaseService {
           } catch {
             BaseService.isRefreshing = false;
             BaseService.refreshSubscribers = [];
-            // Refresh failed - clear auth state and redirect
+            // Refresh failed - clear auth state via stores and redirect
             if (typeof globalThis.window !== 'undefined') {
-              localStorage.removeItem('auth-storage');
-              localStorage.removeItem('user-profile-storage');
-              globalThis.location.href = '/login?error=session_expired';
+              useUserStore.getState().clearUser();
+              useAuthStore.getState().logout('/login?error=session_expired');
             }
           }
         }

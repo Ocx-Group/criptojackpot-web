@@ -21,8 +21,8 @@ export const useConfirmEmail = (token: string) => {
         router.push('/login');
       }, 3000);
     },
-    onError: (error: any) => {
-      const errorMessage = error?.message || t('CONFIRM_EMAIL.errorMessage');
+    onError: (error: Error) => {
+      const errorMessage = error.message || t('CONFIRM_EMAIL.errorMessage');
       showNotification('error', t('CONFIRM_EMAIL.error'), errorMessage);
     },
   });

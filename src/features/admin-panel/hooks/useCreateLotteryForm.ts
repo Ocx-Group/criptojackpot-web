@@ -47,9 +47,9 @@ export const useCreateLotteryForm = () => {
         router.push('/admin/lotteries');
       }, 1000);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       const errorMessage =
-        error?.message || t('LOTTERY_ADMIN.create.error', 'Error al crear la lotería. Intente nuevamente.');
+        error.message || t('LOTTERY_ADMIN.create.error', 'Error al crear la lotería. Intente nuevamente.');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });

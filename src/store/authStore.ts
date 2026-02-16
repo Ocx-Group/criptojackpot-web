@@ -2,14 +2,12 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface AuthState {
-  isAuthenticated: boolean;
   rememberMe: boolean;
   resetPasswordEmail: string | null;
 
   // Actions
-  setAuthenticated: (value: boolean) => void;
   setRememberMe: (value: boolean) => void;
-  logout: () => void;
+  logout: (redirectTo?: string) => void;
   setResetPasswordEmail: (email: string) => void;
   clearResetPasswordEmail: () => void;
 }
@@ -17,27 +15,21 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     set => ({
-      isAuthenticated: false,
       rememberMe: false,
       resetPasswordEmail: null,
-
-      setAuthenticated: (value: boolean) => {
-        set({ isAuthenticated: value });
-      },
 
       setRememberMe: (value: boolean) => {
         set({ rememberMe: value });
       },
 
-      logout: () => {
+      logout: (redirectTo?: string) => {
         set({
-          isAuthenticated: false,
           rememberMe: false,
           resetPasswordEmail: null,
         });
         if (typeof globalThis.window !== 'undefined') {
           localStorage.removeItem('user-profile-storage');
-          globalThis.location.href = '/landing-page';
+          globalThis.location.href = redirectTo || '/landing-page';
         }
       },
 
@@ -52,7 +44,6 @@ export const useAuthStore = create<AuthState>()(
     {
       name: 'auth-storage',
       partialize: state => ({
-        isAuthenticated: state.isAuthenticated,
         rememberMe: state.rememberMe,
         resetPasswordEmail: state.resetPasswordEmail,
       }),

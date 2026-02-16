@@ -61,10 +61,9 @@ export const useCreatePrizeForm = () => {
         router.push('/admin/prizes');
       }, 1000);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       const errorMessage =
-        error?.response?.data?.message ||
-        t('PRIZES_ADMIN.create.error', 'Error al crear el premio. Intente nuevamente.');
+        error.message || t('PRIZES_ADMIN.create.error', 'Error al crear el premio. Intente nuevamente.');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });

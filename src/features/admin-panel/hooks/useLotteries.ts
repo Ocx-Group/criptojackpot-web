@@ -47,9 +47,8 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
       );
       queryClient.invalidateQueries({ queryKey: ['lotteries'] }).then();
     },
-    onError: (error: any) => {
-      const errorMessage =
-        error?.response?.data?.message || t('LOTTERY_ADMIN.delete.error', 'Error al eliminar la lotería');
+    onError: (error: Error) => {
+      const errorMessage = error.message || t('LOTTERY_ADMIN.delete.error', 'Error al eliminar la lotería');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });
@@ -67,9 +66,8 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
       );
       queryClient.invalidateQueries({ queryKey: ['lotteries'] }).then();
     },
-    onError: (error: any) => {
-      const errorMessage =
-        error?.response?.data?.message || t('LOTTERY_ADMIN.updateStatus.error', 'Error al actualizar el estado');
+    onError: (error: Error) => {
+      const errorMessage = error.message || t('LOTTERY_ADMIN.updateStatus.error', 'Error al actualizar el estado');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });
