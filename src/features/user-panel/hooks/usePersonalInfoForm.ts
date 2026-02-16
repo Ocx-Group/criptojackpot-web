@@ -1,11 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { userService } from '@/services';
 import { FormData, ShowPwd, UpdateUserRequest } from '@/features/user-panel/types';
+import { createPersonalInfoSchema } from '@/features/user-panel/schemas/personalInfoSchema';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export function usePersonalInfoForm() {
   const { t } = useTranslation();
@@ -13,16 +17,27 @@ export function usePersonalInfoForm() {
   const showNotification = useNotificationStore(state => state.show);
   const queryClient = useQueryClient(); // Opcional, para invalidar queries si es necesario
 
-  const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
+  const schema = useMemo(() => createPersonalInfoSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+    },
   });
 
-  const [showPwd, setShowPwd] = useState<ShowPwd>({
+  const formData = watch();
+
+  const [showPwd, setShowPwd] = React.useState<ShowPwd>({
     password: false,
     confirmPassword: false,
   });
@@ -30,15 +45,12 @@ export function usePersonalInfoForm() {
   // Efecto para inicializar el formulario con los datos del usuario
   useEffect(() => {
     if (user) {
-      setFormData(prev => ({
-        ...prev,
-        firstName: user.name || '',
-        lastName: user.lastName || '',
-        email: user.email || '',
-        phone: user.phone || '',
-      }));
+      setValue('firstName', user.name || '');
+      setValue('lastName', user.lastName || '');
+      setValue('email', user.email || '');
+      setValue('phone', user.phone || '');
     }
-  }, [user]);
+  }, [user, setValue]);
 
   // Mutación de React Query para actualizar el usuario
   const updateUserMutation = useMutation({
@@ -57,32 +69,38 @@ export function usePersonalInfoForm() {
     },
   });
 
-  const handleChange = useCallback((field: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  }, []);
+  const handleChange = useCallback(
+    (field: keyof FormData, value: string) => {
+      setValue(field, value, { shouldValidate: false });
+    },
+    [setValue]
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.password && formData.password !== formData.confirmPassword) {
-      showNotification('error', t('PERSONAL_INFO.notifications.passwordMismatch'), '');
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        if (user && user.id) {
+          const updatedUserData: UpdateUserRequest = {
+            name: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            password: '',
+          };
 
-    if (user && user.id) {
-      const updatedUserData: UpdateUserRequest = {
-        name: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-        password: '',
-      };
+          if (data.password) {
+            updatedUserData.password = data.password;
+          }
 
-      if (formData.password) {
-        updatedUserData.password = formData.password;
+          updateUserMutation.mutate({ id: user.id, data: updatedUserData });
+        }
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', msg, '');
       }
-
-      updateUserMutation.mutate({ id: user.id, data: updatedUserData });
-    }
+    )();
   };
 
   return {

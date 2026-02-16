@@ -1,15 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { FormEvent, useCallback, useState } from 'react';
+import React, { FormEvent, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { Country } from '@/interfaces/country';
 import { RegisterFormData } from '@/interfaces/registerFormData';
 import { UseRegisterFormReturn } from '@/features/auth/types';
 import { User } from '@/interfaces/user';
-import { validateRegisterForm } from '../validators/registerValidations';
+import { createRegisterSchema } from '@/features/auth/schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 import { useCreateUser } from './useCreateUser';
 
 export const useRegisterForm = (): UseRegisterFormReturn => {
@@ -26,28 +29,40 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
     showNotifications: true,
   });
 
-  const [formData, setFormData] = useState<Omit<RegisterFormData, 'countryId'>>({
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-    identification: '',
-    phone: '',
-    state: '',
-    city: '',
-    address: '',
-    referralCode: '',
+  const schema = useMemo(() => createRegisterSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<Omit<RegisterFormData, 'countryId'>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      lastName: '',
+      email: '',
+      password: '',
+      identification: '',
+      phone: '',
+      state: '',
+      city: '',
+      address: '',
+      referralCode: '',
+    },
   });
+
+  const formData = watch();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'phone') {
-      setFormData(prev => ({ ...prev, [name]: value.replaceAll(/\D/g, '') }));
+      setValue(name as keyof Omit<RegisterFormData, 'countryId'>, value.replaceAll(/\D/g, ''), {
+        shouldValidate: false,
+      });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof Omit<RegisterFormData, 'countryId'>, value, { shouldValidate: false });
     }
   };
 
@@ -58,28 +73,42 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
 
   const togglePasswordVisibility = () => setIsPasswordShow(prev => !prev);
 
-  const setReferralCode = useCallback((code: string) => {
-    if (code) {
-      setFormData(prev => ({ ...prev, referralCode: code }));
-    }
-  }, []);
+  const setReferralCode = useCallback(
+    (code: string) => {
+      if (code) {
+        setValue('referralCode', code);
+      }
+    },
+    [setValue]
+  );
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!validateRegisterForm(formData, selectedCountry, t, showNotification)) {
+
+    // Country validation (outside schema since it's a separate state)
+    if (!selectedCountry) {
+      showNotification('error', t('REGISTER.errors.requiredFields'), '');
       return;
     }
 
-    const userData: User = {
-      ...formData,
-      countryId: selectedCountry?.id ?? 0,
-      statePlace: formData.state,
-      status: true,
-      roleId: 2, // Siempre rol Cliente para registro público
-      country: selectedCountry || undefined,
-    };
+    rhfHandleSubmit(
+      data => {
+        const userData: User = {
+          ...data,
+          countryId: selectedCountry?.id ?? 0,
+          statePlace: data.state,
+          status: true,
+          roleId: 2, // Siempre rol Cliente para registro público
+          country: selectedCountry || undefined,
+        };
 
-    createUser(userData);
+        createUser(userData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', msg, '');
+      }
+    )();
   };
 
   return {

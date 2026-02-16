@@ -2,18 +2,16 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
 import { userService } from '@/services';
-
-interface ResetPasswordFormData {
-  securityCode: string;
-  newPassword: string;
-  confirmPassword: string;
-}
+import { createResetPasswordSchema, ResetPasswordSchemaType } from '@/features/auth/schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useResetPasswordForm = () => {
   const { t } = useTranslation();
@@ -22,12 +20,23 @@ export const useResetPasswordForm = () => {
   const resetPasswordEmail = useAuthStore(state => state.resetPasswordEmail);
   const clearResetPasswordEmail = useAuthStore(state => state.clearResetPasswordEmail);
 
-  const [formData, setFormData] = useState<ResetPasswordFormData>({
-    securityCode: '',
-    newPassword: '',
-    confirmPassword: '',
+  const schema = useMemo(() => createResetPasswordSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    reset,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<ResetPasswordSchemaType>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      securityCode: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
   });
 
+  const formData = watch();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isConfirmPasswordShow, setIsConfirmPasswordShow] = useState(false);
 
@@ -50,7 +59,7 @@ export const useResetPasswordForm = () => {
     },
     onSuccess: () => {
       showNotification('success', t('RESET_PASSWORD.success'), '');
-      setFormData({ securityCode: '', newPassword: '', confirmPassword: '' });
+      reset({ securityCode: '', newPassword: '', confirmPassword: '' });
       clearResetPasswordEmail();
       setTimeout(() => {
         router.push('/login');
@@ -63,7 +72,7 @@ export const useResetPasswordForm = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setValue(name as keyof ResetPasswordSchemaType, value, { shouldValidate: false });
   };
 
   const togglePasswordVisibility = () => {
@@ -74,53 +83,28 @@ export const useResetPasswordForm = () => {
     setIsConfirmPasswordShow(prev => !prev);
   };
 
-  const validateForm = (): boolean => {
-    if (!resetPasswordEmail) {
-      showNotification('error', t('RESET_PASSWORD.errors.noEmailFound'), '');
-      return false;
-    }
-
-    if (!formData.securityCode) {
-      showNotification('error', t('RESET_PASSWORD.errors.securityCodeRequired'), '');
-      return false;
-    }
-
-    if (!formData.newPassword) {
-      showNotification('error', t('RESET_PASSWORD.errors.passwordRequired'), '');
-      return false;
-    }
-
-    if (formData.newPassword.length < 8) {
-      showNotification('error', t('RESET_PASSWORD.errors.passwordTooShort'), '');
-      return false;
-    }
-
-    if (!formData.confirmPassword) {
-      showNotification('error', t('RESET_PASSWORD.errors.confirmPasswordRequired'), '');
-      return false;
-    }
-
-    if (formData.newPassword !== formData.confirmPassword) {
-      showNotification('error', t('RESET_PASSWORD.errors.passwordsMismatch'), '');
-      return false;
-    }
-
-    return true;
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    if (!resetPasswordEmail) {
+      showNotification('error', t('RESET_PASSWORD.errors.noEmailFound'), '');
       return;
     }
 
-    resetPasswordMutation.mutate({
-      email: resetPasswordEmail!,
-      securityCode: formData.securityCode,
-      newPassword: formData.newPassword,
-      confirmPassword: formData.confirmPassword,
-    });
+    rhfHandleSubmit(
+      data => {
+        resetPasswordMutation.mutate({
+          email: resetPasswordEmail!,
+          securityCode: data.securityCode,
+          newPassword: data.newPassword,
+          confirmPassword: data.confirmPassword,
+        });
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', msg, '');
+      }
+    )();
   };
 
   return {

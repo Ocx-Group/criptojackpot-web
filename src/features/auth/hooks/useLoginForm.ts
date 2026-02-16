@@ -2,15 +2,18 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { authService } from '@/services';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
 import { AuthRequest, LoginFormData } from '@/features/auth/types';
-import { validateLoginForm } from '@/features/auth/validators/loginValidations';
+import { createLoginSchema } from '@/features/auth/schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 import { AxiosError } from 'axios';
 
 export const useLoginForm = () => {
@@ -21,11 +24,23 @@ export const useLoginForm = () => {
   const setRememberMe = useAuthStore(state => state.setRememberMe);
   const setUser = useUserStore(state => state.setUser);
 
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: '',
-    rememberMe: false,
+  const schema = useMemo(() => createLoginSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    handleSubmit: rhfHandleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
   });
+
+  const formData = watch();
   const [isPasswordShow, setIsPasswordShow] = useState(false);
 
   const loginMutation = useMutation({
@@ -73,10 +88,7 @@ export const useLoginForm = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+    setValue(name as keyof LoginFormData, type === 'checkbox' ? checked : value, { shouldValidate: false });
   };
 
   const togglePasswordVisibility = () => {
@@ -85,14 +97,19 @@ export const useLoginForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateLoginForm(formData, t, showNotification)) {
-      return;
-    }
-    loginMutation.mutate({
-      email: formData.email,
-      password: formData.password,
-      rememberMe: formData.rememberMe,
-    });
+    rhfHandleSubmit(
+      data => {
+        loginMutation.mutate({
+          email: data.email,
+          password: data.password,
+          rememberMe: data.rememberMe,
+        });
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', msg, '');
+      }
+    )();
   };
 
   return {

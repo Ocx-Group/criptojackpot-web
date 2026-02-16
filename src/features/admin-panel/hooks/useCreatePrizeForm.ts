@@ -1,15 +1,18 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { CreatePrizeRequest, PrizeType, PrizeImageRequest } from '@/interfaces/prize';
 import { prizeService } from '@/services';
 import { CreatePrizeFormData } from '../types/createPrizeFormData';
-import { validateCreatePrizeForm } from '../validators/prizeValidations';
+import { createCreatePrizeSchema } from '../schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useCreatePrizeForm = () => {
   const { t } = useTranslation();
@@ -17,20 +20,31 @@ export const useCreatePrizeForm = () => {
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
 
-  const [formData, setFormData] = useState<CreatePrizeFormData>({
-    lotteryId: '',
-    tier: 1,
-    name: '',
-    description: '',
-    estimatedValue: 0,
-    type: PrizeType.Physical,
-    mainImageUrl: '',
-    additionalImages: [],
-    specifications: {},
-    cashAlternative: 0,
-    isDeliverable: true,
-    isDigital: false,
+  const schema = useMemo(() => createCreatePrizeSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<CreatePrizeFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      lotteryId: '',
+      tier: 1,
+      name: '',
+      description: '',
+      estimatedValue: 0,
+      type: PrizeType.Physical,
+      mainImageUrl: '',
+      additionalImages: [],
+      specifications: {},
+      cashAlternative: 0,
+      isDeliverable: true,
+      isDigital: false,
+    },
   });
+
+  const formData = watch();
 
   const createPrizeMutation = useMutation({
     mutationFn: async (data: CreatePrizeRequest) => {
@@ -59,76 +73,73 @@ export const useCreatePrizeForm = () => {
     const { name, value, type } = e.target;
 
     if (type === 'number') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseFloat(value) || 0 }));
+      setValue(name as keyof CreatePrizeFormData, (Number.parseFloat(value) || 0) as any, { shouldValidate: false });
     } else if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setValue(name as keyof CreatePrizeFormData, checked as any, { shouldValidate: false });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof CreatePrizeFormData, value as any, { shouldValidate: false });
     }
   };
 
   const handleTypeChange = (type: PrizeType) => {
-    setFormData(prev => ({ ...prev, type }));
+    setValue('type', type, { shouldValidate: false });
   };
 
   const handleMainImageUrlChange = (url: string) => {
-    setFormData(prev => ({ ...prev, mainImageUrl: url }));
+    setValue('mainImageUrl', url, { shouldValidate: false });
   };
 
   const handleAddAdditionalImage = (image: PrizeImageRequest) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalImages: [...prev.additionalImages, image],
-    }));
+    setValue('additionalImages', [...formData.additionalImages, image], { shouldValidate: false });
   };
 
   const handleRemoveAdditionalImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalImages: prev.additionalImages.filter((_, i) => i !== index),
-    }));
+    setValue(
+      'additionalImages',
+      formData.additionalImages.filter((_, i) => i !== index),
+      { shouldValidate: false }
+    );
   };
 
   const handleSpecificationChange = (key: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      specifications: { ...prev.specifications, [key]: value },
-    }));
+    setValue('specifications', { ...formData.specifications, [key]: value }, { shouldValidate: false });
   };
 
   const handleRemoveSpecification = (key: string) => {
-    setFormData(prev => {
-      const newSpecs = { ...prev.specifications };
-      delete newSpecs[key];
-      return { ...prev, specifications: newSpecs };
-    });
+    const newSpecs = { ...formData.specifications };
+    delete newSpecs[key];
+    setValue('specifications', newSpecs, { shouldValidate: false });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!validateCreatePrizeForm(formData, t, showNotification)) {
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        // Preparar datos para enviar
+        const submitData: CreatePrizeRequest = {
+          lotteryId: data.lotteryId || undefined,
+          tier: data.tier,
+          name: data.name,
+          description: data.description,
+          estimatedValue: data.estimatedValue,
+          type: data.type,
+          mainImageUrl: data.mainImageUrl,
+          additionalImages: data.additionalImages,
+          specifications: data.specifications,
+          cashAlternative: data.cashAlternative || undefined,
+          isDeliverable: data.isDeliverable,
+          isDigital: data.isDigital,
+        };
 
-    // Preparar datos para enviar
-    const submitData: CreatePrizeRequest = {
-      lotteryId: formData.lotteryId || undefined,
-      tier: formData.tier,
-      name: formData.name,
-      description: formData.description,
-      estimatedValue: formData.estimatedValue,
-      type: formData.type,
-      mainImageUrl: formData.mainImageUrl,
-      additionalImages: formData.additionalImages,
-      specifications: formData.specifications,
-      cashAlternative: formData.cashAlternative || undefined,
-      isDeliverable: formData.isDeliverable,
-      isDigital: formData.isDigital,
-    };
-
-    createPrizeMutation.mutate(submitData);
+        createPrizeMutation.mutate(submitData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', t('COMMON.error', 'Error'), msg);
+      }
+    )();
   };
 
   return {

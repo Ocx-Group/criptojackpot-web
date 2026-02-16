@@ -1,16 +1,19 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useCreateUser } from '@/features/auth/hooks/useCreateUser';
 import { useNotificationStore } from '@/store/notificationStore';
 import { Country } from '@/interfaces/country';
 import { User } from '@/interfaces/user';
 import { Role } from '@/interfaces/role';
-import { validateRegisterForm } from '@/features/auth/validators/registerValidations';
+import { createAdminUserSchema } from '@/features/admin-panel/schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 import { roleService } from '@/services';
 
 interface AdminUserFormData {
@@ -52,20 +55,30 @@ export const useCreateUserForm = () => {
     staleTime: Infinity,
   });
 
-  const [formData, setFormData] = useState<AdminUserFormData>({
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-    identification: '',
-    phone: '',
-    state: '',
-    city: '',
-    address: '',
-    roleId: 2, // Por defecto rol Cliente
-    status: true,
+  const schema = useMemo(() => createAdminUserSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<AdminUserFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      lastName: '',
+      email: '',
+      password: '',
+      identification: '',
+      phone: '',
+      state: '',
+      city: '',
+      address: '',
+      roleId: 2, // Por defecto rol Cliente
+      status: true,
+    },
   });
 
+  const formData = watch();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -73,13 +86,13 @@ export const useCreateUserForm = () => {
 
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setValue(name as keyof AdminUserFormData, checked as any, { shouldValidate: false });
     } else if (name === 'phone') {
-      setFormData(prev => ({ ...prev, [name]: value.replaceAll(/\D/g, '') }));
+      setValue('phone', value.replaceAll(/\D/g, ''), { shouldValidate: false });
     } else if (name === 'roleId') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseInt(value, 10) }));
+      setValue('roleId', Number.parseInt(value, 10), { shouldValidate: false });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof AdminUserFormData, value as any, { shouldValidate: false });
     }
   };
 
@@ -91,25 +104,28 @@ export const useCreateUserForm = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Validar el formulario usando la validación compartida
-    if (!validateRegisterForm(formData, selectedCountry, t, showNotification)) {
+    // Country validation (outside schema since it's a separate state)
+    if (!selectedCountry) {
+      showNotification('error', t('REGISTER.errors.requiredFields', 'Todos los campos son requeridos'), '');
       return;
     }
 
-    // Validación adicional específica del admin
-    if (!formData.roleId) {
-      showNotification('error', t('USERS_ADMIN.create.errors.roleRequired', 'Debe seleccionar un rol'), '');
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        const userData: User = {
+          ...data,
+          countryId: selectedCountry?.id ?? 0,
+          statePlace: data.state,
+          country: selectedCountry || undefined,
+        };
 
-    const userData: User = {
-      ...formData,
-      countryId: selectedCountry?.id ?? 0,
-      statePlace: formData.state,
-      country: selectedCountry || undefined,
-    };
-
-    createUser(userData);
+        createUser(userData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', msg, '');
+      }
+    )();
   };
 
   return {

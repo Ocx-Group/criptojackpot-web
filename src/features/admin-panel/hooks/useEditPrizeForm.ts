@@ -1,16 +1,19 @@
 'use client';
 
-import { FormEvent, useState, useEffect } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { UpdatePrizeRequest, PrizeType, PrizeImage, Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { prizeService } from '@/services';
 import { EditPrizeFormData } from '../types/editPrizeFormData';
-import { validateEditPrizeForm } from '../validators/prizeValidations';
+import { createEditPrizeSchema } from '../schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useEditPrizeForm = (prizeId: string) => {
   const { t } = useTranslation();
@@ -18,20 +21,32 @@ export const useEditPrizeForm = (prizeId: string) => {
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
 
-  const [formData, setFormData] = useState<EditPrizeFormData>({
-    id: '',
-    name: '',
-    description: '',
-    estimatedValue: 0,
-    type: PrizeType.Physical,
-    mainImageUrl: '',
-    additionalImages: [],
-    specifications: {},
-    cashAlternative: 0,
-    isDeliverable: true,
-    isDigital: false,
-    tier: 1,
+  const schema = useMemo(() => createEditPrizeSchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    reset,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<EditPrizeFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      id: '',
+      name: '',
+      description: '',
+      estimatedValue: 0,
+      type: PrizeType.Physical,
+      mainImageUrl: '',
+      additionalImages: [],
+      specifications: {},
+      cashAlternative: 0,
+      isDeliverable: true,
+      isDigital: false,
+      tier: 1,
+    },
   });
+
+  const formData = watch();
 
   // Query para obtener todos los premios y filtrar el que necesitamos
   const {
@@ -52,7 +67,7 @@ export const useEditPrizeForm = (prizeId: string) => {
   // Actualizar formData cuando se encuentra el premio
   useEffect(() => {
     if (isSuccess && prize) {
-      setFormData({
+      reset({
         id: prize.prizeGuid,
         name: prize.name || '',
         description: prize.description || '',
@@ -67,7 +82,7 @@ export const useEditPrizeForm = (prizeId: string) => {
         tier: prize.tier ?? 1,
       });
     }
-  }, [isSuccess, prize]);
+  }, [isSuccess, prize, reset]);
 
   const updatePrizeMutation = useMutation({
     mutationFn: async (data: UpdatePrizeRequest) => {
@@ -96,21 +111,21 @@ export const useEditPrizeForm = (prizeId: string) => {
     const { name, value, type } = e.target;
 
     if (type === 'number') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseFloat(value) || 0 }));
+      setValue(name as keyof EditPrizeFormData, (Number.parseFloat(value) || 0) as any, { shouldValidate: false });
     } else if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setValue(name as keyof EditPrizeFormData, checked as any, { shouldValidate: false });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof EditPrizeFormData, value as any, { shouldValidate: false });
     }
   };
 
   const handleTypeChange = (type: PrizeType) => {
-    setFormData(prev => ({ ...prev, type }));
+    setValue('type', type, { shouldValidate: false });
   };
 
   const handleMainImageUrlChange = (url: string) => {
-    setFormData(prev => ({ ...prev, mainImageUrl: url }));
+    setValue('mainImageUrl', url, { shouldValidate: false });
   };
 
   const handleAddAdditionalImage = (image: Omit<PrizeImage, 'id'>) => {
@@ -118,55 +133,52 @@ export const useEditPrizeForm = (prizeId: string) => {
       ...image,
       id: crypto.randomUUID(),
     };
-    setFormData(prev => ({
-      ...prev,
-      additionalImages: [...prev.additionalImages, newImage],
-    }));
+    setValue('additionalImages', [...formData.additionalImages, newImage], { shouldValidate: false });
   };
 
   const handleRemoveAdditionalImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalImages: prev.additionalImages.filter((_, i) => i !== index),
-    }));
+    setValue(
+      'additionalImages',
+      formData.additionalImages.filter((_, i) => i !== index),
+      { shouldValidate: false }
+    );
   };
 
   const handleSpecificationChange = (key: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      specifications: { ...prev.specifications, [key]: value },
-    }));
+    setValue('specifications', { ...formData.specifications, [key]: value }, { shouldValidate: false });
   };
 
   const handleRemoveSpecification = (key: string) => {
-    setFormData(prev => {
-      const newSpecs = { ...prev.specifications };
-      delete newSpecs[key];
-      return { ...prev, specifications: newSpecs };
-    });
+    const newSpecs = { ...formData.specifications };
+    delete newSpecs[key];
+    setValue('specifications', newSpecs, { shouldValidate: false });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!validateEditPrizeForm(formData, t, showNotification)) {
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        // Preparar datos para enviar
+        const submitData: UpdatePrizeRequest = {
+          name: data.name,
+          description: data.description,
+          estimatedValue: data.estimatedValue,
+          mainImageUrl: data.mainImageUrl,
+          additionalImages: data.additionalImages,
+          specifications: data.specifications,
+          cashAlternative: data.cashAlternative || undefined,
+          isDeliverable: data.isDeliverable,
+          isDigital: data.isDigital,
+        };
 
-    // Preparar datos para enviar
-    const submitData: UpdatePrizeRequest = {
-      name: formData.name,
-      description: formData.description,
-      estimatedValue: formData.estimatedValue,
-      mainImageUrl: formData.mainImageUrl,
-      additionalImages: formData.additionalImages,
-      specifications: formData.specifications,
-      cashAlternative: formData.cashAlternative || undefined,
-      isDeliverable: formData.isDeliverable,
-      isDigital: formData.isDigital,
-    };
-
-    updatePrizeMutation.mutate(submitData);
+        updatePrizeMutation.mutate(submitData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', t('COMMON.error', 'Error'), msg);
+      }
+    )();
   };
 
   return {

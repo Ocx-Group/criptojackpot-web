@@ -1,9 +1,11 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { LotteryType, CreateLotteryRequest } from '@/interfaces/lottery';
@@ -11,12 +13,16 @@ import { Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { lotteryService, prizeService } from '@/services';
 import { CreateTicketFormData, UseCreateTicketFormReturn } from '../types/createTicketForm';
+import { createTicketSchema } from '../schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
+
+  const schema = useMemo(() => createTicketSchema(t), [t]);
 
   // Obtener lista de premios disponibles
   const { data: prizesResponse } = useQuery<PaginatedResponse<Prize>, Error>({
@@ -28,24 +34,33 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
 
   const prizes = prizesResponse?.data?.items || [];
 
-  const [formData, setFormData] = useState<CreateTicketFormData>({
-    name: '',
-    description: '',
-    price: 0,
-    drawDate: '',
-    drawTime: '',
-    totalTickets: 0,
-    status: 'active',
-    prizeId: undefined,
-    // Valores por defecto para campos de lottery
-    minNumber: 1,
-    maxNumber: 49,
-    terms: 'Términos y condiciones estándar del sorteo.',
-    type: LotteryType.Standard,
-    hasAgeRestriction: true,
-    minimumAge: 18,
-    restrictedCountries: [],
+  const {
+    watch,
+    setValue,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<CreateTicketFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      description: '',
+      price: 0,
+      drawDate: '',
+      drawTime: '',
+      totalTickets: 0,
+      status: 'active',
+      prizeId: undefined,
+      // Valores por defecto para campos de lottery
+      minNumber: 1,
+      maxNumber: 49,
+      terms: 'Términos y condiciones estándar del sorteo.',
+      type: LotteryType.Standard,
+      hasAgeRestriction: true,
+      minimumAge: 18,
+      restrictedCountries: [],
+    },
   });
+
+  const formData = watch();
 
   const createLotteryMutation = useMutation({
     mutationFn: async (data: CreateLotteryRequest) => {
@@ -75,114 +90,56 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
     const checked = (e.target as HTMLInputElement).checked;
 
     if (type === 'checkbox') {
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setValue(name as keyof CreateTicketFormData, checked as any, { shouldValidate: false });
     } else if (type === 'number') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseFloat(value) || 0 }));
+      setValue(name as keyof CreateTicketFormData, (Number.parseFloat(value) || 0) as any, { shouldValidate: false });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof CreateTicketFormData, value as any, { shouldValidate: false });
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
-    if (!formData.name.trim()) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.nameRequired', 'El nombre es requerido')
-      );
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        // Calcular fecha de inicio (10 minutos en el futuro para asegurar que pase validación UTC)
+        const startDate = new Date(Date.now() + 10 * 60 * 1000);
+        const drawDateTime = new Date(`${data.drawDate}T${data.drawTime}`);
+        const endDate = drawDateTime;
 
-    if (!formData.description.trim()) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.descriptionRequired', 'La descripción es requerida')
-      );
-      return;
-    }
+        // Mapear status del frontend al enum del backend (active = 1, upcoming/draft = 0)
+        const lotteryStatus = data.status === 'active' ? 1 : 0;
 
-    if (formData.price <= 0) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.priceInvalid', 'El precio debe ser mayor a 0')
-      );
-      return;
-    }
+        // Preparar datos
+        const submitData: CreateLotteryRequest = {
+          title: data.name,
+          description: data.description,
+          minNumber: data.minNumber,
+          maxNumber: data.maxNumber,
+          ticketPrice: data.price,
+          maxTickets: data.totalTickets,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+          status: lotteryStatus,
+          type: 0, // Standard
+          terms: data.terms,
+          hasAgeRestriction: data.hasAgeRestriction,
+          minimumAge: data.hasAgeRestriction ? data.minimumAge : undefined,
+          restrictedCountries: data.restrictedCountries,
+          prizeId: data.prizeId,
+        };
 
-    if (formData.totalTickets <= 0) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.totalTicketsInvalid', 'El total de tickets debe ser mayor a 0')
-      );
-      return;
-    }
+        console.log('Submitting lottery data:', JSON.stringify(submitData, null, 2));
 
-    if (!formData.drawDate) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.drawDateRequired', 'La fecha del sorteo es requerida')
-      );
-      return;
-    }
-
-    if (!formData.drawTime) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.drawTimeRequired', 'La hora del sorteo es requerida')
-      );
-      return;
-    }
-
-    // Validar que la fecha del sorteo sea futura
-    const drawDateTime = new Date(`${formData.drawDate}T${formData.drawTime}`);
-    const now = new Date();
-    if (drawDateTime <= now) {
-      showNotification(
-        'error',
-        t('COMMON.error', 'Error'),
-        t('LOTTERIES_ADMIN.errors.drawDatePast', 'La fecha del sorteo debe ser en el futuro')
-      );
-      return;
-    }
-
-    // Calcular fecha de inicio (10 minutos en el futuro para asegurar que pase validación UTC)
-    const startDate = new Date(Date.now() + 10 * 60 * 1000);
-    const endDate = drawDateTime;
-
-    // Mapear status del frontend al enum del backend (active = 1, upcoming/draft = 0)
-    const lotteryStatus = formData.status === 'active' ? 1 : 0;
-
-    // Preparar datos
-    const submitData: CreateLotteryRequest = {
-      title: formData.name,
-      description: formData.description,
-      minNumber: formData.minNumber,
-      maxNumber: formData.maxNumber,
-      ticketPrice: formData.price,
-      maxTickets: formData.totalTickets,
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
-      status: lotteryStatus,
-      type: 0, // Standard
-      terms: formData.terms,
-      hasAgeRestriction: formData.hasAgeRestriction,
-      minimumAge: formData.hasAgeRestriction ? formData.minimumAge : undefined,
-      restrictedCountries: formData.restrictedCountries,
-      prizeId: formData.prizeId,
-    };
-
-    console.log('Submitting lottery data:', JSON.stringify(submitData, null, 2));
-
-    // Enviar al servidor
-    createLotteryMutation.mutate(submitData);
+        // Enviar al servidor
+        createLotteryMutation.mutate(submitData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', t('COMMON.error', 'Error'), msg);
+      }
+    )();
   };
 
   return {

@@ -1,22 +1,37 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { CreateLotteryRequest } from '@/interfaces/lottery';
 import { lotteryService } from '@/services';
-import { validateCreateLotteryForm } from '../validators/lotteryValidations';
+import { createCreateLotterySchema } from '../schemas';
 import { initialFormData } from '../types/createLotteryFormData';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useCreateLotteryForm = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const showNotification = useNotificationStore(state => state.show);
 
-  const [formData, setFormData] = useState<CreateLotteryRequest>(initialFormData);
+  const schema = useMemo(() => createCreateLotterySchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    reset,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<CreateLotteryRequest>({
+    resolver: zodResolver(schema),
+    defaultValues: initialFormData,
+  });
+
+  const formData = watch();
 
   const createLotteryMutation = useMutation({
     mutationFn: async (data: CreateLotteryRequest) => {
@@ -44,39 +59,43 @@ export const useCreateLotteryForm = () => {
     const checked = (e.target as HTMLInputElement).checked;
 
     if (type === 'checkbox') {
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setValue(name as keyof CreateLotteryRequest, checked as any, { shouldValidate: false });
     } else if (type === 'number') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseFloat(value) || 0 }));
+      setValue(name as keyof CreateLotteryRequest, (Number.parseFloat(value) || 0) as any, { shouldValidate: false });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof CreateLotteryRequest, value as any, { shouldValidate: false });
     }
   };
 
   const handleRestrictedCountriesChange = (countries: string[]) => {
-    setFormData(prev => ({ ...prev, restrictedCountries: countries }));
+    setValue('restrictedCountries', countries, { shouldValidate: false });
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!validateCreateLotteryForm(formData, t, showNotification)) {
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        // Preparar datos para enviar
+        const submitData: CreateLotteryRequest = {
+          ...data,
+          startDate: new Date(data.startDate).toISOString(),
+          endDate: new Date(data.endDate).toISOString(),
+          status: Number(data.status),
+          type: Number(data.type),
+        };
 
-    // Preparar datos para enviar
-    const submitData: CreateLotteryRequest = {
-      ...formData,
-      startDate: new Date(formData.startDate).toISOString(),
-      endDate: new Date(formData.endDate).toISOString(),
-      status: Number(formData.status),
-      type: Number(formData.type),
-    };
-
-    createLotteryMutation.mutate(submitData);
+        createLotteryMutation.mutate(submitData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', t('COMMON.error', 'Error'), msg);
+      }
+    )();
   };
 
   const resetForm = () => {
-    setFormData(initialFormData);
+    reset(initialFormData);
   };
 
   return {

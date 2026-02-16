@@ -1,9 +1,11 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { Lottery, LotteryStatus, UpdateLotteryRequest } from '@/interfaces/lottery';
@@ -11,7 +13,8 @@ import { Prize } from '@/interfaces/prize';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { lotteryService, prizeService } from '@/services';
 import { EditLotteryFormData } from '../types/editLotteryFormData';
-import { validateEditLotteryForm } from '../validators/lotteryValidations';
+import { createEditLotterySchema } from '../schemas';
+import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useEditLotteryForm = (lotteryId: string) => {
   const { t } = useTranslation();
@@ -19,20 +22,32 @@ export const useEditLotteryForm = (lotteryId: string) => {
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
 
-  const [formData, setFormData] = useState<EditLotteryFormData>({
-    name: '',
-    description: '',
-    price: 0,
-    drawDate: '',
-    drawTime: '',
-    totalTickets: 0,
-    status: LotteryStatus.Draft,
-    prizeId: undefined,
-    minNumber: 1,
-    maxNumber: 49,
-    totalSeries: 1,
-    terms: '',
+  const schema = useMemo(() => createEditLotterySchema(t), [t]);
+
+  const {
+    watch,
+    setValue,
+    reset,
+    handleSubmit: rhfHandleSubmit,
+  } = useForm<EditLotteryFormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      description: '',
+      price: 0,
+      drawDate: '',
+      drawTime: '',
+      totalTickets: 0,
+      status: LotteryStatus.Draft,
+      prizeId: undefined,
+      minNumber: 1,
+      maxNumber: 49,
+      totalSeries: 1,
+      terms: '',
+    },
   });
+
+  const formData = watch();
 
   // Obtener la lotería actual
   const {
@@ -64,7 +79,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
       // Extraer hora en UTC para mantener consistencia con la fecha
       const hours = endDate.getUTCHours().toString().padStart(2, '0');
       const minutes = endDate.getUTCMinutes().toString().padStart(2, '0');
-      setFormData({
+      reset({
         name: lottery.title,
         description: lottery.description || '',
         price: lottery.ticketPrice,
@@ -79,7 +94,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
         terms: lottery.terms || '',
       });
     }
-  }, [lottery]);
+  }, [lottery, reset]);
 
   const updateLotteryMutation = useMutation({
     mutationFn: async (data: UpdateLotteryRequest) => {
@@ -110,43 +125,47 @@ export const useEditLotteryForm = (lotteryId: string) => {
     const checked = (e.target as HTMLInputElement).checked;
 
     if (type === 'checkbox') {
-      setFormData(prev => ({ ...prev, [name]: checked }));
+      setValue(name as keyof EditLotteryFormData, checked as any, { shouldValidate: false });
     } else if (type === 'number') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseFloat(value) || 0 }));
+      setValue(name as keyof EditLotteryFormData, (Number.parseFloat(value) || 0) as any, { shouldValidate: false });
     } else if (name === 'status') {
-      setFormData(prev => ({ ...prev, [name]: Number(value) as LotteryStatus }));
+      setValue(name, Number(value) as LotteryStatus, { shouldValidate: false });
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setValue(name as keyof EditLotteryFormData, value as any, { shouldValidate: false });
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!validateEditLotteryForm(formData, t, showNotification)) {
-      return;
-    }
+    rhfHandleSubmit(
+      data => {
+        // Crear fecha en UTC para evitar desfases de zona horaria
+        const endDateISO = `${data.drawDate}T${data.drawTime}:00.000Z`;
 
-    // Crear fecha en UTC para evitar desfases de zona horaria
-    const endDateISO = `${formData.drawDate}T${formData.drawTime}:00.000Z`;
+        const submitData: UpdateLotteryRequest = {
+          id: lotteryId,
+          title: data.name,
+          description: data.description,
+          minNumber: data.minNumber,
+          maxNumber: data.maxNumber,
+          totalSeries: data.totalSeries,
+          ticketPrice: data.price,
+          maxTickets: data.totalTickets,
+          startDate: lottery?.startDate,
+          endDate: endDateISO,
+          status: data.status,
+          terms: data.terms,
+          prizeId: data.prizeId,
+        };
 
-    const submitData: UpdateLotteryRequest = {
-      id: lotteryId,
-      title: formData.name,
-      description: formData.description,
-      minNumber: formData.minNumber,
-      maxNumber: formData.maxNumber,
-      totalSeries: formData.totalSeries,
-      ticketPrice: formData.price,
-      maxTickets: formData.totalTickets,
-      startDate: lottery?.startDate,
-      endDate: endDateISO,
-      status: formData.status,
-      terms: formData.terms,
-      prizeId: formData.prizeId,
-    };
-
-    updateLotteryMutation.mutate(submitData);
+        updateLotteryMutation.mutate(submitData);
+      },
+      fieldErrors => {
+        const msg = getFirstFieldError(fieldErrors);
+        if (msg) showNotification('error', t('COMMON.error', 'Error'), msg);
+      }
+    )();
   };
 
   return {

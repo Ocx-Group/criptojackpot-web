@@ -4,12 +4,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
 
 import { authService } from '@/services';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
 import { Verify2FaRequest } from '@/features/auth/types';
+import { createVerify2FaCodeSchema, createVerify2FaRecoverySchema } from '@/features/auth/schemas';
 import { AxiosError } from 'axios';
 
 export const useVerify2Fa = () => {
@@ -63,8 +65,11 @@ export const useVerify2Fa = () => {
     e.preventDefault();
 
     if (useRecoveryCode) {
-      if (!recoveryCode.trim()) {
-        showNotification('error', t('TWO_FACTOR.errors.recoveryCodeRequired', 'Ingresa el código de recuperación'), '');
+      const schema = createVerify2FaRecoverySchema(t);
+      const result = z.safeParse(schema, { recoveryCode: recoveryCode.trim() });
+      if (!result.success) {
+        const firstError = result.error.issues[0]?.message;
+        if (firstError) showNotification('error', firstError, '');
         return;
       }
       verify2FaMutation.mutate({
@@ -72,8 +77,11 @@ export const useVerify2Fa = () => {
         rememberMe,
       });
     } else {
-      if (!code || code.length !== 6) {
-        showNotification('error', t('TWO_FACTOR.errors.codeRequired', 'Ingresa el código de 6 dígitos'), '');
+      const schema = createVerify2FaCodeSchema(t);
+      const result = z.safeParse(schema, { code });
+      if (!result.success) {
+        const firstError = result.error.issues[0]?.message;
+        if (firstError) showNotification('error', firstError, '');
         return;
       }
       verify2FaMutation.mutate({
