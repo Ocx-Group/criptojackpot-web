@@ -12,7 +12,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
 import { Verify2FaRequest } from '@/features/auth/types';
 import { createVerify2FaCodeSchema, createVerify2FaRecoverySchema } from '@/features/auth/schemas';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 export const useVerify2Fa = () => {
   const { t } = useTranslation();
@@ -55,8 +55,9 @@ export const useVerify2Fa = () => {
       }
     },
     onError: (error: Error) => {
-      const axiosError = error as AxiosError<{ message?: string }>;
-      const message = axiosError.response?.data?.message || t('TWO_FACTOR.errors.invalidCode', 'Código inválido');
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message || t('TWO_FACTOR.errors.invalidCode', 'Código inválido')
+        : error.message || t('TWO_FACTOR.errors.invalidCode', 'Código inválido');
       showNotification('error', message, '');
     },
   });

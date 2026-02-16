@@ -10,7 +10,7 @@ import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { GoogleLoginRequest } from '@/features/auth/types';
 import { GOOGLE_CLIENT_ID } from '@/components/Providers';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 const GoogleLoginButtonInner = () => {
   const { t } = useTranslation();
@@ -55,9 +55,9 @@ const GoogleLoginButtonInner = () => {
       }
     },
     onError: (error: Error) => {
-      const axiosError = error as AxiosError<{ message?: string }>;
-      const message =
-        axiosError.response?.data?.message || t('LOGIN.errors.googleLoginFailed', 'Error al iniciar sesión con Google');
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message || t('LOGIN.errors.googleLoginFailed', 'Error al iniciar sesión con Google')
+        : error.message || t('LOGIN.errors.googleLoginFailed', 'Error al iniciar sesión con Google');
       showNotification('error', message, '');
     },
   });

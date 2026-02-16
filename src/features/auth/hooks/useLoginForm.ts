@@ -14,7 +14,7 @@ import { useUserStore } from '@/store/userStore';
 import { AuthRequest, LoginFormData } from '@/features/auth/types';
 import { createLoginSchema } from '@/features/auth/schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 export const useLoginForm = () => {
   const { t } = useTranslation();
@@ -80,8 +80,9 @@ export const useLoginForm = () => {
       }
     },
     onError: (error: Error) => {
-      const axiosError = error as AxiosError<{ message?: string }>;
-      const message = axiosError.response?.data?.message || t('LOGIN.errors.invalidCredentials');
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message || t('LOGIN.errors.invalidCredentials')
+        : error.message || t('LOGIN.errors.invalidCredentials');
       showNotification('error', message, '');
     },
   });

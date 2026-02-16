@@ -59,7 +59,8 @@ export abstract class BaseService {
         const originalRequest = error.config;
 
         // Skip refresh logic for auth endpoints
-        const isAuthEndpoint = originalRequest.url?.includes('/auth/login') ||
+        const isAuthEndpoint =
+          originalRequest.url?.includes('/auth/login') ||
           originalRequest.url?.includes('/auth/google') ||
           originalRequest.url?.includes('/auth/refresh') ||
           originalRequest.url?.includes('/auth/2fa/verify');
@@ -109,17 +110,29 @@ export abstract class BaseService {
     return data.data;
   }
 
-  protected handleError(error: AxiosError<Response<any>>): never {
-    const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+  private isAxiosError(error: unknown): error is AxiosError<Response<any>> {
+    return axios.isAxiosError(error);
+  }
 
-    if (error.response?.status === 401) {
-      if (error.config?.url !== this.endpoint) {
-        // Session expired - signOut is handled by the interceptor
-        throw new Error('The session has expired');
+  protected handleError(error: unknown): never {
+    if (this.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+
+      if (error.response?.status === 401) {
+        if (error.config?.url !== this.endpoint) {
+          // Session expired - signOut is handled by the interceptor
+          throw new Error('The session has expired');
+        }
       }
+
+      throw new Error(errorMessage);
     }
 
-    throw new Error(errorMessage);
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error(String(error) || 'An unexpected error occurred');
   }
 
   protected async getAll<T>(options: GetAllOptions = {}): Promise<T[]> {
@@ -133,7 +146,7 @@ export abstract class BaseService {
 
       return this.handleResponse(response);
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 
@@ -147,7 +160,7 @@ export abstract class BaseService {
       const response = await this.apiClient.get<PaginatedResponse<T>>(finalUrl, { params });
       return response.data;
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 
@@ -156,7 +169,7 @@ export abstract class BaseService {
       const response = await this.apiClient.get<Response<T>>(`${this.servicePrefix}/${this.endpoint}/${id}`);
       return this.handleResponse(response);
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 
@@ -166,7 +179,7 @@ export abstract class BaseService {
       const response = await this.apiClient.post<Response<TResponse>>(url, data);
       return this.handleResponse(response);
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 
@@ -182,7 +195,7 @@ export abstract class BaseService {
       const response = await this.apiClient.put<Response<TResponse>>(url, data);
       return this.handleResponse(response);
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 
@@ -190,7 +203,7 @@ export abstract class BaseService {
     try {
       await this.apiClient.delete(`${this.servicePrefix}/${this.endpoint}/${id}`);
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 
@@ -199,7 +212,7 @@ export abstract class BaseService {
       const response = await this.apiClient.patch<Response<T>>(`${this.servicePrefix}/${url}`, data);
       return this.handleResponse(response);
     } catch (error) {
-      throw this.handleError(error as AxiosError<Response<any>>);
+      throw this.handleError(error);
     }
   }
 }
