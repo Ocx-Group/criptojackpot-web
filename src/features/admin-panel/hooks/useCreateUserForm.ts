@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateUser } from '@/features/auth/hooks/useCreateUser';
 import { useNotificationStore } from '@/store/notificationStore';
 import { Country } from '@/interfaces/country';
-import { User } from '@/interfaces/user';
+import { User, CreateUserRequest } from '@/interfaces/user';
 import { Role } from '@/interfaces/role';
 import { createAdminUserSchema } from '@/features/admin-panel/schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -112,7 +112,7 @@ export const useCreateUserForm = () => {
 
     rhfHandleSubmit(
       data => {
-        const userData: User = {
+        const userData: CreateUserRequest = {
           ...data,
           countryId: selectedCountry?.id ?? 0,
           statePlace: data.state,

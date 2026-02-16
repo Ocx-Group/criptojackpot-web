@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 import { countryService, userService } from '@/services';
 import { Country } from '@/interfaces/country';
-import { User } from '@/interfaces/user';
+import { User, CreateUserRequest } from '@/interfaces/user';
 import { useNotificationStore } from '@/store/notificationStore';
 
 export interface CreateUserOptions {
@@ -41,7 +41,7 @@ export const useCreateUser = (options?: CreateUserOptions) => {
   }, [countriesError, showNotification, t, options?.showNotifications]);
 
   const createMutation = useMutation({
-    mutationFn: (userData: User) => userService.createUser(userData),
+    mutationFn: (userData: CreateUserRequest) => userService.createUser(userData),
     onSuccess: (user: User) => {
       if (options?.showNotifications !== false) {
         showNotification(

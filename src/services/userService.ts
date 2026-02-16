@@ -1,4 +1,4 @@
-import { User } from '@/interfaces/user';
+import { User, CreateUserRequest } from '@/interfaces/user';
 import { BaseService } from './baseService';
 import { UpdateImageProfileRequest } from '@/features/user-panel/types/updateImageProfileRequest';
 import { GenerateNewSecurityCodeRequest } from '@/features/user-panel/types/generateNewSecurityCodeRequest';
@@ -17,8 +17,8 @@ class UserService extends BaseService {
     super('/api/v1');
   }
 
-  async createUser(user: User): Promise<User> {
-    return this.create<User, User>(user);
+  async createUser(user: CreateUserRequest): Promise<User> {
+    return this.create<CreateUserRequest, User>(user);
   }
 
   async updateImageProfile(request: UpdateImageProfileRequest): Promise<User> {

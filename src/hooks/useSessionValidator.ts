@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/userStore';
 import { userService } from '@/services';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 /**
  * Validates the user session and keeps user data in sync.
@@ -26,12 +26,13 @@ export function useSessionValidator() {
     },
     enabled: isAuthenticated && !!userId,
     retry: 1,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 5000),
     refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
-    if (error instanceof AxiosError && error.response?.status === 401) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
       clearUser();
       logout();
     }

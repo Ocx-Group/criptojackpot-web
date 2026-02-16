@@ -10,7 +10,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { Country } from '@/interfaces/country';
 import { RegisterFormData } from '@/interfaces/registerFormData';
 import { UseRegisterFormReturn } from '@/features/auth/types';
-import { User } from '@/interfaces/user';
+import { User, CreateUserRequest } from '@/interfaces/user';
 import { createRegisterSchema } from '@/features/auth/schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 import { useCreateUser } from './useCreateUser';
@@ -93,7 +93,7 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
 
     rhfHandleSubmit(
       data => {
-        const userData: User = {
+        const userData: CreateUserRequest = {
           ...data,
           countryId: selectedCountry?.id ?? 0,
           statePlace: data.state,
