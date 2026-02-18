@@ -29,6 +29,11 @@ export const useVerify2Fa = () => {
     mutationFn: (request: Verify2FaRequest) => authService.verify2Fa(request),
     onSuccess: data => {
       const userData = data.data;
+      if (!userData.emailVerified) {
+        showNotification('error', t('LOGIN.errors.emailNotVerified'), '');
+        return;
+      }
+
       setUser({
         id: undefined,
         name: userData.name,
@@ -37,6 +42,7 @@ export const useVerify2Fa = () => {
         phone: userData.phone,
         imagePath: userData.imagePath,
         status: userData.status,
+        emailVerified: userData.emailVerified,
         password: '',
         countryId: 0,
         statePlace: '',

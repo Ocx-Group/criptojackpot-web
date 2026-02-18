@@ -36,7 +36,8 @@
       "networkError": "Error de conexión. Verifica tu internet.",
       "passwordRequired": "La contraseña es requerida",
       "requiredFields": "Por favor, complete todos los campos requeridos",
-      "serverError": "Error del servidor. Por favor, intenta más tarde."
+      "serverError": "Error del servidor. Por favor, intenta más tarde.",
+      "emailNotVerified": "Debes verificar tu correo electrónico antes de iniciar sesión. Revisa tu bandeja de entrada."
     },
     "forgetPassword": "¿Olvidaste tu contraseña?",
     "loading": "Cargando...",

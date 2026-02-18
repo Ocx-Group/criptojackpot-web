@@ -52,8 +52,13 @@ export const useLoginForm = () => {
         return;
       }
 
-      // Login successful - store user data
+      // Login successful - check email verification
       const userData = data.data;
+      if (!userData.emailVerified) {
+        showNotification('error', t('LOGIN.errors.emailNotVerified'), '');
+        return;
+      }
+
       setUser({
         id: undefined,
         name: userData.name,
@@ -62,6 +67,7 @@ export const useLoginForm = () => {
         phone: userData.phone,
         imagePath: userData.imagePath,
         status: userData.status,
+        emailVerified: userData.emailVerified,
         password: '',
         countryId: 0,
         statePlace: '',

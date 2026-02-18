@@ -31,6 +31,7 @@ export interface AuthResponseUser {
   phone?: string;
   imagePath?: string;
   status: boolean;
+  emailVerified: boolean;
   role?: AuthResponseRole;
   expiresIn: number;
   requiresTwoFactor: boolean;

@@ -37,6 +37,7 @@ const GoogleLoginButtonInner = () => {
         phone: userData.phone,
         imagePath: userData.imagePath,
         status: userData.status,
+        emailVerified: userData.emailVerified,
         password: '',
         countryId: 0,
         statePlace: '',

@@ -18,6 +18,7 @@ export interface User {
   city: string;
   address?: string;
   status: boolean;
+  emailVerified?: boolean;
   imagePath?: string;
   googleAccessToken?: string;
   googleRefreshToken?: string;

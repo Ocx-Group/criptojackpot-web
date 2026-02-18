@@ -57,7 +57,7 @@ export function useAuth() {
       name: `${user.name || ''} ${user.lastName || ''}`.trim(),
       username: user.email,
       roles: user.role ? [user.role.name] : [],
-      emailVerified: true,
+      emailVerified: user.emailVerified ?? true,
     };
   }, [user]);
 

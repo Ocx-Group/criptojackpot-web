@@ -36,7 +36,8 @@
       "networkError": "Network error. Check your connection.",
       "passwordRequired": "Password is required",
       "requiredFields": "Please complete all required fields",
-      "serverError": "Server error. Please try again later."
+      "serverError": "Server error. Please try again later.",
+      "emailNotVerified": "You must verify your email before logging in. Check your inbox."
     },
     "forgetPassword": "Forget password",
     "loading": "Loading...",
