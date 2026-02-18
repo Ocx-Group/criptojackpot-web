@@ -173,6 +173,7 @@
       "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
       "passwordsMismatch": "Las contraseñas no coinciden",
       "resetFailed": "Error al restablecer la contraseña",
+      "invalidSecurityCode": "El código debe tener 6 dígitos",
       "securityCodeRequired": "El código de seguridad es requerido",
       "serverError": "Error del servidor. Por favor, intenta más tarde."
     },

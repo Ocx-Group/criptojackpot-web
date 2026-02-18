@@ -52,7 +52,7 @@ export const useResetPasswordForm = () => {
     mutationFn: async (data: { email: string; securityCode: string; newPassword: string; confirmPassword: string }) => {
       await userService.resetPassword({
         email: data.email,
-        securityCode: data.securityCode,
+        securityCode: data.securityCode.trim(),
         password: data.newPassword,
         confirmPassword: data.confirmPassword,
       });

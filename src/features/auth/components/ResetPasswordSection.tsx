@@ -53,6 +53,10 @@ const ResetPasswordSection = () => {
                           name="securityCode"
                           value={formData.securityCode}
                           onChange={handleInputChange}
+                          inputMode="numeric"
+                          autoComplete="one-time-code"
+                          maxLength={6}
+                          pattern="\d{6}"
                           placeholder={t('RESET_PASSWORD.securityCodePlaceholder')}
                         />
                       </div>

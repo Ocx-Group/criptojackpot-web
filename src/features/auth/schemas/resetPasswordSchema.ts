@@ -6,7 +6,8 @@ export const createResetPasswordSchema = (t: TFunction) =>
     .object({
       securityCode: z
         .string()
-        .min(1, t('RESET_PASSWORD.errors.securityCodeRequired', 'El código de seguridad es requerido')),
+        .min(1, t('RESET_PASSWORD.errors.securityCodeRequired', 'El código de seguridad es requerido'))
+        .regex(/^\d{6}$/, t('RESET_PASSWORD.errors.invalidSecurityCode', 'El código debe tener 6 dígitos')),
       newPassword: z
         .string()
         .min(8, t('RESET_PASSWORD.errors.passwordTooShort', 'La contraseña debe tener al menos 8 caracteres')),

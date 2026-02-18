@@ -173,6 +173,7 @@
       "passwordTooShort": "Password must be at least 8 characters long",
       "passwordsMismatch": "Passwords do not match",
       "resetFailed": "Failed to reset password",
+      "invalidSecurityCode": "Code must be 6 digits",
       "securityCodeRequired": "Security code is required",
       "serverError": "Server error. Please try again later."
     },
