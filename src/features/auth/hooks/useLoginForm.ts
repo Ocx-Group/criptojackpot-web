@@ -68,6 +68,7 @@ export const useLoginForm = () => {
         city: '',
         roleId: userData.role?.id ?? 0,
         role: userData.role ? { id: userData.role.id, name: userData.role.name } : undefined,
+        userGuid: userData.userGuid,
       });
       showNotification('success', t('LOGIN.success'), '');
 

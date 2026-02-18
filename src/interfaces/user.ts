@@ -22,7 +22,7 @@ export interface User {
   googleAccessToken?: string;
   googleRefreshToken?: string;
   token?: string;
-  securityCode?: string;
+  userGuid?: string;
 
   roleId: number;
   role?: Role;
@@ -31,7 +31,11 @@ export interface User {
 
 /**
  * Request type for creating a new user. password is required here.
+ * roleId and role are optional since public registration delegates role assignment to the backend.
  */
-export interface CreateUserRequest extends Omit<User, 'password'> {
+export interface CreateUserRequest extends Omit<User, 'password' | 'roleId' | 'role'> {
   password: string;
+  referralCode?: string;
+  roleId?: number;
+  role?: Role;
 }

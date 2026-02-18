@@ -1,7 +1,6 @@
 import { User, CreateUserRequest } from '@/interfaces/user';
 import { BaseService } from './baseService';
 import { UpdateImageProfileRequest } from '@/features/user-panel/types/updateImageProfileRequest';
-import { GenerateNewSecurityCodeRequest } from '@/features/user-panel/types/generateNewSecurityCodeRequest';
 import { UpdateUserRequest } from '@/features/user-panel/types/updateUserRequest';
 import { RequestPasswordResetRequest } from '@/features/auth/types/requestPasswordResetRequest';
 import { ResetPasswordWithCodeRequest } from '@/features/auth/types/resetPasswordWithCodeRequest';
@@ -23,10 +22,6 @@ class UserService extends BaseService {
 
   async updateImageProfile(request: UpdateImageProfileRequest): Promise<User> {
     return this.patch<User>(`users/update-image-profile`, request);
-  }
-
-  async generateNewSecurityCode(request: GenerateNewSecurityCodeRequest): Promise<User> {
-    return this.patch<User>(`users/generate-new-security-code`, request);
   }
 
   async updateUserAsync(userId: number, updateUser: UpdateUserRequest): Promise<User> {

@@ -24,8 +24,6 @@ const ReferalProgram = () => {
   const {
     referralLink,
     copyToClipboard: copyReferralLink,
-    generateNewSecurityCode,
-    isGenerating,
     hasSecurityCode,
     referralData,
     isReferralsLoading,
@@ -34,10 +32,6 @@ const ReferalProgram = () => {
   function copyToClipboard(e: React.MouseEvent<HTMLInputElement, MouseEvent>) {
     copyReferralLink();
     e.currentTarget.focus();
-  }
-
-  async function handleGenerateNewCode() {
-    generateNewSecurityCode();
   }
 
   const columns = [
@@ -70,22 +64,9 @@ const ReferalProgram = () => {
                 data-copy="true"
             >
               <div className="d-flex align-items-center gap-3 icon-text">
-              <button
-                  className={`c-icon s1-bg radius-circle d-center cmn-48 ${isGenerating ? 'opacity-50' : 'cursor-pointer'}`}
-                  onClick={isGenerating ? undefined : handleGenerateNewCode}
-                  disabled={isGenerating}
-                  aria-label={t('REFERRAL_PROGRAM.generateNewCodeTitle')}
-                  title={t('REFERRAL_PROGRAM.generateNewCodeTitle')}
-                  style={{ cursor: isGenerating ? 'not-allowed' : 'pointer' }}
-              >
-                {isGenerating ? (
-                    <div className="spinner-border spinner-border-sm text-light">
-                      <output className="visually-hidden">Loading...</output>
-                    </div>
-                ) : (
-                    <LinkSimpleIcon weight="bold" className="ph-bold ph-link nw1-clr fs-four"></LinkSimpleIcon>
-                )}
-              </button>
+              <span className="c-icon s1-bg radius-circle d-center cmn-48">
+                <LinkSimpleIcon weight="bold" className="ph-bold ph-link nw1-clr fs-four"></LinkSimpleIcon>
+              </span>
                 <span className="n4-clr fw_600">{t('REFERRAL_PROGRAM.referralLink')}</span>
               </div>
               <span className="minput">

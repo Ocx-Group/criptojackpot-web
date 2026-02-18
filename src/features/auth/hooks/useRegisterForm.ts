@@ -98,8 +98,6 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
           countryId: selectedCountry?.id ?? 0,
           statePlace: data.state,
           status: true,
-          roleId: 2, // Siempre rol Cliente para registro público
-          country: selectedCountry || undefined,
         };
 
         createUser(userData);
