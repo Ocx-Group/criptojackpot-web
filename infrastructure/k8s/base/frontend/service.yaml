@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cryptojackpot-app
+  namespace: cryptojackpot
+  labels:
+    app: cryptojackpot-app
+    component: frontend
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: cryptojackpot-app

@@ -1,0 +1,130 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: cryptojackpot
+
+resources:
+  - ../../base
+  - secrets
+
+patches:
+  - target:
+      kind: Deployment
+      name: cryptojackpot-app
+    patch: |-
+      - op: add
+        path: /spec/replicas
+        value: 3
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "256Mi"
+            cpu: "150m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+  - target:
+      kind: Ingress
+      name: cryptojackpot-web-ingress
+    patch: |-
+      - op: add
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+        value: letsencrypt-prod
+      - op: add
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1limit-rps
+        value: "100"
+      - op: add
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1limit-connections
+        value: "50"
+      - op: add
+        path: /spec/tls
+        value:
+          - hosts:
+              - cryptojackpot.com
+              - www.cryptojackpot.com
+            secretName: cryptojackpot-app-prod-tls
+      - op: replace
+        path: /spec/rules
+        value:
+          - host: cryptojackpot.com
+            http:
+              paths:
+                - path: /api
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /lottery-hub
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /health
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: cryptojackpot-app
+                      port:
+                        number: 80
+          - host: www.cryptojackpot.com
+            http:
+              paths:
+                - path: /api
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /lottery-hub
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /health
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: cryptojackpot-app
+                      port:
+                        number: 80
+
+configMapGenerator:
+  - name: app-config
+    literals:
+      - NEXT_PUBLIC_API_BASE_URL=
+      - NEXT_PUBLIC_APP_ENV=prod
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+images:
+  - name: cryptojackpot/cryptojackpot-app
+    newName: registry.digitalocean.com/cryptojackpot/cryptojackpot-app
+    newTag: v1.0.0
+
+labels:
+  - pairs:
+      environment: prod
+    includeSelectors: false

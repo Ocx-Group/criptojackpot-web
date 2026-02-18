@@ -1,0 +1,5 @@
+do_token = "dop_v1_xxx"
+
+# Solo necesario si se habilita Cloudflare
+cloudflare_api_token = ""
+cloudflare_zone_id   = ""

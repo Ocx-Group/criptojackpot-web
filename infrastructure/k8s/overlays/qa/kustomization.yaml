@@ -1,0 +1,92 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: cryptojackpot
+
+resources:
+  - ../../base
+  - secrets
+
+patches:
+  - target:
+      kind: Deployment
+      name: cryptojackpot-app
+    patch: |-
+      - op: add
+        path: /spec/replicas
+        value: 2
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
+  - target:
+      kind: Ingress
+      name: cryptojackpot-web-ingress
+    patch: |-
+      - op: add
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+        value: letsencrypt-prod
+      - op: add
+        path: /spec/tls
+        value:
+          - hosts:
+              - qa.cryptojackpot.com
+            secretName: cryptojackpot-app-qa-tls
+      - op: replace
+        path: /spec/rules
+        value:
+          - host: qa.cryptojackpot.com
+            http:
+              paths:
+                - path: /api
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /lottery-hub
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /health
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: bff-gateway
+                      port:
+                        number: 80
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: cryptojackpot-app
+                      port:
+                        number: 80
+
+configMapGenerator:
+  - name: app-config
+    literals:
+      - NEXT_PUBLIC_API_BASE_URL=
+      - NEXT_PUBLIC_APP_ENV=qa
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+images:
+  - name: cryptojackpot/cryptojackpot-app
+    newName: registry.digitalocean.com/cryptojackpot/cryptojackpot-app
+    newTag: qa
+
+labels:
+  - pairs:
+      environment: qa
+    includeSelectors: false
