@@ -4,7 +4,6 @@ import AdminPanelSidebar from '@/features/admin-panel/components/AdminPanelSideb
 import Breadcrumbs from '@/components/about/Breadcrumbs';
 import Footer from '@/components/home-one/Footer';
 import NavbarBlack from '@/components/navbar/NavbarBlack';
-import SessionProvider from '@/components/SessionProvider';
 
 const AdminLayout = ({
   children,
@@ -20,7 +19,7 @@ const AdminLayout = ({
           <div className="container">
             <div className="row g-6 justify-content-center">
               <AdminPanelSidebar />
-              <SessionProvider>{children}</SessionProvider>
+              {children}
             </div>
           </div>
         </div>

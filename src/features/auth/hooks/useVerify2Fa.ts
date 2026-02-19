@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +17,7 @@ import axios from 'axios';
 export const useVerify2Fa = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
   const rememberMe = useAuthStore(state => state.rememberMe);
   const setUser = useUserStore(state => state.setUser);
@@ -51,6 +52,8 @@ export const useVerify2Fa = () => {
         role: userData.role ? { id: userData.role.id, name: userData.role.name } : undefined,
         userGuid: userData.userGuid,
       });
+      // Refetch full user profile from server (has complete data with id)
+      queryClient.invalidateQueries({ queryKey: ['current-user-profile'] });
       showNotification('success', t('LOGIN.success'), '');
 
       if (userData.role?.name === 'admin') {

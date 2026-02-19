@@ -28,7 +28,6 @@ export const useAuthStore = create<AuthState>()(
           resetPasswordEmail: null,
         });
         if (typeof globalThis.window !== 'undefined') {
-          localStorage.removeItem('user-profile-storage');
           globalThis.location.href = redirectTo || '/landing-page';
         }
       },

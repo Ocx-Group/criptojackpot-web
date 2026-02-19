@@ -1,21 +1,18 @@
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { userService } from '@/services';
 
 /**
- * Hook that syncs user profile from backend after authentication.
- * Should be called in app layout or auth provider to ensure user data is loaded.
- * Authentication is handled via HttpOnly cookies (sent automatically by browser).
+ * Hook that checks the session on mount by calling GET /users/me.
+ * The HttpOnly cookie is sent automatically by the browser.
+ * This is the single source of truth for authentication state.
  */
 export function useUserSync() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const { setUser, clearUser, user, isProfileLoaded } = useUserStore();
+  const { setUser, clearUser, user } = useUserStore();
 
-  // Fetch current user profile from backend
   const {
     data: userProfile,
     isLoading,
@@ -23,35 +20,33 @@ export function useUserSync() {
     refetch,
   } = useQuery({
     queryKey: ['current-user-profile'],
-    queryFn: async () => {
-      const userData = await userService.getCurrentUser();
-      return userData;
-    },
-    enabled: isAuthenticated && !isProfileLoaded,
-    retry: 2,
+    queryFn: () => userService.getCurrentUser(),
+    // Always enabled — on every mount/refresh we ask the server
+    enabled: true,
+    retry: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: true,
   });
 
-  // Update user store when profile is fetched
+  // Success: populate user store
   useEffect(() => {
     if (userProfile) {
       setUser(userProfile);
     }
   }, [userProfile, setUser]);
 
-  // Clear user store on logout
+  // Error: no valid session or network issue — clear user and mark session check as done
   useEffect(() => {
-    if (!isAuthenticated && !authLoading) {
+    if (isError) {
       clearUser();
     }
-  }, [isAuthenticated, authLoading, clearUser]);
+  }, [isError, clearUser]);
 
   return {
     user,
-    isLoading: authLoading || isLoading,
+    isLoading,
     isError,
-    isAuthenticated,
-    isProfileLoaded,
+    isAuthenticated: !!user,
     refetch,
   };
 }

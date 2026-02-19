@@ -1,7 +1,7 @@
 'use client';
 
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useRef, useEffect, useState } from 'react';
@@ -37,6 +37,7 @@ const GoogleIcon = () => (
 const GoogleLoginButtonInner = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const setRememberMe = useAuthStore(state => state.setRememberMe);
   const setUser = useUserStore(state => state.setUser);
   const showNotification = useNotificationStore(state => state.show);
@@ -81,6 +82,8 @@ const GoogleLoginButtonInner = () => {
         role: userData.role ? { id: userData.role.id, name: userData.role.name } : undefined,
         userGuid: userData.userGuid,
       });
+      // Refetch full user profile from server (has complete data with id)
+      queryClient.invalidateQueries({ queryKey: ['current-user-profile'] });
       showNotification('success', t('LOGIN.success'), '');
 
       if (userData.role?.name === 'admin') {

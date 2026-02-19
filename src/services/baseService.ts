@@ -89,8 +89,8 @@ export abstract class BaseService {
           } catch {
             BaseService.isRefreshing = false;
             BaseService.refreshSubscribers = [];
-            // Refresh failed - clear auth state via stores and redirect
-            if (typeof globalThis.window !== 'undefined') {
+            // Refresh failed - only redirect if this is NOT a session check call
+            if (typeof globalThis.window !== 'undefined' && !originalRequest._skipAuthRedirect) {
               useUserStore.getState().clearUser();
               useAuthStore.getState().logout('/login?error=session_expired');
             }

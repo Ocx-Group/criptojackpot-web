@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
 import { authService } from '@/services';
@@ -15,8 +15,8 @@ export interface AuthUser {
 }
 
 export function useAuth() {
-  const [isLoading] = useState(false);
   const user = useUserStore(state => state.user);
+  const isSessionLoading = useUserStore(state => state.isSessionLoading);
   const isAuthenticated = user !== null;
   const authLogout = useAuthStore(state => state.logout);
   const clearUser = useUserStore(state => state.clearUser);
@@ -62,7 +62,7 @@ export function useAuth() {
   }, [user]);
 
   return {
-    isLoading,
+    isLoading: isSessionLoading,
     isAuthenticated,
     user: mapUser(),
     userRole,

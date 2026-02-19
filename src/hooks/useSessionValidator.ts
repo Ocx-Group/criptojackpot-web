@@ -6,21 +6,20 @@ import { userService } from '@/services';
 import axios from 'axios';
 
 /**
- * Validates the user session and keeps user data in sync.
+ * Keeps user data in sync while the session is active.
+ * Only runs when a user is already authenticated (after the initial check).
  * Uses HttpOnly cookies for authentication (sent automatically by browser).
  */
 export function useSessionValidator() {
   const { isAuthenticated, logout } = useAuth();
-  const { user, updateUser, clearUser } = useUserStore();
+  const { user, updateUser } = useUserStore();
   const userId = user?.id;
 
   const { error } = useQuery({
     queryKey: ['user', userId],
     queryFn: async () => {
       if (!userId) return null;
-
       const freshUserData = await userService.getUserById(userId);
-
       updateUser(freshUserData);
       return freshUserData;
     },
@@ -33,8 +32,7 @@ export function useSessionValidator() {
 
   useEffect(() => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      clearUser();
       logout();
     }
-  }, [error, clearUser, logout]);
+  }, [error, logout]);
 }

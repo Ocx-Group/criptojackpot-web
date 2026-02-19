@@ -38,8 +38,11 @@ class UserService extends BaseService {
 
   async getCurrentUser(): Promise<User> {
     // Get current authenticated user's profile from backend
+    // _skipAuthRedirect: prevents the interceptor from doing a hard redirect
+    // if the session is invalid — we handle that gracefully in useUserSync
     const response = await this.apiClient.get<{ success: boolean; data: User }>(
-      `${this.servicePrefix}/${this.endpoint}/me`
+      `${this.servicePrefix}/${this.endpoint}/me`,
+      { _skipAuthRedirect: true } as any
     );
     if (!response.data.success || !response.data.data) {
       throw new Error('Failed to get current user');

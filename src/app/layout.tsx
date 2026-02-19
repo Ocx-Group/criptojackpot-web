@@ -1,6 +1,7 @@
 import Bootstrap from '@/components/Bootstrap';
 import Cursor from '@/components/Cursor';
 import Providers from '@/components/Providers';
+import SessionProvider from '@/components/SessionProvider';
 
 import type { Metadata } from 'next';
 import 'swiper/css';
@@ -22,8 +23,10 @@ export default function RootLayout({
       <Bootstrap>
         <body>
           <Providers>
-            <Cursor />
-            {children}
+            <SessionProvider>
+              <Cursor />
+              {children}
+            </SessionProvider>
           </Providers>
         </body>
       </Bootstrap>

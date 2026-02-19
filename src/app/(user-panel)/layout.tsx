@@ -5,7 +5,6 @@ import { AuthGuard } from '@/components/AuthGuard';
 import Footer from '@/components/home-one/Footer';
 import NavbarBlack from '@/components/navbar/NavbarBlack';
 import UserPanelSidebar from '@/features/user-panel/components/UserPanelSidebar';
-import SessionProvider from '@/components/SessionProvider';
 
 const UserPanelLayout = ({
   children,
@@ -21,7 +20,7 @@ const UserPanelLayout = ({
           <div className="container">
             <div className="row g-6 justify-content-center">
               <UserPanelSidebar />
-              <SessionProvider>{children}</SessionProvider>
+              {children}
             </div>
           </div>
         </div>
