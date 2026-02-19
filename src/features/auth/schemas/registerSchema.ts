@@ -3,15 +3,15 @@ import { TFunction } from 'i18next';
 
 export const createRegisterSchema = (t: TFunction) =>
   z.object({
-    name: z.string().min(1, t('REGISTER.errors.requiredFields', 'Todos los campos son requeridos')),
-    lastName: z.string().min(1, t('REGISTER.errors.requiredFields', 'Todos los campos son requeridos')),
+    name: z.string().min(1, t('REGISTER.errors.nameRequired', 'El nombre es requerido')),
+    lastName: z.string().min(1, t('REGISTER.errors.lastNameRequired', 'El apellido es requerido')),
     email: z.email(t('REGISTER.errors.invalidEmailFormat', 'El formato de email es inválido')),
     password: z.string().min(8, t('REGISTER.errors.weakPassword', 'La contraseña debe tener al menos 8 caracteres')),
-    identification: z.string(),
+    identification: z.string().min(1, t('REGISTER.errors.identificationRequired', 'La identificación es requerida')),
     phone: z.string(),
-    state: z.string(),
-    city: z.string(),
-    address: z.string(),
+    state: z.string().min(1, t('REGISTER.errors.stateRequired', 'El estado es requerido')),
+    city: z.string().min(1, t('REGISTER.errors.cityRequired', 'La ciudad es requerida')),
+    address: z.string().min(1, t('REGISTER.errors.addressRequired', 'La dirección es requerida')),
     referralCode: z.string().optional(),
   });
 

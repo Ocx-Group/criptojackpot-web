@@ -22,6 +22,8 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
     isLoading,
     isLoadingCountries,
     error,
+    fieldErrors,
+    countryError,
     handleInputChange,
     handleCountryChange,
     togglePasswordVisibility,
@@ -85,7 +87,7 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                 <div className="row g-3">
                   {/* Name Fields */}
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.name ? 'has-error' : ''}`}>
                       <input
                         type="text"
                         name="name"
@@ -93,12 +95,12 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.namePlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.name && <span className="field-error-text">{fieldErrors.name.message}</span>}
                   </div>
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.lastName ? 'has-error' : ''}`}>
                       <input
                         type="text"
                         name="lastName"
@@ -106,14 +108,14 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.lastNamePlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.lastName && <span className="field-error-text">{fieldErrors.lastName.message}</span>}
                   </div>
 
                   {/* Email */}
                   <div className="col-12">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.email ? 'has-error' : ''}`}>
                       <input
                         type="email"
                         name="email"
@@ -121,15 +123,15 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.emailPlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.email && <span className="field-error-text">{fieldErrors.email.message}</span>}
                   </div>
 
                   {/* Password */}
                   <div className="col-12">
                     <div className="position-relative">
-                      <div className="form-cmn">
+                      <div className={`form-cmn ${fieldErrors.password ? 'has-error' : ''}`}>
                         <input
                           type={isPasswordShow ? 'text' : 'password'}
                           name="password"
@@ -138,7 +140,6 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                           className="py-2 w-100"
                           placeholder={t('REGISTER.passwordPlaceholder')}
                           style={{ paddingRight: '45px' }}
-                          required
                         />
                       </div>
                       <button
@@ -168,18 +169,18 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         )}
                       </button>
                     </div>
+                    {fieldErrors.password && <span className="field-error-text">{fieldErrors.password.message}</span>}
                   </div>
 
                   {/* Country */}
                   <div className="col-12">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${countryError ? 'has-error' : ''}`}>
                       <select
                         title="Country select"
                         className="form-select py-2 w-100"
                         onChange={handleCountryChange}
                         value={selectedCountry?.id || ''}
                         disabled={isLoadingCountries}
-                        required
                       >
                         <option value="" disabled>
                           {isLoadingCountries ? t('REGISTER.loadingCountries') : t('REGISTER.selectCountry')}
@@ -191,11 +192,12 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         ))}
                       </select>
                     </div>
+                    {countryError && <span className="field-error-text">{t('REGISTER.errors.countryRequired')}</span>}
                   </div>
 
                   {/* Identification and Phone */}
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.identification ? 'has-error' : ''}`}>
                       <input
                         type="text"
                         name="identification"
@@ -203,9 +205,11 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.identificationPlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.identification && (
+                      <span className="field-error-text">{fieldErrors.identification.message}</span>
+                    )}
                   </div>
                   <div className="col-12 col-sm-6">
                     <div className="form-cmn">
@@ -225,7 +229,7 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
 
                   {/* State and City */}
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.state ? 'has-error' : ''}`}>
                       <input
                         type="text"
                         name="state"
@@ -233,12 +237,12 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.statePlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.state && <span className="field-error-text">{fieldErrors.state.message}</span>}
                   </div>
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.city ? 'has-error' : ''}`}>
                       <input
                         type="text"
                         name="city"
@@ -246,14 +250,14 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.cityPlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.city && <span className="field-error-text">{fieldErrors.city.message}</span>}
                   </div>
 
                   {/* Address */}
                   <div className="col-12">
-                    <div className="form-cmn">
+                    <div className={`form-cmn ${fieldErrors.address ? 'has-error' : ''}`}>
                       <input
                         type="text"
                         name="address"
@@ -261,9 +265,9 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.addressPlaceholder')}
                         className="py-2 w-100"
-                        required
                       />
                     </div>
+                    {fieldErrors.address && <span className="field-error-text">{fieldErrors.address.message}</span>}
                   </div>
 
                   {/* Submit Button */}

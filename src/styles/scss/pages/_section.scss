@@ -1789,6 +1789,23 @@
   }
 }
 
+.form-cmn.has-error {
+  input,
+  .form-select,
+  .input-group .input-group-text,
+  .input-group .form-control {
+    border: 1px solid #dc3545 !important;
+    transition: border-color 0.2s ease;
+  }
+}
+
+.field-error-text {
+  color: #dc3545;
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: block;
+}
+
 .eye-icon {
   position: absolute;
   right: 10px;

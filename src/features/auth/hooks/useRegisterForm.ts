@@ -35,6 +35,7 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
     watch,
     setValue,
     handleSubmit: rhfHandleSubmit,
+    formState: { errors: fieldErrors, isSubmitted },
   } = useForm<Omit<RegisterFormData, 'countryId'>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -54,21 +55,23 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
   const formData = watch();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
+  const [countryError, setCountryError] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'phone') {
       setValue(name as keyof Omit<RegisterFormData, 'countryId'>, value.replaceAll(/\D/g, ''), {
-        shouldValidate: false,
+        shouldValidate: isSubmitted,
       });
     } else {
-      setValue(name as keyof Omit<RegisterFormData, 'countryId'>, value, { shouldValidate: false });
+      setValue(name as keyof Omit<RegisterFormData, 'countryId'>, value, { shouldValidate: isSubmitted });
     }
   };
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const country = countries.find(c => c.id === Number.parseInt(e.target.value, 10)) || null;
     setSelectedCountry(country);
+    setCountryError(false);
   };
 
   const togglePasswordVisibility = () => setIsPasswordShow(prev => !prev);
@@ -87,7 +90,8 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
 
     // Country validation (outside schema since it's a separate state)
     if (!selectedCountry) {
-      showNotification('error', t('REGISTER.errors.requiredFields'), '');
+      setCountryError(true);
+      showNotification('error', t('REGISTER.errors.countryRequired'), '');
       return;
     }
 
@@ -117,6 +121,8 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
     isLoading: isCreating,
     isLoadingCountries,
     error,
+    fieldErrors,
+    countryError,
     handleInputChange,
     handleCountryChange,
     togglePasswordVisibility,
