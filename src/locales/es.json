@@ -148,6 +148,13 @@
       "warning": "Desactivar la autenticación de dos factores reducirá la seguridad de tu cuenta. Ya no necesitarás un código de verificación al iniciar sesión.",
       "enterCode": "Ingresa el código de 6 dígitos de tu aplicación de autenticación para confirmar la desactivación."
     },
+    "regenerate": {
+      "title": "Regenerar Códigos de Recuperación",
+      "warning": "Regenerar los códigos de recuperación invalidará todos tus códigos existentes. Asegúrate de guardar los nuevos códigos en un lugar seguro.",
+      "enterCode": "Ingresa el código de 6 dígitos de tu aplicación de autenticación para regenerar tus códigos de recuperación.",
+      "confirm": "Regenerar Códigos"
+    },
+    "recoveryCodesRemaining": "Códigos de recuperación restantes: {{count}}",
     "errors": {
       "setupFailed": "Error al configurar la autenticación de dos factores.",
       "invalidCode": "Código inválido. Por favor intenta de nuevo.",

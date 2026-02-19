@@ -85,18 +85,18 @@ const BackHeader = ({ onBack, title }: { onBack: () => void; title: string }) =>
 
 const StatusView = ({
   isEnabled,
+  recoveryCodesRemaining,
   isSetupLoading,
-  isRegenerating,
   onStartSetup,
   onShowDisable,
-  onRegenerateCodes,
+  onShowRegenerate,
 }: {
   isEnabled: boolean;
+  recoveryCodesRemaining: number | null;
   isSetupLoading: boolean;
-  isRegenerating: boolean;
   onStartSetup: () => void;
   onShowDisable: () => void;
-  onRegenerateCodes: () => void;
+  onShowRegenerate: () => void;
 }) => {
   const { t } = useTranslation();
 
@@ -133,28 +133,34 @@ const StatusView = ({
         </p>
 
         {isEnabled ? (
-          <div className="d-flex gap-3 flex-wrap">
-            <button
-              type="button"
-              onClick={onRegenerateCodes}
-              disabled={isRegenerating}
-              className="cmn-btn radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5"
-              style={{ background: 'var(--bg2)', border: '1px solid var(--borderd)', color: 'var(--n0)' }}
-            >
-              {isRegenerating ? t('SECURITY.regenerating') : t('SECURITY.regenerateCodes')}
-            </button>
-            <button
-              type="button"
-              onClick={onShowDisable}
-              className="cmn-btn radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5"
-              style={{
-                background: 'rgba(254, 68, 69, 0.1)',
-                border: '1px solid rgba(254, 68, 69, 0.3)',
-                color: 'var(--act1)',
-              }}
-            >
-              {t('SECURITY.disable2Fa')}
-            </button>
+          <div>
+            {recoveryCodesRemaining !== null && (
+              <p className="n3-clr fs-eight mb-4" style={{ lineHeight: '1.5' }}>
+                {t('SECURITY.recoveryCodesRemaining', { count: recoveryCodesRemaining })}
+              </p>
+            )}
+            <div className="d-flex gap-3 flex-wrap">
+              <button
+                type="button"
+                onClick={onShowRegenerate}
+                className="cmn-btn radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5"
+                style={{ background: 'var(--bg2)', border: '1px solid var(--borderd)', color: 'var(--n0)' }}
+              >
+                {t('SECURITY.regenerateCodes')}
+              </button>
+              <button
+                type="button"
+                onClick={onShowDisable}
+                className="cmn-btn radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5"
+                style={{
+                  background: 'rgba(254, 68, 69, 0.1)',
+                  border: '1px solid rgba(254, 68, 69, 0.3)',
+                  color: 'var(--act1)',
+                }}
+              >
+                {t('SECURITY.disable2Fa')}
+              </button>
+            </div>
           </div>
         ) : (
           <button
@@ -234,11 +240,11 @@ const SetupView = ({
           <h5 className="n4-clr fw_600">{t('SECURITY.setup.step2Title')}</h5>
         </div>
         <div className="ms-5 ps-3">
-          {setupData?.authenticatorUri && (
+          {setupData?.qrCodeUri && (
             <div className="d-inline-block radius16 p-4 mb-4" style={{ background: '#ffffff' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(setupData.authenticatorUri)}`}
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(setupData.qrCodeUri)}`}
                 alt="QR Code"
                 width={200}
                 height={200}
@@ -246,7 +252,7 @@ const SetupView = ({
               />
             </div>
           )}
-          {setupData?.sharedKey && (
+          {setupData?.secret && (
             <div className="mb-4">
               <p className="n3-clr fs-eight mb-2">{t('SECURITY.setup.manualEntry')}</p>
               <div
@@ -257,11 +263,11 @@ const SetupView = ({
                   className="fw_700 fs-six"
                   style={{ color: 'var(--s1)', letterSpacing: '2px', wordBreak: 'break-all' }}
                 >
-                  {setupData.sharedKey}
+                  {setupData.secret}
                 </code>
                 <button
                   type="button"
-                  onClick={() => onCopy(setupData.sharedKey)}
+                  onClick={() => onCopy(setupData.secret)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--n3)' }}
                   title={t('SECURITY.copy')}
                 >
@@ -452,6 +458,69 @@ const DisableView = ({
   );
 };
 
+/* ─── Regenerate Recovery Codes View ─── */
+
+const RegenerateView = ({
+  regenerateCode,
+  isRegenerating,
+  onBack,
+  onCodeComplete,
+  onRegenerate,
+}: {
+  regenerateCode: string;
+  isRegenerating: boolean;
+  onBack: () => void;
+  onCodeComplete: (val: string) => void;
+  onRegenerate: (e?: React.FormEvent) => void;
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <PageShell>
+      <BackHeader onBack={onBack} title={t('SECURITY.regenerate.title')} />
+
+      <div
+        className="radius12 p-4 d-flex gap-3 mb-6"
+        style={{ background: 'rgba(254, 201, 47, 0.1)', border: '1px solid rgba(254, 201, 47, 0.3)' }}
+      >
+        <WarningIcon weight="bold" size={22} style={{ color: 'var(--act3)', flexShrink: 0, marginTop: '2px' }} />
+        <p className="fs-seven" style={{ color: 'var(--act3)', lineHeight: '1.5' }}>
+          {t('SECURITY.regenerate.warning')}
+        </p>
+      </div>
+
+      <p className="n3-clr fs-seven mb-6" style={{ lineHeight: '1.6' }}>
+        {t('SECURITY.regenerate.enterCode')}
+      </p>
+
+      <form onSubmit={onRegenerate}>
+        <div className="d-flex justify-content-start mb-5">
+          <OtpField value={regenerateCode} onChange={onCodeComplete} disabled={isRegenerating} />
+        </div>
+        <div className="d-flex gap-3 flex-wrap">
+          <button
+            type="button"
+            onClick={onBack}
+            className="cmn-btn radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5"
+            style={{ background: 'var(--bg2)', border: '1px solid var(--borderd)', color: 'var(--n0)' }}
+          >
+            {t('SECURITY.cancel')}
+          </button>
+          <button
+            type="submit"
+            disabled={isRegenerating || regenerateCode.length !== 6}
+            className="cmn-btn s1-bg radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5 n0-clr"
+          >
+            <span className="fw_600 n0-clr">
+              {isRegenerating ? t('SECURITY.regenerating') : t('SECURITY.regenerate.confirm')}
+            </span>
+          </button>
+        </div>
+      </form>
+    </PageShell>
+  );
+};
+
 /* ─── Main Component ─── */
 
 const SecuritySection = () => {
@@ -486,11 +555,11 @@ const SecuritySection = () => {
     status: (
       <StatusView
         isEnabled={twoFa.isEnabled}
+        recoveryCodesRemaining={twoFa.recoveryCodesRemaining}
         isSetupLoading={twoFa.isSetupLoading}
-        isRegenerating={twoFa.isRegenerating}
         onStartSetup={twoFa.handleStartSetup}
         onShowDisable={twoFa.handleShowDisable}
-        onRegenerateCodes={twoFa.regenerateCodes}
+        onShowRegenerate={twoFa.handleShowRegenerate}
       />
     ),
     setup: (
@@ -530,6 +599,15 @@ const SecuritySection = () => {
         onBack={twoFa.handleBackToStatus}
         onCodeComplete={twoFa.handleDisableCodeComplete}
         onDisable={twoFa.handleDisable}
+      />
+    ),
+    regenerate: (
+      <RegenerateView
+        regenerateCode={twoFa.regenerateCode}
+        isRegenerating={twoFa.isRegenerating}
+        onBack={twoFa.handleBackToStatus}
+        onCodeComplete={twoFa.handleRegenerateCodeComplete}
+        onRegenerate={twoFa.handleRegenerateCodes}
       />
     ),
   };

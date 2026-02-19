@@ -1,23 +1,28 @@
-export interface TwoFactorSetupResponse {
-  sharedKey: string;
-  authenticatorUri: string;
-  recoveryCodes?: string[];
-}
-
 export interface TwoFactorStatusResponse {
-  twoFactorEnabled: boolean;
-  hasAuthenticator: boolean;
+  isEnabled: boolean;
+  isPendingSetup: boolean;
+  recoveryCodesRemaining: number | null;
 }
 
-export interface Enable2FaRequest {
+export interface TwoFactorSetupResponse {
+  secret: string;
+  qrCodeUri: string;
+}
+
+export interface Confirm2FaRequest {
   code: string;
 }
 
-export interface Enable2FaResponse {
-  success: boolean;
+export interface Confirm2FaResponse {
   recoveryCodes: string[];
+  recoveryCodeCount: number;
 }
 
 export interface Disable2FaRequest {
+  code?: string;
+  recoveryCode?: string;
+}
+
+export interface Regenerate2FaRecoveryCodesRequest {
   code: string;
 }

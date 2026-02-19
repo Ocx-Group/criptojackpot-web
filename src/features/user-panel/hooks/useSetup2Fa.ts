@@ -8,7 +8,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { TwoFactorSetupResponse } from '@/features/user-panel/types/twoFactor';
 import axios from 'axios';
 
-export type TwoFactorStep = 'status' | 'setup' | 'verify' | 'recovery-codes' | 'disable';
+export type TwoFactorStep = 'status' | 'setup' | 'verify' | 'recovery-codes' | 'disable' | 'regenerate';
 
 export const useSetup2Fa = () => {
   const { t } = useTranslation();
@@ -20,6 +20,7 @@ export const useSetup2Fa = () => {
   const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
   const [verifyCode, setVerifyCode] = useState('');
   const [disableCode, setDisableCode] = useState('');
+  const [regenerateCode, setRegenerateCode] = useState('');
 
   const statusQuery = useQuery({
     queryKey: ['2fa-status'],
@@ -41,8 +42,8 @@ export const useSetup2Fa = () => {
     },
   });
 
-  const enableMutation = useMutation({
-    mutationFn: (code: string) => twoFactorService.enable({ code }),
+  const confirmMutation = useMutation({
+    mutationFn: (code: string) => twoFactorService.confirm({ code }),
     onSuccess: data => {
       setRecoveryCodes(data.recoveryCodes || []);
       setStep('recovery-codes');
@@ -75,9 +76,12 @@ export const useSetup2Fa = () => {
   });
 
   const regenerateCodesMutation = useMutation({
-    mutationFn: () => twoFactorService.getRecoveryCodes(),
+    mutationFn: (code: string) => twoFactorService.regenerateRecoveryCodes({ code }),
     onSuccess: data => {
-      setRecoveryCodes(data);
+      setRecoveryCodes(data.recoveryCodes || []);
+      setStep('recovery-codes');
+      setRegenerateCode('');
+      queryClient.invalidateQueries({ queryKey: ['2fa-status'] });
       showNotification('success', t('SECURITY.notifications.codesRegenerated'), '');
     },
     onError: (error: Error) => {
@@ -98,7 +102,7 @@ export const useSetup2Fa = () => {
       showNotification('error', t('SECURITY.errors.codeMustBe6Digits'), '');
       return;
     }
-    enableMutation.mutate(verifyCode);
+    confirmMutation.mutate(verifyCode);
   };
 
   const handleDisable = (e?: React.FormEvent) => {
@@ -110,10 +114,19 @@ export const useSetup2Fa = () => {
     disableMutation.mutate(disableCode);
   };
 
+  const handleRegenerateCodes = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (regenerateCode.length !== 6) {
+      showNotification('error', t('SECURITY.errors.codeMustBe6Digits'), '');
+      return;
+    }
+    regenerateCodesMutation.mutate(regenerateCode);
+  };
+
   const handleCodeComplete = (value: string) => {
     setVerifyCode(value);
     if (value.length === 6) {
-      enableMutation.mutate(value);
+      confirmMutation.mutate(value);
     }
   };
 
@@ -124,16 +137,29 @@ export const useSetup2Fa = () => {
     }
   };
 
+  const handleRegenerateCodeComplete = (value: string) => {
+    setRegenerateCode(value);
+    if (value.length === 6) {
+      regenerateCodesMutation.mutate(value);
+    }
+  };
+
   const handleBackToStatus = () => {
     setStep('status');
     setSetupData(null);
     setVerifyCode('');
     setDisableCode('');
+    setRegenerateCode('');
   };
 
   const handleShowDisable = () => {
     setStep('disable');
     setDisableCode('');
+  };
+
+  const handleShowRegenerate = () => {
+    setStep('regenerate');
+    setRegenerateCode('');
   };
 
   return {
@@ -145,19 +171,24 @@ export const useSetup2Fa = () => {
     setVerifyCode,
     disableCode,
     setDisableCode,
-    isEnabled: statusQuery.data?.twoFactorEnabled ?? false,
+    regenerateCode,
+    setRegenerateCode,
+    isEnabled: statusQuery.data?.isEnabled ?? false,
+    recoveryCodesRemaining: statusQuery.data?.recoveryCodesRemaining ?? null,
     isStatusLoading: statusQuery.isLoading,
     isSetupLoading: setupMutation.isPending,
-    isEnabling: enableMutation.isPending,
+    isEnabling: confirmMutation.isPending,
     isDisabling: disableMutation.isPending,
     isRegenerating: regenerateCodesMutation.isPending,
     handleStartSetup,
     handleVerifyAndEnable,
     handleDisable,
+    handleRegenerateCodes,
     handleCodeComplete,
     handleDisableCodeComplete,
+    handleRegenerateCodeComplete,
     handleBackToStatus,
     handleShowDisable,
-    regenerateCodes: () => regenerateCodesMutation.mutate(),
+    handleShowRegenerate,
   };
 };

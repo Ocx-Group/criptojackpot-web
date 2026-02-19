@@ -148,6 +148,13 @@
       "warning": "Disabling two-factor authentication will reduce your account security. You will no longer need a verification code when signing in.",
       "enterCode": "Enter the 6-digit code from your authenticator app to confirm disabling."
     },
+    "regenerate": {
+      "title": "Regenerate Recovery Codes",
+      "warning": "Regenerating recovery codes will invalidate all your existing codes. Make sure to save the new codes in a safe place.",
+      "enterCode": "Enter the 6-digit code from your authenticator app to regenerate your recovery codes.",
+      "confirm": "Regenerate Codes"
+    },
+    "recoveryCodesRemaining": "Recovery codes remaining: {{count}}",
     "errors": {
       "setupFailed": "Failed to set up two-factor authentication.",
       "invalidCode": "Invalid code. Please try again.",

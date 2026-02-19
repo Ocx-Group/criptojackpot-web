@@ -1,14 +1,16 @@
 import { BaseService } from './baseService';
+import { Response } from '@/interfaces/response';
 import {
   TwoFactorSetupResponse,
   TwoFactorStatusResponse,
-  Enable2FaRequest,
-  Enable2FaResponse,
+  Confirm2FaRequest,
+  Confirm2FaResponse,
   Disable2FaRequest,
+  Regenerate2FaRecoveryCodesRequest,
 } from '@/features/user-panel/types/twoFactor';
 
 class TwoFactorService extends BaseService {
-  protected override endpoint = 'auth/2fa';
+  protected override endpoint = '2fa';
 
   constructor() {
     super('/api/v1');
@@ -16,20 +18,20 @@ class TwoFactorService extends BaseService {
 
   async getStatus(): Promise<TwoFactorStatusResponse> {
     const url = `${this.servicePrefix}/${this.endpoint}/status`;
-    const response = await this.apiClient.get<TwoFactorStatusResponse>(url);
-    return response.data;
+    const response = await this.apiClient.get<Response<TwoFactorStatusResponse>>(url);
+    return this.handleResponse(response);
   }
 
   async setup(): Promise<TwoFactorSetupResponse> {
     const url = `${this.servicePrefix}/${this.endpoint}/setup`;
-    const response = await this.apiClient.post<TwoFactorSetupResponse>(url);
-    return response.data;
+    const response = await this.apiClient.post<Response<TwoFactorSetupResponse>>(url);
+    return this.handleResponse(response);
   }
 
-  async enable(request: Enable2FaRequest): Promise<Enable2FaResponse> {
-    const url = `${this.servicePrefix}/${this.endpoint}/enable`;
-    const response = await this.apiClient.post<Enable2FaResponse>(url, request);
-    return response.data;
+  async confirm(request: Confirm2FaRequest): Promise<Confirm2FaResponse> {
+    const url = `${this.servicePrefix}/${this.endpoint}/confirm`;
+    const response = await this.apiClient.post<Response<Confirm2FaResponse>>(url, request);
+    return this.handleResponse(response);
   }
 
   async disable(request: Disable2FaRequest): Promise<void> {
@@ -37,10 +39,10 @@ class TwoFactorService extends BaseService {
     await this.apiClient.post(url, request);
   }
 
-  async getRecoveryCodes(): Promise<string[]> {
-    const url = `${this.servicePrefix}/${this.endpoint}/recovery-codes`;
-    const response = await this.apiClient.post<string[]>(url);
-    return response.data;
+  async regenerateRecoveryCodes(request: Regenerate2FaRecoveryCodesRequest): Promise<Confirm2FaResponse> {
+    const url = `${this.servicePrefix}/${this.endpoint}/recovery-codes/regenerate`;
+    const response = await this.apiClient.post<Response<Confirm2FaResponse>>(url, request);
+    return this.handleResponse(response);
   }
 }
 
