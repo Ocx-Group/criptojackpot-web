@@ -1,13 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useCallback, useMemo } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { FormEvent, useEffect, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useUserStore } from '@/store/userStore';
 import { useNotificationStore } from '@/store/notificationStore';
-import { userService } from '@/services';
-import { FormData, ShowPwd, UpdateUserRequest } from '@/features/user-panel/types';
+import { countryService, userService } from '@/services';
+import { Country } from '@/interfaces/country';
+import { FormData, UpdateUserRequest } from '@/features/user-panel/types';
 import { createPersonalInfoSchema } from '@/features/user-panel/schemas/personalInfoSchema';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
@@ -15,9 +16,10 @@ export function usePersonalInfoForm() {
   const { t } = useTranslation();
   const { user, updateUser } = useUserStore();
   const showNotification = useNotificationStore(state => state.show);
-  const queryClient = useQueryClient(); // Opcional, para invalidar queries si es necesario
+  const queryClient = useQueryClient();
 
   const schema = useMemo(() => createPersonalInfoSchema(t), [t]);
+  const [countryError, setCountryError] = useState(false);
 
   const {
     watch,
@@ -30,37 +32,56 @@ export function usePersonalInfoForm() {
       lastName: '',
       email: '',
       phone: '',
-      password: '',
-      confirmPassword: '',
+      countryId: 0,
+      statePlace: '',
+      city: '',
+      address: '',
     },
   });
 
   const formData = watch();
 
-  const [showPwd, setShowPwd] = React.useState<ShowPwd>({
-    password: false,
-    confirmPassword: false,
+  const {
+    data: countries = [],
+    isLoading: isLoadingCountries,
+    error: countriesError,
+  } = useQuery({
+    queryKey: ['countries'],
+    queryFn: () => countryService.getAllCountries(),
+    staleTime: Infinity,
+    retry: false,
   });
 
-  // Efecto para inicializar el formulario con los datos del usuario
+  const selectedCountry: Country | null = useMemo(
+    () => countries.find(c => c.id === formData.countryId) ?? null,
+    [countries, formData.countryId]
+  );
+
+  useEffect(() => {
+    if (countriesError) {
+      showNotification('error', t('REGISTER.errors.countryLoadError', 'No se pudo cargar países'), '');
+    }
+  }, [countriesError, showNotification, t]);
+
   useEffect(() => {
     if (user) {
       setValue('firstName', user.name || '');
       setValue('lastName', user.lastName || '');
       setValue('email', user.email || '');
       setValue('phone', user.phone || '');
+      setValue('countryId', user.countryId || 0);
+      setValue('statePlace', user.statePlace || '');
+      setValue('city', user.city || '');
+      setValue('address', user.address || '');
     }
   }, [user, setValue]);
 
-  // Mutación de React Query para actualizar el usuario
   const updateUserMutation = useMutation({
     mutationFn: (userData: { id: number; data: UpdateUserRequest }) =>
       userService.updateUserAsync(userData.id, userData.data),
     onSuccess: updatedUserData => {
       updateUser(updatedUserData);
       showNotification('success', t('PERSONAL_INFO.notifications.updateSuccess'), '');
-
-      // invalidar queries
       queryClient.invalidateQueries({ queryKey: ['user', user?.id] }).then();
     },
     onError: (error: Error) => {
@@ -76,8 +97,23 @@ export function usePersonalInfoForm() {
     [setValue]
   );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCountryChange = useCallback(
+    (value: string) => {
+      const parsed = Number.parseInt(value, 10);
+      const countryId = Number.isNaN(parsed) ? 0 : parsed;
+      setValue('countryId', countryId, { shouldValidate: false });
+      setCountryError(countryId <= 0);
+    },
+    [setValue]
+  );
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!formData.countryId) {
+      setCountryError(true);
+      showNotification('error', t('REGISTER.errors.countryRequired', 'Por favor, seleccione un país'), '');
+      return;
+    }
 
     rhfHandleSubmit(
       data => {
@@ -86,12 +122,11 @@ export function usePersonalInfoForm() {
             name: data.firstName,
             lastName: data.lastName,
             phone: data.phone,
-            password: '',
+            countryId: data.countryId,
+            statePlace: data.statePlace,
+            city: data.city,
+            address: data.address,
           };
-
-          if (data.password) {
-            updatedUserData.password = data.password;
-          }
 
           updateUserMutation.mutate({ id: user.id, data: updatedUserData });
         }
@@ -105,9 +140,12 @@ export function usePersonalInfoForm() {
 
   return {
     formData,
-    showPwd,
-    setShowPwd,
+    countries,
+    selectedCountry,
+    isLoadingCountries,
+    countryError,
     handleChange,
+    handleCountryChange,
     handleSubmit,
     isLoading: updateUserMutation.isPending,
     error: updateUserMutation.error,

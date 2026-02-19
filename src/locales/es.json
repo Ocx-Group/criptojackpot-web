@@ -85,25 +85,27 @@
     "User Panel": "Panel de usuario"
   },
   "PERSONAL_INFO": {
-    "confirmPassword": "Confirmar Contraseña",
+    "address": "Dirección",
+    "city": "Ciudad",
+    "country": "País",
     "emailAddress": "Correo Electrónico",
     "firstName": "Nombre",
     "lastName": "Apellido",
-    "newPassword": "Nueva Contraseña",
     "notifications": {
-      "passwordMismatch": "La contraseña y la confirmación no coinciden.",
       "updateError": "Error al actualizar el perfil.",
       "updateSuccess": "¡Perfil actualizado con éxito!"
     },
     "phoneNumber": "Número de Teléfono",
     "placeholders": {
-      "confirmPassword": "Confirmar Contraseña",
+      "address": "Dirección",
+      "city": "Ciudad",
       "email": "Correo",
       "firstName": "Nombre",
       "lastName": "Apellido",
-      "newPassword": "Nueva Contraseña",
-      "phoneNumber": "Número de Teléfono"
+      "phoneNumber": "Número de Teléfono",
+      "statePlace": "Estado / Provincia"
     },
+    "statePlace": "Estado / Provincia",
     "subscribeNewsletter": "Suscribirme al Boletín",
     "title": "Datos Personales",
     "updateProfile": "Actualizar Perfil"

@@ -68,7 +68,7 @@
     right: 0;
     width: 1060px;
     height: 250px;
-    content: "";
+    content: '';
     background: var(--n1);
     z-index: -1;
   }
@@ -603,8 +603,9 @@
     left: 0;
     width: 200px;
     height: 500px;
-    content: "";
-    border-radius: var(--number-token-0, 0px) var(--number-token-0, 0px) var(--number-token-25, 100px) var(--number-token-25, 100px);
+    content: '';
+    border-radius: var(--number-token-0, 0px) var(--number-token-0, 0px) var(--number-token-25, 100px)
+      var(--number-token-25, 100px);
     background: linear-gradient(180deg, rgba(254, 201, 47, 0) 0%, #fec92f 100%);
     z-index: -1;
   }
@@ -1029,12 +1030,13 @@
     z-index: 2;
     &::before {
       position: absolute;
-      content: "";
+      content: '';
       width: 100%;
       height: 90px;
       bottom: 22%;
       z-index: -1;
-      border-radius: var(--number-token-0, 0px) var(--number-token-0, 0px) var(--number-token-25, 100px) var(--number-token-25, 100px);
+      border-radius: var(--number-token-0, 0px) var(--number-token-0, 0px) var(--number-token-25, 100px)
+        var(--number-token-25, 100px);
       background: linear-gradient(180deg, rgba(254, 201, 47, 0) 0%, rgba(254, 201, 47, 0.7) 100%);
       transition: all 0.4s;
     }
@@ -1227,7 +1229,7 @@
     width: 635px;
     height: 635px;
     border-radius: 50%;
-    content: "";
+    content: '';
     background: var(--act4);
     z-index: -1;
   }
@@ -1238,7 +1240,7 @@
     width: 635px;
     height: 635px;
     border-radius: 900px;
-    content: "";
+    content: '';
     background: var(--act4);
     z-index: -1;
   }
@@ -1703,7 +1705,7 @@
       right: -10px;
       width: 100%;
       height: 100%;
-      content: "";
+      content: '';
       background: #ffedb3;
       border-radius: 685px;
       z-index: -1;
@@ -1711,7 +1713,7 @@
     }
     &::before {
       position: absolute;
-      content: "";
+      content: '';
       width: 100%;
       height: 100%;
       left: -10px;
@@ -1814,7 +1816,7 @@
     right: -30px;
     width: 100%;
     height: 100%;
-    content: "";
+    content: '';
     background: #ffedb3;
     border-radius: 810px;
     z-index: -1;
@@ -2256,7 +2258,7 @@
   position: relative;
   &::before {
     position: absolute;
-    content: "";
+    content: '';
     clip-path: polygon(0 0, 0% 100%, 100% 100%);
     background: var(--act3);
     opacity: 50%;
@@ -2492,7 +2494,7 @@
     left: 0;
     height: 100%;
     width: 572px;
-    content: "";
+    content: '';
     background: #f1f4ec;
   }
   .scroll-bn1 {
@@ -3295,7 +3297,7 @@
     &::before {
       position: absolute;
       left: 0;
-      content: "";
+      content: '';
       background: var(--p1);
       @include box(8);
       border-radius: 50%;
@@ -3336,7 +3338,7 @@
   &::before {
     position: absolute;
     left: 0;
-    content: "";
+    content: '';
     background: var(--p1);
     @include box(8);
     border-radius: 50%;
@@ -3883,7 +3885,7 @@
     height: 40px;
     border-radius: 50%;
     transform: translateY(-50%);
-    content: "";
+    content: '';
     border: 1px solid var(--nw4);
     background: rgba(244, 244, 244, 100%);
     z-index: 9;
@@ -3896,7 +3898,7 @@
     height: 40px;
     border-radius: 50%;
     transform: translateY(-50%);
-    content: "";
+    content: '';
     border: 1px solid var(--nw4);
     background: rgba(244, 244, 244, 100%);
     z-index: 9;
@@ -3917,11 +3919,35 @@
 .cmn-box-addingbg {
   .ch-form-one {
     .ch-form-items {
-      input {
+      position: relative;
+      input,
+      select {
         border: 1px solid var(--nw4);
         outline: none;
         padding: 12px 16px;
         border-radius: 12px;
+        width: 100%;
+        background-color: transparent;
+        color: inherit;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: 1.5;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      select {
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825a.5.5 0 0 1-.354-.146l-4.5-4.5a.5.5 0 1 1 .708-.708L6 7.617l4.146-4.146a.5.5 0 1 1 .708.708l-4.5 4.5A.5.5 0 0 1 6 8.825z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 12px;
+        padding-right: 40px;
+      }
+      .field-error-text {
+        position: absolute;
+        bottom: -18px;
+        left: 4px;
       }
     }
   }
@@ -4054,4 +4080,3 @@
     border-radius: 20px !important;
   }
 }
-

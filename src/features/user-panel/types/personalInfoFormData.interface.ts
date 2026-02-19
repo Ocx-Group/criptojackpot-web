@@ -3,6 +3,8 @@ export interface FormData {
     lastName: string;
     email: string;
     phone: string;
-    password: string;
-    confirmPassword: string;
+    countryId: number;
+    statePlace: string;
+    city: string;
+    address: string;
 }

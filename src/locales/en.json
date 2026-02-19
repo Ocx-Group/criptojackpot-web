@@ -85,25 +85,27 @@
     "User Panel": "User Panel"
   },
   "PERSONAL_INFO": {
-    "confirmPassword": "Confirm Password",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
     "emailAddress": "Email Address",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "newPassword": "New Password",
     "notifications": {
-      "passwordMismatch": "Password and confirmation do not match.",
       "updateError": "Failed to update profile.",
       "updateSuccess": "Profile updated successfully!"
     },
     "phoneNumber": "Phone Number",
     "placeholders": {
-      "confirmPassword": "Confirm Password",
+      "address": "Address",
+      "city": "City",
       "email": "Email",
       "firstName": "First Name",
       "lastName": "Last Name",
-      "newPassword": "New Password",
-      "phoneNumber": "Phone Number"
+      "phoneNumber": "Phone Number",
+      "statePlace": "State / Province"
     },
+    "statePlace": "State / Province",
     "subscribeNewsletter": "Subscribe me to Newsletter",
     "title": "Personal Details",
     "updateProfile": "Update Profile"

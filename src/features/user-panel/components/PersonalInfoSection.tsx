@@ -1,12 +1,20 @@
 "use client";
-import { EyeIcon, EyeSlashIcon, CheckIcon } from "@phosphor-icons/react";
+import { CheckIcon } from "@phosphor-icons/react";
 import MotionFade from "../../../components/motionEffect/MotionFade";
 import { usePersonalInfoForm } from "@/features/user-panel/hooks/usePersonalInfoForm";
 import { useTranslation } from "react-i18next";
 
 export default function PersonalInfoSection() {
   const { t } = useTranslation();
-  const { formData, showPwd, setShowPwd, handleChange, handleSubmit } = usePersonalInfoForm();
+  const {
+    formData,
+    countries,
+    isLoadingCountries,
+    countryError,
+    handleChange,
+    handleCountryChange,
+    handleSubmit,
+  } = usePersonalInfoForm();
 
   return (
       <MotionFade className="col-xxl-9 col-xl-8 col-lg-8">
@@ -74,48 +82,74 @@ export default function PersonalInfoSection() {
                   />
                 </div>
               </div>
-              {/* New Password */}
+              {/* Country */}
               <div className="col-lg-6 col-md-6 col-sm-6">
                 <div className="ch-form-items">
-                  <label htmlFor="password" className="text-capitalize fs18 fw_600 n3-clr mb-xxl-4 mb-xl-3 mb-2">
-                    {t('PERSONAL_INFO.newPassword')}
+                  <label htmlFor="countryId" className="text-capitalize fs18 fw_600 n3-clr mb-xxl-4 mb-xl-3 mb-2">
+                    {t('PERSONAL_INFO.country')}
                   </label>
-                  <div className="ps-grp position-relative">
-                    <input
-                        id="password"
-                        type={showPwd.password ? "text" : "password"}
-                        placeholder={t('PERSONAL_INFO.placeholders.newPassword')}
-                        value={formData.password}
-                        onChange={(e) => handleChange("password", e.target.value)}
-                    />
-                    {showPwd.password ? (
-                        <EyeIcon onClick={() => setShowPwd(prev => ({ ...prev, password: false }))} className="field-icon toggle-password eye-icon" />
-                    ) : (
-                        <EyeSlashIcon onClick={() => setShowPwd(prev => ({ ...prev, password: true }))} className="field-icon toggle-password eye-icon" />
-                    )}
-                  </div>
+                  <select
+                    id="countryId"
+                    title={t('PERSONAL_INFO.country')}
+                    value={formData.countryId || ''}
+                    onChange={(e) => handleCountryChange(e.target.value)}
+                    disabled={isLoadingCountries}
+                  >
+                    <option value="" disabled>
+                      {isLoadingCountries ? t('REGISTER.loadingCountries') : t('REGISTER.selectCountry')}
+                    </option>
+                    {countries.map(country => (
+                      <option key={country.id} value={country.id}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  {countryError && <span className="field-error-text">{t('REGISTER.errors.countryRequired')}</span>}
                 </div>
               </div>
-              {/* Confirm Password */}
+              {/* State Place */}
               <div className="col-lg-6 col-md-6 col-sm-6">
                 <div className="ch-form-items">
-                  <label htmlFor="confirmPassword" className="text-capitalize fs18 fw_600 n3-clr mb-xxl-4 mb-xl-3 mb-2">
-                    {t('PERSONAL_INFO.confirmPassword')}
+                  <label htmlFor="statePlace" className="text-capitalize fs18 fw_600 n3-clr mb-xxl-4 mb-xl-3 mb-2">
+                    {t('PERSONAL_INFO.statePlace')}
                   </label>
-                  <div className="ps-grp position-relative">
-                    <input
-                        id="confirmPassword"
-                        type={showPwd.confirmPassword ? "text" : "password"}
-                        placeholder={t('PERSONAL_INFO.placeholders.confirmPassword')}
-                        value={formData.confirmPassword}
-                        onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                    />
-                    {showPwd.confirmPassword ? (
-                        <EyeIcon onClick={() => setShowPwd(prev => ({ ...prev, confirmPassword: false }))} className="field-icon toggle-password eye-icon" />
-                    ) : (
-                        <EyeSlashIcon onClick={() => setShowPwd(prev => ({ ...prev, confirmPassword: true }))} className="field-icon toggle-password eye-icon" />
-                    )}
-                  </div>
+                  <input
+                    id="statePlace"
+                    type="text"
+                    placeholder={t('PERSONAL_INFO.placeholders.statePlace')}
+                    value={formData.statePlace}
+                    onChange={(e) => handleChange("statePlace", e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* City */}
+              <div className="col-lg-6 col-md-6 col-sm-6">
+                <div className="ch-form-items">
+                  <label htmlFor="city" className="text-capitalize fs18 fw_600 n3-clr mb-xxl-4 mb-xl-3 mb-2">
+                    {t('PERSONAL_INFO.city')}
+                  </label>
+                  <input
+                    id="city"
+                    type="text"
+                    placeholder={t('PERSONAL_INFO.placeholders.city')}
+                    value={formData.city}
+                    onChange={(e) => handleChange("city", e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Address */}
+              <div className="col-lg-6 col-md-6 col-sm-6">
+                <div className="ch-form-items">
+                  <label htmlFor="address" className="text-capitalize fs18 fw_600 n3-clr mb-xxl-4 mb-xl-3 mb-2">
+                    {t('PERSONAL_INFO.address')}
+                  </label>
+                  <input
+                    id="address"
+                    type="text"
+                    placeholder={t('PERSONAL_INFO.placeholders.address')}
+                    value={formData.address}
+                    onChange={(e) => handleChange("address", e.target.value)}
+                  />
                 </div>
               </div>
             </div>
