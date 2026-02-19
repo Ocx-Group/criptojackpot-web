@@ -108,6 +108,60 @@
     "title": "Datos Personales",
     "updateProfile": "Actualizar Perfil"
   },
+  "SECURITY": {
+    "title": "Seguridad",
+    "twoFactorAuth": "Autenticación de Dos Factores",
+    "description": "La autenticación de dos factores agrega una capa extra de seguridad a tu cuenta. Necesitarás ingresar un código de tu aplicación de autenticación además de tu contraseña al iniciar sesión.",
+    "infoBox": "Te recomendamos usar Google Authenticator o Authy como tu aplicación de autenticación. Están disponibles gratuitamente en la App Store y Google Play.",
+    "status": {
+      "enabled": "Activada",
+      "disabled": "Desactivada"
+    },
+    "enable2Fa": "Activar 2FA",
+    "disable2Fa": "Desactivar 2FA",
+    "settingUp": "Configurando...",
+    "verifying": "Verificando...",
+    "disabling": "Desactivando...",
+    "regenerating": "Regenerando...",
+    "regenerateCodes": "Regenerar Códigos de Recuperación",
+    "verifyAndEnable": "Verificar y Activar",
+    "confirmDisable": "Confirmar Desactivación",
+    "cancel": "Cancelar",
+    "copy": "Copiar",
+    "setup": {
+      "title": "Configurar Autenticación de Dos Factores",
+      "step1Title": "Descarga una app de autenticación",
+      "step1Description": "Descarga e instala Google Authenticator o Authy en tu teléfono móvil desde la App Store o Google Play.",
+      "step2Title": "Escanea el código QR",
+      "step3Title": "Ingresa el código de verificación",
+      "step3Description": "Ingresa el código de 6 dígitos que aparece en tu aplicación de autenticación para verificar la configuración.",
+      "manualEntry": "¿No puedes escanear el código? Ingresa esta clave manualmente:"
+    },
+    "recoveryCodes": {
+      "title": "Códigos de Recuperación",
+      "warning": "Guarda estos códigos de recuperación en un lugar seguro. Cada código solo puede usarse una vez. Si pierdes acceso a tu aplicación de autenticación, puedes usar uno de estos códigos para iniciar sesión.",
+      "copyAll": "Copiar Todos",
+      "done": "Listo"
+    },
+    "disable": {
+      "title": "Desactivar Autenticación de Dos Factores",
+      "warning": "Desactivar la autenticación de dos factores reducirá la seguridad de tu cuenta. Ya no necesitarás un código de verificación al iniciar sesión.",
+      "enterCode": "Ingresa el código de 6 dígitos de tu aplicación de autenticación para confirmar la desactivación."
+    },
+    "errors": {
+      "setupFailed": "Error al configurar la autenticación de dos factores.",
+      "invalidCode": "Código inválido. Por favor intenta de nuevo.",
+      "codeMustBe6Digits": "El código debe tener 6 dígitos.",
+      "regenerateFailed": "Error al regenerar los códigos de recuperación."
+    },
+    "notifications": {
+      "enableSuccess": "¡Autenticación de dos factores activada exitosamente!",
+      "disableSuccess": "Autenticación de dos factores desactivada.",
+      "codesRegenerated": "Códigos de recuperación regenerados exitosamente.",
+      "copied": "Copiado al portapapeles.",
+      "allCodesCopied": "Todos los códigos copiados al portapapeles."
+    }
+  },
   "REFERRAL_PROGRAM": {
     "copyLink": "Copiar Enlace",
     "dateRangeFilter": "fecha mín - máx",

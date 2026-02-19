@@ -6,6 +6,7 @@ import {
   HeartIcon,
   InfoIcon,
   LightningIcon,
+  ShieldCheckIcon,
   SignOutIcon,
   TicketIcon,
   UploadIcon,
@@ -159,6 +160,12 @@ const sidebarItems = [
     href: '/personal-info',
     icon: <InfoIcon weight="bold" className="ph-bold ph-info fs-five" />,
     text: 'Personal Information',
+  },
+  {
+    id: 9928371,
+    href: '/security',
+    icon: <ShieldCheckIcon weight="bold" className="ph-bold ph-shield-check fs-five" />,
+    text: 'Security',
   },
   {
     id: 1343,
