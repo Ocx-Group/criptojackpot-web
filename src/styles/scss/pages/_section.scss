@@ -1804,6 +1804,14 @@
   }
 }
 
+// Google Login Button
+.google-login-wrapper {
+  &:hover .google-login-btn {
+    background: var(--bg2) !important;
+    border-color: var(--nw4) !important;
+  }
+}
+
 //Login Section
 
 .tablet-custom-v1 {
