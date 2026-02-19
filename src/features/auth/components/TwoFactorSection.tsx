@@ -34,9 +34,7 @@ const TwoFactorSection = () => {
                   </Link>
                 </div>
                 <div className="log-title mb-xxl-10 mb-xl-7 mb-6">
-                  <h4 className="n4-clr fw_700 mb-2">
-                    {t('TWO_FACTOR.title', 'Verificación en dos pasos')}
-                  </h4>
+                  <h4 className="n4-clr fw_700 mb-2">{t('TWO_FACTOR.title', 'Verificación en dos pasos')}</h4>
                   <span className="n3-clr fs-seven">
                     {useRecoveryCode
                       ? t('TWO_FACTOR.recoveryDescription', 'Ingresa uno de tus códigos de recuperación')
@@ -54,28 +52,34 @@ const TwoFactorSection = () => {
                             numInputs={6}
                             shouldAutoFocus
                             inputType="number"
-                            renderInput={(props) => (
+                            renderInput={props => (
                               <input
                                 {...props}
                                 style={{
-                                  width: '48px',
-                                  height: '56px',
-                                  margin: '0 4px',
-                                  fontSize: '20px',
+                                  width: '52px',
+                                  height: '58px',
+                                  margin: '0 5px',
+                                  padding: '0',
+                                  fontSize: '22px',
                                   fontWeight: 700,
+                                  lineHeight: '58px',
                                   borderRadius: '12px',
-                                  border: '2px solid rgba(255,255,255,0.2)',
-                                  background: 'rgba(255,255,255,0.05)',
-                                  color: '#ffffff',
+                                  border: '2px solid rgba(255,255,255,0.25)',
+                                  background: 'rgba(255,255,255,0.1)',
+                                  color: 'var(--nw2)',
                                   textAlign: 'center',
                                   outline: 'none',
-                                  transition: 'border-color 0.2s',
+                                  overflow: 'visible',
+                                  transition: 'border-color 0.2s, box-shadow 0.2s',
+                                  caretColor: 'var(--s1)',
                                 }}
-                                onFocus={(e) => {
+                                onFocus={e => {
                                   e.target.style.borderColor = 'var(--s1)';
+                                  e.target.style.boxShadow = '0 0 0 3px rgba(85, 74, 255, 0.25)';
                                 }}
-                                onBlur={(e) => {
-                                  e.target.style.borderColor = 'rgba(255,255,255,0.2)';
+                                onBlur={e => {
+                                  e.target.style.borderColor = 'rgba(255,255,255,0.25)';
+                                  e.target.style.boxShadow = 'none';
                                 }}
                               />
                             )}
@@ -88,10 +92,22 @@ const TwoFactorSection = () => {
                           <input
                             type="text"
                             value={recoveryCode}
-                            onChange={(e) => setRecoveryCode(e.target.value)}
+                            onChange={e => setRecoveryCode(e.target.value)}
                             placeholder={t('TWO_FACTOR.recoveryCodePlaceholder', 'XXXX-XXXX')}
                             maxLength={9}
-                            style={{ textAlign: 'center', letterSpacing: '2px', fontSize: '18px' }}
+                            style={{
+                              textAlign: 'center',
+                              letterSpacing: '2px',
+                              fontSize: '18px',
+                              color: 'var(--nw2)',
+                              background: 'rgba(255,255,255,0.1)',
+                              border: '2px solid rgba(255,255,255,0.25)',
+                              borderRadius: '12px',
+                              padding: '14px 18px',
+                              outline: 'none',
+                              width: '100%',
+                              caretColor: 'var(--s1)',
+                            }}
                             autoFocus
                           />
                         </div>
@@ -104,9 +120,7 @@ const TwoFactorSection = () => {
                         disabled={isLoading}
                       >
                         <span className="fw_600 n0-clr">
-                          {isLoading
-                            ? t('LOGIN.loading')
-                            : t('TWO_FACTOR.verify', 'Verificar')}
+                          {isLoading ? t('LOGIN.loading') : t('TWO_FACTOR.verify', 'Verificar')}
                         </span>
                       </button>
                     </div>

@@ -35,24 +35,29 @@ const OtpField = ({
         {...props}
         disabled={disabled}
         style={{
-          width: '48px',
-          height: '56px',
-          margin: '0 4px',
-          fontSize: '20px',
+          width: '52px',
+          height: '58px',
+          margin: '0 5px',
+          padding: '0',
+          fontSize: '22px',
           fontWeight: 700,
+          lineHeight: '58px',
           borderRadius: '12px',
-          border: '2px solid rgba(255,255,255,0.2)',
-          background: 'rgba(255,255,255,0.05)',
-          color: '#ffffff',
+          border: '2px solid var(--nw4)',
+          background: 'var(--n0)',
+          color: 'var(--n4)',
           textAlign: 'center',
           outline: 'none',
-          transition: 'border-color 0.2s',
+          overflow: 'visible',
+          transition: 'border-color 0.2s, box-shadow 0.2s',
         }}
         onFocus={e => {
           e.target.style.borderColor = 'var(--s1)';
+          e.target.style.boxShadow = '0 0 0 3px rgba(85, 74, 255, 0.15)';
         }}
         onBlur={e => {
-          e.target.style.borderColor = 'rgba(255,255,255,0.2)';
+          e.target.style.borderColor = 'var(--nw4)';
+          e.target.style.boxShadow = 'none';
         }}
       />
     )}
@@ -335,26 +340,26 @@ const RecoveryCodesView = ({
 
       <div
         className="radius12 p-4 d-flex gap-3 mb-6"
-        style={{ background: 'rgba(254, 201, 47, 0.1)', border: '1px solid rgba(254, 201, 47, 0.3)' }}
+        style={{ background: 'rgba(180, 130, 0, 0.1)', border: '1px solid rgba(180, 130, 0, 0.3)' }}
       >
-        <WarningIcon weight="bold" size={22} style={{ color: 'var(--act3)', flexShrink: 0, marginTop: '2px' }} />
-        <p className="fs-seven" style={{ color: 'var(--act3)', lineHeight: '1.5' }}>
+        <WarningIcon weight="bold" size={22} style={{ color: '#9a7000', flexShrink: 0, marginTop: '2px' }} />
+        <p className="fs-seven" style={{ color: '#7a5800', lineHeight: '1.5' }}>
           {t('SECURITY.recoveryCodes.warning')}
         </p>
       </div>
 
       <div
         className="radius16 p-xxl-6 p-4 mb-6"
-        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}
+        style={{ background: 'rgba(0, 0, 0, 0.03)', border: '1px solid var(--nw4)' }}
       >
         <div className="row g-3">
           {codes.map(code => (
             <div key={code} className="col-lg-4 col-md-6 col-6">
               <div
                 className="radius8 py-2 px-3 d-flex align-items-center justify-content-between"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                style={{ background: 'var(--n0)', border: '1px solid var(--nw4)' }}
               >
-                <code className="fw_600 fs-seven" style={{ color: 'var(--n0)', letterSpacing: '1px' }}>
+                <code className="fw_600 fs-seven" style={{ color: 'var(--n4)', letterSpacing: '1px' }}>
                   {code}
                 </code>
                 <button
@@ -375,7 +380,7 @@ const RecoveryCodesView = ({
           type="button"
           onClick={onCopyAll}
           className="cmn-btn radius12 fw_600 d-inline-flex align-items-center gap-2 py-3 px-5"
-          style={{ background: 'var(--bg2)', border: '1px solid var(--borderd)', color: 'var(--n0)' }}
+          style={{ background: 'var(--n0)', border: '1px solid var(--nw4)', color: 'var(--n4)' }}
         >
           <CopyIcon weight="bold" size={18} />
           {t('SECURITY.recoveryCodes.copyAll')}
