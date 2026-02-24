@@ -21,6 +21,10 @@ export const createTicketSchema = (t: TFunction) =>
       hasAgeRestriction: z.boolean(),
       minimumAge: z.number().optional(),
       restrictedCountries: z.array(z.string()),
+      cryptoCurrencyId: z
+        .string()
+        .min(1, t('LOTTERIES_ADMIN.errors.cryptoCurrencyRequired', 'La criptomoneda es requerida')),
+      cryptoCurrencySymbol: z.string().min(1),
     })
     .refine(
       data => {

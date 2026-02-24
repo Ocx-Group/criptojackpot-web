@@ -13,4 +13,6 @@ export interface EditLotteryFormData {
   maxNumber: number;
   totalSeries: number;
   terms: string;
+  cryptoCurrencyId: string;
+  cryptoCurrencySymbol: string;
 }

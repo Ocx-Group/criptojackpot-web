@@ -10,8 +10,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationStore } from '@/store/notificationStore';
 import { Lottery, LotteryStatus, UpdateLotteryRequest } from '@/interfaces/lottery';
 import { Prize } from '@/interfaces/prize';
+import { CoinPaymentCurrency } from '@/interfaces/coinPaymentCurrency';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { lotteryService, prizeService } from '@/services';
+import { lotteryService, prizeService, coinPaymentService } from '@/services';
 import { EditLotteryFormData } from '../types/editLotteryFormData';
 import { createEditLotterySchema } from '../schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -44,6 +45,8 @@ export const useEditLotteryForm = (lotteryId: string) => {
       maxNumber: 49,
       totalSeries: 1,
       terms: '',
+      cryptoCurrencyId: '',
+      cryptoCurrencySymbol: '',
     },
   });
 
@@ -72,6 +75,14 @@ export const useEditLotteryForm = (lotteryId: string) => {
 
   const prizes = prizesResponse?.data?.items || [];
 
+  // Obtener lista de criptomonedas disponibles
+  const { data: currencies = [], isLoading: isLoadingCurrencies } = useQuery<CoinPaymentCurrency[], Error>({
+    queryKey: ['coinpayment-currencies'],
+    queryFn: async () => {
+      return coinPaymentService.getCurrencies();
+    },
+  });
+
   // Cargar datos de la lotería en el formulario
   useEffect(() => {
     if (lottery) {
@@ -92,6 +103,8 @@ export const useEditLotteryForm = (lotteryId: string) => {
         maxNumber: lottery.maxNumber,
         totalSeries: lottery.totalSeries,
         terms: lottery.terms || '',
+        cryptoCurrencyId: lottery.cryptoCurrencyId || '',
+        cryptoCurrencySymbol: lottery.cryptoCurrencySymbol || '',
       });
     }
   }, [lottery, reset]);
@@ -135,6 +148,13 @@ export const useEditLotteryForm = (lotteryId: string) => {
     }
   };
 
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    const currency = currencies.find(c => c.id === selectedId);
+    setValue('cryptoCurrencyId', selectedId, { shouldValidate: false });
+    setValue('cryptoCurrencySymbol', currency?.symbol || '', { shouldValidate: false });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -156,6 +176,8 @@ export const useEditLotteryForm = (lotteryId: string) => {
           endDate: endDateISO,
           status: data.status,
           terms: data.terms,
+          cryptoCurrencyId: data.cryptoCurrencyId,
+          cryptoCurrencySymbol: data.cryptoCurrencySymbol,
           prizeId: data.prizeId,
         };
 
@@ -172,11 +194,14 @@ export const useEditLotteryForm = (lotteryId: string) => {
     formData,
     lottery,
     prizes,
+    currencies,
+    isLoadingCurrencies,
     selectedPrize: prizes.find(p => p.prizeGuid === formData.prizeId),
     isLoading: isLoadingLottery,
     isSubmitting: updateLotteryMutation.isPending,
     error: lotteryError,
     handleInputChange,
+    handleCurrencyChange,
     handleSubmit,
   };
 };

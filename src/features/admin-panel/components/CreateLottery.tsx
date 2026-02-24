@@ -8,7 +8,17 @@ import Image from 'next/image';
 import { AlertTriangle, Clock, Ticket } from 'lucide-react';
 
 const CreateLottery: React.FC = () => {
-  const { formData, prizes, selectedPrize, isSubmitting, handleInputChange, handleSubmit } = useCreateTicketForm();
+  const {
+    formData,
+    prizes,
+    currencies,
+    isLoadingCurrencies,
+    selectedPrize,
+    isSubmitting,
+    handleInputChange,
+    handleCurrencyChange,
+    handleSubmit,
+  } = useCreateTicketForm();
 
   const { t } = useTranslation();
 
@@ -92,6 +102,35 @@ const CreateLottery: React.FC = () => {
                   min="1"
                   required
                 />
+              </div>
+
+              {/* Criptomoneda */}
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.cryptoCurrency', 'Criptomoneda de Pago')} <span className="text-danger">*</span>
+                </label>
+                <select
+                  name="cryptoCurrencyId"
+                  className="form-select"
+                  value={formData.cryptoCurrencyId}
+                  onChange={handleCurrencyChange}
+                  required
+                  disabled={isLoadingCurrencies}
+                >
+                  <option value="">
+                    {isLoadingCurrencies
+                      ? t('COMMON.loading', 'Cargando...')
+                      : t('LOTTERIES_ADMIN.placeholders.selectCrypto', 'Seleccione una criptomoneda')}
+                  </option>
+                  {currencies.map(currency => (
+                    <option key={currency.id} value={currency.id}>
+                      {currency.name} ({currency.symbol})
+                    </option>
+                  ))}
+                </select>
+                <div className="form-text">
+                  {t('LOTTERIES_ADMIN.help.cryptoCurrency', 'Moneda en la que se cobrarán los tickets')}
+                </div>
               </div>
 
               {/* Número Mínimo y Máximo */}

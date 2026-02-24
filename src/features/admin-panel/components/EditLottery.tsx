@@ -13,8 +13,19 @@ interface EditLotteryProps {
 }
 
 const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
-  const { formData, prizes, selectedPrize, isLoading, isSubmitting, error, handleInputChange, handleSubmit } =
-    useEditLotteryForm(lotteryId);
+  const {
+    formData,
+    prizes,
+    currencies,
+    isLoadingCurrencies,
+    selectedPrize,
+    isLoading,
+    isSubmitting,
+    error,
+    handleInputChange,
+    handleCurrencyChange,
+    handleSubmit,
+  } = useEditLotteryForm(lotteryId);
 
   const { t } = useTranslation();
 
@@ -127,6 +138,35 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                   min="1"
                   required
                 />
+              </div>
+
+              {/* Criptomoneda */}
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.cryptoCurrency', 'Criptomoneda de Pago')} <span className="text-danger">*</span>
+                </label>
+                <select
+                  name="cryptoCurrencyId"
+                  className="form-select"
+                  value={formData.cryptoCurrencyId}
+                  onChange={handleCurrencyChange}
+                  required
+                  disabled={isLoadingCurrencies}
+                >
+                  <option value="">
+                    {isLoadingCurrencies
+                      ? t('COMMON.loading', 'Cargando...')
+                      : t('LOTTERIES_ADMIN.placeholders.selectCrypto', 'Seleccione una criptomoneda')}
+                  </option>
+                  {currencies.map(currency => (
+                    <option key={currency.id} value={currency.id}>
+                      {currency.name} ({currency.symbol})
+                    </option>
+                  ))}
+                </select>
+                <div className="form-text">
+                  {t('LOTTERIES_ADMIN.help.cryptoCurrency', 'Moneda en la que se cobrarán los tickets')}
+                </div>
               </div>
 
               {/* Premio Asociado */}

@@ -18,6 +18,8 @@ export interface Lottery {
   terms: string;
   hasAgeRestriction: boolean;
   minimumAge?: number;
+  cryptoCurrencyId: string;
+  cryptoCurrencySymbol: string;
   restrictedCountries: string[];
   prizes: Prize[];
   createdAt: string;
@@ -46,6 +48,8 @@ export interface CreateLotteryRequest {
   terms: string;
   hasAgeRestriction: boolean;
   minimumAge?: number;
+  cryptoCurrencyId: string;
+  cryptoCurrencySymbol: string;
   restrictedCountries: string[];
   prizeId?: string;
 }

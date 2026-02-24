@@ -10,8 +10,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationStore } from '@/store/notificationStore';
 import { LotteryType, CreateLotteryRequest } from '@/interfaces/lottery';
 import { Prize } from '@/interfaces/prize';
+import { CoinPaymentCurrency } from '@/interfaces/coinPaymentCurrency';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { lotteryService, prizeService } from '@/services';
+import { lotteryService, prizeService, coinPaymentService } from '@/services';
 import { CreateTicketFormData, UseCreateTicketFormReturn } from '../types/createTicketForm';
 import { createTicketSchema } from '../schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -33,6 +34,14 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   });
 
   const prizes = prizesResponse?.data?.items || [];
+
+  // Obtener lista de criptomonedas disponibles
+  const { data: currencies = [], isLoading: isLoadingCurrencies } = useQuery<CoinPaymentCurrency[], Error>({
+    queryKey: ['coinpayment-currencies'],
+    queryFn: async () => {
+      return coinPaymentService.getCurrencies();
+    },
+  });
 
   const {
     watch,
@@ -57,6 +66,8 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       hasAgeRestriction: true,
       minimumAge: 18,
       restrictedCountries: [],
+      cryptoCurrencyId: '',
+      cryptoCurrencySymbol: '',
     },
   });
 
@@ -98,6 +109,13 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
     }
   };
 
+  const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    const currency = currencies.find(c => c.id === selectedId);
+    setValue('cryptoCurrencyId', selectedId, { shouldValidate: false });
+    setValue('cryptoCurrencySymbol', currency?.symbol || '', { shouldValidate: false });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -126,6 +144,8 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
           terms: data.terms,
           hasAgeRestriction: data.hasAgeRestriction,
           minimumAge: data.hasAgeRestriction ? data.minimumAge : undefined,
+          cryptoCurrencyId: data.cryptoCurrencyId,
+          cryptoCurrencySymbol: data.cryptoCurrencySymbol,
           restrictedCountries: data.restrictedCountries,
           prizeId: data.prizeId,
         };
@@ -145,9 +165,12 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   return {
     formData,
     prizes,
+    currencies,
+    isLoadingCurrencies,
     selectedPrize: prizes.find(p => p.prizeGuid === formData.prizeId),
     isSubmitting: createLotteryMutation.isPending,
     handleInputChange,
+    handleCurrencyChange,
     handleSubmit,
   };
 };

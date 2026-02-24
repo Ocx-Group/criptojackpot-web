@@ -14,6 +14,8 @@ export const initialFormData: CreateLotteryRequest = {
   terms: '',
   hasAgeRestriction: false,
   minimumAge: undefined,
+  cryptoCurrencyId: '',
+  cryptoCurrencySymbol: '',
   restrictedCountries: [],
   prizeId: undefined,
 };
