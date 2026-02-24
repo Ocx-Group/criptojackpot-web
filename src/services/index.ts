@@ -17,6 +17,7 @@ import { LotteryService } from './lotteryService';
 import { LotteryNumberService } from './lotteryNumberService';
 import { TwoFactorService } from './twoFactorService';
 import { CoinPaymentService } from './coinPaymentService';
+import { UserCryptoWalletService } from './userCryptoWalletService';
 
 export const authService = new AuthService();
 export const userService = new UserService();
@@ -29,3 +30,4 @@ export const lotteryService = new LotteryService();
 export const lotteryNumberService = new LotteryNumberService();
 export const twoFactorService = new TwoFactorService();
 export const coinPaymentService = new CoinPaymentService();
+export const userCryptoWalletService = new UserCryptoWalletService();

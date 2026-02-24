@@ -14,20 +14,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import MotionFade from '@/components/motionEffect/MotionFade';
 import { useNotificationStore } from '@/store/notificationStore';
-import { useQuery } from '@tanstack/react-query';
-import { coinPaymentService } from '@/services';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { coinPaymentService, userCryptoWalletService } from '@/services';
+import { CryptoWallet } from '@/interfaces/cryptoWallet';
 
 /* ─── Types ─── */
-
-interface CryptoWallet {
-  id: string;
-  address: string;
-  currencySymbol: string;
-  currencyName: string;
-  logoUrl?: string;
-  label: string;
-  isDefault: boolean;
-}
 
 interface NewWalletForm {
   address: string;
@@ -62,25 +53,6 @@ const truncateAddress = (addr: string): string => {
   return `${addr.slice(0, 10)}...${addr.slice(-8)}`;
 };
 
-const INITIAL_WALLETS: CryptoWallet[] = [
-  {
-    id: '1',
-    address: '0x742d35Cc6634C0532925a3b844Bc454A4088099',
-    currencySymbol: 'ETH',
-    currencyName: 'Ethereum',
-    label: 'Billetera principal',
-    isDefault: true,
-  },
-  {
-    id: '2',
-    address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq',
-    currencySymbol: 'BTC',
-    currencyName: 'Bitcoin',
-    label: 'BTC savings',
-    isDefault: false,
-  },
-];
-
 /* ─── Wallet Card ─── */
 
 interface WalletCardProps {
@@ -89,10 +61,11 @@ interface WalletCardProps {
   readonly onCopy: (address: string) => void;
   readonly onSetDefault: (id: string) => void;
   readonly onDelete: (id: string) => void;
+  readonly isDeleting: boolean;
   readonly t: (key: string) => string;
 }
 
-function WalletCard({ wallet, logoUrl, onCopy, onSetDefault, onDelete, t }: Readonly<WalletCardProps>) {
+function WalletCard({ wallet, logoUrl, onCopy, onSetDefault, onDelete, isDeleting, t }: Readonly<WalletCardProps>) {
   const color = getCryptoColor(wallet.currencySymbol);
   const displayLogo = logoUrl ?? wallet.logoUrl;
 
@@ -164,7 +137,7 @@ function WalletCard({ wallet, logoUrl, onCopy, onSetDefault, onDelete, t }: Read
               <button
                 type="button"
                 className="crypto-action-btn"
-                onClick={() => onSetDefault(wallet.id)}
+                onClick={() => onSetDefault(wallet.walletGuid)}
                 title={t('PAYMENT.setDefault')}
               >
                 <StarIcon size={15} weight="bold" className="n3-clr" />
@@ -181,7 +154,8 @@ function WalletCard({ wallet, logoUrl, onCopy, onSetDefault, onDelete, t }: Read
             <button
               type="button"
               className="crypto-action-btn crypto-action-btn--danger"
-              onClick={() => onDelete(wallet.id)}
+              onClick={() => onDelete(wallet.walletGuid)}
+              disabled={isDeleting}
               title={t('PAYMENT.delete')}
             >
               <TrashIcon size={15} weight="bold" />
@@ -208,8 +182,8 @@ function WalletCard({ wallet, logoUrl, onCopy, onSetDefault, onDelete, t }: Read
 export default function PaymentSection() {
   const { t } = useTranslation();
   const showNotification = useNotificationStore(state => state.show);
+  const queryClient = useQueryClient();
 
-  const [wallets, setWallets] = useState<CryptoWallet[]>(INITIAL_WALLETS);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [newWallet, setNewWallet] = useState<NewWalletForm>({
@@ -226,19 +200,57 @@ export default function PaymentSection() {
     staleTime: 1000 * 60 * 5,
   });
 
+  const { data: wallets = [], isLoading: isLoadingWallets } = useQuery<CryptoWallet[]>({
+    queryKey: ['user-wallets'],
+    queryFn: () => userCryptoWalletService.getMyWallets(),
+  });
+
+  const createWalletMutation = useMutation({
+    mutationFn: userCryptoWalletService.createWallet.bind(userCryptoWalletService),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-wallets'] });
+      setNewWallet({ address: '', currencySymbol: '', currencyName: '', logoUrl: undefined, label: '' });
+      setShowAddForm(false);
+      showNotification('success', t('PAYMENT.walletAdded'), '');
+    },
+    onError: (error: Error) => {
+      showNotification('error', 'Error', error.message);
+    },
+  });
+
+  const deleteWalletMutation = useMutation({
+    mutationFn: (walletGuid: string) => userCryptoWalletService.deleteWallet(walletGuid),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-wallets'] });
+      showNotification('info', t('PAYMENT.walletDeleted'), '');
+    },
+    onError: (error: Error) => {
+      showNotification('error', 'Error', error.message);
+    },
+  });
+
+  const setDefaultMutation = useMutation({
+    mutationFn: (walletGuid: string) => userCryptoWalletService.setDefault(walletGuid),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-wallets'] });
+      showNotification('success', t('PAYMENT.defaultSet'), '');
+    },
+    onError: (error: Error) => {
+      showNotification('error', 'Error', error.message);
+    },
+  });
+
   const handleCopy = (address: string) => {
     navigator.clipboard.writeText(address);
     showNotification('success', t('PAYMENT.copied'), '');
   };
 
-  const handleSetDefault = (id: string) => {
-    setWallets(prev => prev.map(w => ({ ...w, isDefault: w.id === id })));
-    showNotification('success', t('PAYMENT.defaultSet'), '');
+  const handleSetDefault = (walletGuid: string) => {
+    setDefaultMutation.mutate(walletGuid);
   };
 
-  const handleDelete = (id: string) => {
-    setWallets(prev => prev.filter(w => w.id !== id));
-    showNotification('info', t('PAYMENT.walletDeleted'), '');
+  const handleDelete = (walletGuid: string) => {
+    deleteWalletMutation.mutate(walletGuid);
   };
 
   const handleCurrencyChange = (symbol: string, logoUrl?: string, name?: string) => {
@@ -256,19 +268,13 @@ export default function PaymentSection() {
       showNotification('error', t('PAYMENT.fillRequired'), '');
       return;
     }
-    const wallet: CryptoWallet = {
-      id: Date.now().toString(),
+    createWalletMutation.mutate({
       address: newWallet.address.trim(),
       currencySymbol: newWallet.currencySymbol,
       currencyName: newWallet.currencyName,
       logoUrl: newWallet.logoUrl,
       label: newWallet.label.trim() || newWallet.currencyName,
-      isDefault: wallets.length === 0,
-    };
-    setWallets(prev => [...prev, wallet]);
-    setNewWallet({ address: '', currencySymbol: '', currencyName: '', logoUrl: undefined, label: '' });
-    setShowAddForm(false);
-    showNotification('success', t('PAYMENT.walletAdded'), '');
+    });
   };
 
   const enabledCurrencies = currencies.filter(c => c.isEnabledForPayment);
@@ -451,9 +457,15 @@ export default function PaymentSection() {
                   <button
                     type="button"
                     onClick={handleAddWallet}
+                    disabled={createWalletMutation.isPending}
                     className="kewta-btn kewta-alt d-inline-flex align-items-center"
                   >
-                    <span className="kew-text s1-bg nw1-clr">{t('PAYMENT.save')}</span>
+                    <span className="kew-text s1-bg nw1-clr">
+                      {createWalletMutation.isPending ? (
+                        <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                      ) : null}
+                      {t('PAYMENT.save')}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -463,7 +475,13 @@ export default function PaymentSection() {
 
         {/* ── Wallet Cards ── */}
         <div className="px-xxl-8 px-xl-6 px-sm-5 px-4 pb-xxl-4 pb-2">
-          {wallets.length === 0 ? (
+          {isLoadingWallets ? (
+            <div className="text-center py-xxl-15 py-xl-10 py-8">
+              <div className="spinner-border text-primary">
+                <span className="visually-hidden">{t('COMMON.loading', 'Cargando...')}</span>
+              </div>
+            </div>
+          ) : wallets.length === 0 ? (
             <div className="text-center py-xxl-15 py-xl-10 py-8">
               <WalletIcon size={64} weight="duotone" className="n3-clr mb-4" />
               <p className="n3-clr fs-six">{t('PAYMENT.noWallets')}</p>
@@ -471,13 +489,14 @@ export default function PaymentSection() {
           ) : (
             <div className="row g-4 g-xl-5 align-items-stretch">
               {wallets.map(wallet => (
-                <div key={wallet.id} className="col-xl-6 col-md-6">
+                <div key={wallet.walletGuid} className="col-xl-6 col-md-6">
                   <WalletCard
                     wallet={wallet}
                     logoUrl={currencies.find(c => c.symbol === wallet.currencySymbol)?.logoUrl}
                     onCopy={handleCopy}
                     onSetDefault={handleSetDefault}
                     onDelete={handleDelete}
+                    isDeleting={deleteWalletMutation.isPending}
                     t={t}
                   />
                 </div>
