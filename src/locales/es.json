@@ -518,5 +518,29 @@
     "expiredMessage": "El tiempo de reserva de tus números ha terminado. Los números han sido liberados y podrían ser seleccionados por otros usuarios.",
     "tryAgain": "Intentar de Nuevo",
     "backToLotteries": "Ver Otras Loterías"
+  },
+  "PAYMENT": {
+    "title": "Billeteras Crypto",
+    "addWallet": "Agregar Billetera",
+    "newWallet": "Nueva Billetera",
+    "currency": "Moneda",
+    "selectCurrency": "Selecciona una moneda",
+    "label": "Etiqueta",
+    "labelPlaceholder": "Ej: Billetera principal",
+    "walletAddress": "Dirección de billetera",
+    "addressPlaceholder": "Ej: 0x742d35Cc... o bc1q...",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "default": "Predeterminada",
+    "setDefault": "Establecer como predeterminada",
+    "copy": "Copiar dirección",
+    "delete": "Eliminar billetera",
+    "address": "Dirección",
+    "noWallets": "No tienes billeteras crypto agregadas",
+    "copied": "¡Dirección copiada!",
+    "defaultSet": "Billetera predeterminada actualizada",
+    "walletDeleted": "Billetera eliminada",
+    "walletAdded": "¡Billetera agregada correctamente!",
+    "fillRequired": "Por favor completa los campos obligatorios"
   }
 }

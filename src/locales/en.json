@@ -518,5 +518,29 @@
     "expiredMessage": "Your number reservation time has ended. The numbers have been released and may be selected by other users.",
     "tryAgain": "Try Again",
     "backToLotteries": "Browse Other Lotteries"
+  },
+  "PAYMENT": {
+    "title": "Crypto Wallets",
+    "addWallet": "Add Wallet",
+    "newWallet": "New Wallet",
+    "currency": "Currency",
+    "selectCurrency": "Select a currency",
+    "label": "Label",
+    "labelPlaceholder": "E.g: Main wallet",
+    "walletAddress": "Wallet address",
+    "addressPlaceholder": "E.g: 0x742d35Cc... or bc1q...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "default": "Default",
+    "setDefault": "Set as default",
+    "copy": "Copy address",
+    "delete": "Remove wallet",
+    "address": "Address",
+    "noWallets": "You have no crypto wallets added",
+    "copied": "Address copied!",
+    "defaultSet": "Default wallet updated",
+    "walletDeleted": "Wallet removed",
+    "walletAdded": "Wallet added successfully!",
+    "fillRequired": "Please fill in all required fields"
   }
 }
