@@ -27,6 +27,8 @@ const ReferalProgram = () => {
     hasSecurityCode,
     referralData,
     isReferralsLoading,
+    referralEarnings,
+    isEarningsLoading,
   } = useReferralProgram();
 
   function copyToClipboard(e: React.MouseEvent<HTMLInputElement, MouseEvent>) {
@@ -100,7 +102,9 @@ const ReferalProgram = () => {
               <span className="icon m-auto mb-xxl-5 mb-xl-4 mb-lg-3 mb-2 s1-bg radius-circle d-center">
                 <UsersFourIcon className="ph ph-users-four fs-two n0-clr"></UsersFourIcon>
               </span>
-              <span className="n4-clr fs-three mb-2"> ${referralData?.totalEarnings} </span>
+              <span className="n4-clr fs-three mb-2">
+                {isEarningsLoading ? '...' : `$${referralEarnings?.totalEarnings ?? 0}`}
+              </span>
               <span className="n3-clr fw_600 d-block"> {t('REFERRAL_PROGRAM.earnedReferral')} </span>
             </span>
             </Link>
@@ -112,7 +116,9 @@ const ReferalProgram = () => {
               <span className="icon m-auto mb-xxl-5 mb-xl-4 mb-lg-3 mb-2 s1-bg radius-circle d-center">
                 <HandHeartIcon className="ph ph-hand-heart fs-two n0-clr"></HandHeartIcon>
               </span>
-              <span className="n4-clr fs-three mb-2"> ${referralData?.lastMonthEarnings} </span>
+              <span className="n4-clr fs-three mb-2">
+                {isEarningsLoading ? '...' : `$${referralEarnings?.lastMonthEarnings ?? 0}`}
+              </span>
               <span className="n3-clr fw_600 d-block"> {t('REFERRAL_PROGRAM.lastMonth')} </span>
             </span>
             </Link>

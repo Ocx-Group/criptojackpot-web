@@ -1,6 +1,7 @@
 import { useUserStore } from '@/store/userStore';
-import { userReferralService } from '@/services';
+import { userReferralService, walletService } from '@/services';
 import { UserReferralStats } from '@/features/user-panel/types';
+import { ReferralEarnings } from '@/services/walletService';
 import { useQuery } from '@tanstack/react-query';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +25,12 @@ export const useReferralProgram = () => {
     enabled: !!user?.id,
   });
 
+  const { data: referralEarnings, isLoading: isEarningsLoading } = useQuery<ReferralEarnings>({
+    queryKey: ['referralEarnings'],
+    queryFn: () => walletService.getReferralEarnings(),
+    enabled: !!user?.id,
+  });
+
   const copyToClipboard = () => {
     if (referralLink) {
       navigator.clipboard.writeText(referralLink).then();
@@ -37,5 +44,7 @@ export const useReferralProgram = () => {
     hasSecurityCode: !!user?.userGuid,
     referralData,
     isReferralsLoading,
+    referralEarnings,
+    isEarningsLoading,
   };
 };
