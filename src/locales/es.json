@@ -542,5 +542,20 @@
     "walletDeleted": "Billetera eliminada",
     "walletAdded": "¡Billetera agregada correctamente!",
     "fillRequired": "Por favor completa los campos obligatorios"
+  },
+  "MY_TICKETS": {
+    "title": "Mis tickets",
+    "ticketLabel": "Ticket#_",
+    "number": "Número",
+    "series": "Serie",
+    "status": "Estado",
+    "amount": "Monto",
+    "statusActive": "Activo",
+    "statusWon": "Ganador",
+    "statusLost": "No ganador",
+    "statusRefunded": "Reembolsado",
+    "empty": "Aún no tienes tickets comprados",
+    "loading": "Cargando tickets...",
+    "error": "Error al cargar los tickets"
   }
 }

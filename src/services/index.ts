@@ -19,6 +19,7 @@ import { TwoFactorService } from './twoFactorService';
 import { CoinPaymentService } from './coinPaymentService';
 import { UserCryptoWalletService } from './userCryptoWalletService';
 import { WalletService } from './walletService';
+import { TicketService } from './ticketService';
 
 export const authService = new AuthService();
 export const userService = new UserService();
@@ -33,3 +34,4 @@ export const twoFactorService = new TwoFactorService();
 export const coinPaymentService = new CoinPaymentService();
 export const userCryptoWalletService = new UserCryptoWalletService();
 export const walletService = new WalletService();
+export const ticketService = new TicketService();

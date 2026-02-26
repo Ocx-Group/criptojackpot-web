@@ -542,5 +542,20 @@
     "walletDeleted": "Wallet removed",
     "walletAdded": "Wallet added successfully!",
     "fillRequired": "Please fill in all required fields"
+  },
+  "MY_TICKETS": {
+    "title": "My tickets",
+    "ticketLabel": "Ticket#_",
+    "number": "Number",
+    "series": "Series",
+    "status": "Status",
+    "amount": "Amount",
+    "statusActive": "Active",
+    "statusWon": "Won",
+    "statusLost": "Lost",
+    "statusRefunded": "Refunded",
+    "empty": "You don't have any purchased tickets yet",
+    "loading": "Loading tickets...",
+    "error": "Error loading tickets"
   }
 }
