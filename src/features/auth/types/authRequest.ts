@@ -10,6 +10,7 @@ export interface GoogleLoginRequest {
   refreshToken?: string;
   expiresIn?: number;
   rememberMe?: boolean;
+  referralCode?: string;
 }
 
 export interface Verify2FaRequest {

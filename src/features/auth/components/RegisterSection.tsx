@@ -2,6 +2,8 @@
 import registerImage from 'public/images/background/back-register.png';
 import logo from 'public/images/logo/cripto-jackpot-logo.png';
 import { useRegisterForm } from '@/features/auth/hooks/useRegisterForm';
+import { GoogleLoginButton } from '@/features/auth/components/GoogleLoginButton';
+import { GOOGLE_CLIENT_ID } from '@/components/Providers';
 import { CaretRightIcon, EyeIcon, EyeSlashIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -294,6 +296,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                       </Link>
                     </span>
                   </div>
+
+                  {/* Google Login */}
+                  {GOOGLE_CLIENT_ID && (
+                    <div className="col-12">
+                      <div className="d-flex align-items-center gap-3 my-2">
+                        <hr className="flex-grow-1 border-secondary" />
+                        <span className="n3-clr" style={{ fontSize: '0.85rem' }}>
+                          {t('LOGIN.orContinueWith', 'o continuar con')}
+                        </span>
+                        <hr className="flex-grow-1 border-secondary" />
+                      </div>
+                      <GoogleLoginButton referralCode={referralCode} />
+                    </div>
+                  )}
                 </div>
               </form>
             </div>

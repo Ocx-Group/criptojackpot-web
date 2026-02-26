@@ -34,7 +34,11 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const GoogleLoginButtonInner = () => {
+interface GoogleLoginButtonProps {
+  referralCode?: string | null;
+}
+
+const GoogleLoginButtonInner = ({ referralCode }: GoogleLoginButtonProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -102,9 +106,13 @@ const GoogleLoginButtonInner = () => {
 
   const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
     if (credentialResponse.credential) {
-      googleLoginMutation.mutate({
+      const request: GoogleLoginRequest = {
         idToken: credentialResponse.credential,
-      });
+      };
+      if (referralCode) {
+        request.referralCode = referralCode;
+      }
+      googleLoginMutation.mutate(request);
     }
   };
 
@@ -163,10 +171,10 @@ const GoogleLoginButtonInner = () => {
   );
 };
 
-export const GoogleLoginButton = () => {
+export const GoogleLoginButton = ({ referralCode }: GoogleLoginButtonProps = {}) => {
   if (!GOOGLE_CLIENT_ID) {
     return null;
   }
 
-  return <GoogleLoginButtonInner />;
+  return <GoogleLoginButtonInner referralCode={referralCode} />;
 };
