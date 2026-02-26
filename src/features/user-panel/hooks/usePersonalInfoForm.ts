@@ -80,7 +80,13 @@ export function usePersonalInfoForm() {
     mutationFn: (userData: { id: number; data: UpdateUserRequest }) =>
       userService.updateUserAsync(userData.id, userData.data),
     onSuccess: updatedUserData => {
-      updateUser(updatedUserData);
+      // Preserve imagePath: the update request doesn't include it, so the
+      // backend response may return imagePath: null. Falling back to the
+      // current value prevents the profile photo from disappearing.
+      updateUser({
+        ...updatedUserData,
+        imagePath: updatedUserData.imagePath ?? user?.imagePath,
+      });
       showNotification('success', t('PERSONAL_INFO.notifications.updateSuccess'), '');
       queryClient.invalidateQueries({ queryKey: ['user', user?.id] }).then();
     },
