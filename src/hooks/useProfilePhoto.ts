@@ -89,8 +89,6 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
       console.error('Error uploading profile photo:', error);
       setUploadError(errorMessage);
       onUploadError?.(errorMessage);
-      setProfileImage(profileImage);
-      setProfileImage(profileImage);
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
