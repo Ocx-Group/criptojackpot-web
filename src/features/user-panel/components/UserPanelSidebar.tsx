@@ -169,7 +169,7 @@ const sidebarItems = [
   },
   {
     id: 1343,
-    href: '/user-panel',
+    href: '/my-tickets',
     icon: <TicketIcon weight="bold" className="ph-bold ph-ticket fs-five" />,
     text: 'My Tickets',
   },

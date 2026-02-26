@@ -1,11 +1,6 @@
-import UserPanelSection from "@/features/user-panel/components/UserPanelSection";
+import { redirect } from 'next/navigation';
 
-const UserPanel = () => {
-  return (
-    <>
-      <UserPanelSection />
-    </>
-  );
-};
-
-export default UserPanel;
+// Route renamed to /my-tickets
+export default function UserPanelRedirect() {
+  redirect('/my-tickets');
+}

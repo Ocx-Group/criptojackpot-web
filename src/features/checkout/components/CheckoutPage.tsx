@@ -102,8 +102,8 @@ const CheckoutPage: React.FC = () => {
         t('CHECKOUT.paymentSuccessMessage', 'Tu compra ha sido procesada correctamente')
       );
 
-      // Redirigir a confirmación o panel de usuario
-      router.push('/user-panel');
+      // Redirigir a mis tickets tras completar la compra
+      router.push('/my-tickets');
     } catch {
       setError(t('CHECKOUT.paymentError', 'Error al procesar el pago'));
       showNotification('error', t('CHECKOUT.paymentError', 'Error al procesar el pago'), '');

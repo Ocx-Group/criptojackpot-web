@@ -89,7 +89,7 @@ const GoogleLoginButtonInner = () => {
       if (userData.role?.name === 'admin') {
         router.push('/admin');
       } else {
-        router.push('/user-panel');
+        router.push('/personal-info');
       }
     },
     onError: (error: Error) => {

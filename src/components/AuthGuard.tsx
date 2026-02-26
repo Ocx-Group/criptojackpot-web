@@ -30,7 +30,7 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
         if (userRole === 'admin') {
           router.push('/admin');
         } else {
-          router.push('/user-panel');
+          router.push('/personal-info');
         }
         return;
       }
@@ -42,7 +42,7 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
           if (userRole === 'admin') {
             router.push('/admin');
           } else {
-            router.push('/user-panel');
+            router.push('/personal-info');
           }
           return;
         }
