@@ -7,7 +7,7 @@ variable "do_token" {
 variable "project_name" {
   description = "Nombre del proyecto frontend"
   type        = string
-  default     = "cryptojackpot-app"
+  default     = "criptojackpot-app"
 }
 
 variable "environment" {
@@ -21,7 +21,7 @@ variable "environment" {
 }
 
 variable "region" {
-  description = "Región del cluster de DigitalOcean"
+  description = "Region del cluster de DigitalOcean"
   type        = string
   default     = "nyc3"
 }
@@ -32,18 +32,23 @@ variable "cluster_name" {
 }
 
 variable "namespace" {
-  description = "Namespace donde se desplegará el frontend"
+  description = "Namespace donde se desplegara el frontend (compartido con backend)"
   type        = string
   default     = "cryptojackpot"
 }
 
 variable "domain" {
-  description = "Dominio del frontend para el ambiente"
+  description = "Dominio del frontend para el ambiente (ej: qa.criptojackpot.com)"
+  type        = string
+}
+
+variable "api_base_url" {
+  description = "URL base del BFF Gateway del backend (ej: https://api-qa.criptojackpot.com)"
   type        = string
 }
 
 variable "enable_cloudflare_dns" {
-  description = "Habilita creación automática del registro DNS en Cloudflare"
+  description = "Habilita creacion automatica del registro DNS en Cloudflare"
   type        = bool
   default     = false
 }
@@ -83,5 +88,5 @@ variable "google_client_id" {
 variable "tags" {
   description = "Etiquetas para trazabilidad"
   type        = list(string)
-  default     = ["cryptojackpot", "frontend", "terraform-managed"]
+  default     = ["criptojackpot", "frontend", "terraform-managed"]
 }

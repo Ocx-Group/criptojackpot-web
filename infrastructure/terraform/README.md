@@ -1,13 +1,13 @@
-# CryptoJackpot App - Terraform
+# CriptoJackpot App - Terraform
 
 Terraform para preparar infraestructura del frontend en el cluster donde ya corre el backend/BFF.
 
-## Qué gestiona
+## Que gestiona
 
-- Conexión al cluster DOKS existente por nombre (`cluster_name`).
+- Conexion al cluster DOKS existente por nombre (`cluster_name`).
 - Namespace destino (`cryptojackpot` por defecto).
 - Secret `app-secrets` con `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
-- `deploy-config.json` para trazabilidad del ambiente.
+- `deploy-config.json` para trazabilidad del ambiente (incluye `api_base_url`).
 - DNS de Cloudflare opcional (habilitado en `prod`).
 
 ## Requisitos
@@ -33,7 +33,7 @@ terraform plan -var-file=environments/prod.tfvars
 terraform apply -var-file=environments/prod.tfvars
 ```
 
-## DNS en producción
+## DNS en produccion
 
 `environments/prod.tfvars` ya viene con:
 
@@ -43,5 +43,16 @@ terraform apply -var-file=environments/prod.tfvars
 
 Terraform crea:
 
-- Registro `A` de `cryptojackpot.com` al IP del LB de `ingress-nginx`.
-- Registro `CNAME` de `www` apuntando a `cryptojackpot.com`.
+- Registro `A` de `criptojackpot.com` al IP del LB de `ingress-nginx`.
+- Registro `CNAME` de `www` apuntando a `criptojackpot.com`.
+
+## Alineacion con backend
+
+El frontend se despliega en el **mismo cluster** que el backend. Los valores criticos que deben coincidir:
+
+| Variable | QA | Prod |
+|---|---|---|
+| `cluster_name` | `criptojackpot-qa-cluster` | `criptojackpot-prod-cluster` |
+| `namespace` | `cryptojackpot` | `cryptojackpot` |
+| `domain` | `qa.criptojackpot.com` | `criptojackpot.com` |
+| `api_base_url` | `https://api-qa.criptojackpot.com` | `https://api.criptojackpot.com` |

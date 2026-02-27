@@ -24,23 +24,22 @@ patches:
           limits:
             memory: "256Mi"
             cpu: "250m"
+  # Ingress - TLS gestionado por Cloudflare (sin cert-manager)
+  # Flujo: Browser → Cloudflare (TLS terminado) → Ingress (HTTP interno)
   - target:
       kind: Ingress
       name: cryptojackpot-web-ingress
     patch: |-
       - op: add
-        path: /metadata/annotations/cert-manager.io~1cluster-issuer
-        value: letsencrypt-prod
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1use-forwarded-headers
+        value: "true"
       - op: add
-        path: /spec/tls
-        value:
-          - hosts:
-              - qa.cryptojackpot.com
-            secretName: cryptojackpot-app-qa-tls
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1forwarded-for-header
+        value: "CF-Connecting-IP"
       - op: replace
         path: /spec/rules
         value:
-          - host: qa.cryptojackpot.com
+          - host: qa.criptojackpot.com
             http:
               paths:
                 - path: /api
@@ -75,7 +74,7 @@ patches:
 configMapGenerator:
   - name: app-config
     literals:
-      - NEXT_PUBLIC_API_BASE_URL=
+      - NEXT_PUBLIC_API_BASE_URL=https://api-qa.criptojackpot.com
       - NEXT_PUBLIC_APP_ENV=qa
 
 generatorOptions:
@@ -83,7 +82,7 @@ generatorOptions:
 
 images:
   - name: cryptojackpot/cryptojackpot-app
-    newName: registry.digitalocean.com/cryptojackpot/cryptojackpot-app
+    newName: registry.digitalocean.com/criptojackpot/cryptojackpot-app
     newTag: qa
 
 labels:

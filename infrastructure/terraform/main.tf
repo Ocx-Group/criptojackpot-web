@@ -12,7 +12,7 @@ resource "kubernetes_namespace_v1" "app" {
   metadata {
     name = var.namespace
     labels = {
-      "app.kubernetes.io/name"        = "cryptojackpot"
+      "app.kubernetes.io/name"        = "criptojackpot"
       "app.kubernetes.io/managed-by"  = "terraform"
       "app.kubernetes.io/component"   = "frontend"
       "app.kubernetes.io/environment" = var.environment
@@ -25,7 +25,7 @@ resource "kubernetes_secret_v1" "app_secrets" {
     name      = "app-secrets"
     namespace = kubernetes_namespace_v1.app.metadata[0].name
     labels = {
-      "app.kubernetes.io/part-of"     = "cryptojackpot"
+      "app.kubernetes.io/part-of"     = "criptojackpot"
       "app.kubernetes.io/component"   = "frontend"
       "app.kubernetes.io/environment" = var.environment
     }
@@ -45,6 +45,7 @@ resource "local_file" "deploy_config" {
     cluster_name   = var.cluster_name
     namespace      = var.namespace
     domain         = var.domain
+    api_base_url   = var.api_base_url
     deploy_overlay = "infrastructure/k8s/overlays/${var.environment}"
     tags           = local.common_tags
   })
@@ -52,6 +53,10 @@ resource "local_file" "deploy_config" {
   filename = "${path.root}/../deploy-config.json"
 }
 
+# -----------------------------------------------------------------------------
+# Cloudflare DNS — apunta al Load Balancer IP del NGINX Ingress
+# Reutiliza el mismo LB del backend (mismo cluster, mismo ingress-nginx)
+# -----------------------------------------------------------------------------
 data "kubernetes_service_v1" "ingress_nginx_controller" {
   metadata {
     name      = "ingress-nginx-controller"
