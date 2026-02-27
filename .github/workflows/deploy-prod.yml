@@ -1,0 +1,259 @@
+# =============================================================================
+# Deploy Production (Frontend)
+# Se ejecuta en: push a rama 'main' (via PR desde qa)
+# Hace:
+#   1. Build + push de la imagen Docker del frontend con tag semver o prod-{sha}
+#   2. terraform apply -var-file=environments/prod.tfvars
+#      (crea/actualiza namespace + secrets K8s + DNS Cloudflare)
+#   3. kustomize apply overlays/prod
+#   4. Crea GitHub Release
+#
+# IMPORTANTE: El deploy a prod requiere aprobacion manual via GitHub Environments
+# Configura el environment "production" en Settings > Environments con reviewers
+# =============================================================================
+name: Deploy Production
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false  # NUNCA cancelar un deploy de prod en curso
+
+env:
+  NODE_VERSION: "22"
+  ENVIRONMENT: prod
+  REGISTRY: registry.digitalocean.com/criptojackpot
+  TF_DIR: infrastructure/terraform
+  K8S_NAMESPACE: cryptojackpot
+  NEXT_PUBLIC_API_BASE_URL: https://api.criptojackpot.com
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Build & Push — construye y publica con tag :latest + :vX.Y.Z o :prod-{sha}
+  # ---------------------------------------------------------------------------
+  build-and-push:
+    name: Build & Push Frontend Image (Production)
+    runs-on: ubuntu-latest
+
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tag }}
+      version: ${{ steps.meta.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Necesario para obtener tags git
+
+      - name: Set image tag
+        id: meta
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          # Intentar obtener el tag semver más reciente
+          GIT_TAG=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$GIT_TAG" ]; then
+            TAG="${GIT_TAG}"
+            VERSION="${GIT_TAG}"
+          else
+            TAG="prod-${SHORT_SHA}"
+            VERSION="prod-${SHORT_SHA}"
+          fi
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Building production with tag: ${TAG}"
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_TOKEN }}
+
+      - name: Login to DOCR
+        run: doctl registry login --expiry-seconds 3600
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/cryptojackpot-app:latest
+            ${{ env.REGISTRY }}/cryptojackpot-app:${{ steps.meta.outputs.tag }}
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=${{ env.NEXT_PUBLIC_API_BASE_URL }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/cryptojackpot-app:latest
+          cache-to: type=inline
+
+  # ---------------------------------------------------------------------------
+  # Terraform + Deploy — actualiza infra Prod y despliega manifiestos K8s
+  # Requiere aprobacion manual (configura environment "production" en GitHub)
+  # ---------------------------------------------------------------------------
+  terraform-deploy:
+    name: Terraform Deploy Production
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    environment: production  # Bloquea hasta que un reviewer apruebe
+
+    defaults:
+      run:
+        working-directory: ${{ env.TF_DIR }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.7"
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_TOKEN }}
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure AWS credentials for DO Spaces backend
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.DO_SPACES_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.DO_SPACES_SECRET_KEY }}" >> $GITHUB_ENV
+
+      - name: Terraform Init (Prod state)
+        run: |
+          terraform init \
+            -backend-config="key=frontend-prod/terraform.tfstate" \
+            -input=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan \
+            -var-file="environments/prod.tfvars" \
+            -out=tfplan-prod \
+            -input=false \
+            -lock=true \
+            -detailed-exitcode \
+            2>&1 | tee plan-output.txt
+
+          # Bloquear si el plan va a destruir recursos criticos de produccion
+          if grep -E "must be replaced|will be destroyed|forces replacement" plan-output.txt | \
+             grep -E "digitalocean_kubernetes_cluster|digitalocean_vpc|digitalocean_spaces_bucket"; then
+            echo "BLOQUEADO: El plan destruiria recursos criticos de PRODUCCION."
+            echo "   Revisa el plan manualmente antes de aplicar."
+            exit 1
+          fi
+        env:
+          TF_VAR_do_token:             ${{ secrets.DO_TOKEN }}
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id:   ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_google_client_id:     ${{ secrets.PROD_GOOGLE_CLIENT_ID }}
+        continue-on-error: true
+
+      - name: Fail if plan errored
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve tfplan-prod
+        env:
+          TF_VAR_do_token:             ${{ secrets.DO_TOKEN }}
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id:   ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_google_client_id:     ${{ secrets.PROD_GOOGLE_CLIENT_ID }}
+
+      - name: Connect kubectl to Prod cluster
+        run: |
+          CLUSTER_ID=$(terraform output -raw cluster_id)
+          doctl kubernetes cluster kubeconfig save "$CLUSTER_ID" \
+            --context criptojackpot-prod
+
+      - name: Update image tag in Prod overlay
+        run: |
+          cd ${{ github.workspace }}
+          TAG="${{ needs.build-and-push.outputs.image_tag }}"
+          REGISTRY="${{ env.REGISTRY }}"
+
+          cd infrastructure/k8s/overlays/prod
+          kustomize edit set image \
+            cryptojackpot/cryptojackpot-app=${REGISTRY}/cryptojackpot-app:${TAG}
+
+      - name: Commit updated image tag to main branch
+        run: |
+          cd ${{ github.workspace }}
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add infrastructure/k8s/overlays/prod/kustomization.yaml
+          git diff --cached --quiet || git commit -m "chore(prod): update frontend image tag to ${{ needs.build-and-push.outputs.image_tag }} [skip ci]"
+          git push origin main
+
+      - name: Apply Kustomize overlays/prod
+        run: |
+          cd ${{ github.workspace }}
+          kubectl apply -k infrastructure/k8s/overlays/prod \
+            --context criptojackpot-prod \
+            --namespace ${{ env.K8S_NAMESPACE }} \
+            --timeout=300s
+
+      - name: Wait for rollout
+        run: |
+          echo "Waiting for cryptojackpot-app rollout..."
+          kubectl rollout status deployment/cryptojackpot-app \
+            --namespace ${{ env.K8S_NAMESPACE }} \
+            --context criptojackpot-prod \
+            --timeout=300s
+
+      - name: Smoke test - Frontend healthcheck
+        run: |
+          sleep 15
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 15 \
+            https://criptojackpot.com/ || echo "000")
+          echo "Health check status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Production health check failed with status $HTTP_STATUS"
+            exit 1
+          fi
+          echo "Production health check passed"
+
+      - name: Create GitHub Release
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.build-and-push.outputs.version }}
+          name: "Frontend Release ${{ needs.build-and-push.outputs.version }}"
+          body: |
+            ## Deploy Frontend Production — ${{ needs.build-and-push.outputs.version }}
+
+            **Commit:** ${{ github.sha }}
+            **Deployed at:** ${{ github.event.head_commit.timestamp }}
+            **Deployed by:** ${{ github.actor }}
+
+            ### Image
+            - `cryptojackpot-app:${{ needs.build-and-push.outputs.image_tag }}`
+
+            ### URLs
+            - Frontend: https://criptojackpot.com
+            - API: https://api.criptojackpot.com
+          generate_release_notes: true
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify deploy success
+        if: success()
+        run: |
+          echo "Production frontend deploy successful!"
+          echo "  Version: ${{ needs.build-and-push.outputs.version }}"
+          echo "  Commit: ${{ github.sha }}"
+          echo "  URL: https://criptojackpot.com"

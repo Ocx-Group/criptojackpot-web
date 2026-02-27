@@ -3,6 +3,10 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
+# Build arg para inyectar la URL del API en build time (requerido por Next.js NEXT_PUBLIC_*)
+ARG NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+
 COPY package*.json ./
 
 # Instalamos TODAS las dependencias para poder compilar
