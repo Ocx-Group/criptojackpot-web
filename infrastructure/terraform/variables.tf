@@ -34,7 +34,7 @@ variable "cluster_name" {
 variable "namespace" {
   description = "Namespace donde se desplegara el frontend (compartido con backend)"
   type        = string
-  default     = "cryptojackpot"
+  default     = "criptojackpot"
 }
 
 variable "domain" {

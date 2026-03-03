@@ -22,7 +22,7 @@ env:
   ENVIRONMENT: qa
   REGISTRY: registry.digitalocean.com/criptojackpot
   TF_DIR: infrastructure/terraform
-  K8S_NAMESPACE: cryptojackpot
+  K8S_NAMESPACE: criptojackpot
   NEXT_PUBLIC_API_BASE_URL: https://api-qa.criptojackpot.com
 
 jobs:

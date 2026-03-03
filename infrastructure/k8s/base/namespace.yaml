@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cryptojackpot
+  name: criptojackpot
   labels:
-    app.kubernetes.io/name: cryptojackpot
-    app.kubernetes.io/part-of: cryptojackpot-platform
+    app.kubernetes.io/name: criptojackpot
+    app.kubernetes.io/part-of: criptojackpot-platform

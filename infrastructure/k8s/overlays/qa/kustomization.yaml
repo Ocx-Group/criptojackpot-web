@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: cryptojackpot
+namespace: criptojackpot
 
 resources:
   - ../../base
@@ -15,6 +15,19 @@ patches:
       - op: add
         path: /spec/replicas
         value: 2
+      - op: add
+        path: /spec/template/spec/securityContext
+        value:
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+          fsGroup: 1000
+      - op: add
+        path: /spec/template/spec/containers/0/securityContext
+        value:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
       - op: replace
         path: /spec/template/spec/containers/0/resources
         value:
@@ -24,6 +37,14 @@ patches:
           limits:
             memory: "256Mi"
             cpu: "250m"
+  # imagePullSecrets para DOCR privado
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: add
+        path: /spec/template/spec/imagePullSecrets
+        value:
+          - name: regcred
   # Ingress - TLS gestionado por Cloudflare (sin cert-manager)
   # Flujo: Browser → Cloudflare (TLS terminado) → Ingress (HTTP interno)
   - target:

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cryptojackpot-app
-  namespace: cryptojackpot
+  namespace: criptojackpot
   labels:
     app: cryptojackpot-app
     component: frontend

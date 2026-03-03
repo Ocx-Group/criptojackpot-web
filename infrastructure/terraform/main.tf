@@ -8,22 +8,18 @@ locals {
   cloudflare_enabled = var.enable_cloudflare_dns && var.cloudflare_api_token != "" && var.cloudflare_zone_id != ""
 }
 
-resource "kubernetes_namespace_v1" "app" {
+# El namespace 'criptojackpot' es creado por el Terraform del backend.
+# Aquí solo lo referenciamos para no duplicar la creación.
+data "kubernetes_namespace_v1" "app" {
   metadata {
     name = var.namespace
-    labels = {
-      "app.kubernetes.io/name"        = "criptojackpot"
-      "app.kubernetes.io/managed-by"  = "terraform"
-      "app.kubernetes.io/component"   = "frontend"
-      "app.kubernetes.io/environment" = var.environment
-    }
   }
 }
 
 resource "kubernetes_secret_v1" "app_secrets" {
   metadata {
     name      = "app-secrets"
-    namespace = kubernetes_namespace_v1.app.metadata[0].name
+    namespace = data.kubernetes_namespace_v1.app.metadata[0].name
     labels = {
       "app.kubernetes.io/part-of"     = "criptojackpot"
       "app.kubernetes.io/component"   = "frontend"

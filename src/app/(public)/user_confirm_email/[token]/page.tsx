@@ -7,13 +7,14 @@ export const metadata: Metadata = {
 };
 
 interface ConfirmEmailPageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
-const ConfirmEmailPage = ({ params }: ConfirmEmailPageProps) => {
-  return <ConfirmEmailSection token={params.token} />;
+const ConfirmEmailPage = async ({ params }: ConfirmEmailPageProps) => {
+  const { token } = await params;
+  return <ConfirmEmailSection token={token} />;
 };
 
 export default ConfirmEmailPage;

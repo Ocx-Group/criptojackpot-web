@@ -3,7 +3,7 @@ region      = "nyc3"
 
 # Debe ser el cluster donde vive el backend y el servicio bff-gateway
 cluster_name = "criptojackpot-qa-cluster"
-namespace    = "cryptojackpot"
+namespace    = "criptojackpot"
 domain       = "qa.criptojackpot.com"
 
 # URL del BFF Gateway del backend para este ambiente
