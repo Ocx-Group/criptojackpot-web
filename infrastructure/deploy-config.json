@@ -1,0 +1,1 @@
+{"api_base_url":"https://api.criptojackpot.com","cluster_name":"criptojackpot-prod-cluster","deploy_overlay":"infrastructure/k8s/overlays/prod","domain":"criptojackpot.com","environment":"prod","namespace":"criptojackpot","project_name":"criptojackpot-app","tags":["criptojackpot","frontend","terraform-managed","env:prod"]}
