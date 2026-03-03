@@ -100,6 +100,9 @@ jobs:
     needs: build-and-push
     environment: production  # Bloquea hasta que un reviewer apruebe
 
+    env:
+      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DO_TOKEN }}
+
     defaults:
       run:
         working-directory: ${{ env.TF_DIR }}
@@ -174,8 +177,6 @@ jobs:
           TF_VAR_google_client_id:     ${{ secrets.PROD_GOOGLE_CLIENT_ID }}
 
       - name: Connect kubectl to Prod cluster
-        env:
-          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DO_TOKEN }}
         run: |
           CLUSTER_ID=$(terraform output -raw cluster_id)
           doctl kubernetes cluster kubeconfig save "$CLUSTER_ID" \
