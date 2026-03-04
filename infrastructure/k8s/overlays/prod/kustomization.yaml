@@ -142,7 +142,7 @@ generatorOptions:
 images:
   - name: cryptojackpot/cryptojackpot-app
     newName: registry.digitalocean.com/criptojackpot/cryptojackpot-app
-    newTag: prod-423bd33
+    newTag: prod-724d49a
 
 labels:
   - pairs:
