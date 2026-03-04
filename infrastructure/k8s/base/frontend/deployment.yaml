@@ -29,12 +29,12 @@ spec:
             - name: NEXT_PUBLIC_API_BASE_URL
               valueFrom:
                 configMapKeyRef:
-                  name: app-config
+                  name: web-config
                   key: NEXT_PUBLIC_API_BASE_URL
             - name: NEXT_PUBLIC_APP_ENV
               valueFrom:
                 configMapKeyRef:
-                  name: app-config
+                  name: web-config
                   key: NEXT_PUBLIC_APP_ENV
             - name: NEXT_PUBLIC_GOOGLE_CLIENT_ID
               valueFrom:

@@ -93,7 +93,7 @@ patches:
                         number: 80
 
 configMapGenerator:
-  - name: app-config
+  - name: web-config
     literals:
       - NEXT_PUBLIC_API_BASE_URL=https://api-qa.criptojackpot.com
       - NEXT_PUBLIC_APP_ENV=qa
