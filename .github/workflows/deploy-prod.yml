@@ -191,6 +191,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add infrastructure/k8s/overlays/prod/kustomization.yaml
           git diff --cached --quiet || git commit -m "chore(prod): update frontend image tag to ${{ needs.build-and-push.outputs.image_tag }} [skip ci]"
+          git checkout -- .
           git pull --rebase origin main
           git push origin main
           echo "ArgoCD detectara el cambio en ~3 minutos y desplegara automaticamente."
