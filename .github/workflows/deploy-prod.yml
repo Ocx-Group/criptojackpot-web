@@ -177,8 +177,7 @@ jobs:
       - name: Connect kubectl to Prod cluster
         run: |
           doctl kubernetes cluster kubeconfig save criptojackpot-prod-cluster \
-            --context criptojackpot-prod \
-            --access-token "$DIGITALOCEAN_ACCESS_TOKEN"
+            --context criptojackpot-prod
 
       - name: Update image tag in Prod overlay
         run: |
