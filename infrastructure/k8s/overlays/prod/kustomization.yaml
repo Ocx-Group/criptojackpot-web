@@ -44,7 +44,7 @@ patches:
       - op: add
         path: /spec/template/spec/imagePullSecrets
         value:
-          - name: regcred
+          - name: registry-criptojackpot
   # Ingress - TLS gestionado por Cloudflare (sin cert-manager)
   # Flujo: Browser → Cloudflare (TLS terminado) → Ingress (HTTP interno)
   # Rate limiting como capa extra de defensa junto con Cloudflare WAF

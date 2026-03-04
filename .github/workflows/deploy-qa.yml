@@ -2,11 +2,14 @@
 # Deploy QA (Frontend)
 # Se ejecuta en: push a rama 'qa' (via PR desde develop)
 # Hace:
-#   1. Build + push de la imagen Docker del frontend al DOCR
+#   1. Build + push de la imagen Docker del frontend al DOCR con tag qa-{sha}
 #   2. terraform apply -var-file=environments/qa.tfvars
 #      (crea/actualiza namespace + secrets K8s + DNS)
-#   3. kustomize apply overlays/qa
+#   3. Actualiza el image tag en overlays/qa/kustomization.yaml y hace commit
+#   4. ArgoCD detecta el cambio en el repo y despliega automaticamente (~3 min)
 # =============================================================================
+# Flujo GitOps:
+#   push a qa → build+push imagen → commit image tag → ArgoCD sync → cluster
 name: Deploy QA
 
 on:
@@ -15,7 +18,7 @@ on:
 
 concurrency:
   group: deploy-qa
-  cancel-in-progress: false  # Nunca cancelar un deploy en curso
+  cancel-in-progress: false # Nunca cancelar un deploy en curso
 
 env:
   NODE_VERSION: "22"
@@ -99,9 +102,6 @@ jobs:
         with:
           token: ${{ secrets.DO_TOKEN }}
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-
       - name: Configure AWS credentials for DO Spaces backend
         run: |
           echo "AWS_ACCESS_KEY_ID=${{ secrets.DO_SPACES_ACCESS_KEY }}" >> $GITHUB_ENV
@@ -134,37 +134,30 @@ jobs:
             exit 1
           fi
         env:
-          TF_VAR_do_token:             ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          TF_VAR_cloudflare_zone_id:   ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          TF_VAR_google_client_id:     ${{ secrets.QA_GOOGLE_CLIENT_ID }}
-        continue-on-error: true  # exitcode=2 significa cambios (es OK)
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_google_client_id: ${{ secrets.QA_GOOGLE_CLIENT_ID }}
+        continue-on-error: true # exitcode=2 significa cambios (es OK)
 
       - name: Terraform Apply
         if: steps.plan.outcome != 'failure'
         run: |
           terraform apply -auto-approve tfplan-qa
         env:
-          TF_VAR_do_token:             ${{ secrets.DO_TOKEN }}
+          TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          TF_VAR_cloudflare_zone_id:   ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          TF_VAR_google_client_id:     ${{ secrets.QA_GOOGLE_CLIENT_ID }}
-
-      - name: Connect kubectl to QA cluster
-        run: |
-          CLUSTER_ID=$(terraform output -raw cluster_id)
-          doctl kubernetes cluster kubeconfig save "$CLUSTER_ID" \
-            --context criptojackpot-qa
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_google_client_id: ${{ secrets.QA_GOOGLE_CLIENT_ID }}
 
       - name: Update image tag in QA overlay
+        working-directory: ${{ github.workspace }}
         run: |
-          cd ${{ github.workspace }}
           TAG="${{ needs.build-and-push.outputs.image_tag }}"
-          REGISTRY="${{ env.REGISTRY }}"
-
-          cd infrastructure/k8s/overlays/qa
-          kustomize edit set image \
-            cryptojackpot/cryptojackpot-app=${REGISTRY}/cryptojackpot-app:${TAG}
+          FILE="infrastructure/k8s/overlays/qa/kustomization.yaml"
+          sed -i "s/newTag: .*/newTag: ${TAG}/" "$FILE"
+          echo "Updated newTag to: ${TAG}"
+          grep 'newTag' "$FILE"
 
       - name: Commit updated image tag to qa branch
         run: |
@@ -175,38 +168,13 @@ jobs:
           # Solo commitea si hay cambios reales
           git diff --cached --quiet || git commit -m "chore(qa): update frontend image tag to ${{ needs.build-and-push.outputs.image_tag }} [skip ci]"
           git push origin qa
+          echo "ArgoCD detectara el cambio en ~3 minutos y desplegara automaticamente."
+          echo "Monitorea el despliegue en la UI de ArgoCD."
 
-      - name: Apply Kustomize overlays/qa
-        run: |
-          cd ${{ github.workspace }}
-          kubectl apply -k infrastructure/k8s/overlays/qa \
-            --context criptojackpot-qa \
-            --namespace ${{ env.K8S_NAMESPACE }} \
-            --timeout=300s
-
-      - name: Wait for rollout
-        run: |
-          echo "Waiting for cryptojackpot-app rollout..."
-          kubectl rollout status deployment/cryptojackpot-app \
-            --namespace ${{ env.K8S_NAMESPACE }} \
-            --context criptojackpot-qa \
-            --timeout=300s || echo "WARNING: rollout timeout (non-blocking)"
-
-      - name: Smoke test - Frontend healthcheck
-        run: |
-          sleep 10
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            --max-time 15 \
-            https://qa.criptojackpot.com/ || echo "000")
-          echo "Health check status: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" != "200" ]; then
-            echo "WARNING: Health check returned $HTTP_STATUS (may need time to propagate)"
-          fi
-
-      - name: Notify deploy success
+      - name: Notify deploy triggered
         if: success()
         run: |
-          echo "QA frontend deploy successful!"
+          echo "QA frontend deploy triggered via ArgoCD GitOps!"
           echo "  Commit: ${{ github.sha }}"
-          echo "  Image tag: ${{ needs.build-and-push.outputs.image_tag }}"
-          echo "  URL: https://qa.criptojackpot.com"
+          echo "  Image: ${{ env.REGISTRY }}/cryptojackpot-app:${{ needs.build-and-push.outputs.image_tag }}"
+          echo "  ArgoCD sync pending for: https://qa.criptojackpot.com"
