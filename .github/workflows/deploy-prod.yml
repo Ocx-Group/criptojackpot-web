@@ -98,6 +98,8 @@ jobs:
     name: Terraform Deploy Production
     runs-on: ubuntu-latest
     needs: build-and-push
+    permissions:
+      contents: write # Necesario para crear GitHub Releases
     defaults:
       run:
         working-directory: ${{ env.TF_DIR }}
