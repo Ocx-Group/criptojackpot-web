@@ -13,6 +13,3 @@ api_base_url = "https://api.criptojackpot.com"
 enable_cloudflare_dns = true
 cloudflare_proxied    = true
 create_www_record     = true
-
-# OAuth
-google_client_id = "replace-with-prod-google-client-id"

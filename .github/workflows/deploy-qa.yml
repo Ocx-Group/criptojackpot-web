@@ -4,12 +4,13 @@
 # Hace:
 #   1. Build + push de la imagen Docker del frontend al DOCR con tag qa-{sha}
 #   2. terraform apply -var-file=environments/qa.tfvars
-#      (crea/actualiza namespace + secrets K8s + DNS)
-#   3. Actualiza el image tag en overlays/qa/kustomization.yaml y hace commit
-#   4. ArgoCD detecta el cambio en el repo y despliega automaticamente (~3 min)
+#      (crea/actualiza namespace + DNS)
+#   3. ArgoCD Image Updater detecta la nueva imagen en DOCR (~1 min)
+#   4. ArgoCD sincroniza automaticamente el deployment
 # =============================================================================
-# Flujo GitOps:
-#   push a qa → build+push imagen → commit image tag → ArgoCD sync → cluster
+# Flujo GitOps con Image Updater:
+#   push a qa → build+push imagen → Image Updater detecta → ArgoCD sync
+#   (sin commits automaticos, sin git pull forzado)
 name: Deploy QA
 
 on:
@@ -137,7 +138,6 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          TF_VAR_google_client_id: ${{ secrets.QA_GOOGLE_CLIENT_ID }}
         continue-on-error: true # exitcode=2 significa cambios (es OK)
 
       - name: Terraform Apply
@@ -148,28 +148,39 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          TF_VAR_google_client_id: ${{ secrets.QA_GOOGLE_CLIENT_ID }}
 
-      - name: Update image tag in QA overlay
-        working-directory: ${{ github.workspace }}
+      # ArgoCD Image Updater detecta la nueva imagen en DOCR (~1 min en QA)
+      # y actualiza el deployment automaticamente (sin commits a git).
+
+      - name: Wait for Image Updater and verify deployment
         run: |
           TAG="${{ needs.build-and-push.outputs.image_tag }}"
-          FILE="infrastructure/k8s/overlays/qa/kustomization.yaml"
-          sed -i "s/newTag: .*/newTag: ${TAG}/" "$FILE"
-          echo "Updated newTag to: ${TAG}"
-          grep 'newTag' "$FILE"
+          echo "Imagen pushed con tag: ${TAG}"
+          echo "ArgoCD Image Updater detectara el nuevo tag en ~1 minuto..."
 
-      - name: Commit updated image tag to qa branch
-        run: |
-          cd ${{ github.workspace }}
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add infrastructure/k8s/overlays/qa/kustomization.yaml
-          # Solo commitea si hay cambios reales
-          git diff --cached --quiet || git commit -m "chore(qa): update frontend image tag to ${{ needs.build-and-push.outputs.image_tag }} [skip ci]"
-          git push origin qa
-          echo "ArgoCD detectara el cambio en ~3 minutos y desplegara automaticamente."
-          echo "Monitorea el despliegue en la UI de ArgoCD."
+          doctl kubernetes cluster kubeconfig save criptojackpot-qa-cluster 2>/dev/null || true
+
+          for i in $(seq 1 20); do
+            IMAGE=$(kubectl get deployment cryptojackpot-app -n criptojackpot -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null || echo "unknown")
+            READY=$(kubectl get deployment cryptojackpot-app -n criptojackpot -o jsonpath='{.status.readyReplicas}' 2>/dev/null || echo "0")
+
+            echo "  [$i/20] Image: $IMAGE | Ready: $READY"
+
+            if echo "$IMAGE" | grep -q "${TAG}"; then
+              if [ "$READY" != "0" ]; then
+                echo "Deployment verificado: frontend actualizado con el tag correcto."
+                break
+              fi
+            fi
+
+            if [ "$i" = "20" ]; then
+              echo "ADVERTENCIA: Timeout esperando Image Updater. Verificar manualmente."
+            fi
+            sleep 10
+          done
+        env:
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DO_TOKEN }}
+        continue-on-error: true
 
       - name: Notify deploy triggered
         if: success()

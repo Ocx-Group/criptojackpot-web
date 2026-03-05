@@ -11,6 +11,3 @@ api_base_url = "https://api-qa.criptojackpot.com"
 
 # Para QA normalmente no se automatiza DNS por Terraform
 enable_cloudflare_dns = false
-
-# OAuth
-google_client_id = "replace-with-qa-google-client-id"

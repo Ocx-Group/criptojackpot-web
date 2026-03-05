@@ -79,12 +79,6 @@ variable "create_www_record" {
   default     = false
 }
 
-variable "google_client_id" {
-  description = "Google OAuth Client ID para frontend"
-  type        = string
-  default     = ""
-}
-
 variable "tags" {
   description = "Etiquetas para trazabilidad"
   type        = list(string)

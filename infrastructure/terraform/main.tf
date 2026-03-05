@@ -16,23 +16,10 @@ data "kubernetes_namespace_v1" "app" {
   }
 }
 
-resource "kubernetes_secret_v1" "app_secrets" {
-  metadata {
-    name      = "app-secrets"
-    namespace = data.kubernetes_namespace_v1.app.metadata[0].name
-    labels = {
-      "app.kubernetes.io/part-of"     = "criptojackpot"
-      "app.kubernetes.io/component"   = "frontend"
-      "app.kubernetes.io/environment" = var.environment
-    }
-  }
-
-  type = "Opaque"
-
-  data = {
-    NEXT_PUBLIC_GOOGLE_CLIENT_ID = var.google_client_id
-  }
-}
+# NOTA: app-secrets es gestionado via SealedSecrets en los overlays de K8s
+# (infrastructure/k8s/overlays/{env}/secrets/app-secrets.yaml).
+# NO crear kubernetes_secret_v1 aqui para evitar conflicto con el
+# sealed-secrets-controller que tambien crea un Secret con el mismo nombre.
 
 resource "local_file" "deploy_config" {
   content = jsonencode({
