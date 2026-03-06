@@ -511,6 +511,8 @@
     "paymentSuccess": "Payment Successful!",
     "paymentSuccessMessage": "Your purchase has been processed successfully",
     "paymentError": "Error processing payment",
+    "paymentWindowOpened": "Payment page opened",
+    "paymentWindowOpenedDesc": "Complete the payment in the new tab and return here when done.",
     "termsNote": "By confirming payment, you accept our Terms of Service and Privacy Policy",
     "timerMessage": "Time remaining to complete",
     "timerUrgent": "Complete your purchase now!",

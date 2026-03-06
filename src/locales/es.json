@@ -511,6 +511,8 @@
     "paymentSuccess": "¡Pago Exitoso!",
     "paymentSuccessMessage": "Tu compra ha sido procesada correctamente",
     "paymentError": "Error al procesar el pago",
+    "paymentWindowOpened": "Página de pago abierta",
+    "paymentWindowOpenedDesc": "Completa el pago en la nueva pestaña y vuelve aquí cuando termine.",
     "termsNote": "Al confirmar el pago, aceptas nuestros Términos de Servicio y Política de Privacidad",
     "timerMessage": "Tiempo restante para completar",
     "timerUrgent": "¡Completa tu compra ahora!",

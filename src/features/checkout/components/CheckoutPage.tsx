@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, ShieldCheck, Loader2 } from 'lucide-react';
 import { useCheckoutStore, PaymentMethod } from '@/store/checkoutStore';
-import { useCartStore } from '@/store/cartStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { orderService } from '@/services';
 import {
@@ -40,9 +39,6 @@ const CheckoutPage: React.FC = () => {
     setError,
     clearCheckout,
   } = useCheckoutStore();
-
-  // Limpiar carrito cuando se complete el pago
-  const clearCart = useCartStore(state => state.clearCart);
 
   // Estado local para el modal de expiración
   const [showExpiredModal, setShowExpiredModal] = useState(false);
@@ -79,12 +75,15 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod(method);
   };
 
-  // Procesar el pago: usar orden existente (creada via WebSocket) → pagar → redirigir a CoinPayments
+  // Procesar el pago: usar orden existente (creada via WebSocket) → pagar → abrir CoinPayments en nueva pestaña
   const handleConfirmPayment = async () => {
     if (!selectedPaymentMethod) {
       showNotification('warning', t('CHECKOUT.selectPaymentFirst', 'Selecciona un método de pago'), '');
       return;
     }
+
+    // Abrir ventana antes del await para evitar que el bloqueador de popups la bloquee
+    const payWindow = window.open('', '_blank');
 
     try {
       setProcessing(true);
@@ -94,7 +93,10 @@ const CheckoutPage: React.FC = () => {
       const existingOrderId = orderId || items.find(item => item.orderId)?.orderId;
 
       if (!existingOrderId) {
-        throw new Error(t('CHECKOUT.noOrderFound', 'No se encontró la orden. Intenta agregar los números al carrito nuevamente.'));
+        payWindow?.close();
+        throw new Error(
+          t('CHECKOUT.noOrderFound', 'No se encontró la orden. Intenta agregar los números al carrito nuevamente.')
+        );
       }
 
       // Pagar la orden existente → obtener URL de CoinPayments
@@ -103,14 +105,23 @@ const CheckoutPage: React.FC = () => {
       console.log('💳 Pay order response:', JSON.stringify(payResponse));
 
       if (!payResponse?.checkoutUrl) {
+        payWindow?.close();
         throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
       }
 
-      // Marcar como procesando y redirigir al checkout de CoinPayments
-      setStatus('processing');
-      clearCart();
+      // Abrir el checkout de CoinPayments en la nueva pestaña ya abierta
+      if (payWindow) {
+        payWindow.location.href = payResponse.checkoutUrl;
+      } else {
+        // Fallback si el navegador bloqueó la ventana
+        window.open(payResponse.checkoutUrl, '_blank', 'noopener,noreferrer');
+      }
 
-      window.location.href = payResponse.checkoutUrl;
+      showNotification(
+        'info',
+        t('CHECKOUT.paymentWindowOpened', 'Página de pago abierta'),
+        t('CHECKOUT.paymentWindowOpenedDesc', 'Completa el pago en la nueva pestaña y vuelve aquí cuando termine.')
+      );
     } catch (err) {
       const message = err instanceof Error ? err.message : t('CHECKOUT.paymentError', 'Error al procesar el pago');
       setError(message);
