@@ -12,12 +12,13 @@ import {
   LotteryTicketCard,
   PaymentMethodSelector,
   OrderSummary,
-  CheckoutExpiredModal,
 } from '@/features/checkout/components';
 
 /**
- * Página principal de checkout
- * Muestra los tickets reservados, permite seleccionar método de pago y completar la compra
+ * Pagina principal de checkout
+ * Muestra los tickets reservados, permite seleccionar metodo de pago y completar la compra.
+ * El timer de 5 min es puramente visual (urgencia). La expiracion real
+ * de la orden (30 min) la maneja el backend con Quartz scheduler.
  */
 const CheckoutPage: React.FC = () => {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ const CheckoutPage: React.FC = () => {
   // Estado del checkout
   const {
     items,
-    expiresAt,
+    displayExpiresAt,
     selectedPaymentMethod,
     totalAmount,
     isProcessing,
@@ -35,13 +36,11 @@ const CheckoutPage: React.FC = () => {
     orderId,
     setPaymentMethod,
     setProcessing,
-    setStatus,
     setError,
-    clearCheckout,
   } = useCheckoutStore();
 
-  // Estado local para el modal de expiración
-  const [showExpiredModal, setShowExpiredModal] = useState(false);
+  // Timer de urgencia: cuando llega a 0 solo se oculta, no expira nada
+  const [showTimer, setShowTimer] = useState(true);
 
   // Verificar si hay items al montar
   useEffect(() => {
@@ -50,32 +49,24 @@ const CheckoutPage: React.FC = () => {
     }
   }, [items.length, status, router]);
 
-  // Verificar si ya expiró al cargar
+  // Si el timer de urgencia ya paso (ej. reload de pagina despues de 5 min), no mostrarlo
   useEffect(() => {
-    if (expiresAt && Date.now() >= expiresAt && status === 'pending') {
-      setShowExpiredModal(true);
-      setStatus('expired');
+    if (displayExpiresAt && Date.now() >= displayExpiresAt) {
+      setShowTimer(false);
     }
-  }, [expiresAt, status, setStatus]);
+  }, [displayExpiresAt]);
 
-  // Manejar expiración del timer
-  const handleExpired = useCallback(() => {
-    setShowExpiredModal(true);
-    setStatus('expired');
-  }, [setStatus]);
+  // Cuando el timer de urgencia llega a 0, solo ocultarlo
+  const handleTimerEnd = useCallback(() => {
+    setShowTimer(false);
+  }, []);
 
-  // Cerrar modal de expiración
-  const handleCloseExpiredModal = useCallback(() => {
-    setShowExpiredModal(false);
-    clearCheckout();
-  }, [clearCheckout]);
-
-  // Manejar selección de método de pago
+  // Manejar seleccion de metodo de pago
   const handlePaymentMethodSelect = (method: PaymentMethod) => {
     setPaymentMethod(method);
   };
 
-  // Procesar el pago: usar orden existente (creada via WebSocket) → pagar → abrir CoinPayments en nueva pestaña
+  // Procesar el pago: usar orden existente (creada via WebSocket) -> pagar -> abrir CoinPayments en nueva pestana
   const handleConfirmPayment = async () => {
     if (!selectedPaymentMethod) {
       showNotification('warning', t('CHECKOUT.selectPaymentFirst', 'Selecciona un método de pago'), '');
@@ -86,7 +77,7 @@ const CheckoutPage: React.FC = () => {
       setProcessing(true);
       setError(null);
 
-      // Usar el orderId existente creado via WebSocket al reservar números
+      // Usar el orderId existente creado via WebSocket al reservar numeros
       const existingOrderId = orderId || items.find(item => item.orderId)?.orderId;
 
       if (!existingOrderId) {
@@ -95,17 +86,16 @@ const CheckoutPage: React.FC = () => {
         );
       }
 
-      // Pagar la orden existente → obtener URL de CoinPayments
+      // Pagar la orden existente -> obtener URL de CoinPayments
       const payResponse = await orderService.payOrder(existingOrderId);
 
-      console.log('💳 Pay order response:', JSON.stringify(payResponse));
+      console.log('Pay order response:', JSON.stringify(payResponse));
 
       if (!payResponse?.checkoutUrl) {
         throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
       }
 
-      // Abrir el checkout de CoinPayments en una nueva pestaña usando un enlace temporal
-      // Esto garantiza una navegación real (no about:blank) que CoinPayments acepta
+      // Abrir el checkout de CoinPayments en una nueva pestana
       const link = document.createElement('a');
       link.href = payResponse.checkoutUrl;
       link.target = '_blank';
@@ -128,12 +118,12 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
-  // Volver atrás
+  // Volver atras
   const handleGoBack = () => {
     router.back();
   };
 
-  // Si no hay items y no está en éxito/procesando, no renderizar nada
+  // Si no hay items y no esta en exito/procesando, no renderizar nada
   if (items.length === 0 && status !== 'success' && status !== 'processing') {
     return (
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '400px' }}>
@@ -143,125 +133,120 @@ const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <>
-      <div className="checkout-page">
-        <div className="container py-4">
-          {/* Header */}
-          <div className="checkout-header mb-4">
-            <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
-              <div className="d-flex align-items-center gap-3">
-                <button
-                  onClick={handleGoBack}
-                  className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
-                  style={{ width: '44px', height: '44px', borderRadius: '12px' }}
-                  disabled={isProcessing}
-                >
-                  <ArrowLeft size={20} />
-                </button>
-                <div>
-                  <h2 className="mb-0 n4-clr fw-bold">{t('CHECKOUT.title', 'Checkout')}</h2>
-                  <p className="mb-0 text-muted" style={{ fontSize: '13px' }}>
-                    {t('CHECKOUT.subtitle', 'Completa tu compra de manera segura')}
-                  </p>
-                </div>
+    <div className="checkout-page">
+      <div className="container py-4">
+        {/* Header */}
+        <div className="checkout-header mb-4">
+          <div className="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div className="d-flex align-items-center gap-3">
+              <button
+                onClick={handleGoBack}
+                className="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+                style={{ width: '44px', height: '44px', borderRadius: '12px' }}
+                disabled={isProcessing}
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <div>
+                <h2 className="mb-0 n4-clr fw-bold">{t('CHECKOUT.title', 'Checkout')}</h2>
+                <p className="mb-0 text-muted" style={{ fontSize: '13px' }}>
+                  {t('CHECKOUT.subtitle', 'Completa tu compra de manera segura')}
+                </p>
               </div>
+            </div>
 
-              {/* Timer prominente */}
-              {expiresAt && status === 'pending' && (
-                <div style={{ minWidth: '200px' }}>
-                  <CheckoutTimer expiresAt={expiresAt} onExpired={handleExpired} />
-                </div>
-              )}
+            {/* Timer de urgencia (5 min, puramente visual) */}
+            {displayExpiresAt && status === 'pending' && showTimer && (
+              <div style={{ minWidth: '200px' }}>
+                <CheckoutTimer expiresAt={displayExpiresAt} onExpired={handleTimerEnd} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Contenido principal */}
+        <div className="row g-4">
+          {/* Columna izquierda: Tickets y Metodo de pago */}
+          <div className="col-lg-8">
+            {/* Tickets de loteria */}
+            <div className="checkout-tickets mb-4">
+              <h5 className="mb-3 n4-clr fw-bold">{t('CHECKOUT.yourTickets', 'Tus Tickets')}</h5>
+              {items.map(item => (
+                <LotteryTicketCard key={item.id} item={item} />
+              ))}
+            </div>
+
+            {/* Metodo de pago */}
+            <div className="checkout-payment n0-bg p-4 radius16" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+              <PaymentMethodSelector
+                selectedMethod={selectedPaymentMethod}
+                onSelect={handlePaymentMethodSelect}
+                disabled={isProcessing || status !== 'pending'}
+              />
             </div>
           </div>
 
-          {/* Contenido principal */}
-          <div className="row g-4">
-            {/* Columna izquierda: Tickets y Método de pago */}
-            <div className="col-lg-8">
-              {/* Tickets de lotería */}
-              <div className="checkout-tickets mb-4">
-                <h5 className="mb-3 n4-clr fw-bold">{t('CHECKOUT.yourTickets', 'Tus Tickets')}</h5>
-                {items.map(item => (
-                  <LotteryTicketCard key={item.id} item={item} />
-                ))}
-              </div>
+          {/* Columna derecha: Resumen y boton de pago */}
+          <div className="col-lg-4">
+            <div className="checkout-sidebar sticky-top" style={{ top: '100px' }}>
+              {/* Resumen del pedido */}
+              <OrderSummary items={items} totalAmount={totalAmount} />
 
-              {/* Método de pago */}
-              <div className="checkout-payment n0-bg p-4 radius16" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
-                <PaymentMethodSelector
-                  selectedMethod={selectedPaymentMethod}
-                  onSelect={handlePaymentMethodSelect}
-                  disabled={isProcessing || status !== 'pending'}
-                />
-              </div>
-            </div>
+              {/* Boton de pago */}
+              <button
+                onClick={handleConfirmPayment}
+                disabled={!selectedPaymentMethod || isProcessing || status !== 'pending'}
+                className="btn w-100 act4-bg n0-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
+                style={{
+                  borderRadius: '14px',
+                  fontSize: '16px',
+                  transition: 'all 0.2s ease',
+                  opacity: !selectedPaymentMethod || isProcessing ? 0.7 : 1,
+                }}
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 size={20} className="animate-spin" />
+                    {t('CHECKOUT.processing', 'Procesando...')}
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck size={20} />
+                    {t('CHECKOUT.confirmPayment', 'Confirmar y Pagar')} ${totalAmount.toFixed(2)}
+                  </>
+                )}
+              </button>
 
-            {/* Columna derecha: Resumen y botón de pago */}
-            <div className="col-lg-4">
-              <div className="checkout-sidebar sticky-top" style={{ top: '100px' }}>
-                {/* Resumen del pedido */}
-                <OrderSummary items={items} totalAmount={totalAmount} />
+              {/* Terminos */}
+              <p className="text-muted text-center mt-3" style={{ fontSize: '10px' }}>
+                {t(
+                  'CHECKOUT.termsNote',
+                  'Al confirmar el pago, aceptas nuestros Términos de Servicio y Política de Privacidad'
+                )}
+              </p>
 
-                {/* Botón de pago */}
-                <button
-                  onClick={handleConfirmPayment}
-                  disabled={!selectedPaymentMethod || isProcessing || status !== 'pending'}
-                  className="btn w-100 act4-bg n0-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
-                  style={{
-                    borderRadius: '14px',
-                    fontSize: '16px',
-                    transition: 'all 0.2s ease',
-                    opacity: !selectedPaymentMethod || isProcessing ? 0.7 : 1,
-                  }}
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader2 size={20} className="animate-spin" />
-                      {t('CHECKOUT.processing', 'Procesando...')}
-                    </>
-                  ) : (
-                    <>
-                      <ShieldCheck size={20} />
-                      {t('CHECKOUT.confirmPayment', 'Confirmar y Pagar')} ${totalAmount.toFixed(2)}
-                    </>
-                  )}
-                </button>
-
-                {/* Términos */}
-                <p className="text-muted text-center mt-3" style={{ fontSize: '10px' }}>
-                  {t(
-                    'CHECKOUT.termsNote',
-                    'Al confirmar el pago, aceptas nuestros Términos de Servicio y Política de Privacidad'
-                  )}
-                </p>
-
-                {/* Logos de seguridad */}
-                <div
-                  className="security-badges d-flex align-items-center justify-content-center gap-3 mt-3 pt-3"
-                  style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}
-                >
-                  <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-                    <ShieldCheck size={14} color="#22c55e" />
-                    <span>SSL Secured</span>
-                  </div>
-                  <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                    </svg>
-                    <span>256-bit Encryption</span>
-                  </div>
+              {/* Logos de seguridad */}
+              <div
+                className="security-badges d-flex align-items-center justify-content-center gap-3 mt-3 pt-3"
+                style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}
+              >
+                <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
+                  <ShieldCheck size={14} color="#22c55e" />
+                  <span>SSL Secured</span>
+                </div>
+                <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  <span>256-bit Encryption</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Modal de expiración */}
-      <CheckoutExpiredModal isOpen={showExpiredModal} onClose={handleCloseExpiredModal} />
-    </>
+    </div>
   );
 };
 

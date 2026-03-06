@@ -3,14 +3,14 @@ import { persist } from 'zustand/middleware';
 import { CartItem } from '@/interfaces/cart';
 
 /**
- * Métodos de pago disponibles
+ * Metodos de pago disponibles
  */
 export type PaymentMethod = 'crypto';
 
 /**
  * Estado del proceso de checkout
  */
-export type CheckoutStatus = 'pending' | 'processing' | 'success' | 'error' | 'expired';
+export type CheckoutStatus = 'pending' | 'processing' | 'success' | 'error';
 
 /**
  * Item del checkout (heredado del carrito)
@@ -19,12 +19,15 @@ export interface CheckoutItem extends CartItem {
   orderId?: string; // ID de la orden del backend
 }
 
+// Timer de urgencia: 5 minutos (puramente visual, para apurar al usuario)
+const URGENCY_TIMER_MS = 5 * 60 * 1000;
+
 /**
  * Estado del checkout
  */
 export interface CheckoutState {
   items: CheckoutItem[];
-  expiresAt: number | null; // Timestamp de expiración más cercano
+  displayExpiresAt: number | null; // Timer de urgencia visual (5 min), no expira nada
   selectedPaymentMethod: PaymentMethod | null;
   status: CheckoutStatus;
   orderId: string | null;
@@ -40,7 +43,7 @@ export interface CheckoutActions {
   // Inicializar checkout desde el carrito
   initFromCart: (items: CartItem[], orderId?: string) => void;
 
-  // Seleccionar método de pago
+  // Seleccionar metodo de pago
   setPaymentMethod: (method: PaymentMethod) => void;
 
   // Estados del proceso
@@ -51,12 +54,6 @@ export interface CheckoutActions {
   // Limpiar checkout
   clearCheckout: () => void;
 
-  // Calcular tiempo restante (en segundos)
-  getTimeRemaining: () => number;
-
-  // Verificar si expiró
-  isExpired: () => boolean;
-
   // Obtener cantidad total de tickets
   getTotalTickets: () => number;
 }
@@ -65,7 +62,7 @@ export type CheckoutStore = CheckoutState & CheckoutActions;
 
 const initialState: CheckoutState = {
   items: [],
-  expiresAt: null,
+  displayExpiresAt: null,
   selectedPaymentMethod: null,
   status: 'pending',
   orderId: null,
@@ -82,8 +79,8 @@ export const useCheckoutStore = create<CheckoutStore>()(
       initFromCart: (cartItems, orderId) => {
         if (cartItems.length === 0) return;
 
-        // Encontrar la fecha de expiración más cercana
-        const minExpiration = Math.min(...cartItems.map(item => item.expiresAt));
+        // Timer de urgencia visual (5 min desde ahora)
+        const displayExpiresAt = Date.now() + URGENCY_TIMER_MS;
 
         // Calcular el total
         const total = cartItems.reduce((acc, item) => {
@@ -93,7 +90,7 @@ export const useCheckoutStore = create<CheckoutStore>()(
 
         set({
           items: cartItems.map(item => ({ ...item, orderId })),
-          expiresAt: minExpiration,
+          displayExpiresAt,
           orderId: orderId || null,
           totalAmount: total,
           status: 'pending',
@@ -122,21 +119,6 @@ export const useCheckoutStore = create<CheckoutStore>()(
         set(initialState);
       },
 
-      getTimeRemaining: () => {
-        const { expiresAt } = get();
-        if (!expiresAt) return 0;
-
-        const remaining = Math.max(0, expiresAt - Date.now());
-        return Math.floor(remaining / 1000);
-      },
-
-      isExpired: () => {
-        const { expiresAt } = get();
-        if (!expiresAt) return true;
-
-        return Date.now() >= expiresAt;
-      },
-
       getTotalTickets: () => {
         return get().items.reduce((total, item) => {
           const itemTotal = item.numbers.reduce((sum, n) => sum + n.quantity, 0);
@@ -148,23 +130,12 @@ export const useCheckoutStore = create<CheckoutStore>()(
       name: 'checkout-storage',
       partialize: state => ({
         items: state.items,
-        expiresAt: state.expiresAt,
+        displayExpiresAt: state.displayExpiresAt,
         selectedPaymentMethod: state.selectedPaymentMethod,
         orderId: state.orderId,
         totalAmount: state.totalAmount,
         status: state.status,
       }),
-      // Al rehidratar, verificar si ya expiró
-      onRehydrateStorage: () => state => {
-        if (state) {
-          if (state.expiresAt && Date.now() >= state.expiresAt) {
-            // Si expiró, limpiar el checkout
-            state.items = [];
-            state.expiresAt = null;
-            state.status = 'expired';
-          }
-        }
-      },
     }
   )
 );

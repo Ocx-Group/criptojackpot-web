@@ -15,7 +15,8 @@ export interface CartItem {
   ticketPrice: number;
   numbers: CartItemNumber[];
   addedAt: number; // Timestamp cuando se agregó
-  expiresAt: number; // Timestamp cuando expira la reserva
+  expiresAt: number; // Timestamp cuando expira la reserva (5 min, para display en carrito)
+  orderExpiresAt?: number; // Timestamp cuando expira la orden real (30 min, del backend)
   isReserved: boolean; // Si ya se llamó a reserveNumber
   reservationIds?: string[]; // IDs de reservas del backend
   orderId?: string; // ID de la orden creada via WebSocket

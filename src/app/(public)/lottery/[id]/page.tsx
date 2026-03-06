@@ -252,6 +252,7 @@ const LotteryDetailsPage = () => {
         ticketPrice: lottery.ticketPrice,
         numbers,
         orderId: currentOrder.orderId,
+        orderExpiresAt: Date.now() + currentOrder.secondsRemaining * 1000,
       });
 
       // Limpiar selección y mostrar notificación
