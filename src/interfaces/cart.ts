@@ -18,6 +18,7 @@ export interface CartItem {
   expiresAt: number; // Timestamp cuando expira la reserva
   isReserved: boolean; // Si ya se llamó a reserveNumber
   reservationIds?: string[]; // IDs de reservas del backend
+  orderId?: string; // ID de la orden creada via WebSocket
 }
 
 export interface CartState {

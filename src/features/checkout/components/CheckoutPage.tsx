@@ -8,7 +8,6 @@ import { useCheckoutStore, PaymentMethod } from '@/store/checkoutStore';
 import { useCartStore } from '@/store/cartStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { orderService } from '@/services';
-import { CreateOrderRequest, CreateOrderItemRequest } from '@/interfaces/order';
 import {
   CheckoutTimer,
   LotteryTicketCard,
@@ -34,6 +33,7 @@ const CheckoutPage: React.FC = () => {
     totalAmount,
     isProcessing,
     status,
+    orderId,
     setPaymentMethod,
     setProcessing,
     setStatus,
@@ -79,7 +79,7 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod(method);
   };
 
-  // Procesar el pago: crear orden → pagar → redirigir a CoinPayments
+  // Procesar el pago: usar orden existente (creada via WebSocket) → pagar → redirigir a CoinPayments
   const handleConfirmPayment = async () => {
     if (!selectedPaymentMethod) {
       showNotification('warning', t('CHECKOUT.selectPaymentFirst', 'Selecciona un método de pago'), '');
@@ -90,40 +90,17 @@ const CheckoutPage: React.FC = () => {
       setProcessing(true);
       setError(null);
 
-      // 1. Agrupar items del checkout por lotteryId para crear órdenes
-      const itemsByLottery = items.reduce(
-        (acc, item) => {
-          if (!acc[item.lotteryId]) acc[item.lotteryId] = [];
-          acc[item.lotteryId].push(item);
-          return acc;
-        },
-        {} as Record<string, typeof items>
-      );
+      // Usar el orderId existente creado via WebSocket al reservar números
+      const existingOrderId = orderId || items.find(item => item.orderId)?.orderId;
 
-      // 2. Crear orden (por ahora una sola, tomando el primer grupo)
-      const [lotteryId, lotteryItems] = Object.entries(itemsByLottery)[0];
+      if (!existingOrderId) {
+        throw new Error(t('CHECKOUT.noOrderFound', 'No se encontró la orden. Intenta agregar los números al carrito nuevamente.'));
+      }
 
-      const orderItems: CreateOrderItemRequest[] = lotteryItems.flatMap(item =>
-        item.numbers.map(n => ({
-          number: n.number,
-          series: 1,
-          unitPrice: item.ticketPrice,
-          quantity: n.quantity,
-          isGift: false,
-        }))
-      );
+      // Pagar la orden existente → obtener URL de CoinPayments
+      const payResponse = await orderService.payOrder(existingOrderId);
 
-      const createOrderRequest: CreateOrderRequest = {
-        lotteryId,
-        items: orderItems,
-      };
-
-      const order = await orderService.createOrder(createOrderRequest);
-
-      // 3. Pagar la orden → obtener URL de CoinPayments
-      const payResponse = await orderService.payOrder(order.orderGuid);
-
-      // 4. Marcar como procesando y redirigir al checkout de CoinPayments
+      // Marcar como procesando y redirigir al checkout de CoinPayments
       setStatus('processing');
       clearCart();
 

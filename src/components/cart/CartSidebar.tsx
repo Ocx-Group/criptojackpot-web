@@ -145,8 +145,10 @@ const CartSidebar: React.FC = () => {
 
   // Manejar ir al checkout
   const handleGoToCheckout = () => {
-    // Inicializar el store de checkout con los items del carrito
-    initCheckout(items);
+    // Extraer orderId de los items del carrito (creado via WebSocket)
+    const orderId = items.find(item => item.orderId)?.orderId;
+    // Inicializar el store de checkout con los items del carrito y el orderId existente
+    initCheckout(items, orderId);
     // Cerrar el sidebar
     setIsOpen(false);
     // Navegar al checkout

@@ -251,6 +251,7 @@ const LotteryDetailsPage = () => {
         lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
         ticketPrice: lottery.ticketPrice,
         numbers,
+        orderId: currentOrder.orderId,
       });
 
       // Limpiar selección y mostrar notificación
