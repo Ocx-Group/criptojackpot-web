@@ -7,6 +7,8 @@ import { ArrowLeft, ShieldCheck, Loader2 } from 'lucide-react';
 import { useCheckoutStore, PaymentMethod } from '@/store/checkoutStore';
 import { useCartStore } from '@/store/cartStore';
 import { useNotificationStore } from '@/store/notificationStore';
+import { orderService } from '@/services';
+import { CreateOrderRequest, CreateOrderItemRequest } from '@/interfaces/order';
 import {
   CheckoutTimer,
   LotteryTicketCard,
@@ -78,7 +80,7 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod(method);
   };
 
-  // Procesar el pago
+  // Procesar el pago: crear orden → pagar → redirigir a CoinPayments
   const handleConfirmPayment = async () => {
     if (!selectedPaymentMethod) {
       showNotification('warning', t('CHECKOUT.selectPaymentFirst', 'Selecciona un método de pago'), '');
@@ -89,24 +91,48 @@ const CheckoutPage: React.FC = () => {
       setProcessing(true);
       setError(null);
 
-      // Simular procesamiento de pago (aquí iría la llamada al backend)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Éxito
-      setStatus('success');
-      clearCart();
-
-      showNotification(
-        'success',
-        t('CHECKOUT.paymentSuccess', '¡Pago Exitoso!'),
-        t('CHECKOUT.paymentSuccessMessage', 'Tu compra ha sido procesada correctamente')
+      // 1. Agrupar items del checkout por lotteryId para crear órdenes
+      const itemsByLottery = items.reduce(
+        (acc, item) => {
+          if (!acc[item.lotteryId]) acc[item.lotteryId] = [];
+          acc[item.lotteryId].push(item);
+          return acc;
+        },
+        {} as Record<string, typeof items>
       );
 
-      // Redirigir a mis tickets tras completar la compra
-      router.push('/my-tickets');
-    } catch {
-      setError(t('CHECKOUT.paymentError', 'Error al procesar el pago'));
-      showNotification('error', t('CHECKOUT.paymentError', 'Error al procesar el pago'), '');
+      // 2. Crear orden (por ahora una sola, tomando el primer grupo)
+      const [lotteryId, lotteryItems] = Object.entries(itemsByLottery)[0];
+
+      const orderItems: CreateOrderItemRequest[] = lotteryItems.flatMap(item =>
+        item.numbers.map(n => ({
+          number: n.number,
+          series: 1,
+          unitPrice: item.ticketPrice,
+          quantity: n.quantity,
+          isGift: false,
+        }))
+      );
+
+      const createOrderRequest: CreateOrderRequest = {
+        lotteryId,
+        items: orderItems,
+      };
+
+      const order = await orderService.createOrder(createOrderRequest);
+
+      // 3. Pagar la orden → obtener URL de CoinPayments
+      const payResponse = await orderService.payOrder(order.orderGuid);
+
+      // 4. Limpiar carrito y redirigir al checkout de CoinPayments
+      clearCart();
+      clearCheckout();
+
+      window.location.href = payResponse.checkoutUrl;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t('CHECKOUT.paymentError', 'Error al procesar el pago');
+      setError(message);
+      showNotification('error', t('CHECKOUT.paymentError', 'Error al procesar el pago'), message);
     } finally {
       setProcessing(false);
     }

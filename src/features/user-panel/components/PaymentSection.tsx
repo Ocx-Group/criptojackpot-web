@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import MotionFade from '@/components/motionEffect/MotionFade';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { coinPaymentService, userCryptoWalletService } from '@/services';
+import { orderService, userCryptoWalletService } from '@/services';
 import { CryptoWallet } from '@/interfaces/cryptoWallet';
 
 /* ─── Types ─── */
@@ -196,7 +196,7 @@ export default function PaymentSection() {
 
   const { data: currencies = [] } = useQuery({
     queryKey: ['coinpayment-currencies'],
-    queryFn: () => coinPaymentService.getCurrencies(),
+    queryFn: () => orderService.getCurrencies(),
     staleTime: 1000 * 60 * 5,
   });
 

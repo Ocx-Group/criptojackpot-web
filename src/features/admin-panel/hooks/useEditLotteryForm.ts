@@ -12,7 +12,7 @@ import { Lottery, LotteryStatus, UpdateLotteryRequest } from '@/interfaces/lotte
 import { Prize } from '@/interfaces/prize';
 import { CoinPaymentCurrency } from '@/interfaces/coinPaymentCurrency';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { lotteryService, prizeService, coinPaymentService } from '@/services';
+import { lotteryService, prizeService, orderService } from '@/services';
 import { EditLotteryFormData } from '../types/editLotteryFormData';
 import { createEditLotterySchema } from '../schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -79,7 +79,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
   const { data: currencies = [], isLoading: isLoadingCurrencies } = useQuery<CoinPaymentCurrency[], Error>({
     queryKey: ['coinpayment-currencies'],
     queryFn: async () => {
-      return coinPaymentService.getCurrencies();
+      return orderService.getCurrencies();
     },
   });
 

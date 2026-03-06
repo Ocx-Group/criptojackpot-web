@@ -12,7 +12,7 @@ import { LotteryType, CreateLotteryRequest } from '@/interfaces/lottery';
 import { Prize } from '@/interfaces/prize';
 import { CoinPaymentCurrency } from '@/interfaces/coinPaymentCurrency';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
-import { lotteryService, prizeService, coinPaymentService } from '@/services';
+import { lotteryService, prizeService, orderService } from '@/services';
 import { CreateTicketFormData, UseCreateTicketFormReturn } from '../types/createTicketForm';
 import { createTicketSchema } from '../schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -39,7 +39,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   const { data: currencies = [], isLoading: isLoadingCurrencies } = useQuery<CoinPaymentCurrency[], Error>({
     queryKey: ['coinpayment-currencies'],
     queryFn: async () => {
-      return coinPaymentService.getCurrencies();
+      return orderService.getCurrencies();
     },
   });
 
