@@ -100,6 +100,12 @@ const CheckoutPage: React.FC = () => {
       // Pagar la orden existente → obtener URL de CoinPayments
       const payResponse = await orderService.payOrder(existingOrderId);
 
+      console.log('💳 Pay order response:', JSON.stringify(payResponse));
+
+      if (!payResponse?.checkoutUrl) {
+        throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
+      }
+
       // Marcar como procesando y redirigir al checkout de CoinPayments
       setStatus('processing');
       clearCart();
