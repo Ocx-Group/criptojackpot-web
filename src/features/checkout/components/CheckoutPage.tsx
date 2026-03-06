@@ -49,9 +49,8 @@ const CheckoutPage: React.FC = () => {
 
   // Verificar si hay items al montar
   useEffect(() => {
-    if (items.length === 0 && status !== 'success') {
-      // No hay items, redirigir
-      router.push('/contest');
+    if (items.length === 0 && status !== 'success' && status !== 'processing') {
+      router.push('/');
     }
   }, [items.length, status, router]);
 
@@ -124,9 +123,9 @@ const CheckoutPage: React.FC = () => {
       // 3. Pagar la orden → obtener URL de CoinPayments
       const payResponse = await orderService.payOrder(order.orderGuid);
 
-      // 4. Limpiar carrito y redirigir al checkout de CoinPayments
+      // 4. Marcar como procesando y redirigir al checkout de CoinPayments
+      setStatus('processing');
       clearCart();
-      clearCheckout();
 
       window.location.href = payResponse.checkoutUrl;
     } catch (err) {
@@ -143,8 +142,8 @@ const CheckoutPage: React.FC = () => {
     router.back();
   };
 
-  // Si no hay items y no está en éxito, no renderizar nada
-  if (items.length === 0 && status !== 'success') {
+  // Si no hay items y no está en éxito/procesando, no renderizar nada
+  if (items.length === 0 && status !== 'success' && status !== 'processing') {
     return (
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '400px' }}>
         <Loader2 className="animate-spin act4-clr" size={40} />

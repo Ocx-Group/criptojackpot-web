@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CreditCard, Wallet, Building2, Bitcoin, Check } from 'lucide-react';
+import { Wallet, Bitcoin, Check } from 'lucide-react';
 import { PaymentMethod } from '@/store/checkoutStore';
 
 interface PaymentMethodSelectorProps {
@@ -32,32 +32,19 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
 
   const paymentOptions: PaymentOption[] = [
     {
-      id: 'card',
-      name: t('CHECKOUT.paymentMethods.card', 'Tarjeta de Crédito/Débito'),
-      description: t('CHECKOUT.paymentMethods.cardDesc', 'Visa, Mastercard, American Express'),
-      icon: <CreditCard size={28} />,
-      popular: true,
-    },
-    {
       id: 'crypto',
       name: t('CHECKOUT.paymentMethods.crypto', 'Criptomonedas'),
       description: t('CHECKOUT.paymentMethods.cryptoDesc', 'Bitcoin, Ethereum, USDT'),
       icon: <Bitcoin size={28} />,
     },
-    {
-      id: 'paypal',
-      name: t('CHECKOUT.paymentMethods.paypal', 'PayPal'),
-      description: t('CHECKOUT.paymentMethods.paypalDesc', 'Pago seguro con PayPal'),
-      icon: <Wallet size={28} />,
-    },
-    {
-      id: 'bank_transfer',
-      name: t('CHECKOUT.paymentMethods.bank', 'Transferencia Bancaria'),
-      description: t('CHECKOUT.paymentMethods.bankDesc', 'Depósito directo a cuenta'),
-      icon: <Building2 size={28} />,
-      comingSoon: true,
-    },
   ];
+
+  // Auto-seleccionar si solo hay un método disponible
+  useEffect(() => {
+    if (paymentOptions.length === 1 && selectedMethod !== paymentOptions[0].id && !disabled) {
+      onSelect(paymentOptions[0].id);
+    }
+  }, []);
 
   return (
     <div className="payment-method-selector">

@@ -5,7 +5,7 @@ import { CartItem } from '@/interfaces/cart';
 /**
  * Métodos de pago disponibles
  */
-export type PaymentMethod = 'card' | 'crypto' | 'paypal' | 'bank_transfer';
+export type PaymentMethod = 'crypto';
 
 /**
  * Estado del proceso de checkout
