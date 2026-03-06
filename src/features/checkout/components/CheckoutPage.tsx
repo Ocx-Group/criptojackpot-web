@@ -82,9 +82,6 @@ const CheckoutPage: React.FC = () => {
       return;
     }
 
-    // Abrir ventana antes del await para evitar que el bloqueador de popups la bloquee
-    const payWindow = window.open('', '_blank');
-
     try {
       setProcessing(true);
       setError(null);
@@ -93,7 +90,6 @@ const CheckoutPage: React.FC = () => {
       const existingOrderId = orderId || items.find(item => item.orderId)?.orderId;
 
       if (!existingOrderId) {
-        payWindow?.close();
         throw new Error(
           t('CHECKOUT.noOrderFound', 'No se encontró la orden. Intenta agregar los números al carrito nuevamente.')
         );
@@ -105,17 +101,18 @@ const CheckoutPage: React.FC = () => {
       console.log('💳 Pay order response:', JSON.stringify(payResponse));
 
       if (!payResponse?.checkoutUrl) {
-        payWindow?.close();
         throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
       }
 
-      // Abrir el checkout de CoinPayments en la nueva pestaña ya abierta
-      if (payWindow) {
-        payWindow.location.href = payResponse.checkoutUrl;
-      } else {
-        // Fallback si el navegador bloqueó la ventana
-        window.open(payResponse.checkoutUrl, '_blank', 'noopener,noreferrer');
-      }
+      // Abrir el checkout de CoinPayments en una nueva pestaña usando un enlace temporal
+      // Esto garantiza una navegación real (no about:blank) que CoinPayments acepta
+      const link = document.createElement('a');
+      link.href = payResponse.checkoutUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       showNotification(
         'info',
