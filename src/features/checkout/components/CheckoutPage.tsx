@@ -7,12 +7,7 @@ import { ArrowLeft, ShieldCheck, Loader2 } from 'lucide-react';
 import { useCheckoutStore, PaymentMethod } from '@/store/checkoutStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { orderService } from '@/services';
-import {
-  CheckoutTimer,
-  LotteryTicketCard,
-  PaymentMethodSelector,
-  OrderSummary,
-} from '@/features/checkout/components';
+import { CheckoutTimer, LotteryTicketCard, PaymentMethodSelector, OrderSummary } from '@/features/checkout/components';
 
 /**
  * Pagina principal de checkout
@@ -56,9 +51,10 @@ const CheckoutPage: React.FC = () => {
     }
   }, [displayExpiresAt]);
 
-  // Cuando el timer de urgencia llega a 0, solo ocultarlo
+  // Cuando el timer de urgencia llega a 0, redirigir a personal-info
   const handleTimerEnd = useCallback(() => {
     setShowTimer(false);
+    window.location.href = 'https://criptojackpot.com/personal-info';
   }, []);
 
   // Manejar seleccion de metodo de pago

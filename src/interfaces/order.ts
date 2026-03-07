@@ -1,18 +1,3 @@
-export interface CreateOrderItemRequest {
-  number: number;
-  series: number;
-  unitPrice: number;
-  quantity: number;
-  lotteryNumberId?: string;
-  isGift: boolean;
-  giftRecipientId?: number;
-}
-
-export interface CreateOrderRequest {
-  lotteryId: string;
-  items: CreateOrderItemRequest[];
-}
-
 export interface OrderDetailDto {
   id: number;
   number: number;
