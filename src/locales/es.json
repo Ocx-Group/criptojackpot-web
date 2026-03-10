@@ -560,5 +560,31 @@
     "loading": "Cargando tickets...",
     "error": "Error al cargar los tickets",
     "raffle": "Rifa"
+  },
+  "TRANSACTIONS": {
+    "title": "Todas las Transacciones",
+    "availableBalance": "Saldo Disponible",
+    "deposit": "Depositar",
+    "withdraw": "Retirar",
+    "date": "Fecha",
+    "description": "Descripción",
+    "type": "Tipo",
+    "amount": "Monto",
+    "status": "Estado",
+    "loading": "Cargando transacciones...",
+    "error": "Error al cargar las transacciones",
+    "empty": "Aún no tienes transacciones",
+    "typeReferralBonus": "Bono de Referido",
+    "typeReferralPurchaseCommission": "Comisión de Referido",
+    "typeLotteryPrize": "Premio de Lotería",
+    "typeTicketPurchase": "Compra de Ticket",
+    "typeWithdrawal": "Retiro",
+    "typeWithdrawalRefund": "Reembolso de Retiro",
+    "typeAdminCredit": "Crédito Administrativo",
+    "typeAdminDebit": "Débito Administrativo",
+    "statusPending": "Pendiente",
+    "statusCompleted": "Completada",
+    "statusFailed": "Fallida",
+    "statusReversed": "Revertida"
   }
 }

@@ -560,5 +560,31 @@
     "loading": "Loading tickets...",
     "error": "Error loading tickets",
     "raffle": "Raffle"
+  },
+  "TRANSACTIONS": {
+    "title": "All Transactions",
+    "availableBalance": "Available Balance",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "date": "Date",
+    "description": "Description",
+    "type": "Type",
+    "amount": "Amount",
+    "status": "Status",
+    "loading": "Loading transactions...",
+    "error": "Error loading transactions",
+    "empty": "No transactions yet",
+    "typeReferralBonus": "Referral Bonus",
+    "typeReferralPurchaseCommission": "Referral Commission",
+    "typeLotteryPrize": "Lottery Prize",
+    "typeTicketPurchase": "Ticket Purchase",
+    "typeWithdrawal": "Withdrawal",
+    "typeWithdrawalRefund": "Withdrawal Refund",
+    "typeAdminCredit": "Admin Credit",
+    "typeAdminDebit": "Admin Debit",
+    "statusPending": "Pending",
+    "statusCompleted": "Completed",
+    "statusFailed": "Failed",
+    "statusReversed": "Reversed"
   }
 }
