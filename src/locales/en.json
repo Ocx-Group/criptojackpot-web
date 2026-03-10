@@ -558,6 +558,7 @@
     "statusRefunded": "Refunded",
     "empty": "You don't have any purchased tickets yet",
     "loading": "Loading tickets...",
-    "error": "Error loading tickets"
+    "error": "Error loading tickets",
+    "raffle": "Raffle"
   }
 }

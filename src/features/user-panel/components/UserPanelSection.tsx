@@ -10,7 +10,7 @@ const PAGE_SIZE = 6;
 
 const UserPanelSection = () => {
   const { t } = useTranslation();
-  const { tickets, isLoading, error } = useMyTickets();
+  const { tickets, lotteryMap, isLoading, error } = useMyTickets();
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.max(1, Math.ceil(tickets.length / PAGE_SIZE));
@@ -51,12 +51,19 @@ const UserPanelSection = () => {
                 <div key={`ticket-${ticket.id}`} className="col-lg-6 col-md-6">
                   <div className="my-ticket-boxwrap position-relative overflow-hidden">
                     <div className="my-ticket-box n0-bg d-grid align-items-center h-100 overflow-hidden border radius12 py-xxl-5 py-4 position-relative">
-                      <div className="d-flex align-items-center justify-content-between gap-3 mb-12 px-xxl-8 px-xl-6 px-sm-5 px-3">
-                        <span className="fs20 fw_700 n4-clr">
-                          {t('MY_TICKETS.ticketLabel')}
-                          {String(ticket.id).padStart(2, '0')}
-                        </span>
-                        <span className="fw_600 n4-clr">{getStatusLabel(ticket.status)}</span>
+                      <div className="px-xxl-8 px-xl-6 px-sm-5 px-3 mb-12">
+                        <div className="d-flex align-items-center justify-content-between gap-3 mb-2">
+                          <span className="fs20 fw_700 n4-clr">
+                            {t('MY_TICKETS.ticketLabel')}
+                            {String(ticket.id).padStart(2, '0')}
+                          </span>
+                          <span className="fw_600 n4-clr">{getStatusLabel(ticket.status)}</span>
+                        </div>
+                        {lotteryMap.get(ticket.lotteryId) && (
+                          <span className="fs14 fw_500 s1-clr d-block">
+                            {lotteryMap.get(ticket.lotteryId)!.title}
+                          </span>
+                        )}
                       </div>
                       <div className="ticket-border position-relative"></div>
                       <div className="d-flex align-items-center justify-content-between gap-3 pt-xl-3 pt-5 px-xxl-8 px-xl-6 px-sm-5 px-3">

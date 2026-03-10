@@ -558,6 +558,7 @@
     "statusRefunded": "Reembolsado",
     "empty": "Aún no tienes tickets comprados",
     "loading": "Cargando tickets...",
-    "error": "Error al cargar los tickets"
+    "error": "Error al cargar los tickets",
+    "raffle": "Rifa"
   }
 }
