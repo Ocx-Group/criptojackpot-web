@@ -20,6 +20,7 @@ import { UserCryptoWalletService } from './userCryptoWalletService';
 import { WalletService } from './walletService';
 import { TicketService } from './ticketService';
 import { OrderService } from './orderService';
+import { WishListService } from './wishListService';
 
 export const authService = new AuthService();
 export const userService = new UserService();
@@ -35,3 +36,4 @@ export const userCryptoWalletService = new UserCryptoWalletService();
 export const walletService = new WalletService();
 export const ticketService = new TicketService();
 export const orderService = new OrderService();
+export const wishListService = new WishListService();
