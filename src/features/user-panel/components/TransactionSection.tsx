@@ -15,12 +15,14 @@ import {
   WalletTransactionStatus,
   WalletTransactionType,
 } from '@/interfaces/walletTransaction';
+import WithdrawModal from '@/features/user-panel/components/WithdrawModal';
 
 const PAGE_SIZE = 10;
 
 const TransactionSection = () => {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
 
   const { transactions, totalPages, balance, isLoading, error } = useTransactions({
     page: currentPage,
@@ -87,14 +89,14 @@ const TransactionSection = () => {
                 <span className="n3-clr fw_600">{t('TRANSACTIONS.deposit')}</span>
               </span>
             </Link>
-            <Link href="#0" className="deposit-box text-center d-center border radius24 d-center">
+            <button type="button" onClick={() => setIsWithdrawModalOpen(true)} className="deposit-box text-center d-center border radius24 d-center" style={{ background: 'none', cursor: 'pointer' }}>
               <span className="box">
                 <span className="icon mb-xxl-5 mb-xl-4 mb-lg-3 mb-2 s1-bg radius-circle d-center">
                   <ArrowsDownUpIcon className="ph ph-arrows-down-up fs-three n0-clr"></ArrowsDownUpIcon>
                 </span>
                 <span className="n3-clr fw_600">{t('TRANSACTIONS.withdraw')}</span>
               </span>
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -204,6 +206,8 @@ const TransactionSection = () => {
           </>
         )}
       </div>
+
+      <WithdrawModal isOpen={isWithdrawModalOpen} onClose={() => setIsWithdrawModalOpen(false)} />
     </div>
   );
 };
