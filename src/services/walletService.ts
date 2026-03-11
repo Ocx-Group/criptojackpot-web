@@ -83,6 +83,29 @@ class WalletService extends BaseService {
       throw this.handleError(error);
     }
   }
+
+  async getAllTransactions(
+    page: number = 1,
+    pageSize: number = 10,
+    type?: WalletTransactionType
+  ): Promise<PaginatedResponse<WalletTransaction>> {
+    try {
+      const params: Record<string, string> = {
+        page: page.toString(),
+        pageSize: pageSize.toString(),
+      };
+      if (type !== undefined) {
+        params.type = type.toString();
+      }
+      const response = await this.apiClient.get<PaginatedResponse<WalletTransaction>>(
+        `${this.servicePrefix}/${this.endpoint}/admin/transactions`,
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
 }
 
 export { WalletService };

@@ -15,7 +15,11 @@ export interface OrderDto {
   id: number;
   orderGuid: string;
   userId: number;
+  userGuid: string;
+  userEmail: string;
+  userName: string;
   lotteryId: string;
+  lotteryTitle: string;
   totalAmount: number;
   totalItems: number;
   status: number;

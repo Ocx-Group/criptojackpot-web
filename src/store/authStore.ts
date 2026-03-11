@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useCheckoutStore } from '@/store/checkoutStore';
 
 interface AuthState {
   rememberMe: boolean;
@@ -27,6 +28,7 @@ export const useAuthStore = create<AuthState>()(
           rememberMe: false,
           resetPasswordEmail: null,
         });
+        useCheckoutStore.getState().clearCheckout();
         if (typeof globalThis.window !== 'undefined') {
           globalThis.location.href = redirectTo || '/landing-page';
         }

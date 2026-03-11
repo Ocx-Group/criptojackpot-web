@@ -1,6 +1,7 @@
 import { BaseService } from './baseService';
-import { PayOrderResponse } from '@/interfaces/order';
+import { PayOrderResponse, OrderDto } from '@/interfaces/order';
 import { CoinPaymentCurrency } from '@/interfaces/coinPaymentCurrency';
+import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 
 class OrderService extends BaseService {
   protected endpoint = 'orders';
@@ -15,6 +16,21 @@ class OrderService extends BaseService {
 
   async getCurrencies(): Promise<CoinPaymentCurrency[]> {
     return this.getAll<CoinPaymentCurrency>({ path: 'currencies' });
+  }
+
+  async getAllOrders(
+    page: number = 1,
+    pageSize: number = 10,
+    status?: number
+  ): Promise<PaginatedResponse<OrderDto>> {
+    const params: Record<string, string> = {
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    };
+    if (status !== undefined) {
+      params.status = status.toString();
+    }
+    return this.getAllPaginated<OrderDto>({ path: 'admin/all', params });
   }
 }
 

@@ -7,3 +7,5 @@ export { usePrizes } from './usePrizes';
 export { useCreateLotteryForm } from './useCreateLotteryForm';
 export { useEditLotteryForm } from './useEditLotteryForm';
 export { useLotteries } from './useLotteries';
+export { useAdminOrders } from './useAdminOrders';
+export { useAdminTransactions } from './useAdminTransactions';

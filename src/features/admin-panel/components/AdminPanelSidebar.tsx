@@ -35,7 +35,7 @@ const AdminPanelSidebar = () => {
                   <Link
                     href={item.href}
                     className={`${
-                      path === item.href ? 'active' : ''
+                      path === item.href || (item.href !== '/admin' && path.startsWith(item.href)) ? 'active' : ''
                     } py-xxl-3 py-2 px-xxl-5 px-xl-4 px-3 radius12 n4-clr fw_600 d-flex align-items-center gap-xxl-3 gap-2 user-text-inner`}
                   >
                     {/* Aquí instanciamos el icono */}
