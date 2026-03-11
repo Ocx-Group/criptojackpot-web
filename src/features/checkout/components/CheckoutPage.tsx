@@ -192,7 +192,7 @@ const CheckoutPage: React.FC = () => {
               <button
                 onClick={handleConfirmPayment}
                 disabled={!selectedPaymentMethod || isProcessing || status !== 'pending'}
-                className="btn w-100 act4-bg n0-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
+                className="checkout-confirm-btn btn w-100 act4-bg n0-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
                 style={{
                   borderRadius: '14px',
                   fontSize: '16px',

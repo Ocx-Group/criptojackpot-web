@@ -1,3 +1,23 @@
+/* ─── Checkout confirm button ──────────────────────────────── */
+
+.checkout-confirm-btn {
+  background-color: var(--act4) !important;
+  color: #fff !important;
+  border: none !important;
+
+  &:hover:not(:disabled) {
+    background-color: var(--act4) !important;
+    color: #fff !important;
+    filter: brightness(1.12);
+  }
+
+  &:disabled {
+    background-color: var(--act4) !important;
+    color: #fff !important;
+    opacity: 0.6;
+  }
+}
+
 /* Checkout Styles */
 
 /* Animación de spin para loaders */
