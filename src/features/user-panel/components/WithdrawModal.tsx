@@ -61,7 +61,13 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-function AmountStep({ withdraw, t }: { withdraw: ReturnType<typeof useWithdraw>; t: (key: string, opts?: Record<string, unknown>) => string }) {
+function AmountStep({
+  withdraw,
+  t,
+}: {
+  withdraw: ReturnType<typeof useWithdraw>;
+  t: (key: string, opts?: Record<string, unknown>) => string;
+}) {
   return (
     <>
       <h4 className="n4-clr mb-5">{t('WITHDRAWAL.title')}</h4>
@@ -88,12 +94,8 @@ function AmountStep({ withdraw, t }: { withdraw: ReturnType<typeof useWithdraw>;
             onChange={e => withdraw.setAmount(e.target.value)}
           />
         </div>
-        {withdraw.amountError && (
-          <p className="text-danger mt-1 mb-0 fs-seven">{withdraw.amountError}</p>
-        )}
-        <p className="n3-clr mt-1 mb-0 fs-seven">
-          {t('WITHDRAWAL.minAmount', { min: 10 })}
-        </p>
+        {withdraw.amountError && <p className="text-danger mt-1 mb-0 fs-seven">{withdraw.amountError}</p>}
+        <p className="n3-clr mt-1 mb-0 fs-seven">{t('WITHDRAWAL.minAmount', { min: 10 })}</p>
       </div>
 
       {/* Wallet selector */}
@@ -132,7 +134,13 @@ function AmountStep({ withdraw, t }: { withdraw: ReturnType<typeof useWithdraw>;
   );
 }
 
-function VerificationStep({ withdraw, t }: { withdraw: ReturnType<typeof useWithdraw>; t: (key: string, opts?: Record<string, unknown>) => string }) {
+function VerificationStep({
+  withdraw,
+  t,
+}: {
+  withdraw: ReturnType<typeof useWithdraw>;
+  t: (key: string, opts?: Record<string, unknown>) => string;
+}) {
   return (
     <>
       <button
@@ -170,12 +178,12 @@ function VerificationStep({ withdraw, t }: { withdraw: ReturnType<typeof useWith
               onChange={withdraw.setVerificationCode}
               numInputs={6}
               shouldAutoFocus
-              inputType="number"
+              inputType="tel"
               renderInput={props => (
                 <input
                   {...props}
                   style={{
-                    width: '48px',
+                    width: '52px',
                     height: '56px',
                     margin: '0 4px',
                     fontSize: '20px',
@@ -214,7 +222,10 @@ function VerificationStep({ withdraw, t }: { withdraw: ReturnType<typeof useWith
             </div>
             <div className="d-flex justify-content-between">
               <span className="n3-clr">{t('WITHDRAWAL.walletLabel')}</span>
-              <span className="n4-clr fw_600" style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span
+                className="n4-clr fw_600"
+                style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}
+              >
                 {withdraw.wallets.find(w => w.walletGuid === withdraw.selectedWalletGuid)?.label ?? ''}
               </span>
             </div>
@@ -235,17 +246,19 @@ function VerificationStep({ withdraw, t }: { withdraw: ReturnType<typeof useWith
   );
 }
 
-function SuccessStep({ withdraw, t }: { withdraw: ReturnType<typeof useWithdraw>; t: (key: string, opts?: Record<string, unknown>) => string }) {
+function SuccessStep({
+  withdraw,
+  t,
+}: {
+  withdraw: ReturnType<typeof useWithdraw>;
+  t: (key: string, opts?: Record<string, unknown>) => string;
+}) {
   return (
     <div className="text-center py-4">
       <CheckCircle size={64} weight="fill" className="s1-clr mb-4" />
       <h4 className="n4-clr mb-3">{t('WITHDRAWAL.successTitle')}</h4>
       <p className="n3-clr mb-5">{t('WITHDRAWAL.successMessage')}</p>
-      <button
-        type="button"
-        className="cmn-btn w-100 py-3 radius12 fw_700"
-        onClick={withdraw.handleClose}
-      >
+      <button type="button" className="cmn-btn w-100 py-3 radius12 fw_700" onClick={withdraw.handleClose}>
         {t('WITHDRAWAL.close')}
       </button>
     </div>
