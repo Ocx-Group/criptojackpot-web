@@ -1,4 +1,22 @@
 {
+  "HOW_IT_WORK": {
+    "sectionLabel": "Cómo Funciona",
+    "sectionTitle1": "Tu Guía Definitiva",
+    "sectionTitle2": "para",
+    "sectionTitleHighlight": "¡Ganar!",
+    "step1": "PASO_01",
+    "step1Title1": "Elige",
+    "step1Title2": "Tu Ticket",
+    "step1Desc": "Explora nuestras rifas activas, elige la que más te guste y selecciona tus números de la suerte. ¡Completa tu compra y ya estás participando!",
+    "step2": "PASO_02",
+    "step2Title1": "Refiere y",
+    "step2Title2": "Gana",
+    "step2Desc": "Comparte tu enlace de referido. Cada vez que un amigo compre un ticket, ganas el 1% de comisión sobre su compra — de forma automática.",
+    "step3": "PASO_03",
+    "step3Title1": "Gana la",
+    "step3Title2": "Rifa",
+    "step3Desc": "Cuando llega la fecha del sorteo, se elige un ganador al azar. Si tu número es elegido, ¡te llevas el premio! Simple, transparente y justo."
+  },
   "CONFIRM_EMAIL": {
     "title": "Confirmar correo electrónico",
     "verifying": "Verificando tu correo electrónico...",

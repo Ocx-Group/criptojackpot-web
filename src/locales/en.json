@@ -1,4 +1,22 @@
 {
+  "HOW_IT_WORK": {
+    "sectionLabel": "How It Works",
+    "sectionTitle1": "Your Ultimate Guide",
+    "sectionTitle2": "to",
+    "sectionTitleHighlight": "Winning!",
+    "step1": "STEP_01",
+    "step1Title1": "Choose",
+    "step1Title2": "Your Ticket",
+    "step1Desc": "Browse our active lotteries, pick the one you like and select your lucky numbers. Complete your purchase and you're in!",
+    "step2": "STEP_02",
+    "step2Title1": "Refer &",
+    "step2Title2": "Earn",
+    "step2Desc": "Share your unique referral link. Every time a friend purchases a ticket, you earn a 1% commission on their purchase — automatically.",
+    "step3": "STEP_03",
+    "step3Title1": "Win the",
+    "step3Title2": "Raffle!",
+    "step3Desc": "When the draw date arrives, a winner is selected at random. If your number is chosen, you win the prize. Simple, transparent and fair."
+  },
   "CONFIRM_EMAIL": {
     "title": "Confirm Email",
     "verifying": "Verifying your email...",
