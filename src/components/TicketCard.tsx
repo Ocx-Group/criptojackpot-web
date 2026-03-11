@@ -11,7 +11,8 @@ interface TicketCardProps {
 
 export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onAddToCart, onBookmark }) => {
   const remainingTickets = ticket.maxTickets - ticket.soldTickets;
-  const percentageSold = ticket.maxTickets > 0 ? Math.round((ticket.soldTickets / ticket.maxTickets) * 100) : 0;
+  const percentageSold =
+    ticket.maxTickets > 0 ? parseFloat(((ticket.soldTickets / ticket.maxTickets) * 100).toFixed(2)) : 0;
 
   // Calcular días restantes
   const calculateDaysRemaining = () => {

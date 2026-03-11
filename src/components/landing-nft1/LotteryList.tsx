@@ -45,7 +45,7 @@ const LotteryList = () => {
   // Calcular porcentaje vendido
   const getSoldPercentage = (sold: number, max: number) => {
     if (max === 0) return 0;
-    return Math.round((sold / max) * 100);
+    return parseFloat(((sold / max) * 100).toFixed(2));
   };
 
   // Formatear fecha del sorteo
