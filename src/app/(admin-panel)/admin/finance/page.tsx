@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AdminOrdersList from '@/features/admin-panel/components/AdminOrdersList';
 import AdminTransactionsList from '@/features/admin-panel/components/AdminTransactionsList';
-import { ShoppingCart, ArrowsLeftRight } from '@phosphor-icons/react';
+import AdminWithdrawalsList from '@/features/admin-panel/components/AdminWithdrawalsList';
+import { ShoppingCart, ArrowsLeftRight, ArrowsDownUp } from '@phosphor-icons/react';
 
-type FinanceTab = 'orders' | 'transactions';
+type FinanceTab = 'orders' | 'transactions' | 'withdrawals';
 
 const FinancePage = () => {
   const { t } = useTranslation();
@@ -39,11 +40,21 @@ const FinancePage = () => {
               {t('FINANCE.transactions_tab', 'Transacciones')}
             </button>
           </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link d-flex align-items-center gap-2 ${activeTab === 'withdrawals' ? 'active' : ''}`}
+              onClick={() => setActiveTab('withdrawals')}
+            >
+              <ArrowsDownUp size={18} weight="bold" />
+              {t('FINANCE.withdrawals_tab', 'Retiros')}
+            </button>
+          </li>
         </ul>
 
         {/* Tab Content */}
         {activeTab === 'orders' && <AdminOrdersList />}
         {activeTab === 'transactions' && <AdminTransactionsList />}
+        {activeTab === 'withdrawals' && <AdminWithdrawalsList />}
       </div>
     </div>
   );

@@ -9,5 +9,6 @@ export { useEditLotteryForm } from './useEditLotteryForm';
 export { useLotteries } from './useLotteries';
 export { useAdminOrders } from './useAdminOrders';
 export { useAdminTransactions } from './useAdminTransactions';
+export { useAdminWithdrawals } from './useAdminWithdrawals';
 export { useNumberBoard } from './useNumberBoard';
 export { useAdminDashboard } from './useAdminDashboard';

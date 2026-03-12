@@ -62,14 +62,30 @@ const LotteryList = () => {
         <div className="row g-6">
           {[1, 2, 3].map(i => (
             <div key={i} className="col-lg-4 col-md-6">
-              <div className="current-lottery-itemv13 current-lottery-v13before nw3-border position-relative radius24 n0-bg p-xxl-6 p-xl-4 p-3">
-                <div
-                  className="thumb cus-z1 position-relative radius24 overflow-hidden"
-                  style={{ height: '300px', background: '#1a1a2e' }}
-                >
-                  <div className="d-flex align-items-center justify-content-center h-100">
-                    <span className="n3-clr">Cargando...</span>
+              <div className="current-lottery-itemv13 nw3-border position-relative radius24 n0-bg p-xxl-6 p-xl-4 p-3">
+                {/* Image area */}
+                <div className="lottery-skeleton-block radius24" style={{ height: '300px', width: '100%' }} />
+                {/* Content area */}
+                <div className="pt-xxl-6 pt-sm-4 pt-4">
+                  <div className="d-flex align-items-center justify-content-between pb-xxl-3 pb-sm-3 pb-2 gap-3">
+                    <div className="lottery-skeleton-block" style={{ height: '28px', width: '65%' }} />
+                    <div
+                      className="lottery-skeleton-block"
+                      style={{ height: '44px', width: '44px', borderRadius: '50%' }}
+                    />
                   </div>
+                  <div className="lottery-skeleton-block mb-3" style={{ height: '24px', width: '45%' }} />
+                  <div className="border-top opacity-25 mb-3" />
+                  <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="lottery-skeleton-block" style={{ height: '18px', width: '80px' }} />
+                    <div className="lottery-skeleton-block" style={{ height: '18px', width: '100px' }} />
+                  </div>
+                  <div className="border-top opacity-25 mb-3" />
+                  <div className="lottery-skeleton-block mb-2" style={{ height: '14px', width: '40%' }} />
+                  <div
+                    className="lottery-skeleton-block"
+                    style={{ height: '4px', width: '100%', maxWidth: '296px', borderRadius: '4px' }}
+                  />
                 </div>
               </div>
             </div>

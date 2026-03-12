@@ -3,6 +3,7 @@ import { Response } from '@/interfaces/response';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { WalletBalance, WalletTransaction, WalletTransactionType } from '@/interfaces/walletTransaction';
 import { CreateWithdrawalRequest, WithdrawalRequestDto } from '@/features/user-panel/types/withdrawal';
+import { AdminWithdrawalRequest, ProcessWithdrawalRequest } from '@/features/admin-panel/types/withdrawal';
 
 export interface ReferralEarnings {
   totalEarnings: number;
@@ -102,6 +103,53 @@ class WalletService extends BaseService {
         { params }
       );
       return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async getAdminWithdrawals(
+    page: number = 1,
+    pageSize: number = 10,
+    status?: number
+  ): Promise<PaginatedResponse<AdminWithdrawalRequest>> {
+    try {
+      const params: Record<string, string> = {
+        page: page.toString(),
+        pageSize: pageSize.toString(),
+      };
+      if (status !== undefined) {
+        params.status = status.toString();
+      }
+      const response = await this.apiClient.get<PaginatedResponse<AdminWithdrawalRequest>>(
+        `${this.servicePrefix}/withdrawals/admin`,
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async approveWithdrawal(requestGuid: string, request?: ProcessWithdrawalRequest): Promise<AdminWithdrawalRequest> {
+    try {
+      const response = await this.apiClient.post<Response<AdminWithdrawalRequest>>(
+        `${this.servicePrefix}/withdrawals/admin/${requestGuid}/approve`,
+        request || {}
+      );
+      return this.handleResponse(response);
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async rejectWithdrawal(requestGuid: string, request?: ProcessWithdrawalRequest): Promise<AdminWithdrawalRequest> {
+    try {
+      const response = await this.apiClient.post<Response<AdminWithdrawalRequest>>(
+        `${this.servicePrefix}/withdrawals/admin/${requestGuid}/reject`,
+        request || {}
+      );
+      return this.handleResponse(response);
     } catch (error) {
       throw this.handleError(error);
     }
