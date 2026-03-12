@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAdminWithdrawals } from '@/features/admin-panel/hooks';
 import { AdminWithdrawalRequest, WithdrawalRequestStatus } from '@/features/admin-panel/types/withdrawal';
-import { ArrowsDownUp, CheckCircle, XCircle } from '@phosphor-icons/react';
+import { ArrowsDownUp, CheckCircle, XCircle, Eye, Copy } from '@phosphor-icons/react';
+import { toast } from 'react-toastify';
 
 const STATUS_MAP: Record<string, { label: string; badge: string }> = {
   Pending: { label: 'Pendiente', badge: 'badge bg-warning' },
@@ -40,15 +41,22 @@ const AdminWithdrawalsList: React.FC = () => {
 
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [rejectNotes, setRejectNotes] = useState('');
+  const [approvingId, setApprovingId] = useState<string | null>(null);
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const [detailRequest, setDetailRequest] = useState<AdminWithdrawalRequest | null>(null);
 
-  const handleApprove = async (requestGuid: string) => {
-    if (!confirm(t('FINANCE.confirm_approve', '¿Estás seguro de aprobar esta solicitud de retiro?'))) return;
+  const handleApproveClick = (requestGuid: string) => {
+    setApprovingId(requestGuid);
+  };
+
+  const handleApproveConfirm = async () => {
+    if (!approvingId) return;
     try {
-      setProcessingId(requestGuid);
-      await approveWithdrawal(requestGuid);
+      setProcessingId(approvingId);
+      await approveWithdrawal(approvingId);
+      setApprovingId(null);
     } catch {
-      alert(t('FINANCE.error_approve', 'Error al aprobar la solicitud'));
+      // Error handled by mutation onError
     } finally {
       setProcessingId(null);
     }
@@ -62,10 +70,16 @@ const AdminWithdrawalsList: React.FC = () => {
       setRejectingId(null);
       setRejectNotes('');
     } catch {
-      alert(t('FINANCE.error_reject', 'Error al rechazar la solicitud'));
+      // Error handled by mutation onError
     } finally {
       setProcessingId(null);
     }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.info('Copiado al portapapeles');
+    });
   };
 
   if (isLoading) {
@@ -130,10 +144,24 @@ const AdminWithdrawalsList: React.FC = () => {
                     return (
                       <tr key={wr.requestGuid}>
                         <td>
-                          <code className="small">{wr.requestGuid.substring(0, 8)}...</code>
+                          <code
+                            className="small"
+                            role="button"
+                            title={wr.requestGuid}
+                            onClick={() => copyToClipboard(wr.requestGuid)}
+                          >
+                            {wr.requestGuid.substring(0, 8)}...
+                          </code>
                         </td>
                         <td>
-                          <code className="small">{wr.userGuid.substring(0, 8)}...</code>
+                          <code
+                            className="small"
+                            role="button"
+                            title={wr.userGuid}
+                            onClick={() => copyToClipboard(wr.userGuid)}
+                          >
+                            {wr.userGuid.substring(0, 8)}...
+                          </code>
                         </td>
                         <td>
                           <span className="fw-bold text-danger">-${wr.amount.toFixed(2)}</span>
@@ -142,9 +170,17 @@ const AdminWithdrawalsList: React.FC = () => {
                           <span className="small">{wr.currencySymbol}</span>
                         </td>
                         <td>
-                          <code className="small" title={wr.walletAddress}>
-                            {wr.walletAddress.substring(0, 10)}...
-                          </code>
+                          <div className="d-flex align-items-center gap-1">
+                            <code className="small" title={wr.walletAddress}>
+                              {wr.walletAddress.substring(0, 10)}...
+                            </code>
+                            <Copy
+                              size={14}
+                              className="text-muted"
+                              role="button"
+                              onClick={() => copyToClipboard(wr.walletAddress)}
+                            />
+                          </div>
                         </td>
                         <td>
                           <span className={statusInfo.badge}>{statusInfo.label}</span>
@@ -168,33 +204,44 @@ const AdminWithdrawalsList: React.FC = () => {
                           )}
                         </td>
                         <td>
-                          {isPending ? (
-                            <div className="d-flex gap-1">
-                              <button
-                                className="btn btn-sm btn-success d-flex align-items-center gap-1"
-                                onClick={() => handleApprove(wr.requestGuid)}
-                                disabled={isProcessing || isApproving}
-                                title={t('FINANCE.approve', 'Aprobar')}
-                              >
-                                <CheckCircle size={16} weight="bold" />
-                                {t('FINANCE.approve', 'Aprobar')}
-                              </button>
-                              <button
-                                className="btn btn-sm btn-danger d-flex align-items-center gap-1"
-                                onClick={() => {
-                                  setRejectingId(wr.requestGuid);
-                                  setRejectNotes('');
-                                }}
-                                disabled={isProcessing || isRejecting}
-                                title={t('FINANCE.reject', 'Rechazar')}
-                              >
-                                <XCircle size={16} weight="bold" />
-                                {t('FINANCE.reject', 'Rechazar')}
-                              </button>
-                            </div>
-                          ) : (
-                            <span className="text-muted small">—</span>
-                          )}
+                          <div className="d-flex gap-1">
+                            <button
+                              className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1"
+                              onClick={() => setDetailRequest(wr)}
+                              title={t('FINANCE.view_details', 'Ver detalles')}
+                            >
+                              <Eye size={16} weight="bold" />
+                            </button>
+                            {isPending && (
+                              <>
+                                <button
+                                  className="btn btn-sm btn-success d-flex align-items-center gap-1"
+                                  onClick={() => handleApproveClick(wr.requestGuid)}
+                                  disabled={isProcessing || isApproving}
+                                  title={t('FINANCE.approve', 'Aprobar')}
+                                >
+                                  {isProcessing && approvingId === wr.requestGuid ? (
+                                    <span className="spinner-border spinner-border-sm" />
+                                  ) : (
+                                    <CheckCircle size={16} weight="bold" />
+                                  )}
+                                  {t('FINANCE.approve', 'Aprobar')}
+                                </button>
+                                <button
+                                  className="btn btn-sm btn-danger d-flex align-items-center gap-1"
+                                  onClick={() => {
+                                    setRejectingId(wr.requestGuid);
+                                    setRejectNotes('');
+                                  }}
+                                  disabled={isProcessing || isRejecting}
+                                  title={t('FINANCE.reject', 'Rechazar')}
+                                >
+                                  <XCircle size={16} weight="bold" />
+                                  {t('FINANCE.reject', 'Rechazar')}
+                                </button>
+                              </>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     );
@@ -261,6 +308,152 @@ const AdminWithdrawalsList: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Detail Modal */}
+      {detailRequest && (
+        <div className="modal d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">{t('FINANCE.withdrawal_details', 'Detalle de Solicitud de Retiro')}</h5>
+                <button type="button" className="btn-close" onClick={() => setDetailRequest(null)} />
+              </div>
+              <div className="modal-body">
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label className="form-label text-muted small mb-0">ID Solicitud</label>
+                    <div className="d-flex align-items-center gap-1">
+                      <code className="small">{detailRequest.requestGuid}</code>
+                      <Copy
+                        size={14}
+                        className="text-muted"
+                        role="button"
+                        onClick={() => copyToClipboard(detailRequest.requestGuid)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label text-muted small mb-0">ID Usuario</label>
+                    <div className="d-flex align-items-center gap-1">
+                      <code className="small">{detailRequest.userGuid}</code>
+                      <Copy
+                        size={14}
+                        className="text-muted"
+                        role="button"
+                        onClick={() => copyToClipboard(detailRequest.userGuid)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label text-muted small mb-0">Monto</label>
+                    <div className="fw-bold text-danger fs-5">-${detailRequest.amount.toFixed(2)}</div>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label text-muted small mb-0">Moneda</label>
+                    <div>{detailRequest.currencyName} ({detailRequest.currencySymbol})</div>
+                  </div>
+                  <div className="col-12">
+                    <label className="form-label text-muted small mb-0">Dirección Wallet</label>
+                    <div className="d-flex align-items-center gap-1">
+                      <code className="small text-break">{detailRequest.walletAddress}</code>
+                      <Copy
+                        size={14}
+                        className="text-muted flex-shrink-0"
+                        role="button"
+                        onClick={() => copyToClipboard(detailRequest.walletAddress)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label text-muted small mb-0">Estado</label>
+                    <div>
+                      <span className={STATUS_MAP[detailRequest.status]?.badge || 'badge bg-secondary'}>
+                        {STATUS_MAP[detailRequest.status]?.label || detailRequest.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label text-muted small mb-0">Fecha de Creación</label>
+                    <div>{new Date(detailRequest.createdAt).toLocaleString()}</div>
+                  </div>
+                  {detailRequest.processedAt && (
+                    <div className="col-md-6">
+                      <label className="form-label text-muted small mb-0">Fecha de Procesamiento</label>
+                      <div>{new Date(detailRequest.processedAt).toLocaleString()}</div>
+                    </div>
+                  )}
+                  {detailRequest.adminNotes && (
+                    <div className="col-12">
+                      <label className="form-label text-muted small mb-0">Notas del Admin</label>
+                      <div className="bg-light p-2 rounded small">{detailRequest.adminNotes}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setDetailRequest(null)}>
+                  {t('COMMON.close', 'Cerrar')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Approve Confirmation Modal */}
+      {approvingId && (
+        <div className="modal d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">{t('FINANCE.approve_withdrawal', 'Aprobar Solicitud de Retiro')}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setApprovingId(null)}
+                  disabled={!!processingId}
+                />
+              </div>
+              <div className="modal-body">
+                <div className="alert alert-warning mb-3">
+                  <strong>{t('FINANCE.attention', '¡Atención!')}</strong>{' '}
+                  {t(
+                    'FINANCE.approve_warning',
+                    'Al aprobar esta solicitud, se enviará el pago automáticamente vía CoinPayments. Esta acción no se puede deshacer.'
+                  )}
+                </div>
+                <p>
+                  {t(
+                    'FINANCE.confirm_approve_message',
+                    '¿Estás seguro de que deseas aprobar esta solicitud de retiro?'
+                  )}
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setApprovingId(null)}
+                  disabled={!!processingId}
+                >
+                  {t('COMMON.cancel', 'Cancelar')}
+                </button>
+                <button
+                  className="btn btn-success"
+                  onClick={handleApproveConfirm}
+                  disabled={!!processingId}
+                >
+                  {processingId ? (
+                    <span className="spinner-border spinner-border-sm me-1" />
+                  ) : (
+                    <CheckCircle size={16} weight="bold" className="me-1" />
+                  )}
+                  {t('FINANCE.confirm_approve', 'Confirmar Aprobación')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Reject Modal */}
       {rejectingId && (

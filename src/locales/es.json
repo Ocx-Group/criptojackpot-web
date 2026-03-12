@@ -633,5 +633,92 @@
     "invalidAmount": "Ingresa un monto válido",
     "minAmount": "El monto mínimo de retiro es ${{min}}",
     "insufficientBalance": "Saldo insuficiente"
+  },
+  "BANNER": {
+    "step1": "Participar",
+    "step2": "Sorteo",
+    "step3": "Ganar",
+    "titleLine1": "Descubre, Juega",
+    "titleLine2": "y Gana",
+    "titleHighlight": "Cripto",
+    "description": "Explora y mantente al tanto de los últimos lanzamientos y sorteos. ¡Únete ahora y disfruta!",
+    "joinNow": "Únete Ahora",
+    "customers": "Clientes",
+    "artwork": "Sorteos",
+    "owner": "Ganadores",
+    "endsIn": "Termina en",
+    "currentBid": "Oferta actual",
+    "buyNow": "Comprar Ahora",
+    "scroll": "Desplazar"
+  },
+  "LOTTERY_LIST": {
+    "sectionLabel": "Prueba tu suerte y gana",
+    "titleMain": "Loterías",
+    "titleHighlight": "Disponibles",
+    "titleEnd": "Ahora",
+    "viewMore": "Ver Más",
+    "noLotteries": "No hay loterías disponibles en este momento",
+    "perTicket": "POR TICKET",
+    "remaining": "Restantes",
+    "sold": "Vendido",
+    "today": "Hoy",
+    "oneDay": "1 Día",
+    "days": "{{count}} Días",
+    "ended": "Finalizado",
+    "draw": "Sorteo"
+  },
+  "CALL_TO_ACTION": {
+    "sectionLabel": "Llámanos",
+    "callAnytime": "LLÁMANOS EN CUALQUIER MOMENTO",
+    "phone": "(629) 555-0129",
+    "titleLine1": "Obtén Tu",
+    "titleLine2": "Ticket de Lotería",
+    "titleHighlight": "¡Ahora!",
+    "listing": "Ver más",
+    "agreeWith": "Estoy de acuerdo con la",
+    "privacyPolicy": "Política de Privacidad",
+    "and": "y los",
+    "termsOfConditions": "Términos y Condiciones",
+    "submit": "Enviar"
+  },
+  "TESTIMONIALS": {
+    "sectionLabel": "Triunfos",
+    "titleLine1": "Lotería",
+    "titleHighlight": "¡Exitosa!",
+    "reviews": "¡Reseñas!",
+    "text": "Participar en la lotería fue un cambio de vida para mí. Ganar mi premio soñado fue una experiencia indescriptible. El camino a la alegría comienza aquí."
+  },
+  "BLOG": {
+    "sectionLabel": "Blog Reciente",
+    "title": "Noticias y",
+    "titleHighlight": "Análisis",
+    "browseMore": "Ver Más"
+  },
+  "FAQ": {
+    "sectionLabel": "Tienes Preguntas",
+    "title": "Tenemos",
+    "titleHighlight": "Respuestas",
+    "description": "No dudes en enviarnos un correo si no encuentras lo que buscas.",
+    "tab1": "Compra de Tickets",
+    "tab2": "Sorteo y Ganadores",
+    "tab3": "Premios",
+    "tab4": "Soporte Técnico",
+    "q1": "¿Cómo y cuándo se seleccionan los ganadores?",
+    "a1": "Los ganadores se seleccionan de forma aleatoria cada semana. El sorteo tiene lugar el domingo a las 10:00 AM.",
+    "q2": "¿Puedo ver el sorteo en vivo?",
+    "a2": "Sí, puedes ver el sorteo en vivo en nuestro sitio web o a través de nuestras redes sociales.",
+    "q3": "¿Cómo me notificarán si gano?",
+    "a3": "Si ganas algún premio, nos comunicaremos contigo por correo electrónico o teléfono para confirmar tu ganancia."
+  },
+  "FOOTER": {
+    "disclaimer": "Los juegos de lotería están diseñados para entretener y disfrutar. Si tú o alguien que conoces tiene un problema con el juego,",
+    "newsletter": "Suscríbete a nuestro boletín",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "getStarted": "Comenzar",
+    "explore": "EXPLORAR",
+    "ourLottery": "NUESTRA",
+    "ourLotteryHighlight": "LOTERÍA",
+    "copyright": "Copyright © 2025",
+    "designedBy": "Diseñado por"
   }
 }

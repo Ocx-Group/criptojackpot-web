@@ -633,5 +633,92 @@
     "invalidAmount": "Enter a valid amount",
     "minAmount": "Minimum withdrawal amount is ${{min}}",
     "insufficientBalance": "Insufficient balance"
+  },
+  "BANNER": {
+    "step1": "Entry",
+    "step2": "Draw",
+    "step3": "Win",
+    "titleLine1": "Discover, Play",
+    "titleLine2": "and Win",
+    "titleHighlight": "Cripto",
+    "description": "Explore and stay updated on the latest releases and giveaways. Join now and enjoy!",
+    "joinNow": "Join Now",
+    "customers": "Customers",
+    "artwork": "Draws",
+    "owner": "Winners",
+    "endsIn": "Ends in",
+    "currentBid": "Current bid",
+    "buyNow": "Buy Now",
+    "scroll": "Scroll"
+  },
+  "LOTTERY_LIST": {
+    "sectionLabel": "Try your luck and win",
+    "titleMain": "Lotteries",
+    "titleHighlight": "Available",
+    "titleEnd": "Now",
+    "viewMore": "View More",
+    "noLotteries": "No lotteries available at this time",
+    "perTicket": "PER TICKET",
+    "remaining": "Remaining",
+    "sold": "Sold",
+    "today": "Today",
+    "oneDay": "1 Day",
+    "days": "{{count}} Days",
+    "ended": "Ended",
+    "draw": "Draw"
+  },
+  "CALL_TO_ACTION": {
+    "sectionLabel": "Call To Action",
+    "callAnytime": "CALL US AT ANYTIME",
+    "phone": "(629) 555-0129",
+    "titleLine1": "Get Your Real",
+    "titleLine2": "Lottery",
+    "titleHighlight": "Ticket Now!",
+    "listing": "Listing",
+    "agreeWith": "I agree with",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and",
+    "termsOfConditions": "Terms of Conditions",
+    "submit": "Submit"
+  },
+  "TESTIMONIALS": {
+    "sectionLabel": "NFT Triumphs",
+    "titleLine1": "NFT Lottery",
+    "titleHighlight": "Success!",
+    "reviews": "Reviews!",
+    "text": "Participating in the lottery was a game changer for me. Winning my dream prize was an experience beyond words. The road to joy starts here."
+  },
+  "BLOG": {
+    "sectionLabel": "Recent Blog",
+    "title": "News &",
+    "titleHighlight": "Analysis",
+    "browseMore": "Browse More"
+  },
+  "FAQ": {
+    "sectionLabel": "You Have Questions",
+    "title": "We Have",
+    "titleHighlight": "Answers",
+    "description": "Do not hesitate to send us an email if you can't find what you're looking for.",
+    "tab1": "Ticket Purchasing",
+    "tab2": "Draw and Winners",
+    "tab3": "Car Prizes",
+    "tab4": "Technical Support",
+    "q1": "How and when are the winners selected?",
+    "a1": "The winners are selected randomly every week. The draw takes place on Sunday at 10:00 AM.",
+    "q2": "Can I see the draw live?",
+    "a2": "Yes, you can watch the draw live on our website or through our social media channels.",
+    "q3": "How will I be notified if I win?",
+    "a3": "If you win any of the prizes, we will contact you through email or phone to confirm your win."
+  },
+  "FOOTER": {
+    "disclaimer": "Lottery games are meant to be entertaining and enjoyable. If you or someone you know has a gambling problem,",
+    "newsletter": "Subscribe to our newsletter",
+    "emailPlaceholder": "Enter your email address",
+    "getStarted": "Get Started",
+    "explore": "EXPLORE",
+    "ourLottery": "OUR",
+    "ourLotteryHighlight": "LOTTERY",
+    "copyright": "Copyright © 2025",
+    "designedBy": "Designed By"
   }
 }

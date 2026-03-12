@@ -19,8 +19,10 @@ import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import MotionFade from '../motionEffect/MotionFade';
 import MotionFadeDownToTop from '../motionEffect/MotionFadeDownToTop';
 import MotionFadeTopToDown from '../motionEffect/MotionFadeTopToDown';
+import { useTranslation } from 'react-i18next';
 
 const LotteryList = () => {
+  const { t, i18n } = useTranslation();
   const { data: lotteriesResponse, isLoading } = useQuery<PaginatedResponse<Lottery>, Error>({
     queryKey: ['lotteries-public'],
     queryFn: async () => {
@@ -36,24 +38,24 @@ const LotteryList = () => {
     const now = new Date();
     const diff = end.getTime() - now.getTime();
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    if (days < 0) return 'Finalizado';
-    if (days === 0) return 'Hoy';
-    if (days === 1) return '1 Día';
-    return `${days} Días`;
+    if (days < 0) return t('LOTTERY_LIST.ended');
+    if (days === 0) return t('LOTTERY_LIST.today');
+    if (days === 1) return t('LOTTERY_LIST.oneDay');
+    return t('LOTTERY_LIST.days', { count: days });
   };
 
   // Calcular porcentaje vendido
   const getSoldPercentage = (sold: number, max: number) => {
     if (max === 0) return 0;
-    return parseFloat(((sold / max) * 100).toFixed(2));
+    return Number.parseFloat(((sold / max) * 100).toFixed(2));
   };
 
   // Formatear fecha del sorteo
   const getDrawTime = (endDate: string) => {
     const date = new Date(endDate);
-    const dayName = date.toLocaleDateString('es-ES', { weekday: 'long' });
-    const time = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    return `Sorteo ${dayName} ${time}`;
+    const dayName = date.toLocaleDateString(i18n.language, { weekday: 'long' });
+    const time = date.toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' });
+    return `${t('LOTTERY_LIST.draw')} ${dayName} ${time}`;
   };
 
   const renderContent = () => {
@@ -97,7 +99,7 @@ const LotteryList = () => {
     if (lotteries.length === 0) {
       return (
         <div className="text-center py-5">
-          <h4 className="n3-clr">No hay loterías disponibles en este momento</h4>
+          <h4 className="n3-clr">{t('LOTTERY_LIST.noLotteries')}</h4>
         </div>
       );
     }
@@ -161,7 +163,7 @@ const LotteryList = () => {
                   </div>
                   <h3 className="d-flex align-items-center gap-3 n4-clr mb-xxl-4 mb-3">
                     <span className="pr fw_700">${lottery.ticketPrice.toFixed(2)}</span>
-                    <span className="fs-six text-uppercase">POR TICKET</span>
+                    <span className="fs-six text-uppercase">{t('LOTTERY_LIST.perTicket')}</span>
                   </h3>
                   <div className="border-top" />
                   <ul className="remaining-info py-xxl-3 py-3 d-flex align-items-center gap-xxl-5 gap-lg-3 gap-2">
@@ -172,12 +174,16 @@ const LotteryList = () => {
                     <li className="vline-remaing" />
                     <li className="d-flex align-items-center gap-2">
                       <BarbellIcon className="ph ph-barbell fs-five n3-clr" />
-                      <span className="n3-clr fw_600">{remaining} Restantes</span>
+                      <span className="n3-clr fw_600">
+                        {remaining} {t('LOTTERY_LIST.remaining')}
+                      </span>
                     </li>
                   </ul>
                   <div className="border-top" />
                   <div className="cmn-prrice-range mt-xxl-4 mt-3 d-grid align-items-center gap-2">
-                    <span className="n4-clr soldout fw_700 fs-eight mb-1">{soldPercent}% Vendido</span>
+                    <span className="n4-clr soldout fw_700 fs-eight mb-1">
+                      {soldPercent}% {t('LOTTERY_LIST.sold')}
+                    </span>
                     <div
                       className="position-relative"
                       style={{
@@ -219,16 +225,16 @@ const LotteryList = () => {
             <div className="section__title text-sm-start text-center mb-lg-0 mb-4">
               <MotionFadeTopToDown className="subtitle-head mb-xxl-4 mb-sm-4 mb-3 d-flex flex-wrap align-items-center justify-content-sm-start justify-content-center gap-3">
                 <Image src={icon} alt="img" />
-                <h5 className="s1-clr fw_700">Prueba tu suerte y gana</h5>
+                <h5 className="s1-clr fw_700">{t('LOTTERY_LIST.sectionLabel')}</h5>
               </MotionFadeTopToDown>
               <MotionFadeDownToTop>
                 <h3 className="display-four d-block n4-clr">
-                  Loterías{' '}
+                  {t('LOTTERY_LIST.titleMain')}{' '}
                   <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
-                    Disponibles{' '}
+                    {t('LOTTERY_LIST.titleHighlight')}{' '}
                   </span>
                   <span className="d-block" data-aos="zoom-in-right" data-aos-duration="1200">
-                    Ahora
+                    {t('LOTTERY_LIST.titleEnd')}
                   </span>
                 </h3>
               </MotionFadeDownToTop>
@@ -247,7 +253,7 @@ const LotteryList = () => {
                       className="ph-bold ph-arrow-up-right n4-clr fs-three"
                     ></ArrowUpRightIcon>
                   </span>
-                  <span className="d-block n4-clr fw_700">Ver Más</span>
+                  <span className="d-block n4-clr fw_700">{t('LOTTERY_LIST.viewMore')}</span>
                 </span>
               </Link>
             </div>

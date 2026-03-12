@@ -1,12 +1,15 @@
+'use client';
 import logoWhite from '@/../public/images/logo/logo-white.png';
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import AnimationCardTwo from '../AnimationCardTwo';
 import MotionFadeLeft from '../motionEffect/MotionFadeLeft';
 import MotionFadeTopToDown from '../motionEffect/MotionFadeTopToDown';
 
 const Jewellery1Footer = () => {
+  const { t } = useTranslation();
   return (
     <footer className="footer-section4 n4-bg position-relative cus-z1 overflow-hidden">
       <div className="container pt-120 pb-120">
@@ -16,18 +19,16 @@ const Jewellery1Footer = () => {
               <Link href="#0" className="d-block mb-xxl-6 mb-lg-4 mb-3">
                 <Image src={logoWhite} alt="img" />
               </Link>
-              <p className="nw4-clr fs18 mb-xxl-10 mb-xxl-8 mb-6">
-                Lottery games are meant entertaining and enjoyable. If you or someone you have a gambling problem,
-              </p>
-              <h4 className="fw_600 nw1-clr d-block mb-xxl-5 mb-xl-4 mb-3">Subscribe to our newsletter</h4>
+              <p className="nw4-clr fs18 mb-xxl-10 mb-xxl-8 mb-6">{t('FOOTER.disclaimer')}</p>
+              <h4 className="fw_600 nw1-clr d-block mb-xxl-5 mb-xl-4 mb-3">{t('FOOTER.newsletter')}</h4>
               <div className="gap-xl-6 gap-lg-4 gap-sm-3 gap-2" data-aos="fade-up" data-aos-duration="1800">
                 <form className="box-address box-addressv7">
-                  <input type="text" placeholder="Enter your email address" />
+                  <input type="text" placeholder={t('FOOTER.emailPlaceholder')} />
                   <button
                     type="submit"
                     className="p1-bg mt-xxl-10 mt-xl-8 mt-lg-6 mt-5 fs20 fw_700 w-100 n4-clr py-xxl-4 py-xl-3 py-2 px-2 radius100"
                   >
-                    Get Started
+                    {t('FOOTER.getStarted')}
                   </button>
                 </form>
               </div>
@@ -37,7 +38,7 @@ const Jewellery1Footer = () => {
             <div className="footer-explore-v7">
               <MotionFadeTopToDown className="display-two n0-clr">
                 <div className="d-flex align-items-center gap-xl-4 gap-3">
-                  EXPLORE
+                  {t('FOOTER.explore')}
                   <Link
                     href="contact"
                     className="kewta-btn cmn-60 d-inline-flex align-items-center justify-content-center"
@@ -54,7 +55,7 @@ const Jewellery1Footer = () => {
                 </div>
                 <span>
                   {' '}
-                  OUR <span className="act4-clr">LOTTERY</span>{' '}
+                  {t('FOOTER.ourLottery')} <span className="act4-clr">{t('FOOTER.ourLotteryHighlight')}</span>{' '}
                 </span>
               </MotionFadeTopToDown>
               <div className="jewellery-custom-tablet">
@@ -73,7 +74,7 @@ const Jewellery1Footer = () => {
               <p className="footer-copyright flex-wrap justify-content-center n4-clr">
                 <span className="copy nw4-clr">
                   {' '}
-                  Copyright &copy; 2025{' '}
+                  {t('FOOTER.copyright')}{' '}
                   <Link href="#" className="nw4-clr">
                     Criptojackpot
                   </Link>{' '}
@@ -81,7 +82,7 @@ const Jewellery1Footer = () => {
                 <span className="midbor"> </span>
                 <span className="designed nw4-clr">
                   {' '}
-                  Designed By{' '}
+                  {t('FOOTER.designedBy')}{' '}
                   <Link href="https://themeforest.net/user/pixelaxis" className="p1-clr">
                     {' '}
                     Pixelaxis

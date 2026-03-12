@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { AdminWithdrawalRequest, WithdrawalRequestStatus } from '@/features/admin-panel/types/withdrawal';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { PaginationRequest } from '@/interfaces/pagination';
@@ -36,7 +37,11 @@ export const useAdminWithdrawals = (initialPagination?: PaginationRequest) => {
   const approveMutation = useMutation({
     mutationFn: (requestGuid: string) => walletService.approveWithdrawal(requestGuid),
     onSuccess: () => {
+      toast.success('Solicitud de retiro aprobada. El envío se procesará automáticamente.');
       queryClient.invalidateQueries({ queryKey: ['admin-withdrawals'] });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Error al aprobar la solicitud de retiro');
     },
   });
 
@@ -44,7 +49,11 @@ export const useAdminWithdrawals = (initialPagination?: PaginationRequest) => {
     mutationFn: ({ requestGuid, adminNotes }: { requestGuid: string; adminNotes?: string }) =>
       walletService.rejectWithdrawal(requestGuid, { adminNotes }),
     onSuccess: () => {
+      toast.success('Solicitud de retiro rechazada. Los fondos han sido devueltos al usuario.');
       queryClient.invalidateQueries({ queryKey: ['admin-withdrawals'] });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Error al rechazar la solicitud de retiro');
     },
   });
 
