@@ -136,6 +136,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
+          set +e
           terraform plan \
             -var-file="environments/prod.tfvars" \
             -out=tfplan-prod \
@@ -143,6 +144,14 @@ jobs:
             -lock=true \
             -detailed-exitcode \
             2>&1 | tee plan-output.txt
+          PLAN_EXIT=$?
+          echo "plan_exit_code=${PLAN_EXIT}" >> $GITHUB_OUTPUT
+
+          # -detailed-exitcode: 0=no changes, 1=error, 2=changes present
+          if [ "$PLAN_EXIT" -eq 1 ]; then
+            echo "ERROR: Terraform plan fallo con errores."
+            exit 1
+          fi
 
           # Bloquear si el plan va a destruir recursos criticos de produccion
           if grep -E "must be replaced|will be destroyed|forces replacement" plan-output.txt | \
@@ -155,11 +164,6 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DO_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-        continue-on-error: true
-
-      - name: Fail if plan errored
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
 
       - name: Terraform Apply
         run: |
