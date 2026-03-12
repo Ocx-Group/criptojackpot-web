@@ -22,6 +22,40 @@ interface NumberStatsResponse {
   soldNumbers: number;
 }
 
+export interface NumberSummaryItem {
+  number: number;
+  soldCount: number;
+  reservedCount: number;
+  availableCount: number;
+}
+
+export interface NumberBoardSummary {
+  lotteryId: string;
+  minNumber: number;
+  maxNumber: number;
+  totalSeries: number;
+  totalSlots: number;
+  soldCount: number;
+  reservedCount: number;
+  availableCount: number;
+  numbers: NumberSummaryItem[];
+}
+
+export interface SeriesStatusItem {
+  series: number;
+  status: 'Available' | 'Reserved' | 'Sold';
+}
+
+export interface NumberSeriesDetail {
+  lotteryId: string;
+  number: number;
+  totalSeries: number;
+  soldCount: number;
+  reservedCount: number;
+  availableCount: number;
+  series: SeriesStatusItem[];
+}
+
 class LotteryNumberService extends BaseService {
   protected endpoint = 'lottery-numbers';
 
@@ -70,6 +104,26 @@ class LotteryNumberService extends BaseService {
   async getNumberStats(lotteryId: string): Promise<NumberStatsResponse> {
     return this.getAll<NumberStatsResponse>({
       path: `${lotteryId}/stats`,
+    }) as any;
+  }
+
+  /**
+   * Obtener resumen del tablero de números (conteos por número)
+   * GET /api/v1/lottery-numbers/{lotteryId}/board
+   */
+  async getNumberBoard(lotteryId: string): Promise<NumberBoardSummary> {
+    return this.getAll<NumberBoardSummary>({
+      path: `${lotteryId}/board`,
+    }) as any;
+  }
+
+  /**
+   * Obtener detalle de series para un número específico
+   * GET /api/v1/lottery-numbers/{lotteryId}/board/{number}
+   */
+  async getNumberSeriesDetail(lotteryId: string, number: number): Promise<NumberSeriesDetail> {
+    return this.getAll<NumberSeriesDetail>({
+      path: `${lotteryId}/board/${number}`,
     }) as any;
   }
 }

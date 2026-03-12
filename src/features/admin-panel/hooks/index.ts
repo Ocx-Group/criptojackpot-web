@@ -9,3 +9,4 @@ export { useEditLotteryForm } from './useEditLotteryForm';
 export { useLotteries } from './useLotteries';
 export { useAdminOrders } from './useAdminOrders';
 export { useAdminTransactions } from './useAdminTransactions';
+export { useNumberBoard } from './useNumberBoard';

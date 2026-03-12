@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useLotteries } from '@/features/admin-panel/hooks';
 import { Lottery, LotteryStatus } from '@/interfaces/lottery';
 import Image from 'next/image';
-import { Plus, Pencil, Trash2, Ticket as TicketIcon, Calendar, Clock } from 'lucide-react';
+import { Plus, Pencil, Trash2, Ticket as TicketIcon, Calendar, Clock, Grid3X3 } from 'lucide-react';
+import NumberBoardModal from './NumberBoardModal';
 
 const LotteriesList: React.FC = () => {
   const { t } = useTranslation();
   const { lotteries, isLoading, deleteLottery, isDeleting, pagination, goToPage } = useLotteries();
   const [lotteryToDelete, setLotteryToDelete] = useState<Lottery | null>(null);
+  const [boardLottery, setBoardLottery] = useState<Lottery | null>(null);
 
   const handleDelete = async () => {
     if (!lotteryToDelete) return;
@@ -166,6 +168,14 @@ const LotteriesList: React.FC = () => {
                           </td>
                           <td>
                             <div className="btn-group btn-group-sm">
+                              <button
+                                type="button"
+                                className="btn btn-outline-warning"
+                                onClick={() => setBoardLottery(lottery)}
+                                title={t('LOTTERIES_ADMIN.actions.numberBoard', 'Panel de Números')}
+                              >
+                                <Grid3X3 size={14} />
+                              </button>
                               <Link
                                 href={`/admin/lotteries/${lottery.lotteryGuid}/edit`}
                                 className="btn btn-outline-primary"
@@ -298,6 +308,14 @@ const LotteriesList: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+      {/* Modal del panel de números */}
+      {boardLottery && (
+        <NumberBoardModal
+          lotteryId={boardLottery.lotteryGuid}
+          lotteryTitle={boardLottery.title}
+          onClose={() => setBoardLottery(null)}
+        />
       )}
     </div>
   );
