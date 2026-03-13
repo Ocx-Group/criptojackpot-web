@@ -18,8 +18,10 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/userStore';
 import { useProfilePhoto } from '@/hooks/useProfilePhoto';
+import { useTranslation } from 'react-i18next';
 
 const UserPanelSidebar = () => {
+  const { t } = useTranslation();
   const path = usePathname();
   const { user } = useUserStore();
   const { logout } = useAuth();
@@ -43,9 +45,60 @@ const UserPanelSidebar = () => {
   };
 
   const getFullName = () => {
-    if (!user) return 'Usuario';
-    return `${user.name || ''} ${user.lastName || ''}`.trim() || 'Usuario';
+    if (!user) return t('SIDEBAR.items.personalInfo');
+    return `${user.name || ''} ${user.lastName || ''}`.trim() || t('SIDEBAR.items.personalInfo');
   };
+
+  const sidebarItems = [
+    {
+      id: 3434652,
+      href: '/personal-info',
+      icon: <InfoIcon weight="bold" className="ph-bold ph-info fs-five" />,
+      text: t('SIDEBAR.items.personalInfo'),
+    },
+    {
+      id: 9928371,
+      href: '/security',
+      icon: <ShieldCheckIcon weight="bold" className="ph-bold ph-shield-check fs-five" />,
+      text: t('SIDEBAR.items.security'),
+    },
+    {
+      id: 1343,
+      href: '/my-tickets',
+      icon: <TicketIcon weight="bold" className="ph-bold ph-ticket fs-five" />,
+      text: t('SIDEBAR.items.myTickets'),
+    },
+    {
+      id: 334221,
+      href: '/transaction',
+      icon: <UploadIcon weight="bold" className="ph-bold ph-upload fs-five" />,
+      text: t('SIDEBAR.items.transactions'),
+    },
+    {
+      id: 4212,
+      href: '/referal-program',
+      icon: <LightningIcon weight="bold" className="ph-bold ph-lightning fs-five" />,
+      text: t('SIDEBAR.items.referralProgram'),
+    },
+    {
+      id: 51212,
+      href: '/wish-list',
+      icon: <HeartIcon weight="bold" className="ph-bold ph-heart fs-five" />,
+      text: t('SIDEBAR.items.wishlist'),
+    },
+    {
+      id: 62342,
+      href: '/payment',
+      icon: <WalletIcon weight="bold" className="ph-bold ph-wallet fs-five" />,
+      text: t('SIDEBAR.items.paymentMethods'),
+    },
+    {
+      id: 4447,
+      href: '/#',
+      icon: <HeadsetIcon weight="bold" className="ph-bold ph-headset fs-five" />,
+      text: t('SIDEBAR.items.helpCenter'),
+    },
+  ];
 
   return (
     <div className="col-xxl-3 col-xl-4 col-lg-4 col-md-8 relative">
@@ -67,7 +120,7 @@ const UserPanelSidebar = () => {
                 cursor: uploading ? 'not-allowed' : 'pointer',
                 opacity: uploading ? 0.6 : 1,
               }}
-              title={uploading ? 'Subiendo imagen...' : 'Cambiar foto de perfil'}
+              title={uploading ? t('SIDEBAR.uploadingTitle') : t('SIDEBAR.changePhoto')}
             >
               <UploadIcon weight="bold" className="ph-bold ph-upload fs-five" />
             </span>
@@ -86,7 +139,7 @@ const UserPanelSidebar = () => {
               {uploading && (
                 <div className="position-absolute inset-0 bg-black bg-opacity-50 d-center radius-circle">
                   <div className="spinner-border text-white" role="status">
-                    <span className="visually-hidden">Subiendo...</span>
+                    <span className="visually-hidden">{t('SIDEBAR.uploading')}</span>
                   </div>
                 </div>
               )}
@@ -102,7 +155,7 @@ const UserPanelSidebar = () => {
                   type="button"
                   className="btn-close btn-close-sm ms-2"
                   onClick={clearError}
-                  aria-label="Cerrar error"
+                  aria-label={t('SIDEBAR.closeError')}
                 ></button>
               </div>
             )}
@@ -117,7 +170,7 @@ const UserPanelSidebar = () => {
             </div>
           </div>
 
-          <nav aria-label="Panel de usuario">
+          <nav aria-label={t('SIDEBAR.navLabel')}>
             <ul className="user-sidebar d-grid gap-2">
               {sidebarItems.map(item => (
                 <li key={`sidebar-${item.id}`}>
@@ -138,10 +191,10 @@ const UserPanelSidebar = () => {
                 <button
                   onClick={handleLogout}
                   className="py-xxl-3 py-2 px-xxl-5 px-xl-4 px-3 radius12 n4-clr fw_600 d-flex align-items-center gap-xxl-3 gap-2 user-text-inner w-full border-0 bg-transparent text-start"
-                  aria-label="Cerrar sesión"
+                  aria-label={t('SIDEBAR.logoutLabel')}
                 >
                   <SignOutIcon weight="bold" className="ph-bold ph-sign-out fs-five" />
-                  Log Out
+                  {t('SIDEBAR.logout')}
                 </button>
               </li>
             </ul>
@@ -153,54 +206,3 @@ const UserPanelSidebar = () => {
 };
 
 export default UserPanelSidebar;
-
-const sidebarItems = [
-  {
-    id: 3434652,
-    href: '/personal-info',
-    icon: <InfoIcon weight="bold" className="ph-bold ph-info fs-five" />,
-    text: 'Personal Information',
-  },
-  {
-    id: 9928371,
-    href: '/security',
-    icon: <ShieldCheckIcon weight="bold" className="ph-bold ph-shield-check fs-five" />,
-    text: 'Security',
-  },
-  {
-    id: 1343,
-    href: '/my-tickets',
-    icon: <TicketIcon weight="bold" className="ph-bold ph-ticket fs-five" />,
-    text: 'My Tickets',
-  },
-  {
-    id: 334221,
-    href: '/transaction',
-    icon: <UploadIcon weight="bold" className="ph-bold ph-upload fs-five" />,
-    text: 'Transactions',
-  },
-  {
-    id: 4212,
-    href: '/referal-program',
-    icon: <LightningIcon weight="bold" className="ph-bold ph-lightning fs-five" />,
-    text: 'Referral Program',
-  },
-  {
-    id: 51212,
-    href: '/wish-list',
-    icon: <HeartIcon weight="bold" className="ph-bold ph-heart fs-five" />,
-    text: 'Wishlist',
-  },
-  {
-    id: 62342,
-    href: '/payment',
-    icon: <WalletIcon weight="bold" className="ph-bold ph-wallet fs-five" />,
-    text: 'Payment Methods',
-  },
-  {
-    id: 4447,
-    href: '/#',
-    icon: <HeadsetIcon weight="bold" className="ph-bold ph-headset fs-five" />,
-    text: 'Help Center',
-  },
-];

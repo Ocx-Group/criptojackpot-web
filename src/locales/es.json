@@ -720,5 +720,42 @@
     "ourLotteryHighlight": "LOTERÍA",
     "copyright": "Copyright © 2025",
     "designedBy": "Diseñado por"
+  },
+  "WISH_LIST": {
+    "title": "Mi Lista de Deseos",
+    "loading": "Cargando lista de deseos...",
+    "empty": "Tu lista de deseos está vacía.",
+    "browseLotteries": "Ver Loterías",
+    "drawToday": "Sorteo Hoy",
+    "drawTomorrow": "Sorteo Mañana",
+    "drawInDays": "Sorteo en {{days}} Días",
+    "copyLink": "Copiar enlace de la lotería",
+    "linkCopied": "¡Enlace copiado al portapapeles!",
+    "copyError": "Error al copiar el enlace",
+    "sold": "Vendido",
+    "removeFromWishlist": "Quitar de la lista de deseos",
+    "day": "Día",
+    "days": "Días",
+    "remaining": "Restantes",
+    "perEntry": "POR ENTRADA"
+  },
+  "SIDEBAR": {
+    "uploadingTitle": "Subiendo imagen...",
+    "changePhoto": "Cambiar foto de perfil",
+    "uploading": "Subiendo...",
+    "closeError": "Cerrar error",
+    "navLabel": "Panel de usuario",
+    "logout": "Cerrar Sesión",
+    "logoutLabel": "Cerrar sesión",
+    "items": {
+      "personalInfo": "Información Personal",
+      "security": "Seguridad",
+      "myTickets": "Mis Tickets",
+      "transactions": "Transacciones",
+      "referralProgram": "Programa de Referidos",
+      "wishlist": "Lista de Deseos",
+      "paymentMethods": "Métodos de Pago",
+      "helpCenter": "Centro de Ayuda"
+    }
   }
 }

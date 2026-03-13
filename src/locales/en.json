@@ -720,5 +720,42 @@
     "ourLotteryHighlight": "LOTTERY",
     "copyright": "Copyright © 2025",
     "designedBy": "Designed By"
+  },
+  "WISH_LIST": {
+    "title": "My Wish List",
+    "loading": "Loading wishlist...",
+    "empty": "Your wishlist is empty.",
+    "browseLotteries": "Browse Lotteries",
+    "drawToday": "Draw Today",
+    "drawTomorrow": "Draw Tomorrow",
+    "drawInDays": "Draw in {{days}} Days",
+    "copyLink": "Copy lottery link",
+    "linkCopied": "Link copied to clipboard!",
+    "copyError": "Failed to copy link",
+    "sold": "Sold",
+    "removeFromWishlist": "Remove from wishlist",
+    "day": "Day",
+    "days": "Days",
+    "remaining": "Remaining",
+    "perEntry": "PER ENTRY"
+  },
+  "SIDEBAR": {
+    "uploadingTitle": "Uploading image...",
+    "changePhoto": "Change profile photo",
+    "uploading": "Uploading...",
+    "closeError": "Close error",
+    "navLabel": "User panel",
+    "logout": "Log Out",
+    "logoutLabel": "Logout",
+    "items": {
+      "personalInfo": "Personal Information",
+      "security": "Security",
+      "myTickets": "My Tickets",
+      "transactions": "Transactions",
+      "referralProgram": "Referral Program",
+      "wishlist": "Wishlist",
+      "paymentMethods": "Payment Methods",
+      "helpCenter": "Help Center"
+    }
   }
 }
