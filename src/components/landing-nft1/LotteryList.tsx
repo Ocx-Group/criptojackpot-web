@@ -8,7 +8,7 @@ import {
   BarbellIcon,
   BookmarkSimpleIcon,
   ClockIcon,
-  ShoppingCartIcon,
+  LinkIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,9 +20,18 @@ import MotionFade from '../motionEffect/MotionFade';
 import MotionFadeDownToTop from '../motionEffect/MotionFadeDownToTop';
 import MotionFadeTopToDown from '../motionEffect/MotionFadeTopToDown';
 import { useTranslation } from 'react-i18next';
+import { useWishlist } from '@/features/user-panel/hooks/useWishlist';
+import { useAuthStore } from '@/store/authStore';
+import { useNotificationStore } from '@/store/notificationStore';
+import { useState } from 'react';
 
 const LotteryList = () => {
   const { t, i18n } = useTranslation();
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const showNotification = useNotificationStore(state => state.show);
+  const { isInWishlist, toggleWishlist, isAdding, isRemoving } = useWishlist();
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
   const { data: lotteriesResponse, isLoading } = useQuery<PaginatedResponse<Lottery>, Error>({
     queryKey: ['lotteries-public'],
     queryFn: async () => {
@@ -56,6 +65,30 @@ const LotteryList = () => {
     const dayName = date.toLocaleDateString(i18n.language, { weekday: 'long' });
     const time = date.toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' });
     return `${t('LOTTERY_LIST.draw')} ${dayName} ${time}`;
+  };
+
+  const handleWishlistToggle = (e: React.MouseEvent, lotteryGuid: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      showNotification('warning', t('COMMON.login_required', 'Inicia sesión'), t('WISHLIST.login_to_add', 'Inicia sesión para agregar a favoritos'));
+      return;
+    }
+    toggleWishlist(lotteryGuid);
+  };
+
+  const handleCopyLink = async (e: React.MouseEvent, lotteryGuid: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}/lottery/${lotteryGuid}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(lotteryGuid);
+      showNotification('success', t('WISHLIST.link_copied', '¡Enlace copiado!'), '');
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      showNotification('error', t('COMMON.error', 'Error'), t('WISHLIST.copy_failed', 'No se pudo copiar el enlace'));
+    }
   };
 
   const renderContent = () => {
@@ -120,12 +153,29 @@ const LotteryList = () => {
                     </span>
                   </div>
                   <div className="cart-added d-grid align-items-center gap-xxl-3 gap-2">
-                    <Link href="#" className="cmn-60 act3-bg d-center radius-circle n0-hover">
-                      <BookmarkSimpleIcon weight="bold" className="ph-bold ph-bookmark-simple n4-clr fs-five" />
-                    </Link>
-                    <Link href="basket" className="cmn-60 act3-bg d-center radius-circle n0-hover">
-                      <ShoppingCartIcon weight="bold" className="ph ph-bold ph-shopping-cart n4-clr fs-five" />
-                    </Link>
+                    <button
+                      onClick={(e) => handleWishlistToggle(e, lottery.lotteryGuid)}
+                      disabled={isAdding || isRemoving}
+                      className="cmn-60 act3-bg d-center radius-circle n0-hover border-0"
+                      style={{ cursor: 'pointer' }}
+                      title={isInWishlist(lottery.lotteryGuid) ? t('WISHLIST.remove', 'Quitar de favoritos') : t('WISHLIST.add', 'Agregar a favoritos')}
+                    >
+                      <BookmarkSimpleIcon
+                        weight={isInWishlist(lottery.lotteryGuid) ? 'fill' : 'bold'}
+                        className={`ph-bold ph-bookmark-simple fs-five ${isInWishlist(lottery.lotteryGuid) ? 'act4-clr' : 'n4-clr'}`}
+                      />
+                    </button>
+                    <button
+                      onClick={(e) => handleCopyLink(e, lottery.lotteryGuid)}
+                      className="cmn-60 act3-bg d-center radius-circle n0-hover border-0"
+                      style={{ cursor: 'pointer' }}
+                      title={t('WISHLIST.copy_link', 'Copiar enlace')}
+                    >
+                      <LinkIcon
+                        weight="bold"
+                        className={`ph-bold fs-five ${copiedId === lottery.lotteryGuid ? 'act4-clr' : 'n4-clr'}`}
+                      />
+                    </button>
                   </div>
                   {lottery.prizes?.[0]?.mainImageUrl ? (
                     <Image
