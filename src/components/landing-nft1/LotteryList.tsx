@@ -21,15 +21,13 @@ import MotionFadeDownToTop from '../motionEffect/MotionFadeDownToTop';
 import MotionFadeTopToDown from '../motionEffect/MotionFadeTopToDown';
 import { useTranslation } from 'react-i18next';
 import { useWishlist } from '@/features/user-panel/hooks/useWishlist';
-import { useAuthStore } from '@/store/authStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useState } from 'react';
 
 const LotteryList = () => {
   const { t, i18n } = useTranslation();
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   const showNotification = useNotificationStore(state => state.show);
-  const { isInWishlist, toggleWishlist, isAdding, isRemoving } = useWishlist();
+  const { isInWishlist, toggleWishlist, isAdding, isRemoving, isAuthenticated } = useWishlist();
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const { data: lotteriesResponse, isLoading } = useQuery<PaginatedResponse<Lottery>, Error>({

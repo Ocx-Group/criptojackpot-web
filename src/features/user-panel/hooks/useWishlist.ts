@@ -5,11 +5,12 @@ import { useMemo, useCallback } from 'react';
 import { wishListService, lotteryService } from '@/services';
 import { Lottery } from '@/interfaces/lottery';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '@/store/authStore';
+import { useUserStore } from '@/store/userStore';
 
 export const useWishlist = () => {
   const queryClient = useQueryClient();
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const user = useUserStore(state => state.user);
+  const isAuthenticated = user !== null;
 
   const {
     data: wishlistItems = [],
@@ -85,6 +86,7 @@ export const useWishlist = () => {
     wishlistItems,
     lotteries,
     isLoading: isLoadingWishlist || isLoadingLotteries,
+    isAuthenticated,
     error: wishlistError,
     refetch,
     addToWishlist: addMutation.mutate,
