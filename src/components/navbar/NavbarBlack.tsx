@@ -86,12 +86,14 @@ const NavbarBlack = () => {
                 </ul>
                 <div className="d-flex flex-nowrap align-items-center justify-content-lg-end gap-2 gap-lg-3 gap-xl-4">
                   <ul className="d-flex head-card align-items-center gap-3">
-                    <li>
-                      <Link href="/checkout" className="cmn-circle" title={t('NAVBAR-BLACK.Basket')}>
-                        <ShoppingCartSimpleIcon className="ti ti-shopping-cart-plus"></ShoppingCartSimpleIcon>
-                      </Link>
-                      {cartCount > 0 && <span className="badge-seri">{cartCount.toString().padStart(2, '0')}</span>}
-                    </li>
+                    {cartCount > 0 && (
+                      <li>
+                        <Link href="/checkout" className="cmn-circle" title={t('NAVBAR-BLACK.Basket')}>
+                          <ShoppingCartSimpleIcon className="ti ti-shopping-cart-plus"></ShoppingCartSimpleIcon>
+                        </Link>
+                        <span className="badge-seri">{cartCount.toString().padStart(2, '0')}</span>
+                      </li>
+                    )}
                     {isAuthenticated && (
                       <li>
                         <Link href="user-panel" className="cmn-circle" title={t('NAVBAR-BLACK.User Panel')}>

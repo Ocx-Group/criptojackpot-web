@@ -44,34 +44,39 @@ const TwoFactorSection = () => {
                 <form onSubmit={handleSubmit} className="form-cmn-action">
                   <div className="row g-6">
                     {!useRecoveryCode ? (
-                      <div className="col-lg-12">
-                        <div className="d-flex justify-content-center">
+                      <div className="col-12">
+                        <div className="d-flex justify-content-center otp-container">
                           <OtpInput
                             value={code}
                             onChange={handleCodeComplete}
                             numInputs={6}
                             shouldAutoFocus
                             inputType="number"
+                            containerStyle={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              gap: 'clamp(4px, 1.5vw, 8px)',
+                              width: '100%',
+                            }}
                             renderInput={props => (
                               <input
                                 {...props}
+                                className="otp-input"
                                 style={{
-                                  width: '52px',
-                                  height: '58px',
-                                  margin: '0 5px',
+                                  width: 'clamp(40px, 12vw, 52px)',
+                                  height: 'clamp(46px, 13vw, 58px)',
                                   padding: '0',
-                                  fontSize: '22px',
+                                  fontSize: 'clamp(18px, 5vw, 22px)',
                                   fontWeight: 700,
-                                  lineHeight: '58px',
                                   borderRadius: '12px',
                                   border: '2px solid rgba(255,255,255,0.25)',
                                   background: 'rgba(255,255,255,0.1)',
                                   color: 'var(--nw2)',
                                   textAlign: 'center',
                                   outline: 'none',
-                                  overflow: 'visible',
                                   transition: 'border-color 0.2s, box-shadow 0.2s',
                                   caretColor: 'var(--s1)',
+                                  flexShrink: 0,
                                 }}
                                 onFocus={e => {
                                   e.target.style.borderColor = 'var(--s1)';
@@ -87,7 +92,7 @@ const TwoFactorSection = () => {
                         </div>
                       </div>
                     ) : (
-                      <div className="col-lg-12">
+                      <div className="col-12">
                         <div className="form-cmn">
                           <input
                             type="text"
@@ -113,7 +118,7 @@ const TwoFactorSection = () => {
                         </div>
                       </div>
                     )}
-                    <div className="col-lg-12">
+                    <div className="col-12">
                       <button
                         type="submit"
                         className="cmn-btn s1-bg radius12 w-100 fw_600 justify-content-center d-inline-flex align-items-center gap-2 py-xxl-4 py-3 px-xl-6 px-5 n0-clr mt-1"
@@ -124,7 +129,7 @@ const TwoFactorSection = () => {
                         </span>
                       </button>
                     </div>
-                    <div className="col-lg-12 text-center">
+                    <div className="col-12 text-center">
                       <button
                         type="button"
                         onClick={() => setUseRecoveryCode(!useRecoveryCode)}
@@ -136,7 +141,7 @@ const TwoFactorSection = () => {
                           : t('TWO_FACTOR.useRecoveryCode', 'Usar código de recuperación')}
                       </button>
                     </div>
-                    <div className="col-lg-12 text-center mt-3">
+                    <div className="col-12 text-center mt-3">
                       <Link href="/login" className="n3-clr fs-eight s1-texthover text-decoration-underline">
                         {t('TWO_FACTOR.backToLogin', 'Volver al inicio de sesión')}
                       </Link>
