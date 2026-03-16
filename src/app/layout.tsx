@@ -29,13 +29,13 @@ export default function RootLayout({
               {children}
             </SessionProvider>
           </Providers>
-          <Script
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon='{"token": "a8ef18c9640c46f083a3d760ef6cb878"}'
-            strategy="afterInteractive"
-          />
         </body>
       </Bootstrap>
+      <Script
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "a8ef18c9640c46f083a3d760ef6cb878"}'
+        strategy="lazyOnload"
+      />
     </html>
   );
 }
