@@ -134,7 +134,7 @@ function AmountStep({
           <p className="text-warning fs-seven">{t('WITHDRAWAL.noWallets')}</p>
         ) : (
           <select
-            className="w-100 radius12 py-3 px-3 fw_600"
+            className="w-100 radius12 py-3 px-3 fw_600 withdraw-wallet-select"
             style={{
               background: 'rgba(255,255,255,0.07)',
               border: '1.5px solid rgba(255,255,255,0.12)',
@@ -158,6 +158,7 @@ function AmountStep({
       <button
         type="button"
         className="cmn-btn w-100 py-3 radius12 fw_700"
+        style={{ backgroundColor: 'var(--p1)', color: '#000' }}
         disabled={!withdraw.canProceedToVerification}
         onClick={withdraw.handleContinue}
       >
@@ -272,6 +273,7 @@ function VerificationStep({
           <button
             type="button"
             className="cmn-btn w-100 py-3 radius12 fw_700"
+            style={{ backgroundColor: 'var(--p1)', color: '#000' }}
             disabled={withdraw.verificationCode.length !== 6 || withdraw.isSubmitting}
             onClick={withdraw.handleSubmit}
           >
