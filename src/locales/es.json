@@ -757,5 +757,27 @@
       "paymentMethods": "Métodos de Pago",
       "helpCenter": "Centro de Ayuda"
     }
+  },
+  "SEO": {
+    "home": {
+      "title": "CriptoJackpot — Rifas y Sorteos con Cripto",
+      "description": "Descubre, juega y gana con CriptoJackpot. Participa en rifas con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios."
+    },
+    "login": {
+      "title": "Iniciar Sesión",
+      "description": "Inicia sesión en CriptoJackpot para participar en rifas y sorteos con criptomonedas."
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "description": "Regístrate en CriptoJackpot y comienza a participar en rifas y sorteos con criptomonedas."
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contraseña",
+      "description": "Recupera tu contraseña de CriptoJackpot."
+    },
+    "notFound": {
+      "title": "Página no encontrada",
+      "description": "La página que buscas no existe en CriptoJackpot."
+    }
   }
 }

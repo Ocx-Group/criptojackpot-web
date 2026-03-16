@@ -2,8 +2,9 @@ import ResetPasswordSection from '@/features/auth/components/ResetPasswordSectio
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Reset Password | CryptoJackpot',
-  description: 'Reset your password',
+  title: 'Restablecer Contraseña',
+  description: 'Restablece tu contraseña de CriptoJackpot.',
+  robots: { index: false, follow: false },
 };
 
 const ResetPasswordPage = () => {
@@ -11,4 +12,3 @@ const ResetPasswordPage = () => {
 };
 
 export default ResetPasswordPage;
-

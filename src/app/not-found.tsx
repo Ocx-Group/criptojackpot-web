@@ -1,11 +1,12 @@
-import errorImage from "@/../public/images/error/error.png";
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+import errorImage from '@/../public/images/error/error.png';
+import { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: "Not found - Lottery & Giveaway NextJs Template",
-  description: "Lottery & Giveaway NextJs Template",
+  title: 'Página no encontrada',
+  description: 'La página que buscas no existe en CriptoJackpot.',
+  robots: { index: false, follow: true },
 };
 
 const NotFound = () => {
@@ -20,7 +21,9 @@ const NotFound = () => {
               </div>
               <div className="cont text-center">
                 <h2 className="n4-clr mb-xxl-6 mb-xl-4 mb-3">Page Not Found</h2>
-                <p className="fs18 fw_600 mb-xxl-10 mb-xl-7 mb-5">The page you are looking for doesn exist or has been moved</p>
+                <p className="fs18 fw_600 mb-xxl-10 mb-xl-7 mb-5">
+                  The page you are looking for doesn exist or has been moved
+                </p>
                 <Link href="/" className="kewta-btn d-inline-flex align-items-center">
                   <span className="kew-text s1-bg s1-border n0-clr">Back To Home</span>
                 </Link>

@@ -2,8 +2,12 @@ import RegisterSection from '@/features/auth/components/RegisterSection';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Register - Lottery & Giveaway NextJs Template',
-  description: 'Lottery & Giveaway NextJs Template',
+  title: 'Crear Cuenta',
+  description:
+    'Regístrate en CriptoJackpot y comienza a participar en rifas y sorteos con criptomonedas. Refiere amigos y gana comisiones.',
+  alternates: {
+    canonical: 'https://criptojackpot.com/register',
+  },
 };
 
 interface PageProps {

@@ -757,5 +757,27 @@
       "paymentMethods": "Payment Methods",
       "helpCenter": "Help Center"
     }
+  },
+  "SEO": {
+    "home": {
+      "title": "CriptoJackpot — Crypto Raffles & Giveaways",
+      "description": "Discover, play, and win with CriptoJackpot. Join crypto raffles, pick your lucky numbers, refer friends, and win prizes."
+    },
+    "login": {
+      "title": "Sign In",
+      "description": "Sign in to CriptoJackpot to participate in crypto raffles and giveaways."
+    },
+    "register": {
+      "title": "Create Account",
+      "description": "Sign up for CriptoJackpot and start participating in crypto raffles and giveaways."
+    },
+    "forgotPassword": {
+      "title": "Recover Password",
+      "description": "Recover your CriptoJackpot password."
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for does not exist on CriptoJackpot."
+    }
   }
 }

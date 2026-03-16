@@ -12,8 +12,12 @@ import { Metadata } from 'next';
 import { nft1data } from 'public/data/nft1PageData';
 
 export const metadata: Metadata = {
-  title: 'Landing NFT Two - Lottery & Giveaway NextJs Template',
-  description: 'Lottery & Giveaway NextJs Template',
+  title: 'CriptoJackpot — Rifas y Sorteos con Cripto',
+  description:
+    'Descubre, juega y gana con CriptoJackpot. Participa en rifas con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
+  alternates: {
+    canonical: 'https://criptojackpot.com',
+  },
 };
 
 const LandingPage = () => {

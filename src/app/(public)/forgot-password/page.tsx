@@ -2,8 +2,11 @@ import ForgotPasswordSection from '@/features/auth/components/ForgotPasswordSect
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Forgot Password - Lottery & Giveaway NextJs Template',
-  description: 'Lottery & Giveaway NextJs Template',
+  title: 'Recuperar Contraseña',
+  description: 'Recupera tu contraseña de CriptoJackpot para volver a participar en rifas y sorteos.',
+  alternates: {
+    canonical: 'https://criptojackpot.com/forgot-password',
+  },
 };
 
 const ForgotPassword = () => {
@@ -15,4 +18,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
