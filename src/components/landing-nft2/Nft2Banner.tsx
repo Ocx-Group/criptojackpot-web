@@ -72,7 +72,7 @@ const Nft2Banner = () => {
                       </Link>
                     </MotionStaggerEffectUl>
                   </ul>
-                  <Link href="contest" className="custom-bigarrow">
+                  <Link href="/landing-page" className="custom-bigarrow">
                     <span className="icon">
                       <svg width="137" height="16" viewBox="0 0 137 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -114,7 +114,7 @@ const Nft2Banner = () => {
                     {t('BANNER.description')}
                   </p>
                   <Link
-                    href="contact"
+                    href="/login"
                     className="kewta-btn kewta-alt d-inline-flex align-items-center"
                     data-aos="zoom-in-right"
                     data-aos-duration="1000"

@@ -1,6 +1,6 @@
 import bannerCar3 from '@/../public/images/banner/banner-car3.png';
 import chnagingIcon from '@/../public/images/global/chnaging-icon.png';
-import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 import MotionFadeRight from '../motionEffect/MotionFadeRight';
@@ -18,20 +18,18 @@ function Footer() {
                   <span className="nw1-clr fw_700 fs20"> Chasing Fortunes </span>
                 </div>
                 <div className="section__title mb-xxl-15 mb-xl-10 mb-8">
-                  <span className="display-one d-block n0-clr">
+                  <div className="display-one d-block n0-clr">
                     Explore
-                    <span className="d-flex align-items-center gap-2">
+                    <div className="d-flex align-items-center gap-2">
                       <span className="d-block" data-aos="zoom-in-right" data-aos-duration="1200">
-                        {' '}
-                        Our{' '}
+                        Our
                       </span>
                       <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
-                        {' '}
-                        Lottery{' '}
+                        Lottery
                       </span>
-                    </span>
+                    </div>{' '}
                     Hub
-                  </span>
+                  </div>
                 </div>
                 <div className="say-helow pb-xxl-5 pb-5 d-flex flex-wrap gap-3 align-items-center justify-content-between">
                   <div className="mails">
@@ -41,10 +39,10 @@ function Footer() {
                       cruz@example.com{' '}
                     </Link>
                   </div>
-                  <Link href="contest" className="kewta-btn d-inline-flex align-items-center">
+                  <Link href="/landing-page" className="kewta-btn d-inline-flex align-items-center">
                     <span className="kew-text p1-bg n4-clr">
                       Participant Now
-                      <ArrowUpRight className="ph-bold ph-arrow-up-right n4-clr"></ArrowUpRight>
+                      <ArrowUpRightIcon className="ph-bold ph-arrow-up-right n4-clr"></ArrowUpRightIcon>
                     </span>
                   </Link>
                 </div>
@@ -56,7 +54,7 @@ function Footer() {
                   <Link href="#0" className="cmn__collection radius-circle act4-bg d-center position-relative">
                     <span className="cmn-cont-box text-center position-relative">
                       <span className="icon mb-1">
-                        <ArrowUpRight className="ph-bold ph-arrow-up-right n0-clr fs-three"></ArrowUpRight>
+                        <ArrowUpRightIcon className="ph-bold ph-arrow-up-right n0-clr fs-three"></ArrowUpRightIcon>
                       </span>
                       <span className="d-block n0-clr fw_700"> Explore Now </span>
                     </span>
@@ -86,16 +84,7 @@ function Footer() {
                 <Link href="/"> Home </Link>
               </li>
               <li>
-                <Link href="about"> About Us </Link>
-              </li>
-              <li>
-                <Link href="blog1"> Our Blog </Link>
-              </li>
-              <li>
-                <Link href="winners"> Winners List </Link>
-              </li>
-              <li>
-                <Link href="contact"> Contact Us </Link>
+                <Link href="/landing-page"> Lotteries </Link>
               </li>
             </ul>
             <ul className="social d-flex align-items-center gap-3">
@@ -156,17 +145,9 @@ function Footer() {
             <p className="footer-copyright flex-wrap justify-content-center">
               <span className="copy n0-clr">
                 {' '}
-                Copyright &copy; 2025 <Link href="#">Criptojackpot</Link>{' '}
+                Copyright &copy; 2026 <Link href="#">Criptojackpot</Link>{' '}
               </span>
               <span className="midbor"> </span>
-              <span className="designed n0-clr">
-                {' '}
-                Designed By{' '}
-                <Link href="https://themeforest.net/user/pixelaxis" className="p1-clr">
-                  {' '}
-                  Pixelaxis
-                </Link>{' '}
-              </span>
             </p>
           </div>
         </div>

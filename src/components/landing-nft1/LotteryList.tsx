@@ -69,7 +69,11 @@ const LotteryList = () => {
     e.preventDefault();
     e.stopPropagation();
     if (!isAuthenticated) {
-      showNotification('warning', t('COMMON.login_required', 'Inicia sesión'), t('WISHLIST.login_to_add', 'Inicia sesión para agregar a favoritos'));
+      showNotification(
+        'warning',
+        t('COMMON.login_required', 'Inicia sesión'),
+        t('WISHLIST.login_to_add', 'Inicia sesión para agregar a favoritos')
+      );
       return;
     }
     toggleWishlist(lotteryGuid);
@@ -152,11 +156,15 @@ const LotteryList = () => {
                   </div>
                   <div className="cart-added d-grid align-items-center gap-xxl-3 gap-2">
                     <button
-                      onClick={(e) => handleWishlistToggle(e, lottery.lotteryGuid)}
+                      onClick={e => handleWishlistToggle(e, lottery.lotteryGuid)}
                       disabled={isAdding || isRemoving}
                       className="cmn-60 act3-bg d-center radius-circle n0-hover border-0"
                       style={{ cursor: 'pointer' }}
-                      title={isInWishlist(lottery.lotteryGuid) ? t('WISHLIST.remove', 'Quitar de favoritos') : t('WISHLIST.add', 'Agregar a favoritos')}
+                      title={
+                        isInWishlist(lottery.lotteryGuid)
+                          ? t('WISHLIST.remove', 'Quitar de favoritos')
+                          : t('WISHLIST.add', 'Agregar a favoritos')
+                      }
                     >
                       <BookmarkSimpleIcon
                         weight={isInWishlist(lottery.lotteryGuid) ? 'fill' : 'bold'}
@@ -164,7 +172,7 @@ const LotteryList = () => {
                       />
                     </button>
                     <button
-                      onClick={(e) => handleCopyLink(e, lottery.lotteryGuid)}
+                      onClick={e => handleCopyLink(e, lottery.lotteryGuid)}
                       className="cmn-60 act3-bg d-center radius-circle n0-hover border-0"
                       style={{ cursor: 'pointer' }}
                       title={t('WISHLIST.copy_link', 'Copiar enlace')}
@@ -291,7 +299,7 @@ const LotteryList = () => {
           <div className="col-xl-2 col-lg-2 col-md-2 col-sm-2">
             <div className="browse-more" data-aos="zoom-in" data-aos-duration="2000">
               <Link
-                href="contest"
+                href="/landing-page"
                 className="cmn__collection radius-circle act3-bg d-center position-relative ms-lg-auto"
               >
                 <span className="cmn-cont-box text-center position-relative">

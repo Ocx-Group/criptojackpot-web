@@ -2,7 +2,7 @@
 import callSum from '@/../public/images/global/call-sun.png';
 import globalPicon from '@/../public/images/global/global-picon.png';
 import jewelryCallto from '@/../public/images/global/jewelry-callto.png';
-import { ArrowUpRight, Check } from '@phosphor-icons/react/dist/ssr';
+import { ArrowUpRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -49,7 +49,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
                   <span className="d-flex flex-wrap justify-content-sm-start justify-content-center align-items-center gap-2">
                     <span className="d-block" data-aos="zoom-in-right" data-aos-duration="1200">
                       {' '}
-                      {title ? title : t('CALL_TO_ACTION.titleLine2')}{' '}
+                      {title ?? t('CALL_TO_ACTION.titleLine2')}{' '}
                     </span>
                     <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
                       {' '}
@@ -61,7 +61,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
                   <Link href="#0" className="listing-box position-relative">
                     <span className="text-uppercase fs-six fw_600 n0-clr"> {t('CALL_TO_ACTION.listing')} </span>
                     <span className="listing-arrow cmn-48 s1-bg radius-circle d-flex align-items-center justify-content-center">
-                      <ArrowUpRight weight="bold" className="ph-bold ph-arrow-up-right n0-clr"></ArrowUpRight>
+                      <ArrowUpRightIcon weight="bold" className="ph-bold ph-arrow-up-right n0-clr"></ArrowUpRightIcon>
                     </span>
                   </Link>
                   <div className="listing-right">
@@ -73,7 +73,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
                       <label className="checkbox-single">
                         <span className="checkbox-area d-center">
                           <input type="checkbox" checked={!isChecked} onChange={() => setIsChecked(!isChecked)} />
-                          <span className="checkmark d-center">{isChecked && <Check />} </span>
+                          <span className="checkmark d-center">{isChecked && <CheckIcon />} </span>
                         </span>
                         <span className="nw2-clr text-check text-start">
                           {t('CALL_TO_ACTION.agreeWith')}{' '}
@@ -96,7 +96,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
             </div>
           </div>
           <MotionFadeDownToTop className="jewelary-callto">
-            <Image src={image ? image : jewelryCallto} alt="img" />
+            <Image src={image ?? jewelryCallto} alt="img" />
           </MotionFadeDownToTop>
         </div>
       </div>

@@ -37,7 +37,7 @@ const BlogSection = ({ sectionBg, blogCardsData = data }: BlogProps) => {
           <div className="col-xl-2 col-lg-2 col-md-2 col-sm-2">
             <div className="browse-more" data-aos="zoom-in-up" data-aos-duration="2000">
               <Link
-                href="blog-details"
+                href="/landing-page"
                 className="cmn__collection radius-circle s1-bg d-center position-relative ms-lg-auto"
               >
                 <span className="cmn-cont-box text-center position-relative">

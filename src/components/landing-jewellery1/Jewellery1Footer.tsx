@@ -1,6 +1,6 @@
 'use client';
-import logoWhite from '@/../public/images/logo/logo-white.png';
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
+import logo from '@/../public/images/logo/cripto-jackpot-logo.png';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ const Jewellery1Footer = () => {
           <MotionFadeLeft className="col-lg-5">
             <div className="destination-cont-left footer-lottovibe-newsv7">
               <Link href="#0" className="d-block mb-xxl-6 mb-lg-4 mb-3">
-                <Image src={logoWhite} alt="img" />
+                <Image src={logo} alt="img" />
               </Link>
               <p className="nw4-clr fs18 mb-xxl-10 mb-xxl-8 mb-6">{t('FOOTER.disclaimer')}</p>
               <h4 className="fw_600 nw1-clr d-block mb-xxl-5 mb-xl-4 mb-3">{t('FOOTER.newsletter')}</h4>
@@ -40,15 +40,15 @@ const Jewellery1Footer = () => {
                 <div className="d-flex align-items-center gap-xl-4 gap-3">
                   {t('FOOTER.explore')}
                   <Link
-                    href="contact"
+                    href="/landing-page"
                     className="kewta-btn cmn-60 d-inline-flex align-items-center justify-content-center"
                   >
                     <div className="kew-arrow p1-bg">
                       <div className="kt-one">
-                        <ArrowRight className="ti ti-arrow-right n4-clr"></ArrowRight>
+                        <ArrowRightIcon className="ti ti-arrow-right n4-clr"></ArrowRightIcon>
                       </div>
                       <div className="kt-two">
-                        <ArrowRight className="ti ti-arrow-right n4-clr"></ArrowRight>
+                        <ArrowRightIcon className="ti ti-arrow-right n4-clr"></ArrowRightIcon>
                       </div>
                     </div>
                   </Link>
@@ -77,15 +77,6 @@ const Jewellery1Footer = () => {
                   {t('FOOTER.copyright')}{' '}
                   <Link href="#" className="nw4-clr">
                     Criptojackpot
-                  </Link>{' '}
-                </span>
-                <span className="midbor"> </span>
-                <span className="designed nw4-clr">
-                  {' '}
-                  {t('FOOTER.designedBy')}{' '}
-                  <Link href="https://themeforest.net/user/pixelaxis" className="p1-clr">
-                    {' '}
-                    Pixelaxis
                   </Link>{' '}
                 </span>
               </p>

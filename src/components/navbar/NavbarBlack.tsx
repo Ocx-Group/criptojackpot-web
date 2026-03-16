@@ -1,10 +1,8 @@
 'use client';
-import globalNft from '@/../public/images/global/global-nft.png';
-import globalNft2 from '@/../public/images/global/global-nft2.png';
 import logoWhite from '@/../public/images/logo/BlackOrange.png';
 
 import { ShoppingCartSimpleIcon, SignOutIcon } from '@phosphor-icons/react';
-import { ArrowRightIcon, CaretDownIcon, UserIcon } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRightIcon, UserIcon } from '@phosphor-icons/react/dist/ssr';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,7 +10,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { navbarData } from 'public/data/navbarData';
-import AllHomePage from './AllHomePage';
 import LanguageSelector from '../languageSelector/LanguageSelector';
 import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/cartStore';
@@ -23,7 +20,6 @@ const NavbarBlack = () => {
   const [scrollHeight, setScrollHeight] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isOverflowHidden, setIsOverflowHidden] = useState(false);
-  const [dropdownId, setDropdownId] = useState('');
   const { isAuthenticated, logout } = useAuth();
   const cartCount = useCartStore(state => state.items.length);
 
@@ -45,14 +41,6 @@ const NavbarBlack = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const handleDropDown = (id: string) => {
-    if (dropdownId === id) {
-      setDropdownId('');
-    } else {
-      setDropdownId(id);
-    }
-  };
 
   return (
     <header
@@ -87,37 +75,14 @@ const NavbarBlack = () => {
                   <Image className="w-auto" src={logoWhite} width={243} alt="logo" />
                 </Link>
                 <ul className="custom-nav d-xl-flex d-grid gap-4 gap-xl-5 gap-xxl-10">
-                  <AllHomePage handleDropDown={handleDropDown} dropdownId={dropdownId} />
-
-                  {navbarData.map(({ id, menuTitle, menuTitleKey, path, menuItems }) => {
-                    let isActive = menuItems?.some(path => pathName == path.menuItemPath);
-                    return menuItems ? (
-                      <li key={`black-nav-dropdown-menu-title-${id}`} className="menu-item position-relative">
-                        <div className="d-flex align-items-center" onClick={() => handleDropDown(id)}>
-                          <button className={`position-relative ${isActive ? 'active' : ''}`}>
-                            {menuTitleKey ? t(menuTitleKey) : menuTitle}
-                          </button>{' '}
-                          <CaretDownIcon />
-                        </div>
-                        <ul className={`sub-menu ${dropdownId === id ? 'active-sub-menu' : ''}`}>
-                          {menuItems.map(({ id, title, titleKey, menuItemPath }) => (
-                            <li key={id} className={`menu-link mb-xxl-2 `}>
-                              <Link href={menuItemPath} className={`${pathName == menuItemPath ? 'menu-active' : ''}`}>
-                                {titleKey ? t(titleKey) : title}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                    ) : (
-                      <li
-                        key={`black-nav-menu-title-${id}`}
-                        className={`menu-item position-relative ${pathName === path ? 'active' : ''}`}
-                      >
-                        <Link href={path}> {menuTitleKey ? t(menuTitleKey) : menuTitle} </Link>
-                      </li>
-                    );
-                  })}
+                  {navbarData.map(({ id, menuTitle, menuTitleKey, path }) => (
+                    <li
+                      key={`black-nav-menu-title-${id}`}
+                      className={`menu-item position-relative ${pathName === path ? 'active' : ''}`}
+                    >
+                      <Link href={path}> {menuTitleKey ? t(menuTitleKey) : menuTitle} </Link>
+                    </li>
+                  ))}
                 </ul>
                 <div className="d-flex flex-nowrap align-items-center justify-content-lg-end gap-2 gap-lg-3 gap-xl-4">
                   <ul className="d-flex head-card align-items-center gap-3">
@@ -165,15 +130,6 @@ const NavbarBlack = () => {
                       </div>
                     </Link>
                   )}
-
-                  <div className="invisible-menuthumb d-flex">
-                    <Link href="landing-nft1">
-                      <Image src={globalNft} width={456} alt="img" />
-                    </Link>
-                    <Link href="landing-nft2">
-                      <Image src={globalNft2} width={456} alt="img" />
-                    </Link>
-                  </div>
                 </div>
               </div>
             </div>
