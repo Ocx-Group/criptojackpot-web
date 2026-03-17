@@ -159,7 +159,7 @@ const WinnersSection = () => {
   }
 
   return (
-    <section className="testimonial-sectionv8 overflow-visible testimonial-v1-before pt-120 pb-120">
+    <section className="testimonial-sectionv8 overflow-visible pt-120 pb-120">
       {/* Section Header */}
       <div className="container">
         <div className="row g-xl-4 g-3 align-items-center justify-content-between mb-xxl-15 mb-xl-10 mb-8">
