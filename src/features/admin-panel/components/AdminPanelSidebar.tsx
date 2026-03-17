@@ -5,14 +5,19 @@ import { usePathname } from 'next/navigation';
 import { sidebarItems } from 'public/data/sidebarItems';
 import { SignOutIcon } from '@phosphor-icons/react';
 import { useAuth } from '@/hooks/useAuth';
+import { useUserStore } from '@/store/userStore';
 
 const AdminPanelSidebar = () => {
   const path = usePathname();
   const { logout } = useAuth();
+  const user = useUserStore(state => state.user);
 
   const handleLogout = () => {
     logout();
   };
+
+  const displayName = user ? `${user.name || ''} ${user.lastName || ''}`.trim() || user.email : 'Administrador';
+  const displayEmail = user?.email ?? '';
 
   return (
     <div className="col-lg-3 pe-lg-10">
@@ -21,8 +26,8 @@ const AdminPanelSidebar = () => {
           {/* Admin Profile Info */}
           <div className="profile-info mb-xxl-10 mb-6 p-xxl-6 p-4 radius16 act4-bg d-flex align-items-center gap-xxl-4 gap-3">
             <div className="content">
-              <span className="fs20 fw_700 n4-clr d-block mb-1">Panel de Administración</span>
-              <span className="n3-clr">admin@sistema.com</span>
+              <span className="fs20 fw_700 n4-clr d-block mb-1">{displayName}</span>
+              <span className="n3-clr">{displayEmail}</span>
             </div>
           </div>
 
