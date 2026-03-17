@@ -44,7 +44,7 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
         t('WINNERS.determine.success', '¡Ganador registrado!'),
         t('WINNERS.determine.successMessage', 'El ganador ha sido registrado exitosamente')
       );
-      queryClient.invalidateQueries({ queryKey: ['winners'] }).then();
+      queryClient.invalidateQueries({ queryKey: ['admin-winners'] }).then();
       onClose();
     },
     onError: (error: Error) => {
@@ -88,9 +88,7 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
 
               <div className="row g-3">
                 <div className="col-md-6">
-                  <label className="form-label fw-semibold">
-                    {t('WINNERS.determine.number', 'Número')}
-                  </label>
+                  <label className="form-label fw-semibold">{t('WINNERS.determine.number', 'Número')}</label>
                   <input
                     type="number"
                     className="form-control"
@@ -104,9 +102,7 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
                   />
                 </div>
                 <div className="col-md-6">
-                  <label className="form-label fw-semibold">
-                    {t('WINNERS.determine.series', 'Serie')}
-                  </label>
+                  <label className="form-label fw-semibold">{t('WINNERS.determine.series', 'Serie')}</label>
                   <input
                     type="number"
                     className="form-control"
@@ -130,11 +126,7 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
               >
                 {t('COMMON.cancel', 'Cancelar')}
               </button>
-              <button
-                type="submit"
-                className="btn btn-warning"
-                disabled={determineMutation.isPending}
-              >
+              <button type="submit" className="btn btn-warning" disabled={determineMutation.isPending}>
                 {determineMutation.isPending ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2"></span>
