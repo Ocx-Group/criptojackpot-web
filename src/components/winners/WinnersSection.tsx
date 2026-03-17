@@ -1,6 +1,6 @@
 'use client';
 
-import { Trophy, CalendarBlank, Ticket, CurrencyDollar } from '@phosphor-icons/react/dist/ssr';
+import { Trophy, CalendarBlank } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
@@ -32,9 +32,9 @@ const WinnerCard = ({ winner, locale }: { winner: Winner; locale: string }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="testimonial-item11 nw4-border radius24 h-100">
+    <div className="testimonial-item11 nw4-border radius24">
       {/* Prize image or gradient placeholder */}
-      <div className="thumb position-relative" style={{ minHeight: '220px', overflow: 'hidden' }}>
+      <div className="thumb position-relative" style={{ height: '200px', overflow: 'hidden' }}>
         {winner.prizeImageUrl ? (
           <Image
             src={winner.prizeImageUrl}
@@ -47,10 +47,7 @@ const WinnerCard = ({ winner, locale }: { winner: Winner; locale: string }) => {
         ) : (
           <div
             className="radius24 d-flex align-items-center justify-content-center w-100 h-100"
-            style={{
-              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-              minHeight: '220px',
-            }}
+            style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}
           >
             <Trophy size={64} weight="fill" className="act4-clr" style={{ opacity: 0.6 }} />
           </div>
@@ -58,47 +55,27 @@ const WinnerCard = ({ winner, locale }: { winner: Winner; locale: string }) => {
         {/* Trophy badge */}
         <span className="rat-star d-inline-flex align-items-center gap-2 p1-bg py-2 px-4 radius100">
           <Trophy weight="fill" className="fs20 n4-clr" />
-          <span className="fs18 fw_600 n4-clr">
-            {t('WINNERS_PAGE.prize')}
-          </span>
+          <span className="fs18 fw_600 n4-clr">{t('WINNERS_PAGE.prize')}</span>
         </span>
       </div>
 
       <div className="content p-xxl-6 p-xl-4 p-4">
-        {/* Prize name */}
-        {winner.prizeName && (
-          <h5 className="n4-clr fw_700 mb-2">{winner.prizeName}</h5>
-        )}
-
-        {/* Prize value */}
-        {winner.prizeEstimatedValue && (
-          <div className="d-flex align-items-center gap-2 mb-3">
-            <CurrencyDollar size={18} weight="bold" className="act4-clr" />
-            <span className="act4-clr fw_700 fs20">
-              ${winner.prizeEstimatedValue.toLocaleString()}
-            </span>
-          </div>
-        )}
-
-        {/* Lottery info */}
-        <p className="n3-clr mb-3 fs-six">
-          <span className="fw_600">{t('WINNERS_PAGE.lottery')}:</span> {winner.lotteryTitle}
+        {/* Prize name + value in one line */}
+        <p className="mb-xxl-7 mb-xl-6 mb-lg-4 mb-md-3 mb-3 n3-clr">
+          {winner.prizeName && <span className="fw_700 n4-clr">{winner.prizeName}</span>}
+          {winner.prizeEstimatedValue && (
+            <span className="act4-clr fw_700 ms-2">${winner.prizeEstimatedValue.toLocaleString()}</span>
+          )}
+          {!winner.prizeName && !winner.prizeEstimatedValue && <span>{winner.lotteryTitle}</span>}
         </p>
 
-        {/* Ticket info */}
-        <div className="d-flex gap-3 mb-xxl-5 mb-xl-4 mb-3">
-          <span className="d-inline-flex align-items-center gap-1 n3-clr">
-            <Ticket size={16} />
-            #{winner.number}
-          </span>
-          <span className="d-inline-flex align-items-center gap-1 n3-clr">
-            {t('WINNERS_PAGE.series')}: {winner.series}
-          </span>
-        </div>
+        {/* Lottery + ticket compact line */}
+        <p className="n3-clr mb-xxl-7 mb-xl-6 mb-lg-4 mb-md-3 mb-3 fs-six">
+          {winner.lotteryTitle} · #{winner.number} · {t('WINNERS_PAGE.series')}: {winner.series}
+        </p>
 
         {/* Winner info */}
-        <div className="conts d-flex align-items-center gap-xxl-4 gap-xl-3 gap-3">
-          {/* User avatar */}
+        <div className="conts d-flex align-items-center gap-xxl-4 gap-xl-3 gap-2">
           <div
             className="d-flex align-items-center justify-content-center radius-circle flex-shrink-0"
             style={{
@@ -112,12 +89,10 @@ const WinnerCard = ({ winner, locale }: { winner: Winner; locale: string }) => {
             </span>
           </div>
           <div className="designation-box">
-            <span className="fs20 mb-0 fw_700 n4-clr d-block">
-              {winner.userName || 'Anonymous'}
-            </span>
+            <span className="fs20 mb-0 fw_700 n4-clr d-block">{winner.userName || 'Anonymous'}</span>
             <span className="fw_600 n3-clr d-flex align-items-center gap-1">
               <CalendarBlank size={14} />
-              {t('WINNERS_PAGE.wonOn')} {formatDate(winner.wonAt, locale)}
+              {formatDate(winner.wonAt, locale)}
             </span>
           </div>
         </div>
