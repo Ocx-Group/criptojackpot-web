@@ -688,6 +688,22 @@
     "reviews": "Reviews!",
     "text": "Participating in the lottery was a game changer for me. Winning my dream prize was an experience beyond words. The road to joy starts here."
   },
+  "WINNERS_PAGE": {
+    "sectionLabel": "Our Winners",
+    "title": "Lucky",
+    "titleHighlight": "Winners!",
+    "subtitle": "Meet the lucky winners who turned their dreams into reality with CriptoJackpot",
+    "lottery": "Lottery",
+    "prize": "Prize",
+    "wonOn": "Won on",
+    "ticket": "Ticket",
+    "series": "Series",
+    "noWinners": "No winners yet. Be the first!",
+    "loading": "Loading winners...",
+    "prizeValue": "Prize value",
+    "pageTitle": "Winners — CriptoJackpot",
+    "pageDescription": "Meet our lucky winners who have won amazing prizes with CriptoJackpot."
+  },
   "BLOG": {
     "sectionLabel": "Recent Blog",
     "title": "News &",

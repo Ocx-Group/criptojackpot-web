@@ -8,6 +8,7 @@ import {
   MegaphoneIcon,
   GiftIcon,
   CloverIcon,
+  TrophyIcon,
   IconProps,
 } from '@phosphor-icons/react';
 import React from 'react';
@@ -24,6 +25,7 @@ export const sidebarItems: SidebarItemData[] = [
   { id: 2, href: '/admin/users', Icon: UsersIcon, label: 'Usuarios' },
   { id: 3, href: '/admin/lotteries', Icon: CloverIcon, label: 'Loterías' },
   { id: 4, href: '/admin/prizes', Icon: GiftIcon, label: 'Premios' },
+  { id: 5, href: '/admin/winners', Icon: TrophyIcon, label: 'Ganadores' },
   { id: 6, href: '/admin/reports', Icon: ChartBarIcon, label: 'Reportes' },
   { id: 7, href: '/admin/finance', Icon: MoneyIcon, label: 'Finanzas' },
   { id: 8, href: '/admin/announcements', Icon: MegaphoneIcon, label: 'Anuncios' },

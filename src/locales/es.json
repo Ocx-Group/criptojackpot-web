@@ -688,6 +688,22 @@
     "reviews": "¡Reseñas!",
     "text": "Participar en la lotería fue un cambio de vida para mí. Ganar mi premio soñado fue una experiencia indescriptible. El camino a la alegría comienza aquí."
   },
+  "WINNERS_PAGE": {
+    "sectionLabel": "Nuestros Ganadores",
+    "title": "Felices",
+    "titleHighlight": "¡Ganadores!",
+    "subtitle": "Conoce a los afortunados ganadores que hicieron realidad sus sueños con CriptoJackpot",
+    "lottery": "Lotería",
+    "prize": "Premio",
+    "wonOn": "Ganado el",
+    "ticket": "Boleto",
+    "series": "Serie",
+    "noWinners": "Aún no hay ganadores. ¡Sé el primero!",
+    "loading": "Cargando ganadores...",
+    "prizeValue": "Valor del premio",
+    "pageTitle": "Ganadores — CriptoJackpot",
+    "pageDescription": "Conoce a nuestros afortunados ganadores que han ganado premios increíbles con CriptoJackpot."
+  },
   "BLOG": {
     "sectionLabel": "Blog Reciente",
     "title": "Noticias y",

@@ -9,10 +9,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { navbarData } from 'public/data/navbarData';
 import LanguageSelector from '../languageSelector/LanguageSelector';
 import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/cartStore';
+import { winnerService } from '@/services';
 dynamic(() => import('react-select'), { ssr: false });
 const NavbarBlack = () => {
   const { t } = useTranslation();
@@ -22,6 +24,13 @@ const NavbarBlack = () => {
   const [isOverflowHidden, setIsOverflowHidden] = useState(false);
   const { isAuthenticated, logout } = useAuth();
   const cartCount = useCartStore(state => state.items.length);
+
+  const { data: winners = [] } = useQuery({
+    queryKey: ['winners-nav'],
+    queryFn: () => winnerService.getAllWinners(),
+    staleTime: 10 * 60 * 1000,
+  });
+  const hasWinners = winners.length > 0;
 
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
@@ -83,6 +92,13 @@ const NavbarBlack = () => {
                       <Link href={path}> {menuTitleKey ? t(menuTitleKey) : menuTitle} </Link>
                     </li>
                   ))}
+                  {hasWinners && (
+                    <li
+                      className={`menu-item position-relative ${pathName === '/winners' ? 'active' : ''}`}
+                    >
+                      <Link href="/winners"> {t('NAVBAR.Winners')} </Link>
+                    </li>
+                  )}
                 </ul>
                 <div className="d-flex flex-nowrap align-items-center justify-content-lg-end gap-2 gap-lg-3 gap-xl-4">
                   <ul className="d-flex head-card align-items-center gap-3">
