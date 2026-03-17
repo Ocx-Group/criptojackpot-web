@@ -6,14 +6,16 @@ import Link from 'next/link';
 import { useLotteries } from '@/features/admin-panel/hooks';
 import { Lottery, LotteryStatus } from '@/interfaces/lottery';
 import Image from 'next/image';
-import { Plus, Pencil, Trash2, Ticket as TicketIcon, Calendar, Clock, Grid3X3 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Ticket as TicketIcon, Calendar, Clock, Grid3X3, Trophy } from 'lucide-react';
 import NumberBoardModal from './NumberBoardModal';
+import DetermineWinnerModal from './DetermineWinnerModal';
 
 const LotteriesList: React.FC = () => {
   const { t } = useTranslation();
   const { lotteries, isLoading, deleteLottery, isDeleting, pagination, goToPage } = useLotteries();
   const [lotteryToDelete, setLotteryToDelete] = useState<Lottery | null>(null);
   const [boardLottery, setBoardLottery] = useState<Lottery | null>(null);
+  const [winnerLottery, setWinnerLottery] = useState<Lottery | null>(null);
 
   const handleDelete = async () => {
     if (!lotteryToDelete) return;
@@ -171,6 +173,14 @@ const LotteriesList: React.FC = () => {
                               <button
                                 type="button"
                                 className="btn btn-outline-warning"
+                                onClick={() => setWinnerLottery(lottery)}
+                                title={t('LOTTERIES_ADMIN.actions.determineWinner', 'Determinar Ganador')}
+                              >
+                                <Trophy size={14} />
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-outline-warning"
                                 onClick={() => setBoardLottery(lottery)}
                                 title={t('LOTTERIES_ADMIN.actions.numberBoard', 'Panel de Números')}
                               >
@@ -315,6 +325,13 @@ const LotteriesList: React.FC = () => {
           lotteryId={boardLottery.lotteryGuid}
           lotteryTitle={boardLottery.title}
           onClose={() => setBoardLottery(null)}
+        />
+      )}
+      {/* Modal de determinar ganador */}
+      {winnerLottery && (
+        <DetermineWinnerModal
+          lottery={winnerLottery}
+          onClose={() => setWinnerLottery(null)}
         />
       )}
     </div>
