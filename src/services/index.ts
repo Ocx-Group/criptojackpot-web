@@ -22,6 +22,7 @@ import { TicketService } from './ticketService';
 import { OrderService } from './orderService';
 import { WishListService } from './wishListService';
 import { WinnerService } from './winnerService';
+import { TestimonialService } from './testimonialService';
 
 export const authService = new AuthService();
 export const userService = new UserService();
@@ -39,3 +40,4 @@ export const ticketService = new TicketService();
 export const orderService = new OrderService();
 export const wishListService = new WishListService();
 export const winnerService = new WinnerService();
+export const testimonialService = new TestimonialService();

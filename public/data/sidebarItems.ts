@@ -9,6 +9,7 @@ import {
   GiftIcon,
   CloverIcon,
   TrophyIcon,
+  ChatCircleTextIcon,
   IconProps,
 } from '@phosphor-icons/react';
 import React from 'react';
@@ -29,5 +30,6 @@ export const sidebarItems: SidebarItemData[] = [
   { id: 6, href: '/admin/reports', Icon: ChartBarIcon, label: 'Reportes' },
   { id: 7, href: '/admin/finance', Icon: MoneyIcon, label: 'Finanzas' },
   { id: 8, href: '/admin/announcements', Icon: MegaphoneIcon, label: 'Anuncios' },
-  { id: 9, href: '/admin/settings', Icon: GearIcon, label: 'Configuración' },
+  { id: 9, href: '/admin/testimonials', Icon: ChatCircleTextIcon, label: 'Reseñas' },
+  { id: 10, href: '/admin/settings', Icon: GearIcon, label: 'Configuración' },
 ];

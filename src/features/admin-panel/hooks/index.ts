@@ -12,3 +12,6 @@ export { useAdminTransactions } from './useAdminTransactions';
 export { useAdminWithdrawals } from './useAdminWithdrawals';
 export { useNumberBoard } from './useNumberBoard';
 export { useAdminDashboard } from './useAdminDashboard';
+export { useTestimonials } from './useTestimonials';
+export { useCreateTestimonialForm } from './useCreateTestimonialForm';
+export { useEditTestimonialForm } from './useEditTestimonialForm';
