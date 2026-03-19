@@ -82,7 +82,7 @@ const LotteryList = () => {
   const handleCopyLink = async (e: React.MouseEvent, lotteryGuid: string) => {
     e.preventDefault();
     e.stopPropagation();
-    const url = `${window.location.origin}/lottery/${lotteryGuid}`;
+    const url = `${globalThis.location.origin}/lottery/${lotteryGuid}`;
     try {
       await navigator.clipboard.writeText(url);
       setCopiedId(lotteryGuid);

@@ -1,20 +1,43 @@
 'use client';
 import bannerV14 from '@/../public/images/banner/banner-v14-simble.png';
 import banner14 from '@/../public/images/banner/bitcoin-banner5.png';
-import acv1 from '@/../public/images/testimonial/acv17-1.png';
-import acv2 from '@/../public/images/testimonial/acv17-2.png';
-import acv3 from '@/../public/images/testimonial/acv17-3.png';
-import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState, useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { lotteryService } from '@/services';
+import { Lottery } from '@/interfaces/lottery';
+import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import Counter from '../Counter';
 import MotionFade from '../motionEffect/MotionFade';
-import MotionFadeTopToDown from '../motionEffect/MotionFadeTopToDown';
 import MotionStaggerEffectUl from '../motionEffect/MotionStaggerEffectUl';
 
 const Nft2Banner = () => {
   const { t } = useTranslation();
+
+  const { data: lotteriesResponse } = useQuery<PaginatedResponse<Lottery>, Error>({
+    queryKey: ['lotteries-banner'],
+    queryFn: () => lotteryService.getAllLotteries({ pageNumber: 1, pageSize: 10 }),
+  });
+
+  const bannerImages = useMemo(() => {
+    return (lotteriesResponse?.data?.items || [])
+      .filter(l => l.prizes?.[0]?.mainImageUrl)
+      .map(l => ({ src: l.prizes[0].mainImageUrl, alt: l.title }));
+  }, [lotteriesResponse]);
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    if (bannerImages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % bannerImages.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [bannerImages.length]);
+
   return (
     <div className="banner-section-v14 pt-70-fixed position-relative overflow-hidden">
       {/* <!--Banner Content --> */}
@@ -41,7 +64,7 @@ const Nft2Banner = () => {
                       data-aos="fade-down-right"
                       data-aos-duration="1200"
                     >
-                      <ArrowRight className="ti ti-arrow-right fs-four p1-clr"></ArrowRight>
+                      <ArrowRightIcon className="ti ti-arrow-right fs-four p1-clr"></ArrowRightIcon>
                     </MotionStaggerEffectUl>
                     <MotionStaggerEffectUl
                       id={3}
@@ -59,7 +82,7 @@ const Nft2Banner = () => {
                       data-aos="fade-down-right"
                       data-aos-duration="1600"
                     >
-                      <ArrowRight className="ti ti-arrow-right fs-four p1-clr"></ArrowRight>
+                      <ArrowRightIcon className="ti ti-arrow-right fs-four p1-clr"></ArrowRightIcon>
                     </MotionStaggerEffectUl>
                     <MotionStaggerEffectUl
                       id={5}
@@ -122,10 +145,10 @@ const Nft2Banner = () => {
                     <span className="kew-text n4-clr act3-bg">{t('BANNER.joinNow')}</span>
                     <div className="kew-arrow act3-bg">
                       <div className="kt-one">
-                        <ArrowRight className="ti ti-arrow-right n4-clr"></ArrowRight>
+                        <ArrowRightIcon className="ti ti-arrow-right n4-clr"></ArrowRightIcon>
                       </div>
                       <div className="kt-two">
-                        <ArrowRight className="ti ti-arrow-right n4-clr"></ArrowRight>
+                        <ArrowRightIcon className="ti ti-arrow-right n4-clr"></ArrowRightIcon>
                       </div>
                     </div>
                   </Link>
@@ -139,7 +162,6 @@ const Nft2Banner = () => {
                       <span className="plus__icon display-four p1-clr fw_800">k</span>
                       <span className="plus__icon display-four p1-clr fw_800">+</span>
                     </div>
-                    <p className="nw2-clr">{t('BANNER.customers')}</p>
                   </div>
                   <div className="odometer__items" data-aos="zoom-in-down" data-aos-duration="1000">
                     <div className="cont d-flex align-items-center">
@@ -149,7 +171,6 @@ const Nft2Banner = () => {
                       <span className="plus__icon display-four p1-clr fw_800">k</span>
                       <span className="plus__icon display-four p1-clr fw_800">+</span>
                     </div>
-                    <p className="nw2-clr">{t('BANNER.artwork')}</p>
                   </div>
                   <div className="odometer__items" data-aos="zoom-in-down" data-aos-duration="1000">
                     <div className="cont d-flex align-items-center">
@@ -159,7 +180,6 @@ const Nft2Banner = () => {
                       <span className="plus__icon display-four p1-clr fw_800">k</span>
                       <span className="plus__icon display-four p1-clr fw_800">+</span>
                     </div>
-                    <p className="nw2-clr">{t('BANNER.owner')}</p>
                   </div>
                 </div>
               </div>
@@ -167,77 +187,34 @@ const Nft2Banner = () => {
             <div className="col-xl-4 col-lg-4 col-md-4">
               <div className="banner-v14-thumb position-relative" data-aos="zoom-in" data-aos-duration="2000">
                 <MotionFade>
-                  <Image src={banner14} alt="img" />
+                  {bannerImages.length > 0 ? (
+                    <div
+                      className="position-relative w-100"
+                      style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden' }}
+                    >
+                      {bannerImages.map((img, index) => (
+                        <div
+                          key={img.src}
+                          className="position-absolute w-100 h-100"
+                          style={{
+                            opacity: index === currentSlide ? 1 : 0,
+                            transition: 'opacity 0.6s ease-in-out',
+                          }}
+                        >
+                          <Image
+                            src={img.src}
+                            alt={img.alt}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <Image src={banner14} alt="img" />
+                  )}
                 </MotionFade>
-                <div className="flash">
-                  <svg width="103" height="64" viewBox="0 0 103 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6.15625 1L18.1904 43.2425" stroke="#AEFE3A" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M27.4141 25.2158L31.2182 43.8042" stroke="#AEFE3A" strokeWidth="2" strokeLinecap="round" />
-                    <path
-                      d="M51.2274 11.4654L39.4158 46.8064M59.8522 40.2032L46.3836 51.6747M99.2899 38.9107L52.6157 58.4688"
-                      stroke="#AEFE3A"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </div>
-                <MotionFadeTopToDown className="place-customer d-grid justify-content-center text-center text-lg-start d-lg-flex align-items-center gap-xxl-3 gap-2">
-                  <ul className="customer-reviewv17 customer-review17-alt radius100 ">
-                    <li>
-                      <Link
-                        href="#"
-                        className="customer-revew-item act3-bg d-flex align-items-center justify-content-center"
-                      >
-                        <Image src={acv1} alt="img" />
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="#"
-                        className="customer-revew-item act3-bg d-flex align-items-center justify-content-center"
-                      >
-                        <Image src={acv2} alt="img" />
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="#"
-                        className="customer-revew-item act3-bg d-flex align-items-center justify-content-center"
-                      >
-                        <Image src={acv3} alt="img" />
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="#"
-                        className="customer-revew-item n0-bg d-flex align-items-center justify-content-center"
-                      >
-                        <span className="d-grid customer-ratting text-center p-2 p1-bg align-items-center justify-content-center">
-                          <span className="d-block fs20 fw_700 n4-clr">99+</span>
-                        </span>
-                      </Link>
-                    </li>
-                  </ul>
-                  <div className="cont">
-                    <span className="p1-clr fs18 fw_600">
-                      @Digimental
-                      <span className="d-block nw1-clr">HAPE Teaser</span>
-                    </span>
-                  </div>
-                </MotionFadeTopToDown>
-                <div className="place-bidwrap">
-                  <div className="d-flex align-items-center justify-content-between gap-2 mb-xxl-3 mb-2">
-                    <span className="fs18 fw_600 p1-clr d-block">{t('BANNER.endsIn')}</span>
-                    <span className="fs18 fw_600 p1-clr d-block">{t('BANNER.currentBid')}</span>
-                  </div>
-                  <div className="d-flex align-items-center justify-content-between gap-2 mb-xxl-8 mb-xl-6 mb-sm-4 mb-3">
-                    <span className="fs18 fw_600 p1-clr d-block">05:39:47</span>
-                    <span className="fs18 fw_600 p1-clr d-block">0.32 ETH</span>
-                  </div>
-                  <button type="button" className="kewta-btn w-100 d-inline-flex align-items-center">
-                    <span className="kew-text p1-border w-100 p1-bg n4-clr">{t('BANNER.buyNow')}</span>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
