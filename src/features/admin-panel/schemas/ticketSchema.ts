@@ -16,7 +16,7 @@ export const createTicketSchema = (t: TFunction) =>
       prizeId: z.string().optional(),
       minNumber: z.number(),
       maxNumber: z.number(),
-      terms: z.string(),
+      terms: z.string().min(1, t('LOTTERIES_ADMIN.errors.termsRequired', 'Los términos y condiciones son requeridos')),
       type: z.number(),
       hasAgeRestriction: z.boolean(),
       minimumAge: z.number().optional(),

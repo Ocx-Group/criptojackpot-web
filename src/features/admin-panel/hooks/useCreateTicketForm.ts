@@ -61,7 +61,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       // Valores por defecto para campos de lottery
       minNumber: 1,
       maxNumber: 49,
-      terms: 'Términos y condiciones estándar del sorteo.',
+      terms: '',
       type: LotteryType.Standard,
       hasAgeRestriction: true,
       minimumAge: 18,

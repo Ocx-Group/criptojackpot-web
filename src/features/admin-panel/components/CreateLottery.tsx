@@ -279,6 +279,25 @@ const CreateLottery: React.FC = () => {
                 </div>
               </div>
 
+              {/* Términos y Condiciones */}
+              <div className="col-md-12">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.terms', 'Términos y Condiciones')} <span className="text-danger">*</span>
+                </label>
+                <textarea
+                  name="terms"
+                  className="form-control"
+                  rows={5}
+                  value={formData.terms}
+                  onChange={handleInputChange}
+                  placeholder={t('LOTTERIES_ADMIN.placeholders.terms', 'Términos y condiciones del sorteo')}
+                  required
+                />
+                <div className="form-text">
+                  {t('LOTTERIES_ADMIN.help.terms', 'Los términos y condiciones específicos para esta lotería')}
+                </div>
+              </div>
+
               {/* Preview de la Lotería (usando imagen del premio) */}
               {selectedPrize && (
                 <div className="col-md-12">
