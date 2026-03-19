@@ -9,12 +9,6 @@ export const navbarData = [
   },
   {
     id: uuidv4(),
-    menuTitle: 'Lotteries',
-    menuTitleKey: 'NAVBAR.Lotteries',
-    path: '/landing-page',
-  },
-  {
-    id: uuidv4(),
     menuTitle: 'Login',
     menuTitleKey: 'NAVBAR.Login',
     path: '/login',
