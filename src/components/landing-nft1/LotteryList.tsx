@@ -146,8 +146,8 @@ const LotteryList = () => {
           const remaining = lottery.maxTickets - lottery.soldTickets;
 
           return (
-            <MotionFade key={lottery.lotteryGuid} className="col-lg-4 col-md-6">
-              <div className="current-lottery-itemv13 current-lottery-v13before nw3-border position-relative radius24 n0-bg p-xxl-6 p-xl-4 p-3">
+            <MotionFade key={lottery.lotteryGuid} className="col-lg-4 col-md-6 d-flex">
+              <div className="current-lottery-itemv13 current-lottery-v13before nw3-border position-relative radius24 n0-bg p-xxl-6 p-xl-4 p-3 d-flex flex-column w-100">
                 <div className="thumb cus-z1 position-relative radius24 overflow-hidden">
                   <div className="current-l-badge cus-z1 d-flex align-items-center justify-content-between pe-xxl-5 pe-4">
                     <span className="cmn-draw-badge d-inline-blog act3-bg py-2 ps-xxl-5 ps-3 pe-8">
@@ -196,7 +196,7 @@ const LotteryList = () => {
                     <Image src={defaultImage} alt={lottery.title} className="w-100" />
                   )}
                 </div>
-                <div className="content-middle pt-xxl-6 pt-sm-4 pt-4">
+                <div className="content-middle pt-xxl-6 pt-sm-4 pt-4 d-flex flex-column flex-grow-1">
                   <div className="d-flex flex-wrap align-items-center justify-content-between pb-xxl-3 pb-sm-3 pb-2 gap-3">
                     <h4>
                       <Link href={`/lottery/${lottery.lotteryGuid}`} className="n4-clr fw_700 act4-texthover">
@@ -236,7 +236,7 @@ const LotteryList = () => {
                     </li>
                   </ul>
                   <div className="border-top" />
-                  <div className="cmn-prrice-range mt-xxl-4 mt-3 d-grid align-items-center gap-2">
+                  <div className="cmn-prrice-range mt-xxl-4 mt-3 d-grid align-items-center gap-2 mt-auto">
                     <span className="n4-clr soldout fw_700 fs-eight mb-1">
                       {soldPercent}% {t('LOTTERY_LIST.sold')}
                     </span>

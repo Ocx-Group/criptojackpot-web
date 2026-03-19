@@ -42,7 +42,6 @@ const Nft2HowItWork = () => {
         <div className="row g-6">
           <MotionFade className="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-duration="1000">
             <div className="work-item1 work-itemv14 position-relative">
-              <span className="text-uppercase s1-clr fw_700 fs20 d-block mb-xxl-5 mb-3">{t('HOW_IT_WORK.step1')}</span>
               <h2 className="n1-clr mb-xxl-11 mb-xl-8 mb-lg-6 mb-5">
                 <span className="d-block">{t('HOW_IT_WORK.step1Title1')}</span>
                 <span>{t('HOW_IT_WORK.step1Title2')}</span>
@@ -53,7 +52,6 @@ const Nft2HowItWork = () => {
           </MotionFade>
           <MotionFade className="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-duration="1500">
             <div className="work-item1 work-itemv14 position-relative">
-              <span className="text-uppercase s1-clr fw_700 fs20 d-block mb-xxl-5 mb-3">{t('HOW_IT_WORK.step2')}</span>
               <h2 className="n1-clr mb-xxl-11 mb-xl-8 mb-lg-6 mb-5">
                 <span className="d-block">{t('HOW_IT_WORK.step2Title1')}</span>
                 <span>{t('HOW_IT_WORK.step2Title2')}</span>
@@ -64,7 +62,6 @@ const Nft2HowItWork = () => {
           </MotionFade>
           <MotionFade className="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-duration="1800">
             <div className="work-item1 work-itemv14 position-relative">
-              <span className="text-uppercase s1-clr fw_700 fs20 d-block mb-xxl-5 mb-3">{t('HOW_IT_WORK.step3')}</span>
               <h2 className="n1-clr mb-xxl-11 mb-xl-8 mb-lg-6 mb-md-5 mb-2">
                 <span className="d-block">{t('HOW_IT_WORK.step3Title1')}</span>
                 <span>{t('HOW_IT_WORK.step3Title2')}</span>

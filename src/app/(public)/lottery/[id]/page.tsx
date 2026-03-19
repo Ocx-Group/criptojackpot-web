@@ -48,7 +48,7 @@ const LotteryDetailsPage = () => {
   const lotteryId = params.id as string;
 
   // Check authentication status (auth handled via HttpOnly cookies)
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, hasRole } = useAuth();
 
   // Estado: { número: cantidad }
   const [selectedNumbers, setSelectedNumbers] = useState<Record<number, number>>({});
@@ -294,6 +294,16 @@ const LotteryDetailsPage = () => {
       return;
     }
 
+    // Verificar que no sea administrador
+    if (hasRole('admin')) {
+      showNotification(
+        'warning',
+        t('CART.adminRestricted', 'Acción no permitida'),
+        t('CART.adminCannotBuy', 'Los administradores no pueden comprar boletos')
+      );
+      return;
+    }
+
     // Verificar conexión al hub
     if (!isConnected) {
       console.log('⚠️ Not connected to hub');
@@ -455,7 +465,8 @@ const LotteryDetailsPage = () => {
     ticketQuantity === 0 ||
     isReserving ||
     !isAuthenticated ||
-    !isConnected;
+    !isConnected ||
+    hasRole('admin');
 
   return (
     <div>

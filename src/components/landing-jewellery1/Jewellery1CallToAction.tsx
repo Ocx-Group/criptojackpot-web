@@ -67,7 +67,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
                   <div className="listing-right">
                     <Link href="#" className="cruz-expm d-inline-flex">
                       {' '}
-                      cruz@example.com{' '}
+                      support@criptojackpot.com{' '}
                     </Link>
                     <div className="listing-submit mt-xxl-6 mt-xl-5 mt-lg-4 mt-3 pt-xxl-6 pt-xl-5 pt-lg-4 pt-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
                       <label className="checkbox-single">

@@ -27,36 +27,27 @@ const Faq = ({ bgColor }: Props) => {
       id: 1,
       title: t('FAQ.tab1'),
       tab: [
-        { question: t('FAQ.q1'), answer: t('FAQ.a1') },
-        { question: t('FAQ.q2'), answer: t('FAQ.a2') },
-        { question: t('FAQ.q3'), answer: t('FAQ.a3') },
+        { question: t('FAQ.tab1_q1'), answer: t('FAQ.tab1_a1') },
+        { question: t('FAQ.tab1_q2'), answer: t('FAQ.tab1_a2') },
+        { question: t('FAQ.tab1_q3'), answer: t('FAQ.tab1_a3') },
       ],
     },
     {
       id: 2,
       title: t('FAQ.tab2'),
       tab: [
-        { question: t('FAQ.q1'), answer: t('FAQ.a1') },
-        { question: t('FAQ.q2'), answer: t('FAQ.a2') },
-        { question: t('FAQ.q3'), answer: t('FAQ.a3') },
+        { question: t('FAQ.tab2_q1'), answer: t('FAQ.tab2_a1') },
+        { question: t('FAQ.tab2_q2'), answer: t('FAQ.tab2_a2') },
+        { question: t('FAQ.tab2_q3'), answer: t('FAQ.tab2_a3') },
       ],
     },
     {
       id: 3,
       title: t('FAQ.tab3'),
       tab: [
-        { question: t('FAQ.q1'), answer: t('FAQ.a1') },
-        { question: t('FAQ.q2'), answer: t('FAQ.a2') },
-        { question: t('FAQ.q3'), answer: t('FAQ.a3') },
-      ],
-    },
-    {
-      id: 4,
-      title: t('FAQ.tab4'),
-      tab: [
-        { question: t('FAQ.q1'), answer: t('FAQ.a1') },
-        { question: t('FAQ.q2'), answer: t('FAQ.a2') },
-        { question: t('FAQ.q3'), answer: t('FAQ.a3') },
+        { question: t('FAQ.tab3_q1'), answer: t('FAQ.tab3_a1') },
+        { question: t('FAQ.tab3_q2'), answer: t('FAQ.tab3_a2') },
+        { question: t('FAQ.tab3_q3'), answer: t('FAQ.tab3_a3') },
       ],
     },
   ];
@@ -106,7 +97,7 @@ const Faq = ({ bgColor }: Props) => {
                 <div className="question-tab mb-xxl-15 mb-xl-10 mb-lg-8 mb-7">
                   <ul className="tablinks">
                     {tabs.map((tab, index) => (
-                      <li key={`faq-tab-${index}`} className={`nav-links ${activeTab === index ? 'active' : ''}`}>
+                      <li key={`faq-tab-${tab.id}`} className={`nav-links ${activeTab === index ? 'active' : ''}`}>
                         <button className="tablink" onClick={() => setActiveTab(index)}>
                           {tab.title}
                         </button>
@@ -116,7 +107,7 @@ const Faq = ({ bgColor }: Props) => {
                 </div>
                 <div className="tabcontents">
                   {tabs.map((tab, tabIndex) => (
-                    <div key={tabIndex} className={`tabitem ${activeTab === tabIndex ? 'active' : ''}`}>
+                    <div key={`faq-content-${tab.id}`} className={`tabitem ${activeTab === tabIndex ? 'active' : ''}`}>
                       <div className="accordion-section">
                         {tab.tab?.map(({ question, answer }, index) => (
                           <SingleFaq
