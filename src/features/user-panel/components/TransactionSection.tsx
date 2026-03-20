@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  ArrowsDownUpIcon,
-  CaretLeftIcon,
-  CaretRightIcon,
-  WalletIcon,
-} from '@phosphor-icons/react/dist/ssr';
-import Link from 'next/link';
+import { ArrowsDownUpIcon, CaretLeftIcon, CaretRightIcon } from '@phosphor-icons/react/dist/ssr';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTransactions } from '@/features/user-panel/hooks/useTransactions';
@@ -74,22 +68,17 @@ const TransactionSection = () => {
         <div className="d-flex flex-sm-nowrap flex-wrap align-items-center justify-content-sm-between justify-content-center gap-3">
           <div className="trans-pribox d-flex align-items-center border radius24 px-xxl-10 px-4 py-4">
             <div className="box">
-              <h3 className="n4-clr mb-2">
-                {isLoading ? '...' : `$${balance?.balance.toFixed(2) ?? '0.00'}`}
-              </h3>
+              <h3 className="n4-clr mb-2">{isLoading ? '...' : `$${balance?.balance.toFixed(2) ?? '0.00'}`}</h3>
               <span className="fw_600 n3-clr">{t('TRANSACTIONS.availableBalance')}</span>
             </div>
           </div>
           <div className="d-flex align-items-center gap-xl-6 gap-4">
-            <Link href="#0" className="deposit-box text-center d-center border radius24 d-center">
-              <span className="box">
-                <span className="icon mb-xxl-5 mb-xl-4 mb-lg-3 mb-2 s1-bg radius-circle d-center">
-                  <WalletIcon className="ph ph-wallet fs-three n0-clr"></WalletIcon>
-                </span>
-                <span className="n3-clr fw_600">{t('TRANSACTIONS.deposit')}</span>
-              </span>
-            </Link>
-            <button type="button" onClick={() => setIsWithdrawModalOpen(true)} className="deposit-box text-center d-center border radius24 d-center" style={{ background: 'none', cursor: 'pointer' }}>
+            <button
+              type="button"
+              onClick={() => setIsWithdrawModalOpen(true)}
+              className="deposit-box text-center d-center border radius24 d-center"
+              style={{ background: 'none', cursor: 'pointer' }}
+            >
               <span className="box">
                 <span className="icon mb-xxl-5 mb-xl-4 mb-lg-3 mb-2 s1-bg radius-circle d-center">
                   <ArrowsDownUpIcon className="ph ph-arrows-down-up fs-three n0-clr"></ArrowsDownUpIcon>
@@ -154,9 +143,7 @@ const TransactionSection = () => {
                         </span>
                       </td>
                       <td>
-                        <span className={`fw_600 ${getStatusClass(tx.status)}`}>
-                          {getStatusLabel(tx.status)}
-                        </span>
+                        <span className={`fw_600 ${getStatusClass(tx.status)}`}>{getStatusLabel(tx.status)}</span>
                       </td>
                     </tr>
                   ))}
