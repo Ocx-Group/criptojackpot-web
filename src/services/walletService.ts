@@ -154,6 +154,22 @@ class WalletService extends BaseService {
       throw this.handleError(error);
     }
   }
+
+  async adminCredit(request: {
+    userGuid: string;
+    amount: number;
+    description?: string;
+  }): Promise<WalletTransaction> {
+    try {
+      const response = await this.apiClient.post<Response<WalletTransaction>>(
+        `${this.servicePrefix}/${this.endpoint}/admin/credit`,
+        request
+      );
+      return this.handleResponse(response);
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
 }
 
 export { WalletService };
