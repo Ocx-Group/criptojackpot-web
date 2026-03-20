@@ -490,6 +490,12 @@
     "numbersReserved": "Numbers reserved for 5 minutes",
     "tryAgain": "Please try again"
   },
+  "HELP_CENTER": {
+    "title": "Help Center",
+    "description": "If you have any questions, issues, or need assistance, feel free to contact our support team.",
+    "contactLabel": "Support email",
+    "contactMessage": "Send us an email and we will get back to you as soon as possible."
+  },
   "CHECKOUT": {
     "title": "Checkout",
     "subtitle": "Complete your purchase securely",

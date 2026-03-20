@@ -94,7 +94,7 @@ const UserPanelSidebar = () => {
     },
     {
       id: 4447,
-      href: '/#',
+      href: '/help-center',
       icon: <HeadsetIcon weight="bold" className="ph-bold ph-headset fs-five" />,
       text: t('SIDEBAR.items.helpCenter'),
     },
