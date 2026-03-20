@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAdminOrders } from '@/features/admin-panel/hooks';
 import { OrderDto } from '@/interfaces/order';
 import { ShoppingCart, CaretDown, CaretUp } from '@phosphor-icons/react';
+import { formatSeries } from '@/utils/formatSeries';
 
 const ORDER_STATUS_MAP: Record<number, { label: string; badge: string }> = {
   0: { label: 'Pendiente', badge: 'badge bg-warning' },
@@ -134,7 +135,7 @@ const AdminOrdersList: React.FC = () => {
                                     {order.items.map((detail, idx) => (
                                       <tr key={idx}>
                                         <td>{detail.number}</td>
-                                        <td>{detail.series}</td>
+                                        <td>{formatSeries(detail.series)}</td>
                                         <td>${detail.unitPrice.toFixed(2)}</td>
                                         <td>{detail.quantity}</td>
                                         <td>${detail.subtotal.toFixed(2)}</td>

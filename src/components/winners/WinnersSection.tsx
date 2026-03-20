@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import SubTitle from '../SubTitle';
 import { winnerService } from '@/services';
+import { formatSeries } from '@/utils/formatSeries';
 import { Winner } from '@/interfaces/winner';
 
 const getInitials = (name?: string): string => {
@@ -71,7 +72,7 @@ const WinnerCard = ({ winner, locale }: { winner: Winner; locale: string }) => {
 
         {/* Lottery + ticket compact line */}
         <p className="n3-clr mb-xxl-7 mb-xl-6 mb-lg-4 mb-md-3 mb-3 fs-six">
-          {winner.lotteryTitle} · #{winner.number} · {t('WINNERS_PAGE.series')}: {winner.series}
+          {winner.lotteryTitle} · #{winner.number} · {t('WINNERS_PAGE.series')}: {formatSeries(winner.series)}
         </p>
 
         {/* Winner info */}

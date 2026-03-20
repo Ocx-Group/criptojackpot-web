@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMyTickets } from '@/features/user-panel/hooks/useMyTickets';
 import { TicketStatus } from '@/interfaces/ticket';
+import { formatSeries } from '@/utils/formatSeries';
 
 const PAGE_SIZE = 6;
 
@@ -73,7 +74,7 @@ const UserPanelSection = () => {
                         </div>
                         <div className="ticket-in text-center">
                           <span className="fs18 fw_600 n4-clr d-block mb-2">{t('MY_TICKETS.series')}</span>
-                          <span className="s1-clr fw_600">{ticket.series}</span>
+                          <span className="s1-clr fw_600">{formatSeries(ticket.series)}</span>
                         </div>
                         <div className="ticket-in text-center">
                           <span className="fs18 fw_600 n4-clr d-block mb-2">{t('MY_TICKETS.amount')}</span>

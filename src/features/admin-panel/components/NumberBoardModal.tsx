@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { X, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useNumberBoard } from '@/features/admin-panel/hooks';
 import type { NumberSummaryItem } from '@/services/lotteryNumberService';
+import { formatSeries } from '@/utils/formatSeries';
 
 interface NumberBoardModalProps {
   lotteryId: string;
@@ -409,7 +410,7 @@ const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryT
                                   color: isSold ? COLORS.green : isReserved ? COLORS.blue : COLORS.textMuted,
                                 }}
                               >
-                                <div style={{ fontWeight: 700 }}>S{String(s.series).padStart(2, '0')}</div>
+                                <div style={{ fontWeight: 700 }}>S{formatSeries(s.series)}</div>
                                 <div style={{ fontSize: 9, marginTop: 2 }}>
                                   {isSold
                                     ? `✓ ${t('NUMBER_BOARD.statusSold', 'vendida')}`

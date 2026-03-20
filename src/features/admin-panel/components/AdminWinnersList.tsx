@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Trophy, CalendarBlank, Ticket, CurrencyDollar } from '@phosphor-icons/react';
 import { winnerService } from '@/services';
 import { Winner, WinnerStatus } from '@/interfaces/winner';
+import { formatSeries } from '@/utils/formatSeries';
 
 const STATUS_MAP: Record<string, { label: string; badge: string }> = {
   [WinnerStatus.Announced]: { label: 'Anunciado', badge: 'badge bg-info' },
@@ -93,7 +94,7 @@ const AdminWinnersList: React.FC = () => {
                           <Ticket size={14} className="text-muted" />
                           <span>#{winner.number}</span>
                         </div>
-                        <small className="text-muted">Serie: {winner.series}</small>
+                        <small className="text-muted">Serie: {formatSeries(winner.series)}</small>
                       </td>
                       <td>
                         <span className="fw-semibold">{winner.prizeName || '—'}</span>
