@@ -1,7 +1,7 @@
 'use client';
 import callSum from '@/../public/images/global/call-sun.png';
 import globalPicon from '@/../public/images/global/global-picon.png';
-import jewelryCallto from '@/../public/images/global/jewelry-callto.png';
+import jewelryCallto from '@/../public/images/global/dimond-v12.png';
 import { ArrowUpRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';

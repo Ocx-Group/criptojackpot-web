@@ -1,4 +1,3 @@
-import image from '@/../public/images/howit/how14.png';
 import Faq from '@/components/home-one/Faq';
 import Jewellery1CallToAction from '@/components/landing-jewellery1/Jewellery1CallToAction';
 import Jewellery1Footer from '@/components/landing-jewellery1/Jewellery1Footer';
@@ -25,7 +24,7 @@ const LandingPage = () => {
       <Nft2Banner />
       <Nft2HowItWork />
       <LotteryList />
-      <Jewellery1CallToAction image={image} />
+      <Jewellery1CallToAction />
       <Nft2Testimonial />
       <Faq />
       <Jewellery1Footer />
