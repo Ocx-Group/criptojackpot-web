@@ -14,6 +14,10 @@ class OrderService extends BaseService {
     return this.create<Record<string, never>, PayOrderResponse>({}, `${orderId}/pay`);
   }
 
+  async payOrderWithBalance(orderId: string): Promise<void> {
+    return this.create<Record<string, never>, void>({}, `${orderId}/pay-with-balance`);
+  }
+
   async getCurrencies(): Promise<CoinPaymentCurrency[]> {
     return this.getAll<CoinPaymentCurrency>({ path: 'currencies' });
   }

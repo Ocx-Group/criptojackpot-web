@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Wallet, Bitcoin, Check } from 'lucide-react';
+import { Wallet, Bitcoin, Check, DollarSign } from 'lucide-react';
 import { PaymentMethod } from '@/store/checkoutStore';
+import { walletService } from '@/services';
 
 interface PaymentMethodSelectorProps {
   selectedMethod: PaymentMethod | null;
   onSelect: (method: PaymentMethod) => void;
   disabled?: boolean;
+  totalAmount?: number;
 }
 
 interface PaymentOption {
@@ -18,6 +20,7 @@ interface PaymentOption {
   icon: React.ReactNode;
   popular?: boolean;
   comingSoon?: boolean;
+  insufficientFunds?: boolean;
 }
 
 /**
@@ -27,10 +30,55 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
   selectedMethod,
   onSelect,
   disabled = false,
+  totalAmount = 0,
 }) => {
   const { t } = useTranslation();
+  const [balance, setBalance] = useState<number | null>(null);
+  const [loadingBalance, setLoadingBalance] = useState(true);
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const walletBalance = await walletService.getBalance();
+        setBalance(walletBalance.balance);
+      } catch {
+        setBalance(null);
+      } finally {
+        setLoadingBalance(false);
+      }
+    };
+    fetchBalance();
+  }, []);
+
+  const hasInsufficientFunds = balance !== null && balance < totalAmount;
+  const isBalanceAvailable = balance !== null;
+
+  const getBalanceDescription = (): string => {
+    if (loadingBalance) {
+      return t('CHECKOUT.paymentMethods.balanceLoading', 'Cargando saldo...');
+    }
+    if (!isBalanceAvailable) {
+      return t('CHECKOUT.paymentMethods.balanceUnavailable', 'Saldo no disponible');
+    }
+    if (hasInsufficientFunds) {
+      return t('CHECKOUT.paymentMethods.balanceInsufficient', 'Saldo insuficiente: ${{balance}}', {
+        balance: balance.toFixed(2),
+      });
+    }
+    return t('CHECKOUT.paymentMethods.balanceAvailable', 'Saldo disponible: ${{balance}}', {
+      balance: balance.toFixed(2),
+    });
+  };
 
   const paymentOptions: PaymentOption[] = [
+    {
+      id: 'balance',
+      name: t('CHECKOUT.paymentMethods.balance', 'Saldo Interno'),
+      description: getBalanceDescription(),
+      icon: <DollarSign size={28} />,
+      popular: !hasInsufficientFunds && isBalanceAvailable && balance >= totalAmount,
+      insufficientFunds: hasInsufficientFunds,
+    },
     {
       id: 'crypto',
       name: t('CHECKOUT.paymentMethods.crypto', 'Criptomonedas'),
@@ -38,13 +86,6 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       icon: <Bitcoin size={28} />,
     },
   ];
-
-  // Auto-seleccionar si solo hay un método disponible
-  useEffect(() => {
-    if (paymentOptions.length === 1 && selectedMethod !== paymentOptions[0].id && !disabled) {
-      onSelect(paymentOptions[0].id);
-    }
-  }, []);
 
   return (
     <div className="payment-method-selector">
@@ -56,7 +97,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       <div className="payment-options d-flex flex-column gap-3">
         {paymentOptions.map(option => {
           const isSelected = selectedMethod === option.id;
-          const isDisabled = disabled || option.comingSoon;
+          const isDisabled = disabled || option.comingSoon || option.insufficientFunds;
 
           return (
             <button
@@ -99,6 +140,11 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
                   {option.comingSoon && (
                     <span className="badge bg-secondary n0-clr" style={{ fontSize: '9px', padding: '3px 8px' }}>
                       {t('CHECKOUT.comingSoon', 'Próximamente')}
+                    </span>
+                  )}
+                  {option.insufficientFunds && (
+                    <span className="badge bg-danger n0-clr" style={{ fontSize: '9px', padding: '3px 8px' }}>
+                      {t('CHECKOUT.insufficientFunds', 'Fondos insuficientes')}
                     </span>
                   )}
                 </div>

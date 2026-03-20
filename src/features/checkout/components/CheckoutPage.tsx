@@ -32,6 +32,8 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod,
     setProcessing,
     setError,
+    setStatus,
+    clearCheckout,
   } = useCheckoutStore();
 
   // Timer de urgencia: cuando llega a 0 solo se oculta, no expira nada
@@ -54,7 +56,7 @@ const CheckoutPage: React.FC = () => {
   // Cuando el timer de urgencia llega a 0, redirigir a personal-info
   const handleTimerEnd = useCallback(() => {
     setShowTimer(false);
-    window.location.href = 'https://criptojackpot.com/personal-info';
+    globalThis.location.href = 'https://criptojackpot.com/personal-info';
   }, []);
 
   // Manejar seleccion de metodo de pago
@@ -62,7 +64,46 @@ const CheckoutPage: React.FC = () => {
     setPaymentMethod(method);
   };
 
-  // Procesar el pago: usar orden existente (creada via WebSocket) -> pagar -> abrir CoinPayments en nueva pestana
+  // Pago con saldo interno: debit balance → complete order → redirect
+  const handleBalancePayment = async (existingOrderId: string) => {
+    await orderService.payOrderWithBalance(existingOrderId);
+
+    setStatus('success');
+    clearCheckout();
+
+    showNotification(
+      'success',
+      t('CHECKOUT.balancePaymentSuccess', '¡Pago exitoso!'),
+      t('CHECKOUT.balancePaymentSuccessDesc', 'Tu compra ha sido completada con saldo interno.')
+    );
+
+    router.push('/personal-info');
+  };
+
+  // Pago con crypto: abrir CoinPayments en nueva pestaña
+  const handleCryptoPayment = async (existingOrderId: string) => {
+    const payResponse = await orderService.payOrder(existingOrderId);
+
+    if (!payResponse?.checkoutUrl) {
+      throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
+    }
+
+    const link = document.createElement('a');
+    link.href = payResponse.checkoutUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    showNotification(
+      'info',
+      t('CHECKOUT.paymentWindowOpened', 'Página de pago abierta'),
+      t('CHECKOUT.paymentWindowOpenedDesc', 'Completa el pago en la nueva pestaña y vuelve aquí cuando termine.')
+    );
+  };
+
+  // Procesar el pago segun el metodo seleccionado
   const handleConfirmPayment = async () => {
     if (!selectedPaymentMethod) {
       showNotification('warning', t('CHECKOUT.selectPaymentFirst', 'Selecciona un método de pago'), '');
@@ -73,7 +114,6 @@ const CheckoutPage: React.FC = () => {
       setProcessing(true);
       setError(null);
 
-      // Usar el orderId existente creado via WebSocket al reservar numeros
       const existingOrderId = orderId || items.find(item => item.orderId)?.orderId;
 
       if (!existingOrderId) {
@@ -82,29 +122,11 @@ const CheckoutPage: React.FC = () => {
         );
       }
 
-      // Pagar la orden existente -> obtener URL de CoinPayments
-      const payResponse = await orderService.payOrder(existingOrderId);
-
-      console.log('Pay order response:', JSON.stringify(payResponse));
-
-      if (!payResponse?.checkoutUrl) {
-        throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
+      if (selectedPaymentMethod === 'balance') {
+        await handleBalancePayment(existingOrderId);
+      } else {
+        await handleCryptoPayment(existingOrderId);
       }
-
-      // Abrir el checkout de CoinPayments en una nueva pestana
-      const link = document.createElement('a');
-      link.href = payResponse.checkoutUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      showNotification(
-        'info',
-        t('CHECKOUT.paymentWindowOpened', 'Página de pago abierta'),
-        t('CHECKOUT.paymentWindowOpenedDesc', 'Completa el pago en la nueva pestaña y vuelve aquí cuando termine.')
-      );
     } catch (err) {
       const message = err instanceof Error ? err.message : t('CHECKOUT.paymentError', 'Error al procesar el pago');
       setError(message);
@@ -178,6 +200,7 @@ const CheckoutPage: React.FC = () => {
                 selectedMethod={selectedPaymentMethod}
                 onSelect={handlePaymentMethodSelect}
                 disabled={isProcessing || status !== 'pending'}
+                totalAmount={totalAmount}
               />
             </div>
           </div>
