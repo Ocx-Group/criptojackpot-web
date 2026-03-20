@@ -7,7 +7,7 @@ const HelpCenterSection: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="user-body-area pt-120 pb-120">
+    <div className="col-xxl-9 col-xl-8 col-lg-8">
       <div className="cmn-box-addingbg win40-ragba border radius24 p-xxl-10 p-xl-8 p-lg-6 p-5">
         <div className="d-flex align-items-center gap-3 mb-5">
           <HeadsetIcon size={32} weight="bold" className="act4-clr" />
