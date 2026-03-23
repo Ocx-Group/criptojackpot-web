@@ -8,8 +8,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
+import { useUserStore } from '@/store/userStore';
 import { CreateTestimonialRequest } from '@/interfaces/testimonial';
-import { testimonialService } from '@/services';
+import { testimonialService, digitalOceanStorageService } from '@/services';
 import { CreateTestimonialFormData } from '../types/createTestimonialFormData';
 import { createCreateTestimonialSchema } from '../schemas/testimonialSchema';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -19,6 +20,7 @@ export const useCreateTestimonialForm = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
+  const user = useUserStore(state => state.user);
 
   const schema = useMemo(() => createCreateTestimonialSchema(t), [t]);
 
@@ -79,6 +81,22 @@ export const useCreateTestimonialForm = () => {
     }
   };
 
+  const handleAuthorImageUpload = async (file: File): Promise<void> => {
+    const userId = user?.id ?? 0;
+    try {
+      const cdnUrl = await digitalOceanStorageService.uploadPrizeImage(file, userId);
+      setValue('authorImageUrl', cdnUrl, { shouldValidate: false });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Error al subir la imagen';
+      showNotification('error', t('COMMON.error', 'Error'), msg);
+      throw error;
+    }
+  };
+
+  const handleAuthorImageUrlChange = (url: string) => {
+    setValue('authorImageUrl', url, { shouldValidate: false });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -108,6 +126,8 @@ export const useCreateTestimonialForm = () => {
     formData,
     isSubmitting: createMutation.isPending,
     handleInputChange,
+    handleAuthorImageUpload,
+    handleAuthorImageUrlChange,
     handleSubmit,
   };
 };

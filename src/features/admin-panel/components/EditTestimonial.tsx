@@ -1,19 +1,40 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { useEditTestimonialForm } from '@/features/admin-panel/hooks';
-import { Star } from 'lucide-react';
+import { Star, Upload, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface EditTestimonialProps {
   testimonialId: string;
 }
 
 const EditTestimonial: React.FC<EditTestimonialProps> = ({ testimonialId }) => {
-  const { formData, isLoading, isSubmitting, handleInputChange, handleSubmit } =
+  const { formData, isLoading, isSubmitting, handleInputChange, handleAuthorImageUpload, handleAuthorImageUrlChange, handleSubmit } =
     useEditTestimonialForm(testimonialId);
   const { t } = useTranslation();
+
+  const [imageUploading, setImageUploading] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageUploading(true);
+    try {
+      await handleAuthorImageUpload(file);
+    } finally {
+      setImageUploading(false);
+      if (imageInputRef.current) imageInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveImage = () => {
+    handleAuthorImageUrlChange('');
+  };
 
   if (isLoading) {
     return (
@@ -90,19 +111,71 @@ const EditTestimonial: React.FC<EditTestimonialProps> = ({ testimonialId }) => {
                 <div className="form-text">{formData.text.length}/500</div>
               </div>
 
-              {/* URL de imagen */}
+              {/* Imagen del autor - Upload */}
               <div className="col-md-12">
                 <label className="form-label fw-semibold">
-                  {t('TESTIMONIALS_ADMIN.fields.authorImageUrl', 'URL de Imagen del Autor')}
+                  {t('TESTIMONIALS_ADMIN.fields.authorImageUrl', 'Imagen del Autor')}
                 </label>
                 <input
-                  type="url"
-                  name="authorImageUrl"
-                  className="form-control"
-                  value={formData.authorImageUrl}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/avatar.jpg"
+                  ref={imageInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                  className="d-none"
+                  onChange={handleImageFileChange}
                 />
+                {!formData.authorImageUrl && !imageUploading ? (
+                  <div
+                    className="border border-2 border-secondary rounded p-4 text-center bg-light"
+                    style={{ borderStyle: 'dashed', cursor: 'pointer' }}
+                    onClick={() => imageInputRef.current?.click()}
+                  >
+                    <Upload size={32} className="text-secondary mb-2" />
+                    <p className="text-muted mb-1">
+                      {t('TESTIMONIALS_ADMIN.upload.clickToUpload', 'Haz clic para subir una foto del autor')}
+                    </p>
+                    <small className="text-muted">JPG, PNG, GIF, WebP — máximo 10MB (opcional)</small>
+                  </div>
+                ) : imageUploading ? (
+                  <div className="border rounded p-4 text-center bg-light">
+                    <div className="spinner-border text-primary mb-2" aria-hidden="true"></div>
+                    <p className="text-muted mb-0">
+                      {t('TESTIMONIALS_ADMIN.upload.uploading', 'Subiendo imagen...')}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="d-flex align-items-center gap-3 p-3 border rounded bg-light">
+                    <Image
+                      src={formData.authorImageUrl || ''}
+                      alt="Author"
+                      width={64}
+                      height={64}
+                      className="rounded-circle"
+                      style={{ objectFit: 'cover', width: 64, height: 64 }}
+                      onError={e => {
+                        (e.target as HTMLImageElement).src = '/images/placeholder.jpg';
+                      }}
+                    />
+                    <div className="flex-grow-1">
+                      <p className="mb-0 text-muted small">{t('TESTIMONIALS_ADMIN.upload.imageReady', 'Imagen del autor')}</p>
+                    </div>
+                    <div className="d-flex gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() => imageInputRef.current?.click()}
+                      >
+                        {t('TESTIMONIALS_ADMIN.upload.changeImage', 'Cambiar')}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={handleRemoveImage}
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Rating */}

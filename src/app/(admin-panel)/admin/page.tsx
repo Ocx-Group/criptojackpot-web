@@ -6,7 +6,7 @@ import StatsSection from '@/features/admin-panel/components/StatsSection';
 import { useAdminDashboard } from '@/features/admin-panel/hooks';
 
 const AdminDashboard = () => {
-  const { userStats, orderStats, recentActivity, isLoading } = useAdminDashboard();
+  const { userStats, orderStats, recentActivity } = useAdminDashboard();
 
   return (
     <div className="col-lg-9">
@@ -17,10 +17,7 @@ const AdminDashboard = () => {
           orderStats={orderStats.data}
           isLoading={userStats.isLoading || orderStats.isLoading}
         />
-        <RecentActivityTable
-          activities={recentActivity.data}
-          isLoading={recentActivity.isLoading}
-        />
+        <RecentActivityTable activities={recentActivity.data} isLoading={recentActivity.isLoading} />
         <QuickActions />
       </div>
     </div>

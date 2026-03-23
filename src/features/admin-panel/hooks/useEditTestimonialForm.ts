@@ -8,8 +8,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
+import { useUserStore } from '@/store/userStore';
 import { Testimonial, UpdateTestimonialRequest } from '@/interfaces/testimonial';
-import { testimonialService } from '@/services';
+import { testimonialService, digitalOceanStorageService } from '@/services';
 import { createEditTestimonialSchema } from '../schemas/testimonialSchema';
 import { z } from 'zod';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -19,6 +20,7 @@ export const useEditTestimonialForm = (testimonialId: string) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
+  const user = useUserStore(state => state.user);
 
   const schema = useMemo(() => createEditTestimonialSchema(t), [t]);
   type EditTestimonialFormData = z.infer<typeof schema>;
@@ -105,6 +107,22 @@ export const useEditTestimonialForm = (testimonialId: string) => {
     }
   };
 
+  const handleAuthorImageUpload = async (file: File): Promise<void> => {
+    const userId = user?.id ?? 0;
+    try {
+      const cdnUrl = await digitalOceanStorageService.uploadPrizeImage(file, userId);
+      setValue('authorImageUrl', cdnUrl, { shouldValidate: false });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Error al subir la imagen';
+      showNotification('error', t('COMMON.error', 'Error'), msg);
+      throw error;
+    }
+  };
+
+  const handleAuthorImageUrlChange = (url: string) => {
+    setValue('authorImageUrl', url, { shouldValidate: false });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -135,6 +153,8 @@ export const useEditTestimonialForm = (testimonialId: string) => {
     isLoading,
     isSubmitting: updateMutation.isPending,
     handleInputChange,
+    handleAuthorImageUpload,
+    handleAuthorImageUrlChange,
     handleSubmit,
   };
 };

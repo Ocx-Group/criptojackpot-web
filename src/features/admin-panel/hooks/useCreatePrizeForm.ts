@@ -8,8 +8,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useNotificationStore } from '@/store/notificationStore';
+import { useUserStore } from '@/store/userStore';
 import { CreatePrizeRequest, PrizeType, PrizeImageRequest } from '@/interfaces/prize';
-import { prizeService } from '@/services';
+import { prizeService, digitalOceanStorageService } from '@/services';
 import { CreatePrizeFormData } from '../types/createPrizeFormData';
 import { createCreatePrizeSchema } from '../schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
@@ -19,6 +20,7 @@ export const useCreatePrizeForm = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const showNotification = useNotificationStore(state => state.show);
+  const user = useUserStore(state => state.user);
 
   const schema = useMemo(() => createCreatePrizeSchema(t), [t]);
 
@@ -89,6 +91,35 @@ export const useCreatePrizeForm = () => {
     setValue('mainImageUrl', url, { shouldValidate: false });
   };
 
+  const handleMainImageUpload = async (file: File): Promise<void> => {
+    const userId = user?.id ?? 0;
+    try {
+      const cdnUrl = await digitalOceanStorageService.uploadPrizeImage(file, userId);
+      setValue('mainImageUrl', cdnUrl, { shouldValidate: false });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Error al subir la imagen';
+      showNotification('error', t('COMMON.error', 'Error'), msg);
+      throw error;
+    }
+  };
+
+  const handleAdditionalImageUpload = async (file: File, caption: string): Promise<void> => {
+    const userId = user?.id ?? 0;
+    try {
+      const cdnUrl = await digitalOceanStorageService.uploadPrizeImage(file, userId);
+      const newImage: PrizeImageRequest = {
+        imageUrl: cdnUrl,
+        caption,
+        displayOrder: formData.additionalImages.length,
+      };
+      setValue('additionalImages', [...formData.additionalImages, newImage], { shouldValidate: false });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Error al subir la imagen';
+      showNotification('error', t('COMMON.error', 'Error'), msg);
+      throw error;
+    }
+  };
+
   const handleAddAdditionalImage = (image: PrizeImageRequest) => {
     setValue('additionalImages', [...formData.additionalImages, image], { shouldValidate: false });
   };
@@ -147,6 +178,8 @@ export const useCreatePrizeForm = () => {
     handleInputChange,
     handleTypeChange,
     handleMainImageUrlChange,
+    handleMainImageUpload,
+    handleAdditionalImageUpload,
     handleAddAdditionalImage,
     handleRemoveAdditionalImage,
     handleSpecificationChange,
