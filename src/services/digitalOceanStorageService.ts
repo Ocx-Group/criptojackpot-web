@@ -116,6 +116,7 @@ export class DigitalOceanStorageService extends BaseService {
       body: file,
       headers: {
         'Content-Type': file.type,
+        'x-amz-acl': 'public-read',
       },
     });
 
