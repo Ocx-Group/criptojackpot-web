@@ -18,10 +18,11 @@ class PrizeService extends BaseService {
     return this.create<CreatePrizeRequest, Prize>(request);
   }
 
-  async getAllPrizes(pagination?: PaginationRequest): Promise<PaginatedResponse<Prize>> {
+  async getAllPrizes(pagination?: PaginationRequest, availableOnly?: boolean): Promise<PaginatedResponse<Prize>> {
     const params: Record<string, string> = {};
     if (pagination?.pageNumber) params.pageNumber = pagination.pageNumber.toString();
     if (pagination?.pageSize) params.pageSize = pagination.pageSize.toString();
+    if (availableOnly) params.availableOnly = 'true';
 
     return this.getAllPaginated<Prize>({ params });
   }

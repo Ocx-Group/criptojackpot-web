@@ -67,9 +67,9 @@ export const useEditLotteryForm = (lotteryId: string) => {
 
   // Obtener lista de premios disponibles
   const { data: prizesResponse } = useQuery<PaginatedResponse<Prize>, Error>({
-    queryKey: ['prizes'],
+    queryKey: ['prizes', 'available'],
     queryFn: async () => {
-      return prizeService.getAllPrizes({ pageNumber: 1, pageSize: 100 });
+      return prizeService.getAllPrizes({ pageNumber: 1, pageSize: 100 }, true);
     },
   });
 
