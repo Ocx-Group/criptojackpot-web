@@ -63,13 +63,11 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
 
     try {
       const uploadResult = await digitalOceanStorageService.uploadProfilePhoto(file, user?.id ?? 0);
-      const url = new URL(uploadResult);
-      const imageRelativePath = url.pathname.replace('/cryptojackpot/', '');
 
       if (user) {
         const updateImageProfile: UpdateImageProfileRequest = {
           userId: user.id ?? 0,
-          storageKey: imageRelativePath,
+          storageKey: uploadResult.fileName,
         };
 
         try {
@@ -83,7 +81,7 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
         }
       }
 
-      onUploadSuccess?.(uploadResult);
+      onUploadSuccess?.(uploadResult.fileUrl);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error al subir la imagen';
       console.error('Error uploading profile photo:', error);

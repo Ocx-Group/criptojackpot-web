@@ -79,9 +79,8 @@ export class DigitalOceanStorageService extends BaseService {
   /**
    * Sube foto de perfil y actualiza en el backend
    */
-  async uploadProfilePhoto(file: File, userId: number): Promise<string> {
-    const { fileUrl } = await this.uploadFile(file, userId, 'profile-photos');
-    return fileUrl;
+  async uploadProfilePhoto(file: File, userId: number): Promise<UploadResponse> {
+    return this.uploadFile(file, userId, 'profile-photos');
   }
 
   /**
