@@ -69,7 +69,7 @@ export const useProfilePhoto = (options: UseProfilePhotoOptions = {}): UseProfil
       if (user) {
         const updateImageProfile: UpdateImageProfileRequest = {
           userId: user.id ?? 0,
-          imageUrl: imageRelativePath,
+          storageKey: imageRelativePath,
         };
 
         try {

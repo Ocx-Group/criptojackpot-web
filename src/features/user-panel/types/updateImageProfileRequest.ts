@@ -1,4 +1,4 @@
 export interface UpdateImageProfileRequest {
   userId: number;
-  imageUrl: string;
+  storageKey: string;
 }
