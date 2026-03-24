@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { useEditPrizeForm } from '@/features/admin-panel/hooks/useEditPrizeForm';
 import { PrizeType } from '@/interfaces/prize';
 import Image from 'next/image';
-import { Plus, X, Trash2, ArrowLeft } from 'lucide-react';
+import { Plus, X, Trash2, ArrowLeft, Upload } from 'lucide-react';
 
 interface EditPrizeProps {
   prizeId: string;
@@ -20,7 +20,8 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
     handleInputChange,
     handleTypeChange,
     handleMainImageUrlChange,
-    handleAddAdditionalImage,
+    handleMainImageUpload,
+    handleAdditionalImageUpload,
     handleRemoveAdditionalImage,
     handleSpecificationChange,
     handleRemoveSpecification,
@@ -31,8 +32,13 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
 
   const [newSpecKey, setNewSpecKey] = useState('');
   const [newSpecValue, setNewSpecValue] = useState('');
-  const [newAdditionalImageUrl, setNewAdditionalImageUrl] = useState('');
   const [newAdditionalImageCaption, setNewAdditionalImageCaption] = useState('');
+  const [mainImageUploading, setMainImageUploading] = useState(false);
+  const [additionalImageUploading, setAdditionalImageUploading] = useState(false);
+  const [mainImagePreview, setMainImagePreview] = useState<string | null>(null);
+
+  const mainImageInputRef = useRef<HTMLInputElement>(null);
+  const additionalImageInputRef = useRef<HTMLInputElement>(null);
 
   const prizeTypes = [
     { value: PrizeType.Cash, label: t('PRIZES_ADMIN.types.cash', 'Efectivo') },
@@ -49,16 +55,45 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
     }
   };
 
-  const handleAddImage = () => {
-    if (newAdditionalImageUrl.trim()) {
-      handleAddAdditionalImage({
-        imageUrl: newAdditionalImageUrl.trim(),
-        caption: newAdditionalImageCaption.trim(),
-        displayOrder: formData.additionalImages.length,
-      });
-      setNewAdditionalImageUrl('');
-      setNewAdditionalImageCaption('');
+  const handleMainImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const localPreview = URL.createObjectURL(file);
+    setMainImagePreview(localPreview);
+    setMainImageUploading(true);
+
+    try {
+      await handleMainImageUpload(file);
+    } catch {
+      setMainImagePreview(null);
+    } finally {
+      setMainImageUploading(false);
+      if (mainImageInputRef.current) {
+        mainImageInputRef.current.value = '';
+      }
     }
+  };
+
+  const handleAdditionalImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAdditionalImageUploading(true);
+    try {
+      await handleAdditionalImageUpload(file, newAdditionalImageCaption.trim());
+      setNewAdditionalImageCaption('');
+    } finally {
+      setAdditionalImageUploading(false);
+      if (additionalImageInputRef.current) {
+        additionalImageInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemoveMainImage = () => {
+    setMainImagePreview(null);
+    handleMainImageUrlChange('');
   };
 
   if (isLoading) {
@@ -242,30 +277,56 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
                 </div>
               </div>
 
-              {/* URL de Imagen Principal */}
+              {/* Imagen Principal - Upload */}
               <div className="col-md-12">
                 <label className="form-label fw-semibold">
-                  {t('PRIZES_ADMIN.fields.mainImageUrl', 'URL de Imagen Principal')}{' '}
+                  {t('PRIZES_ADMIN.fields.mainImageUrl', 'Imagen Principal')}{' '}
                   <span className="text-danger">*</span>
                 </label>
                 <input
-                  type="url"
-                  name="mainImageUrl"
-                  className="form-control"
-                  value={formData.mainImageUrl}
-                  onChange={e => handleMainImageUrlChange(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  required
+                  ref={mainImageInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                  className="d-none"
+                  onChange={handleMainImageFileChange}
                 />
+                {!formData.mainImageUrl && !mainImageUploading ? (
+                  <div
+                    className="border border-2 border-secondary rounded p-5 text-center bg-light"
+                    style={{ borderStyle: 'dashed', cursor: 'pointer' }}
+                    onClick={() => mainImageInputRef.current?.click()}
+                  >
+                    <Upload size={40} className="text-secondary mb-2" />
+                    <p className="text-muted mb-1">
+                      {t('PRIZES_ADMIN.upload.clickToUpload', 'Haz clic para subir una imagen')}
+                    </p>
+                    <small className="text-muted">JPG, PNG, GIF, WebP — máximo 10MB</small>
+                  </div>
+                ) : mainImageUploading ? (
+                  <div className="border rounded p-5 text-center bg-light">
+                    <div className="spinner-border text-primary mb-2" aria-hidden="true"></div>
+                    <p className="text-muted mb-0">
+                      {t('PRIZES_ADMIN.upload.uploading', 'Subiendo imagen...')}
+                    </p>
+                  </div>
+                ) : null}
               </div>
 
               {/* Preview de Imagen Principal */}
-              {formData.mainImageUrl && (
+              {(formData.mainImageUrl || mainImagePreview) && !mainImageUploading && (
                 <div className="col-md-12">
                   <label className="form-label fw-semibold">{t('PRIZES_ADMIN.fields.preview', 'Vista Previa')}</label>
-                  <div className="border rounded p-4 bg-light text-center">
+                  <div className="border rounded p-4 bg-light text-center position-relative">
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
+                      onClick={handleRemoveMainImage}
+                      title={t('PRIZES_ADMIN.upload.removeImage', 'Eliminar imagen')}
+                    >
+                      <X size={16} />
+                    </button>
                     <Image
-                      src={formData.mainImageUrl}
+                      src={formData.mainImageUrl || mainImagePreview || ''}
                       alt="Preview"
                       width={300}
                       height={300}
@@ -285,37 +346,57 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
                         <span className="badge bg-info fs-6 px-3 py-2">Tier {formData.tier}</span>
                       </div>
                     </div>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary btn-sm mt-3"
+                      onClick={() => mainImageInputRef.current?.click()}
+                    >
+                      {t('PRIZES_ADMIN.upload.changeImage', 'Cambiar imagen')}
+                    </button>
                   </div>
                 </div>
               )}
 
-              {/* Imágenes Adicionales */}
+              {/* Imágenes Adicionales - Upload */}
               <div className="col-md-12">
                 <label className="form-label fw-semibold">
                   {t('PRIZES_ADMIN.fields.additionalImages', 'Imágenes Adicionales')}
                 </label>
                 <div className="row g-2 mb-3">
-                  <div className="col-md-5">
-                    <input
-                      type="url"
-                      className="form-control"
-                      value={newAdditionalImageUrl}
-                      onChange={e => setNewAdditionalImageUrl(e.target.value)}
-                      placeholder="URL de imagen"
-                    />
-                  </div>
-                  <div className="col-md-5">
+                  <div className="col-md-7">
                     <input
                       type="text"
                       className="form-control"
                       value={newAdditionalImageCaption}
                       onChange={e => setNewAdditionalImageCaption(e.target.value)}
-                      placeholder="Descripción (opcional)"
+                      placeholder={t('PRIZES_ADMIN.placeholders.imageCaption', 'Descripción (opcional)')}
                     />
                   </div>
-                  <div className="col-md-2">
-                    <button type="button" className="btn btn-outline-primary w-100" onClick={handleAddImage}>
-                      <Plus size={18} />
+                  <div className="col-md-5">
+                    <input
+                      ref={additionalImageInputRef}
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                      className="d-none"
+                      onChange={handleAdditionalImageFileChange}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                      onClick={() => additionalImageInputRef.current?.click()}
+                      disabled={additionalImageUploading}
+                    >
+                      {additionalImageUploading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                          {t('PRIZES_ADMIN.upload.uploading', 'Subiendo...')}
+                        </>
+                      ) : (
+                        <>
+                          <Upload size={18} />
+                          {t('PRIZES_ADMIN.upload.addImage', 'Subir imagen')}
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
