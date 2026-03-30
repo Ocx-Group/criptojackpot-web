@@ -52,6 +52,7 @@ const LotteryDetailsPage = () => {
 
   // Estado: { número: cantidad }
   const [selectedNumbers, setSelectedNumbers] = useState<Record<number, number>>({});
+  const [pick3Numbers, setPick3Numbers] = useState<[string, string, string]>(['', '', '']);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   // Cart store
@@ -107,6 +108,23 @@ const LotteryDetailsPage = () => {
     },
     enabled: !!lotteryId,
   });
+
+  // Pick3: detect game type and sync inputs to selectedNumbers
+  const isPick3 = lottery?.type === LotteryType.Pick3;
+
+  useEffect(() => {
+    if (!isPick3) return;
+    const newSelected: Record<number, number> = {};
+    const seen = new Set<number>();
+    pick3Numbers.forEach(n => {
+      const num = parseInt(n, 10);
+      if (n !== '' && !isNaN(num) && num >= 0 && num <= 999 && !seen.has(num)) {
+        seen.add(num);
+        newSelected[num] = 1;
+      }
+    });
+    setSelectedNumbers(newSelected);
+  }, [pick3Numbers, isPick3]);
 
   // Calcular días restantes
   const getDaysRemaining = (endDate: string) => {
@@ -230,6 +248,7 @@ const LotteryDetailsPage = () => {
   // Limpiar selección
   const clearSelection = () => {
     setSelectedNumbers({});
+    setPick3Numbers(['', '', '']);
   };
 
   // Referencia para tracking de reservas pendientes
@@ -389,9 +408,9 @@ const LotteryDetailsPage = () => {
     // Aquí podrías redirigir al checkout directamente
   };
 
-  // Formatear número con dos dígitos
+  // Formatear número según tipo de lotería
   const formatNumber = (num: number): string => {
-    return num.toString().padStart(2, '0');
+    return num.toString().padStart(isPick3 ? 3 : 2, '0');
   };
 
   // Validar si una URL de imagen es válida
@@ -796,7 +815,9 @@ const LotteryDetailsPage = () => {
                       <div className="d-flex justify-content-between align-items-center mb-2">
                         <div className="d-flex align-items-center gap-2">
                           <label className="n4-clr fw_600" style={{ fontSize: '13px' }}>
-                            {t('LOTTERY_DETAILS.selectNumbers', 'Selecciona tus números')}
+                            {isPick3
+                              ? t('LOTTERY_DETAILS.pick3Title', 'Escoge tus 3 números')
+                              : t('LOTTERY_DETAILS.selectNumbers', 'Selecciona tus números')}
                           </label>
                           {/* Indicador de conexión WebSocket */}
                           {isAuthenticated && (
@@ -832,143 +853,280 @@ const LotteryDetailsPage = () => {
                         </div>
                       )}
 
-                      {/* Numbers Grid - Compacto sin scroll */}
-                      <div
-                        className="number-grid"
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: 'repeat(10, 1fr)',
-                          gap: '2px',
-                        }}
-                      >
-                        {allNumbers.map(num => {
-                          const qty = selectedNumbers[num] || 0;
-                          const isSelected = qty > 0;
-                          // Buscar info de disponibilidad del hub si está conectado
-                          const hubNumber = availableNumbers.find(n => n.number === num);
-                          const isExhausted = hubNumber?.isExhausted ?? false;
-                          const availableSeries = hubNumber?.availableSeries ?? lottery.totalSeries;
+                      {/* Pick3: 3 number inputs / Standard: Number Grid */}
+                      {isPick3 ? (
+                        <div className="pick3-selector">
+                          <p className="n3-clr mb-3" style={{ fontSize: '12px' }}>
+                            {t('LOTTERY_DETAILS.pick3Help', 'Escoge 3 números diferentes del 000 al 999')}
+                          </p>
+                          {[0, 1, 2].map(idx => {
+                            const value = pick3Numbers[idx];
+                            const numValue = parseInt(value, 10);
+                            const isValid = value !== '' && !isNaN(numValue) && numValue >= 0 && numValue <= 999;
+                            const isDuplicate = isValid && pick3Numbers.some((n, i) => {
+                              if (i === idx) return false;
+                              const other = parseInt(n, 10);
+                              return !isNaN(other) && other === numValue;
+                            });
 
-                          // Determinar clase CSS del botón
-                          let buttonClass = 'n0-bg n4-clr border';
-                          if (isExhausted) buttonClass = 'n2-bg n3-clr';
-                          else if (isSelected) buttonClass = 'act4-bg n0-clr';
-
-                          // Determinar tooltip del botón
-                          let buttonTitle = '';
-                          if (isExhausted) buttonTitle = 'Agotado';
-                          else if (isConnected) buttonTitle = `${availableSeries} series disponibles`;
-
-                          return (
-                            <button
-                              key={num}
-                              onClick={() => !isExhausted && handleNumberClick(num)}
-                              disabled={isExhausted}
-                              className={`btn p-0 ${buttonClass}`}
-                              style={{
-                                width: '100%',
-                                height: '28px',
-                                fontSize: '10px',
-                                fontWeight: 600,
-                                borderRadius: '4px',
-                                position: 'relative',
-                                opacity: isExhausted ? 0.5 : 1,
-                                cursor: isExhausted ? 'not-allowed' : 'pointer',
-                              }}
-                              title={buttonTitle}
-                            >
-                              {formatNumber(num)}
-                              {qty > 1 && (
-                                <span
+                            return (
+                              <div key={idx} className="d-flex align-items-center gap-2 mb-3">
+                                <div
+                                  className="d-flex align-items-center justify-content-center fw_700"
                                   style={{
-                                    position: 'absolute',
-                                    top: '-4px',
-                                    right: '-4px',
-                                    background: '#ff4757',
+                                    width: '32px',
+                                    height: '48px',
+                                    borderRadius: '8px',
+                                    background: 'linear-gradient(135deg, #ff6348, #ffa502)',
                                     color: '#fff',
-                                    fontSize: '8px',
-                                    fontWeight: 700,
-                                    borderRadius: '50%',
-                                    width: '14px',
-                                    height: '14px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
+                                    fontSize: '16px',
+                                    flexShrink: 0,
                                   }}
                                 >
-                                  {qty}
-                                </span>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
+                                  {idx + 1}
+                                </div>
+                                <input
+                                  type="text"
+                                  inputMode="numeric"
+                                  maxLength={3}
+                                  value={value}
+                                  onChange={e => {
+                                    const val = e.target.value;
+                                    if (val === '' || /^\d{1,3}$/.test(val)) {
+                                      setPick3Numbers(prev => {
+                                        const next = [...prev] as [string, string, string];
+                                        next[idx] = val;
+                                        return next;
+                                      });
+                                    }
+                                  }}
+                                  onBlur={() => {
+                                    if (value !== '') {
+                                      const num = parseInt(value, 10);
+                                      if (!isNaN(num) && num >= 0 && num <= 999) {
+                                        setPick3Numbers(prev => {
+                                          const next = [...prev] as [string, string, string];
+                                          next[idx] = num.toString().padStart(3, '0');
+                                          return next;
+                                        });
+                                      }
+                                    }
+                                  }}
+                                  placeholder="000"
+                                  className="form-control text-center fw_700"
+                                  style={{
+                                    fontSize: '22px',
+                                    letterSpacing: '8px',
+                                    height: '48px',
+                                    borderRadius: '8px',
+                                    backgroundColor: '#1a1a2e',
+                                    color: isValid && !isDuplicate ? '#ffa502' : '#fff',
+                                    border: isDuplicate ? '2px solid #ff4757' : isValid ? '2px solid #2ed573' : '1px solid #444',
+                                  }}
+                                />
+                                {isDuplicate && (
+                                  <span style={{ color: '#ff4757', fontSize: '10px', minWidth: '55px', flexShrink: 0 }}>
+                                    {t('LOTTERY_DETAILS.pick3Duplicate', 'Repetido')}
+                                  </span>
+                                )}
+                                {isValid && !isDuplicate && (
+                                  <span style={{ color: '#2ed573', fontSize: '18px', minWidth: '55px', flexShrink: 0, textAlign: 'center' }}>✓</span>
+                                )}
+                              </div>
+                            );
+                          })}
 
-                      {/* Selected Numbers with Quantity Control */}
-                      {selectedEntries.length > 0 && (
-                        <div className="mt-3 p-2 n0-bg radius8">
-                          <span className="fs-nine n3-clr d-block mb-2">
-                            {t('LOTTERY_DETAILS.selectedNumbers', 'Seleccionados')}:
-                          </span>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            {selectedEntries
-                              .toSorted(([a], [b]) => Number(a) - Number(b))
-                              .map(([num, qty]) => {
-                                const available = getAvailableSeries(Number(num));
-                                const isAtMax = qty >= available;
-
-                                return (
-                                  <div
-                                    key={num}
-                                    className="d-flex align-items-center justify-content-between"
-                                    style={{ fontSize: '12px' }}
-                                  >
-                                    <div className="d-flex align-items-center gap-2">
-                                      <span className="fw_700 act4-clr">{formatNumber(Number(num))}</span>
-                                      <span className="text-muted" style={{ fontSize: '10px' }}>
-                                        ({qty}/{available})
-                                      </span>
-                                    </div>
-                                    <div className="d-flex align-items-center gap-1">
-                                      <button
-                                        className="btn p-0 n4-clr"
-                                        onClick={() => decreaseQuantity(Number(num))}
-                                        style={{ width: '20px', height: '20px', fontSize: '14px', lineHeight: 1 }}
-                                      >
-                                        −
-                                      </button>
-                                      <span className="fw_600 n4-clr" style={{ minWidth: '20px', textAlign: 'center' }}>
-                                        {qty}
-                                      </span>
-                                      <button
-                                        className="btn p-0"
-                                        onClick={() => increaseQuantity(Number(num))}
-                                        disabled={isAtMax}
-                                        style={{
-                                          width: '20px',
-                                          height: '20px',
-                                          fontSize: '14px',
-                                          lineHeight: 1,
-                                          opacity: isAtMax ? 0.3 : 1,
-                                          cursor: isAtMax ? 'not-allowed' : 'pointer',
-                                        }}
-                                        title={isAtMax ? t('LOTTERY_DETAILS.maxSeriesReached', 'Límite alcanzado') : ''}
-                                      >
-                                        +
-                                      </button>
-                                      <button
-                                        className="btn p-0 n3-clr ms-1"
-                                        onClick={() => removeNumber(Number(num))}
-                                        style={{ width: '20px', height: '20px', fontSize: '12px', lineHeight: 1 }}
-                                      >
-                                        ✕
-                                      </button>
-                                    </div>
-                                  </div>
-                                );
-                              })}
+                          {/* Visual summary of the 3 chosen numbers */}
+                          <div className="d-flex justify-content-center gap-2 mt-3">
+                            {pick3Numbers.map((n, idx) => {
+                              const num = parseInt(n, 10);
+                              const isValid = n !== '' && !isNaN(num) && num >= 0 && num <= 999;
+                              return (
+                                <div
+                                  key={idx}
+                                  className="text-center fw_700"
+                                  style={{
+                                    padding: '10px 16px',
+                                    borderRadius: '10px',
+                                    background: isValid ? 'linear-gradient(135deg, #ff6348, #ffa502)' : '#2a2a3e',
+                                    color: '#fff',
+                                    fontSize: '18px',
+                                    letterSpacing: '4px',
+                                    minWidth: '68px',
+                                    transition: 'all 0.3s ease',
+                                  }}
+                                >
+                                  {isValid ? num.toString().padStart(3, '0') : '---'}
+                                </div>
+                              );
+                            })}
                           </div>
+
+                          {/* Pick3 status message */}
+                          {(() => {
+                            const validCount = Object.keys(selectedNumbers).length;
+                            const hasDuplicates = pick3Numbers.some((n, i) => {
+                              const num = parseInt(n, 10);
+                              if (n === '' || isNaN(num)) return false;
+                              return pick3Numbers.some((m, j) => j !== i && parseInt(m, 10) === num);
+                            });
+                            return (
+                              <p className="text-center mt-3 mb-0" style={{ fontSize: '12px' }}>
+                                {hasDuplicates ? (
+                                  <span style={{ color: '#ff4757' }}>
+                                    {t('LOTTERY_DETAILS.pick3NoDuplicates', 'Los 3 números deben ser diferentes')}
+                                  </span>
+                                ) : validCount === 3 ? (
+                                  <span style={{ color: '#2ed573' }}>
+                                    ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Listo! 3 números seleccionados')}
+                                  </span>
+                                ) : (
+                                  <span className="n3-clr">
+                                    {t('LOTTERY_DETAILS.pick3Remaining', '{{count}} de 3 números seleccionados', { count: validCount })}
+                                  </span>
+                                )}
+                              </p>
+                            );
+                          })()}
                         </div>
+                      ) : (
+                        <>
+                          {/* Numbers Grid - Compacto sin scroll */}
+                          <div
+                            className="number-grid"
+                            style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(10, 1fr)',
+                              gap: '2px',
+                            }}
+                          >
+                            {allNumbers.map(num => {
+                              const qty = selectedNumbers[num] || 0;
+                              const isSelected = qty > 0;
+                              const hubNumber = availableNumbers.find(n => n.number === num);
+                              const isExhausted = hubNumber?.isExhausted ?? false;
+                              const availableSeries = hubNumber?.availableSeries ?? lottery.totalSeries;
+
+                              let buttonClass = 'n0-bg n4-clr border';
+                              if (isExhausted) buttonClass = 'n2-bg n3-clr';
+                              else if (isSelected) buttonClass = 'act4-bg n0-clr';
+
+                              let buttonTitle = '';
+                              if (isExhausted) buttonTitle = 'Agotado';
+                              else if (isConnected) buttonTitle = `${availableSeries} series disponibles`;
+
+                              return (
+                                <button
+                                  key={num}
+                                  onClick={() => !isExhausted && handleNumberClick(num)}
+                                  disabled={isExhausted}
+                                  className={`btn p-0 ${buttonClass}`}
+                                  style={{
+                                    width: '100%',
+                                    height: '28px',
+                                    fontSize: '10px',
+                                    fontWeight: 600,
+                                    borderRadius: '4px',
+                                    position: 'relative',
+                                    opacity: isExhausted ? 0.5 : 1,
+                                    cursor: isExhausted ? 'not-allowed' : 'pointer',
+                                  }}
+                                  title={buttonTitle}
+                                >
+                                  {formatNumber(num)}
+                                  {qty > 1 && (
+                                    <span
+                                      style={{
+                                        position: 'absolute',
+                                        top: '-4px',
+                                        right: '-4px',
+                                        background: '#ff4757',
+                                        color: '#fff',
+                                        fontSize: '8px',
+                                        fontWeight: 700,
+                                        borderRadius: '50%',
+                                        width: '14px',
+                                        height: '14px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                      }}
+                                    >
+                                      {qty}
+                                    </span>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {/* Selected Numbers with Quantity Control */}
+                          {selectedEntries.length > 0 && (
+                            <div className="mt-3 p-2 n0-bg radius8">
+                              <span className="fs-nine n3-clr d-block mb-2">
+                                {t('LOTTERY_DETAILS.selectedNumbers', 'Seleccionados')}:
+                              </span>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                {selectedEntries
+                                  .toSorted(([a], [b]) => Number(a) - Number(b))
+                                  .map(([num, qty]) => {
+                                    const available = getAvailableSeries(Number(num));
+                                    const isAtMax = qty >= available;
+
+                                    return (
+                                      <div
+                                        key={num}
+                                        className="d-flex align-items-center justify-content-between"
+                                        style={{ fontSize: '12px' }}
+                                      >
+                                        <div className="d-flex align-items-center gap-2">
+                                          <span className="fw_700 act4-clr">{formatNumber(Number(num))}</span>
+                                          <span className="text-muted" style={{ fontSize: '10px' }}>
+                                            ({qty}/{available})
+                                          </span>
+                                        </div>
+                                        <div className="d-flex align-items-center gap-1">
+                                          <button
+                                            className="btn p-0 n4-clr"
+                                            onClick={() => decreaseQuantity(Number(num))}
+                                            style={{ width: '20px', height: '20px', fontSize: '14px', lineHeight: 1 }}
+                                          >
+                                            −
+                                          </button>
+                                          <span className="fw_600 n4-clr" style={{ minWidth: '20px', textAlign: 'center' }}>
+                                            {qty}
+                                          </span>
+                                          <button
+                                            className="btn p-0"
+                                            onClick={() => increaseQuantity(Number(num))}
+                                            disabled={isAtMax}
+                                            style={{
+                                              width: '20px',
+                                              height: '20px',
+                                              fontSize: '14px',
+                                              lineHeight: 1,
+                                              opacity: isAtMax ? 0.3 : 1,
+                                              cursor: isAtMax ? 'not-allowed' : 'pointer',
+                                            }}
+                                            title={isAtMax ? t('LOTTERY_DETAILS.maxSeriesReached', 'Límite alcanzado') : ''}
+                                          >
+                                            +
+                                          </button>
+                                          <button
+                                            className="btn p-0 n3-clr ms-1"
+                                            onClick={() => removeNumber(Number(num))}
+                                            style={{ width: '20px', height: '20px', fontSize: '12px', lineHeight: 1 }}
+                                          >
+                                            ✕
+                                          </button>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                              </div>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
 
