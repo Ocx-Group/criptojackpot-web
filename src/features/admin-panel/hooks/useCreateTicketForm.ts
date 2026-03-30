@@ -105,7 +105,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
 
     if (type === 'checkbox') {
       setValue(name as keyof CreateTicketFormData, checked as any, { shouldValidate: false });
-    } else if (type === 'number') {
+    } else if (type === 'number' || name === 'type' || name === 'status') {
       setValue(name as keyof CreateTicketFormData, (Number.parseFloat(value) || 0) as any, { shouldValidate: false });
     } else {
       setValue(name as keyof CreateTicketFormData, value as any, { shouldValidate: false });
