@@ -32,6 +32,7 @@ export enum LotteryType {
   Daily = 2,
   Weekly = 3,
   Monthly = 4,
+  Pick3 = 5,
 }
 
 export interface CreateLotteryRequest {

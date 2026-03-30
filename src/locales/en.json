@@ -342,7 +342,11 @@
       "drawTime": "Draw Time",
       "status": "Status",
       "image": "Lottery Image",
-      "preview": "Preview"
+      "preview": "Preview",
+      "type": "Lottery Type",
+      "minNumber": "Minimum Number",
+      "maxNumber": "Maximum Number",
+      "cryptoCurrency": "Payment Cryptocurrency"
     },
     "placeholders": {
       "name": "E.g: Digital Dreamscapes",
@@ -354,7 +358,10 @@
       "image": "Recommended size: 368x383 pixels. Formats: JPG, PNG, WEBP",
       "noPrizes": "No prizes available.",
       "createPrize": "Create one now",
-      "imageFromPrize": "The image is inherited from the selected prize"
+      "imageFromPrize": "The image is inherited from the selected prize",
+      "pick3": "Pick3: 1000 numbers (000-999), 1 series. Users select exactly 3 numbers.",
+      "minNumber": "The lowest number available in the lottery",
+      "maxNumber": "The highest number available in the lottery"
     },
     "status": {
       "draft": "Draft",
@@ -400,7 +407,12 @@
       "drawDatePast": "Draw date must be in the future",
       "imageRequired": "Image is required",
       "invalidImageType": "Invalid image format. Use JPG, PNG or WEBP",
-      "imageTooLarge": "Image is too large. Maximum 5MB"
+      "imageTooLarge": "Image is too large. Maximum 5MB",
+      "pick3Config": "Pick3 must have minNumber=0, maxNumber=999, totalTickets=1000"
+    },
+    "types": {
+      "standard": "Standard",
+      "pick3": "Pick 3 (000-999)"
     }
   },
   "PRIZES_ADMIN": {
@@ -488,7 +500,11 @@
     "reservationError": "Error reserving numbers",
     "noConnection": "No connection to the server",
     "numbersReserved": "Numbers reserved for 5 minutes",
-    "tryAgain": "Please try again"
+    "tryAgain": "Please try again",
+    "pick3NumbersRequired": "Select 3 numbers",
+    "pick3MustSelect3": "You must select exactly 3 numbers for Pick3",
+    "pick3QuantityError": "Invalid quantity",
+    "pick3OnePerNumber": "Pick3: only 1 ticket per number"
   },
   "HELP_CENTER": {
     "title": "Help Center",

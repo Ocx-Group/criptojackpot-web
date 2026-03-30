@@ -35,6 +35,22 @@ export const createTicketSchema = (t: TFunction) =>
         message: t('LOTTERIES_ADMIN.errors.drawDatePast', 'La fecha del sorteo debe ser en el futuro'),
         path: ['drawDate'],
       }
+    )
+    .refine(
+      data => {
+        // Pick3 (type=5) must have fixed config
+        if (data.type === 5) {
+          return data.minNumber === 0 && data.maxNumber === 999 && data.totalTickets === 1000;
+        }
+        return true;
+      },
+      {
+        message: t(
+          'LOTTERIES_ADMIN.errors.pick3Config',
+          'Pick3 must have minNumber=0, maxNumber=999, totalTickets=1000'
+        ),
+        path: ['type'],
+      }
     );
 
 export type TicketSchemaType = z.infer<ReturnType<typeof createTicketSchema>>;

@@ -41,7 +41,23 @@ export const createCreateLotterySchema = (t: TFunction) =>
     .refine(data => !data.hasAgeRestriction || (data.minimumAge !== undefined && data.minimumAge >= 18), {
       message: t('LOTTERY_ADMIN.errors.minimumAgeInvalid', 'La edad mínima debe ser al menos 18 años'),
       path: ['minimumAge'],
-    });
+    })
+    .refine(
+      data => {
+        // Pick3 (type=5) must have fixed config: min=0, max=999, maxTickets=1000
+        if (data.type === 5) {
+          return data.minNumber === 0 && data.maxNumber === 999 && data.maxTickets === 1000;
+        }
+        return true;
+      },
+      {
+        message: t(
+          'LOTTERY_ADMIN.errors.pick3Config',
+          'Pick3 must have minNumber=0, maxNumber=999, maxTickets=1000'
+        ),
+        path: ['type'],
+      }
+    );
 
 export type CreateLotterySchemaType = z.infer<ReturnType<typeof createCreateLotterySchema>>;
 

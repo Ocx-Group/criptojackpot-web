@@ -342,7 +342,11 @@
       "drawTime": "Hora del Sorteo",
       "status": "Estado",
       "image": "Imagen de la Lotería",
-      "preview": "Vista Previa"
+      "preview": "Vista Previa",
+      "type": "Tipo de Lotería",
+      "minNumber": "Número Mínimo",
+      "maxNumber": "Número Máximo",
+      "cryptoCurrency": "Criptomoneda de Pago"
     },
     "placeholders": {
       "name": "Ej: Digital Dreamscapes",
@@ -354,7 +358,10 @@
       "image": "Tamaño recomendado: 368x383 píxeles. Formatos: JPG, PNG, WEBP",
       "noPrizes": "No hay premios disponibles.",
       "createPrize": "Crear uno ahora",
-      "imageFromPrize": "La imagen se hereda del premio seleccionado"
+      "imageFromPrize": "La imagen se hereda del premio seleccionado",
+      "pick3": "Pick3: 1000 números (000-999), 1 serie. El usuario selecciona exactamente 3 números.",
+      "minNumber": "El número más bajo disponible en la lotería",
+      "maxNumber": "El número más alto disponible en la lotería"
     },
     "status": {
       "draft": "Borrador",
@@ -400,7 +407,12 @@
       "drawDatePast": "La fecha del sorteo debe ser en el futuro",
       "imageRequired": "La imagen es requerida",
       "invalidImageType": "Formato de imagen no válido. Use JPG, PNG o WEBP",
-      "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB"
+      "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB",
+      "pick3Config": "Pick3 debe tener núm. mínimo=0, núm. máximo=999, totalTickets=1000"
+    },
+    "types": {
+      "standard": "Estándar",
+      "pick3": "Pick 3 (000-999)"
     }
   },
   "PRIZES_ADMIN": {
@@ -488,7 +500,11 @@
     "reservationError": "Error al reservar números",
     "noConnection": "No hay conexión con el servidor",
     "numbersReserved": "Números reservados por 5 minutos",
-    "tryAgain": "Intenta nuevamente"
+    "tryAgain": "Intenta nuevamente",
+    "pick3NumbersRequired": "Selecciona 3 números",
+    "pick3MustSelect3": "Debes seleccionar exactamente 3 números para Pick3",
+    "pick3QuantityError": "Cantidad inválida",
+    "pick3OnePerNumber": "Pick3: solo 1 boleto por número"
   },
   "HELP_CENTER": {
     "title": "Centro de Ayuda",

@@ -12,6 +12,7 @@ export interface CartItem {
   lotteryId: string;
   lotteryName: string;
   lotteryImage?: string;
+  lotteryType?: number;
   ticketPrice: number;
   numbers: CartItemNumber[];
   addedAt: number; // Timestamp cuando se agregó

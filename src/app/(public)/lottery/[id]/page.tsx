@@ -27,7 +27,7 @@ import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 
 import { lotteryService } from '@/services';
-import { Lottery, LotteryStatus } from '@/interfaces/lottery';
+import { Lottery, LotteryStatus, LotteryType } from '@/interfaces/lottery';
 import NavbarBlack from '@/components/navbar/NavbarBlack';
 import Jewellery1Footer from '@/components/landing-jewellery1/Jewellery1Footer';
 import MotionFade from '@/components/motionEffect/MotionFade';
@@ -249,6 +249,7 @@ const LotteryDetailsPage = () => {
         lotteryId: lottery.lotteryGuid,
         lotteryName: lottery.title,
         lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
+        lotteryType: lottery.type,
         ticketPrice: lottery.ticketPrice,
         numbers,
         orderId: currentOrder.orderId,
@@ -319,6 +320,26 @@ const LotteryDetailsPage = () => {
       number: Number(num),
       quantity: qty,
     }));
+
+    // Pick3: exactly 3 distinct numbers, each with quantity 1
+    if (lottery.type === LotteryType.Pick3) {
+      if (numbers.length !== 3) {
+        showNotification(
+          'warning',
+          t('CART.pick3NumbersRequired', 'Selecciona 3 números'),
+          t('CART.pick3MustSelect3', 'Debes seleccionar exactamente 3 números para Pick3')
+        );
+        return;
+      }
+      if (numbers.some(n => n.quantity !== 1)) {
+        showNotification(
+          'warning',
+          t('CART.pick3QuantityError', 'Cantidad inválida'),
+          t('CART.pick3OnePerNumber', 'Pick3: solo 1 boleto por número')
+        );
+        return;
+      }
+    }
 
     console.log('📤 Numbers to reserve:', numbers);
     setIsReserving(true);

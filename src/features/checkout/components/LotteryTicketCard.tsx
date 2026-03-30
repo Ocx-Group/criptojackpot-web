@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Ticket, Gift, Trophy } from 'lucide-react';
 import { CheckoutItem } from '@/store/checkoutStore';
+import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
 
 interface LotteryTicketCardProps {
   item: CheckoutItem;
@@ -103,7 +104,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
                   }}
                 >
                   <span className="n0-clr fw-bold" style={{ fontSize: '24px' }}>
-                    {number.toString().padStart(2, '0')}
+                    {formatLotteryNumber(number, item.lotteryType)}
                   </span>
                   {quantity > 1 && (
                     <span

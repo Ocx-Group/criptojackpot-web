@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ShoppingBag, Ticket, Percent } from 'lucide-react';
 import { CheckoutItem } from '@/store/checkoutStore';
+import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
 
 interface OrderSummaryProps {
   items: CheckoutItem[];
@@ -61,7 +62,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
                 <div className="mt-1 d-flex flex-wrap gap-1">
                   {item.numbers.map(({ number, quantity }) => (
                     <span key={number} className="badge n1-bg n4-clr" style={{ fontSize: '9px', padding: '3px 6px' }}>
-                      #{number.toString().padStart(2, '0')}
+                      #{formatLotteryNumber(number, item.lotteryType)}
                       {quantity > 1 && ` ×${quantity}`}
                     </span>
                   ))}

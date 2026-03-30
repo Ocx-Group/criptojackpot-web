@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useCreateTicketForm } from '@/features/admin-panel/hooks';
 import Image from 'next/image';
 import { AlertTriangle, Clock, Ticket } from 'lucide-react';
+import { LotteryType } from '@/interfaces/lottery';
 
 const CreateLottery: React.FC = () => {
   const {
@@ -67,6 +68,28 @@ const CreateLottery: React.FC = () => {
                 />
               </div>
 
+              {/* Tipo de Lotería */}
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.type', 'Tipo de Lotería')} <span className="text-danger">*</span>
+                </label>
+                <select
+                  name="type"
+                  className="form-select"
+                  value={formData.type}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value={LotteryType.Standard}>{t('LOTTERIES_ADMIN.types.standard', 'Estándar')}</option>
+                  <option value={LotteryType.Pick3}>{t('LOTTERIES_ADMIN.types.pick3', 'Pick 3 (000-999)')}</option>
+                </select>
+                {formData.type === LotteryType.Pick3 && (
+                  <div className="form-text text-info">
+                    {t('LOTTERIES_ADMIN.help.pick3', 'Pick3: 1000 numbers (000-999), 1 series, users select 3 numbers')}
+                  </div>
+                )}
+              </div>
+
               {/* Precio y Total de Tickets */}
               <div className="col-md-6">
                 <label className="form-label fw-semibold">
@@ -101,6 +124,7 @@ const CreateLottery: React.FC = () => {
                   placeholder="1000"
                   min="1"
                   required
+                  disabled={formData.type === LotteryType.Pick3}
                 />
               </div>
 
@@ -147,6 +171,7 @@ const CreateLottery: React.FC = () => {
                   placeholder="1"
                   min="0"
                   required
+                  disabled={formData.type === LotteryType.Pick3}
                 />
                 <div className="form-text">
                   {t('LOTTERIES_ADMIN.help.minNumber', 'El número más bajo disponible en la lotería')}
@@ -166,6 +191,7 @@ const CreateLottery: React.FC = () => {
                   placeholder="49"
                   min="1"
                   required
+                  disabled={formData.type === LotteryType.Pick3}
                 />
                 <div className="form-text">
                   {t('LOTTERIES_ADMIN.help.maxNumber', 'El número más alto disponible en la lotería')}

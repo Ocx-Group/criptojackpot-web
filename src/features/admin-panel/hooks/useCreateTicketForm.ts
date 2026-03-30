@@ -17,6 +17,9 @@ import { CreateTicketFormData, UseCreateTicketFormReturn } from '../types/create
 import { createTicketSchema } from '../schemas';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
+/** Pick3 preset values */
+const PICK3_PRESET = { minNumber: 0, maxNumber: 999, totalTickets: 1000 } as const;
+
 export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -107,6 +110,16 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
     } else {
       setValue(name as keyof CreateTicketFormData, value as any, { shouldValidate: false });
     }
+
+    // Auto-configure fields when lottery type changes to Pick3
+    if (name === 'type') {
+      const numValue = Number(value);
+      if (numValue === LotteryType.Pick3) {
+        setValue('minNumber', PICK3_PRESET.minNumber, { shouldValidate: false });
+        setValue('maxNumber', PICK3_PRESET.maxNumber, { shouldValidate: false });
+        setValue('totalTickets', PICK3_PRESET.totalTickets, { shouldValidate: false });
+      }
+    }
   };
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -140,7 +153,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
           startDate: startDate.toISOString(),
           endDate: endDate.toISOString(),
           status: lotteryStatus,
-          type: 0, // Standard
+          type: data.type, // Pass selected lottery type
           terms: data.terms,
           hasAgeRestriction: data.hasAgeRestriction,
           minimumAge: data.hasAgeRestriction ? data.minimumAge : undefined,
