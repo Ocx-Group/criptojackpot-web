@@ -487,6 +487,12 @@ const LotteryDetailsPage = () => {
   const allNumbers = Array.from({ length: lottery.maxNumber - lottery.minNumber + 1 }, (_, i) => lottery.minNumber + i);
 
   // Debug: Estado del botón "Agregar al carrito"
+  const pick3NumberValue = isPick3 ? parseInt(pick3Number, 10) : NaN;
+  const pick3NumInfo = isPick3 && !isNaN(pick3NumberValue)
+    ? availableNumbers.find(n => n.number === pick3NumberValue)
+    : null;
+  const isPick3Unavailable = isPick3 && pick3NumInfo?.isExhausted === true;
+
   const isAddToCartDisabled =
     lottery.status !== LotteryStatus.Active ||
     remaining === 0 ||
@@ -494,7 +500,8 @@ const LotteryDetailsPage = () => {
     isReserving ||
     !isAuthenticated ||
     !isConnected ||
-    hasRole('admin');
+    hasRole('admin') ||
+    isPick3Unavailable;
 
   return (
     <div>
@@ -850,6 +857,11 @@ const LotteryDetailsPage = () => {
                           {(() => {
                             const numValue = parseInt(pick3Number, 10);
                             const isValid = pick3Number !== '' && !isNaN(numValue) && numValue >= 0 && numValue <= 999;
+                            const numberInfo = isValid
+                              ? availableNumbers.find(n => n.number === numValue)
+                              : null;
+                            const isAvailable = numberInfo ? numberInfo.availableSeries > 0 : isValid;
+                            const isSoldOut = numberInfo ? numberInfo.isExhausted : false;
                             return (
                               <div className="d-flex flex-column align-items-center gap-3">
                                 <input
@@ -880,8 +892,12 @@ const LotteryDetailsPage = () => {
                                     maxWidth: '200px',
                                     borderRadius: '12px',
                                     backgroundColor: '#1a1a2e',
-                                    color: isValid ? '#ffa502' : '#fff',
-                                    border: isValid ? '2px solid #2ed573' : '1px solid #444',
+                                    color: isValid ? (isSoldOut ? '#ff4757' : '#ffa502') : '#fff',
+                                    border: isSoldOut
+                                      ? '2px solid #ff4757'
+                                      : isValid && isAvailable
+                                        ? '2px solid #2ed573'
+                                        : '1px solid #444',
                                   }}
                                 />
                                 {/* Visual badge */}
@@ -890,7 +906,11 @@ const LotteryDetailsPage = () => {
                                   style={{
                                     padding: '12px 24px',
                                     borderRadius: '12px',
-                                    background: isValid ? 'linear-gradient(135deg, #ff6348, #ffa502)' : '#2a2a3e',
+                                    background: isValid
+                                      ? isSoldOut
+                                        ? 'linear-gradient(135deg, #ff4757, #c44569)'
+                                        : 'linear-gradient(135deg, #ff6348, #ffa502)'
+                                      : '#2a2a3e',
                                     color: '#fff',
                                     fontSize: '24px',
                                     letterSpacing: '6px',
@@ -902,9 +922,19 @@ const LotteryDetailsPage = () => {
                                 </div>
                                 <p className="mb-0" style={{ fontSize: '12px' }}>
                                   {isValid ? (
-                                    <span style={{ color: '#2ed573' }}>
-                                      ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Número seleccionado!')}
-                                    </span>
+                                    isSoldOut ? (
+                                      <span style={{ color: '#ff4757' }}>
+                                        ✗ {t('LOTTERY_DETAILS.pick3Unavailable', 'Número no disponible, intenta otro')}
+                                      </span>
+                                    ) : isAvailable ? (
+                                      <span style={{ color: '#2ed573' }}>
+                                        ✓ {t('LOTTERY_DETAILS.pick3Available', '¡Número disponible!')}
+                                      </span>
+                                    ) : (
+                                      <span style={{ color: '#2ed573' }}>
+                                        ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Número seleccionado!')}
+                                      </span>
+                                    )
                                   ) : (
                                     <span className="n3-clr">
                                       {t('LOTTERY_DETAILS.pick3Waiting', 'Ingresa un número de 3 dígitos')}
@@ -1084,7 +1114,8 @@ const LotteryDetailsPage = () => {
                         ticketQuantity === 0 ||
                         isReserving ||
                         !isAuthenticated ||
-                        !isConnected
+                        !isConnected ||
+                        isPick3Unavailable
                       }
                       onClick={handleBuyNow}
                     >

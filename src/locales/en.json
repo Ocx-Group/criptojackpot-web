@@ -866,6 +866,8 @@
     "pick3Help": "Enter your 3-digit number (000 to 999)",
     "pick3Ready": "Number selected!",
     "pick3Waiting": "Enter a 3-digit number",
+    "pick3Available": "Number available!",
+    "pick3Unavailable": "Number not available, try another",
     "selectNumbers": "Select your numbers",
     "clearAll": "Clear",
     "selectedNumbers": "Selected",
