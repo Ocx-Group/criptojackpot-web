@@ -16,7 +16,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/cartStore';
 import { winnerService } from '@/services';
 dynamic(() => import('react-select'), { ssr: false });
-const NavbarBlack = () => {
+interface NavbarBlackProps {
+  forceDark?: boolean;
+}
+
+const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
   const { t } = useTranslation();
   const pathName = usePathname();
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -54,7 +58,7 @@ const NavbarBlack = () => {
   return (
     <header
       className={`header-section-v1 custom-fixed header-position ${
-        scrollHeight > 50 ? 'animated fadeInDown header-fixed' : ''
+        forceDark || scrollHeight > 50 ? 'animated fadeInDown header-fixed' : ''
       }`}
     >
       {/* desktop header */}

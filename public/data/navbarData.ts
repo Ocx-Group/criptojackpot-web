@@ -9,6 +9,12 @@ export const navbarData = [
   },
   {
     id: uuidv4(),
+    menuTitle: 'Sorteos',
+    menuTitleKey: 'NAVBAR.Sorteos',
+    path: '/sorteos',
+  },
+  {
+    id: uuidv4(),
     menuTitle: 'Login',
     menuTitleKey: 'NAVBAR.Login',
     path: '/login',
