@@ -52,7 +52,7 @@ const LotteryDetailsPage = () => {
 
   // Estado: { número: cantidad }
   const [selectedNumbers, setSelectedNumbers] = useState<Record<number, number>>({});
-  const [pick3Numbers, setPick3Numbers] = useState<[string, string, string]>(['', '', '']);
+  const [pick3Number, setPick3Number] = useState<string>('');
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   // Cart store
@@ -115,16 +115,12 @@ const LotteryDetailsPage = () => {
   useEffect(() => {
     if (!isPick3) return;
     const newSelected: Record<number, number> = {};
-    const seen = new Set<number>();
-    pick3Numbers.forEach(n => {
-      const num = parseInt(n, 10);
-      if (n !== '' && !isNaN(num) && num >= 0 && num <= 999 && !seen.has(num)) {
-        seen.add(num);
-        newSelected[num] = 1;
-      }
-    });
+    const num = parseInt(pick3Number, 10);
+    if (pick3Number !== '' && !isNaN(num) && num >= 0 && num <= 999) {
+      newSelected[num] = 1;
+    }
     setSelectedNumbers(newSelected);
-  }, [pick3Numbers, isPick3]);
+  }, [pick3Number, isPick3]);
 
   // Calcular días restantes
   const getDaysRemaining = (endDate: string) => {
@@ -248,7 +244,7 @@ const LotteryDetailsPage = () => {
   // Limpiar selección
   const clearSelection = () => {
     setSelectedNumbers({});
-    setPick3Numbers(['', '', '']);
+    setPick3Number('');
   };
 
   // Referencia para tracking de reservas pendientes
@@ -340,21 +336,13 @@ const LotteryDetailsPage = () => {
       quantity: qty,
     }));
 
-    // Pick3: exactly 3 distinct numbers, each with quantity 1
+    // Pick3: exactly 1 number (3-digit), quantity 1
     if (lottery.type === LotteryType.Pick3) {
-      if (numbers.length !== 3) {
+      if (numbers.length !== 1) {
         showNotification(
           'warning',
-          t('CART.pick3NumbersRequired', 'Selecciona 3 números'),
-          t('CART.pick3MustSelect3', 'Debes seleccionar exactamente 3 números para Pick3')
-        );
-        return;
-      }
-      if (numbers.some(n => n.quantity !== 1)) {
-        showNotification(
-          'warning',
-          t('CART.pick3QuantityError', 'Cantidad inválida'),
-          t('CART.pick3OnePerNumber', 'Pick3: solo 1 boleto por número')
+          t('CART.pick3NumberRequired', 'Selecciona tu número'),
+          t('CART.pick3MustSelect1', 'Debes seleccionar un número de 3 dígitos (000-999)')
         );
         return;
       }
@@ -816,7 +804,7 @@ const LotteryDetailsPage = () => {
                         <div className="d-flex align-items-center gap-2">
                           <label className="n4-clr fw_600" style={{ fontSize: '13px' }}>
                             {isPick3
-                              ? t('LOTTERY_DETAILS.pick3Title', 'Escoge tus 3 números')
+                              ? t('LOTTERY_DETAILS.pick3Title', 'Escoge tu número')
                               : t('LOTTERY_DETAILS.selectNumbers', 'Selecciona tus números')}
                           </label>
                           {/* Indicador de conexión WebSocket */}
@@ -853,139 +841,77 @@ const LotteryDetailsPage = () => {
                         </div>
                       )}
 
-                      {/* Pick3: 3 number inputs / Standard: Number Grid */}
+                      {/* Pick3: single 3-digit input / Standard: Number Grid */}
                       {isPick3 ? (
-                        <div className="pick3-selector">
+                        <div className="pick3-selector text-center">
                           <p className="n3-clr mb-3" style={{ fontSize: '12px' }}>
-                            {t('LOTTERY_DETAILS.pick3Help', 'Escoge 3 números diferentes del 000 al 999')}
+                            {t('LOTTERY_DETAILS.pick3Help', 'Escribe tu número de 3 dígitos (000 al 999)')}
                           </p>
-                          {[0, 1, 2].map(idx => {
-                            const value = pick3Numbers[idx];
-                            const numValue = parseInt(value, 10);
-                            const isValid = value !== '' && !isNaN(numValue) && numValue >= 0 && numValue <= 999;
-                            const isDuplicate = isValid && pick3Numbers.some((n, i) => {
-                              if (i === idx) return false;
-                              const other = parseInt(n, 10);
-                              return !isNaN(other) && other === numValue;
-                            });
-
+                          {(() => {
+                            const numValue = parseInt(pick3Number, 10);
+                            const isValid = pick3Number !== '' && !isNaN(numValue) && numValue >= 0 && numValue <= 999;
                             return (
-                              <div key={idx} className="d-flex align-items-center gap-2 mb-3">
-                                <div
-                                  className="d-flex align-items-center justify-content-center fw_700"
-                                  style={{
-                                    width: '32px',
-                                    height: '48px',
-                                    borderRadius: '8px',
-                                    background: 'linear-gradient(135deg, #ff6348, #ffa502)',
-                                    color: '#fff',
-                                    fontSize: '16px',
-                                    flexShrink: 0,
-                                  }}
-                                >
-                                  {idx + 1}
-                                </div>
+                              <div className="d-flex flex-column align-items-center gap-3">
                                 <input
                                   type="text"
                                   inputMode="numeric"
                                   maxLength={3}
-                                  value={value}
+                                  value={pick3Number}
                                   onChange={e => {
                                     const val = e.target.value;
                                     if (val === '' || /^\d{1,3}$/.test(val)) {
-                                      setPick3Numbers(prev => {
-                                        const next = [...prev] as [string, string, string];
-                                        next[idx] = val;
-                                        return next;
-                                      });
+                                      setPick3Number(val);
                                     }
                                   }}
                                   onBlur={() => {
-                                    if (value !== '') {
-                                      const num = parseInt(value, 10);
+                                    if (pick3Number !== '') {
+                                      const num = parseInt(pick3Number, 10);
                                       if (!isNaN(num) && num >= 0 && num <= 999) {
-                                        setPick3Numbers(prev => {
-                                          const next = [...prev] as [string, string, string];
-                                          next[idx] = num.toString().padStart(3, '0');
-                                          return next;
-                                        });
+                                        setPick3Number(num.toString().padStart(3, '0'));
                                       }
                                     }
                                   }}
                                   placeholder="000"
                                   className="form-control text-center fw_700"
                                   style={{
-                                    fontSize: '22px',
-                                    letterSpacing: '8px',
-                                    height: '48px',
-                                    borderRadius: '8px',
+                                    fontSize: '36px',
+                                    letterSpacing: '12px',
+                                    height: '64px',
+                                    maxWidth: '200px',
+                                    borderRadius: '12px',
                                     backgroundColor: '#1a1a2e',
-                                    color: isValid && !isDuplicate ? '#ffa502' : '#fff',
-                                    border: isDuplicate ? '2px solid #ff4757' : isValid ? '2px solid #2ed573' : '1px solid #444',
+                                    color: isValid ? '#ffa502' : '#fff',
+                                    border: isValid ? '2px solid #2ed573' : '1px solid #444',
                                   }}
                                 />
-                                {isDuplicate && (
-                                  <span style={{ color: '#ff4757', fontSize: '10px', minWidth: '55px', flexShrink: 0 }}>
-                                    {t('LOTTERY_DETAILS.pick3Duplicate', 'Repetido')}
-                                  </span>
-                                )}
-                                {isValid && !isDuplicate && (
-                                  <span style={{ color: '#2ed573', fontSize: '18px', minWidth: '55px', flexShrink: 0, textAlign: 'center' }}>✓</span>
-                                )}
-                              </div>
-                            );
-                          })}
-
-                          {/* Visual summary of the 3 chosen numbers */}
-                          <div className="d-flex justify-content-center gap-2 mt-3">
-                            {pick3Numbers.map((n, idx) => {
-                              const num = parseInt(n, 10);
-                              const isValid = n !== '' && !isNaN(num) && num >= 0 && num <= 999;
-                              return (
+                                {/* Visual badge */}
                                 <div
-                                  key={idx}
-                                  className="text-center fw_700"
+                                  className="fw_700"
                                   style={{
-                                    padding: '10px 16px',
-                                    borderRadius: '10px',
+                                    padding: '12px 24px',
+                                    borderRadius: '12px',
                                     background: isValid ? 'linear-gradient(135deg, #ff6348, #ffa502)' : '#2a2a3e',
                                     color: '#fff',
-                                    fontSize: '18px',
-                                    letterSpacing: '4px',
-                                    minWidth: '68px',
+                                    fontSize: '24px',
+                                    letterSpacing: '6px',
+                                    minWidth: '120px',
                                     transition: 'all 0.3s ease',
                                   }}
                                 >
-                                  {isValid ? num.toString().padStart(3, '0') : '---'}
+                                  {isValid ? numValue.toString().padStart(3, '0') : '---'}
                                 </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* Pick3 status message */}
-                          {(() => {
-                            const validCount = Object.keys(selectedNumbers).length;
-                            const hasDuplicates = pick3Numbers.some((n, i) => {
-                              const num = parseInt(n, 10);
-                              if (n === '' || isNaN(num)) return false;
-                              return pick3Numbers.some((m, j) => j !== i && parseInt(m, 10) === num);
-                            });
-                            return (
-                              <p className="text-center mt-3 mb-0" style={{ fontSize: '12px' }}>
-                                {hasDuplicates ? (
-                                  <span style={{ color: '#ff4757' }}>
-                                    {t('LOTTERY_DETAILS.pick3NoDuplicates', 'Los 3 números deben ser diferentes')}
-                                  </span>
-                                ) : validCount === 3 ? (
-                                  <span style={{ color: '#2ed573' }}>
-                                    ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Listo! 3 números seleccionados')}
-                                  </span>
-                                ) : (
-                                  <span className="n3-clr">
-                                    {t('LOTTERY_DETAILS.pick3Remaining', '{{count}} de 3 números seleccionados', { count: validCount })}
-                                  </span>
-                                )}
-                              </p>
+                                <p className="mb-0" style={{ fontSize: '12px' }}>
+                                  {isValid ? (
+                                    <span style={{ color: '#2ed573' }}>
+                                      ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Número seleccionado!')}
+                                    </span>
+                                  ) : (
+                                    <span className="n3-clr">
+                                      {t('LOTTERY_DETAILS.pick3Waiting', 'Ingresa un número de 3 dígitos')}
+                                    </span>
+                                  )}
+                                </p>
+                              </div>
                             );
                           })()}
                         </div>
