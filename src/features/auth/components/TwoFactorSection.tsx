@@ -1,6 +1,6 @@
 'use client';
 
-import logoBlack from 'public/images/logo/cripto-jackpot-logo.png';
+import logoBlack from 'public/images/logo/blue-logo.png';
 import loginImage from 'public/images/background/back-register.png';
 import { useVerify2Fa } from '@/features/auth/hooks/useVerify2Fa';
 import Image from 'next/image';

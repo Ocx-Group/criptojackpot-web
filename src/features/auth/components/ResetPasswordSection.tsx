@@ -1,6 +1,6 @@
 'use client';
 import resetPasswordImage from 'public/images/background/back-register.png';
-import logoBlack from 'public/images/logo/cripto-jackpot-logo.png';
+import logoBlack from 'public/images/logo/blue-logo.png';
 import { useResetPasswordForm } from '@/features/auth/hooks/useResetPasswordForm';
 import { EyeIcon, EyeSlashIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
@@ -188,8 +188,7 @@ const ResetPasswordSection = () => {
 
 export default ResetPasswordSection;
 export interface ResetPasswordRequest {
-    email: string;
-    securityCode: string;
-    newPassword: string;
+  email: string;
+  securityCode: string;
+  newPassword: string;
 }
-

@@ -1,6 +1,6 @@
 'use client';
 import registerImage from 'public/images/background/back-register.png';
-import logo from 'public/images/logo/cripto-jackpot-logo.png';
+import logo from 'public/images/logo/blue-logo.png';
 import { useRegisterForm } from '@/features/auth/hooks/useRegisterForm';
 import { GoogleLoginButton } from '@/features/auth/components/GoogleLoginButton';
 import { GOOGLE_CLIENT_ID } from '@/components/Providers';

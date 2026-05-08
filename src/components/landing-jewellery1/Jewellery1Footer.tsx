@@ -1,5 +1,5 @@
 'use client';
-import logo from '@/../public/images/logo/cripto-jackpot-logo.png';
+import logo from '@/../public/images/logo/blue-logo.png';
 import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';

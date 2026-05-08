@@ -1,5 +1,5 @@
 'use client';
-import logoWhite from '@/../public/images/logo/BlackOrange.png';
+import logoWhite from '@/../public/images/logo/blue-logo.png';
 
 import { ShoppingCartSimpleIcon, SignOutIcon } from '@phosphor-icons/react';
 import { ArrowRightIcon, UserIcon } from '@phosphor-icons/react/dist/ssr';
@@ -97,9 +97,7 @@ const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
                     </li>
                   ))}
                   {hasWinners && (
-                    <li
-                      className={`menu-item position-relative ${pathName === '/winners' ? 'active' : ''}`}
-                    >
+                    <li className={`menu-item position-relative ${pathName === '/winners' ? 'active' : ''}`}>
                       <Link href="/winners"> {t('NAVBAR.Winners')} </Link>
                     </li>
                   )}

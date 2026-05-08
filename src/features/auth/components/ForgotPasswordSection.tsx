@@ -1,6 +1,6 @@
 'use client';
 import loginImage from 'public/images/background/back-login.png';
-import logoBlack from 'public/images/logo/cripto-jackpot-logo.png';
+import logoBlack from 'public/images/logo/blue-logo.png';
 import { useForgotPasswordForm } from '@/features/auth/hooks/useForgotPasswordForm';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,9 +24,7 @@ const ForgotPasswordSection = () => {
                 </div>
                 <div className="log-title mb-xxl-6 mb-xl-5 mb-4">
                   <h3 className="n3-clr fw-bold mb-3">{t('FORGOT_PASSWORD.title')}</h3>
-                  <p className="n3-clr fs-seven">
-                    {t('FORGOT_PASSWORD.description')}
-                  </p>
+                  <p className="n3-clr fs-seven">{t('FORGOT_PASSWORD.description')}</p>
                 </div>
                 <form onSubmit={handleSubmit} className="form-cmn-action">
                   <div className="row g-6">
@@ -87,4 +85,3 @@ const ForgotPasswordSection = () => {
 };
 
 export default ForgotPasswordSection;
-

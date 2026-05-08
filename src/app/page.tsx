@@ -58,7 +58,7 @@ const orgJsonLd = {
   '@type': 'Organization',
   name: 'CriptoJackpot',
   url: 'https://criptojackpot.com',
-  logo: 'https://criptojackpot.com/images/logo/cripto-jackpot-logo.png',
+  logo: 'https://criptojackpot.com/images/logo/blue-logo.png',
   sameAs: [],
 };
 

@@ -1,7 +1,7 @@
 'use client';
 
 import confirmEmailImage from 'public/images/background/back-register.png';
-import logo from 'public/images/logo/cripto-jackpot-logo.png';
+import logo from 'public/images/logo/blue-logo.png';
 import { useConfirmEmail } from '@/features/auth/hooks/useConfirmEmail';
 import { CheckCircleIcon, XCircleIcon } from '@phosphor-icons/react';
 import Image from 'next/image';
@@ -27,12 +27,7 @@ const ConfirmEmailSection = ({ token }: ConfirmEmailSectionProps) => {
                 {/* Logo */}
                 <Link href="/landing-page" className="d-block text-center mb-4">
                   <div className="d-flex justify-content-center">
-                    <Image
-                      src={logo}
-                      alt="logo"
-                      className="img-fluid"
-                      style={{ maxWidth: '200px', height: 'auto' }}
-                    />
+                    <Image src={logo} alt="logo" className="img-fluid" style={{ maxWidth: '200px', height: 'auto' }} />
                   </div>
                 </Link>
 
@@ -99,12 +94,7 @@ const ConfirmEmailSection = ({ token }: ConfirmEmailSectionProps) => {
           {/* Image Column */}
           <div className="col-lg-7 order-1 order-lg-2 d-none d-lg-block">
             <div className="right-logwrap h-100">
-              <Image
-                src={confirmEmailImage}
-                alt="Confirm Email"
-                className="w-100 h-100 object-fit-cover"
-                priority
-              />
+              <Image src={confirmEmailImage} alt="Confirm Email" className="w-100 h-100 object-fit-cover" priority />
             </div>
           </div>
         </div>
@@ -114,4 +104,3 @@ const ConfirmEmailSection = ({ token }: ConfirmEmailSectionProps) => {
 };
 
 export default ConfirmEmailSection;
-

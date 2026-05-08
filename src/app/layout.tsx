@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     description: 'Participa en rifas y sorteos con criptomonedas. Elige tus números, refiere amigos y gana premios.',
     images: [
       {
-        url: '/images/logo/cripto-jackpot-logo.png',
+        url: '/images/logo/blue-logo.png',
         width: 1200,
         height: 630,
         alt: 'CriptoJackpot - Rifas y Sorteos con Cripto',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'CriptoJackpot — Rifas y Sorteos con Cripto',
     description: 'Participa en rifas y sorteos con criptomonedas. Elige tus números, refiere amigos y gana premios.',
-    images: ['/images/logo/cripto-jackpot-logo.png'],
+    images: ['/images/logo/blue-logo.png'],
   },
   alternates: {
     canonical: siteUrl,
