@@ -8,7 +8,7 @@ export default function CheckoutLayout({ children }: Readonly<{ children: React.
     <AuthGuard requireAuth={true} requiredRole="client">
       <div>
         <NavbarBlack />
-        <div className="checkout-section pt-120 pb-120 n1-bg" style={{ minHeight: '100vh' }}>
+        <div className="checkout-section pt-120 pb-120 bg1-color" style={{ minHeight: '100vh' }}>
           {children}
         </div>
         <Footer />

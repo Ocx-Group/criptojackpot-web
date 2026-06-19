@@ -47,7 +47,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
     return (
       <div className="col-lg-9">
         <div className="user-panel-wrapper">
-          <div className="alert alert-danger">{t('LOTTERIES_ADMIN.edit.loadError', 'Error al cargar la lotería')}</div>
+          <div className="alert alert-danger">{t('LOTTERIES_ADMIN.edit.loadError', 'Error al cargar la promoción')}</div>
           <Link href="/admin/lotteries" className="btn btn-secondary">
             <ArrowLeft size={18} className="me-2" />
             {t('COMMON.back', 'Volver')}
@@ -60,11 +60,11 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
   return (
     <div className="col-lg-9">
       <div className="user-panel-wrapper">
-        <h3 className="n4-clr fw_700 mb-xxl-10 mb-6">{t('LOTTERIES_ADMIN.edit.title', 'Editar Lotería')}</h3>
+        <h3 className="n4-clr fw_700 mb-xxl-10 mb-6">{t('LOTTERIES_ADMIN.edit.title', 'Editar Promoción')}</h3>
 
         <div className="card border-0 shadow-sm mb-6">
           <div className="card-header bg-white py-4 d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{t('LOTTERIES_ADMIN.edit.formTitle', 'Modificar Lotería')}</h5>
+            <h5 className="mb-0">{t('LOTTERIES_ADMIN.edit.formTitle', 'Modificar Promoción')}</h5>
             <Link href="/admin/lotteries" className="btn btn-outline-secondary">
               <ArrowLeft size={16} className="me-2" />
               {t('COMMON.back', 'Volver')}
@@ -75,7 +75,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
               {/* Nombre de la Lotería */}
               <div className="col-md-12">
                 <label className="form-label fw-semibold">
-                  {t('LOTTERIES_ADMIN.fields.name', 'Nombre de la Lotería')} <span className="text-danger">*</span>
+                  {t('LOTTERIES_ADMIN.fields.name', 'Nombre de la Promoción')} <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"
@@ -99,7 +99,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                   rows={4}
                   value={formData.description}
                   onChange={handleInputChange}
-                  placeholder={t('LOTTERIES_ADMIN.placeholders.description', 'Descripción del sorteo')}
+                  placeholder={t('LOTTERIES_ADMIN.placeholders.description', 'Descripción de la promoción')}
                 />
               </div>
 
@@ -172,7 +172,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
               {/* Premio Asociado */}
               <div className="col-md-12">
                 <label className="form-label fw-semibold">
-                  {t('LOTTERIES_ADMIN.fields.prize', 'Premio del Sorteo')}
+                  {t('LOTTERIES_ADMIN.fields.prize', 'Premio de la Promoción')}
                 </label>
                 <select
                   name="prizeId"
@@ -227,7 +227,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
               {/* Fecha y Hora del Sorteo */}
               <div className="col-md-6">
                 <label className="form-label fw-semibold">
-                  {t('LOTTERIES_ADMIN.fields.drawDate', 'Fecha del Sorteo')} <span className="text-danger">*</span>
+                  {t('LOTTERIES_ADMIN.fields.drawDate', 'Fecha de la Promoción')} <span className="text-danger">*</span>
                 </label>
                 <input
                   type="date"
@@ -241,7 +241,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
 
               <div className="col-md-6">
                 <label className="form-label fw-semibold">
-                  {t('LOTTERIES_ADMIN.fields.drawTime', 'Hora del Sorteo')} <span className="text-danger">*</span>
+                  {t('LOTTERIES_ADMIN.fields.drawTime', 'Hora de la Promoción')} <span className="text-danger">*</span>
                 </label>
                 <input
                   type="time"
@@ -272,7 +272,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                   <option value={LotteryStatus.Cancelled}>{t('LOTTERIES_ADMIN.status.cancelled', 'Cancelado')}</option>
                 </select>
                 <div className="form-text">
-                  {t('LOTTERIES_ADMIN.help.status', 'Las loterías activas estarán disponibles para compra inmediata')}
+                  {t('LOTTERIES_ADMIN.help.status', 'Las promociones activas estarán disponibles para compra inmediata')}
                 </div>
               </div>
 
@@ -287,7 +287,7 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                   rows={3}
                   value={formData.terms}
                   onChange={handleInputChange}
-                  placeholder={t('LOTTERIES_ADMIN.placeholders.terms', 'Términos y condiciones del sorteo')}
+                  placeholder={t('LOTTERIES_ADMIN.placeholders.terms', 'Términos y condiciones de la promoción')}
                 />
               </div>
 
@@ -326,14 +326,14 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                               new Date(formData.drawDate).toLocaleDateString('en-US', { weekday: 'long' })}{' '}
                             {formData.drawTime}
                           </div>
-                          <h4 className="mb-2">{formData.name || 'Nombre de la Lotería'}</h4>
+                          <h4 className="mb-2">{formData.name || 'Nombre de la Promoción'}</h4>
                           <h5 className="text-danger mb-3">
                             ${formData.price || '0.00'} <small className="text-muted">PER ENTRY</small>
                           </h5>
                           <div className="d-flex gap-3 mb-2">
                             <div>
                               <Clock size={14} className="me-2" />
-                              <small>Sorteo programado</small>
+                              <small>Promoción programada</small>
                             </div>
                             <div>
                               <Ticket size={14} className="me-2" />

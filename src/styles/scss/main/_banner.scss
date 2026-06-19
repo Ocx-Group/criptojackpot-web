@@ -2750,8 +2750,16 @@
 
 //Banner version 14
 .banner-section-v14 {
-  background: url(../../../../public/images/banner/banner-v14-bg.png) no-repeat center center;
-  background-size: cover;
+  // Base obsidiana + glow de marca; la imagen de ondas neón se funde con
+  // `screen` para que su fondo negro deje ver la obsidiana y solo queden las ondas.
+  background-color: var(--bg1);
+  background-image: url(../../../../public/images/banner/banner-v14-bg.png),
+    radial-gradient(circle at 16% 22%, rgba(0, 229, 255, 0.1), transparent 45%),
+    radial-gradient(circle at 84% 72%, rgba(0, 230, 118, 0.08), transparent 48%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover, cover, cover;
+  background-blend-mode: screen, normal, normal;
   z-index: 1;
   .scroll-bn1 {
     left: initial;

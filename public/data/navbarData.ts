@@ -9,7 +9,7 @@ export const navbarData = [
   },
   {
     id: uuidv4(),
-    menuTitle: 'Sorteos',
+    menuTitle: 'Promociones',
     menuTitleKey: 'NAVBAR.Sorteos',
     path: '/sorteos',
   },

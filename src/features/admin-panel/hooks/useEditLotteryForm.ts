@@ -119,8 +119,8 @@ export const useEditLotteryForm = (lotteryId: string) => {
       queryClient.invalidateQueries({ queryKey: ['prizes'] });
       showNotification(
         'success',
-        t('LOTTERIES_ADMIN.edit.success', 'Lotería actualizada'),
-        t('LOTTERIES_ADMIN.edit.successMessage', 'La lotería se ha actualizado correctamente')
+        t('LOTTERIES_ADMIN.edit.success', 'Promoción actualizada'),
+        t('LOTTERIES_ADMIN.edit.successMessage', 'La promoción se ha actualizado correctamente')
       );
       setTimeout(() => {
         router.push('/admin/lotteries');
@@ -128,7 +128,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
     },
     onError: (error: Error) => {
       const errorMessage =
-        error.message || t('LOTTERIES_ADMIN.edit.error', 'Error al actualizar la lotería. Intente nuevamente.');
+        error.message || t('LOTTERIES_ADMIN.edit.error', 'Error al actualizar la promoción. Intente nuevamente.');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });

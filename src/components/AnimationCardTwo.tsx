@@ -109,7 +109,7 @@ const AnimationCardTwo = () => {
           width: containerWidth,
           height: containerHeight,
           pixelRatio: 2,
-          background: '#000000',
+          background: '#0B0E14',
           wireframes: false,
         },
       });

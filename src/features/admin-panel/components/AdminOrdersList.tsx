@@ -63,7 +63,7 @@ const AdminOrdersList: React.FC = () => {
                     <th style={{ width: '40px' }}></th>
                     <th>{t('FINANCE.order_id', 'Orden')}</th>
                     <th>{t('FINANCE.user', 'Usuario')}</th>
-                    <th>{t('FINANCE.lottery', 'Lotería')}</th>
+                    <th>{t('FINANCE.lottery', 'Promoción')}</th>
                     <th>{t('FINANCE.total', 'Total')}</th>
                     <th>{t('FINANCE.items', 'Items')}</th>
                     <th>{t('FINANCE.status', 'Estado')}</th>

@@ -13,19 +13,19 @@ const siteUrl = 'https://criptojackpot.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'CriptoJackpot — Rifas y Sorteos con Cripto',
+    default: 'CriptoJackpot — Rifas y Promociones con Cripto',
     template: '%s | CriptoJackpot',
   },
   description:
-    'Participa en rifas y sorteos con criptomonedas. Elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
+    'Participa en rifas y promociones con criptomonedas. Elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
   keywords: [
     'rifas cripto',
-    'sorteos criptomonedas',
-    'lottery crypto',
+    'promociones criptomonedas',
+    'promotion crypto',
     'crypto raffle',
-    'bitcoin lottery',
+    'bitcoin promotion',
     'cripto jackpot',
-    'sorteos online',
+    'promociones online',
     'rifas online',
     'ganar criptomonedas',
     'win crypto',
@@ -50,21 +50,21 @@ export const metadata: Metadata = {
     alternateLocale: 'en_US',
     url: siteUrl,
     siteName: 'CriptoJackpot',
-    title: 'CriptoJackpot — Rifas y Sorteos con Cripto',
-    description: 'Participa en rifas y sorteos con criptomonedas. Elige tus números, refiere amigos y gana premios.',
+    title: 'CriptoJackpot — Rifas y Promociones con Cripto',
+    description: 'Participa en rifas y promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
     images: [
       {
         url: '/images/logo/blue-logo.png',
         width: 1200,
         height: 630,
-        alt: 'CriptoJackpot - Rifas y Sorteos con Cripto',
+        alt: 'CriptoJackpot - Rifas y Promociones con Cripto',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CriptoJackpot — Rifas y Sorteos con Cripto',
-    description: 'Participa en rifas y sorteos con criptomonedas. Elige tus números, refiere amigos y gana premios.',
+    title: 'CriptoJackpot — Rifas y Promociones con Cripto',
+    description: 'Participa en rifas y promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
     images: ['/images/logo/blue-logo.png'],
   },
   alternates: {

@@ -2,11 +2,11 @@ import LandingPage from '@/app/(public)/landing-page/page';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'CriptoJackpot — Rifas y Sorteos con Cripto',
+  title: 'CriptoJackpot — Rifas y Promociones con Cripto',
   description:
     'Descubre, juega y gana con CriptoJackpot. Participa en rifas con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
   openGraph: {
-    title: 'CriptoJackpot — Rifas y Sorteos con Cripto',
+    title: 'CriptoJackpot — Rifas y Promociones con Cripto',
     description:
       'Descubre, juega y gana con CriptoJackpot. Participa en rifas con criptomonedas, elige tus números de la suerte y gana premios.',
   },
@@ -17,7 +17,7 @@ const jsonLd = {
   '@type': 'WebSite',
   name: 'CriptoJackpot',
   url: 'https://criptojackpot.com',
-  description: 'Plataforma de rifas y sorteos con criptomonedas. Elige tus números, refiere amigos y gana premios.',
+  description: 'Plataforma de rifas y promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
   potentialAction: {
     '@type': 'SearchAction',
     target: 'https://criptojackpot.com/?q={search_term_string}',
@@ -30,7 +30,7 @@ const howItWorksJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: 'Cómo participar en CriptoJackpot',
-  description: 'Guía paso a paso para participar en rifas y sorteos con criptomonedas en CriptoJackpot.',
+  description: 'Guía paso a paso para participar en rifas y promociones con criptomonedas en CriptoJackpot.',
   step: [
     {
       '@type': 'HowToStep',
@@ -48,7 +48,7 @@ const howItWorksJsonLd = {
       '@type': 'HowToStep',
       position: 3,
       name: 'Gana la Rifa',
-      text: 'Cuando llega la fecha del sorteo, se elige un ganador al azar. Si tu número es elegido, ¡te llevas el premio! Simple, transparente y justo.',
+      text: 'Cuando llega la fecha de la promoción, se elige un ganador al azar. Si tu número es elegido, ¡te llevas el premio! Simple, transparente y justo.',
     },
   ],
 };

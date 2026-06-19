@@ -78,7 +78,7 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
             <div className="modal-body">
               {/* Lottery info */}
               <div className="alert alert-info mb-4">
-                <strong>{t('WINNERS.determine.lottery', 'Lotería')}:</strong> {lottery.title}
+                <strong>{t('WINNERS.determine.lottery', 'Promoción')}:</strong> {lottery.title}
                 <br />
                 <small className="text-muted">
                   {t('WINNERS.determine.range', 'Rango')}: {lottery.minNumber} - {lottery.maxNumber} |{' '}

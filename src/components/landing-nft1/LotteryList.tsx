@@ -134,7 +134,7 @@ const LotteryList = () => {
     if (lotteries.length === 0) {
       return (
         <div className="text-center py-5">
-          <h4 className="n3-clr">{t('LOTTERY_LIST.noLotteries')}</h4>
+          <h4 className="nw2-clr">{t('LOTTERY_LIST.noLotteries')}</h4>
         </div>
       );
     }
@@ -243,7 +243,7 @@ const LotteryList = () => {
                     <div
                       className="position-relative"
                       style={{
-                        background: 'rgba(85, 74, 255, 0.2)',
+                        background: 'rgba(0, 229, 255, 0.2)',
                         height: '4px',
                         borderRadius: '4px',
                         width: '100%',
@@ -273,7 +273,7 @@ const LotteryList = () => {
   };
 
   return (
-    <section className="current-lotteryv13 pt-120 pb-120">
+    <section className="current-lotteryv13 bg1-color pt-120 pb-120">
       <div className="container">
         {/* <!--Section Header--> */}
         <div className="row g-xl-4 g-3 align-items-center justify-content-between mb-xxl-15 mb-xl-10 mb-8">
@@ -284,7 +284,7 @@ const LotteryList = () => {
                 <h5 className="s1-clr fw_700">{t('LOTTERY_LIST.sectionLabel')}</h5>
               </MotionFadeTopToDown>
               <MotionFadeDownToTop>
-                <h3 className="display-four d-block n4-clr">
+                <h3 className="display-four d-block nw1-clr">
                   {t('LOTTERY_LIST.titleMain')}{' '}
                   <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
                     {t('LOTTERY_LIST.titleHighlight')}{' '}

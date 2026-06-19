@@ -225,7 +225,7 @@ const PrizesList: React.FC = () => {
                 <Gift size={48} className="text-muted mb-3" />
                 <h5 className="text-muted">{t('PRIZES_ADMIN.empty', 'No hay premios creados')}</h5>
                 <p className="text-muted mb-4">
-                  {t('PRIZES_ADMIN.emptyMessage', 'Comienza creando tu primer premio para los sorteos')}
+                  {t('PRIZES_ADMIN.emptyMessage', 'Comienza creando tu primer premio para las promociones')}
                 </p>
                 <Link href="/admin/prizes/create" className="btn btn-primary">
                   <Plus size={18} className="me-2" />

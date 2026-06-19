@@ -66,8 +66,8 @@ export const createEditLotterySchema = (t: TFunction) =>
     name: z.string().min(1, t('LOTTERIES_ADMIN.errors.nameRequired', 'El nombre es requerido')),
     description: z.string(),
     price: z.number().positive(t('LOTTERIES_ADMIN.errors.priceInvalid', 'El precio debe ser mayor a 0')),
-    drawDate: z.string().min(1, t('LOTTERIES_ADMIN.errors.drawDateRequired', 'La fecha del sorteo es requerida')),
-    drawTime: z.string().min(1, t('LOTTERIES_ADMIN.errors.drawDateRequired', 'La hora del sorteo es requerida')),
+    drawDate: z.string().min(1, t('LOTTERIES_ADMIN.errors.drawDateRequired', 'La fecha de la promoción es requerida')),
+    drawTime: z.string().min(1, t('LOTTERIES_ADMIN.errors.drawDateRequired', 'La hora de la promoción es requerida')),
     totalTickets: z
       .number()
       .positive(t('LOTTERIES_ADMIN.errors.totalTicketsInvalid', 'El total de tickets debe ser mayor a 0')),

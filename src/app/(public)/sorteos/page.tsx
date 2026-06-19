@@ -193,8 +193,8 @@ const SorteosPage = () => {
             style={{
               borderRadius: '12px',
               fontSize: '13px',
-              background: filterType === key ? 'var(--s1)' : 'var(--n0)',
-              color: filterType === key ? 'var(--n0)' : 'var(--n3)',
+              background: filterType === key ? 'var(--s1)' : 'var(--bg1)',
+              color: filterType === key ? 'var(--n0)' : 'var(--nw2)',
               transition: 'all 0.3s ease',
               cursor: 'pointer',
             }}
@@ -203,7 +203,7 @@ const SorteosPage = () => {
             {label}
             <span
               style={{
-                background: filterType === key ? 'rgba(255,255,255,0.25)' : 'rgba(85,74,255,0.1)',
+                background: filterType === key ? 'rgba(255,255,255,0.25)' : 'rgba(0,229,255,0.1)',
                 color: filterType === key ? '#fff' : 'var(--s1)',
                 padding: '1px 8px',
                 borderRadius: '8px',
@@ -349,7 +349,7 @@ const SorteosPage = () => {
               </span>
               <div
                 style={{
-                  background: 'rgba(85, 74, 255, 0.2)',
+                  background: 'rgba(0, 229, 255, 0.2)',
                   height: '4px',
                   borderRadius: '4px',
                   width: '100%',
@@ -383,7 +383,7 @@ const SorteosPage = () => {
       <CartSidebar />
       <CartButton />
 
-      <section className="current-lotteryv13 pt-120 pb-120" style={{ minHeight: '100vh' }}>
+      <section className="current-lotteryv13 bg1-color pt-120 pb-120" style={{ minHeight: '100vh' }}>
         <div className="container">
           {/* Header */}
           <div className="row g-xl-4 g-3 align-items-center justify-content-between mb-xxl-15 mb-xl-10 mb-8">
@@ -392,8 +392,8 @@ const SorteosPage = () => {
                 <h5 className="s1-clr fw_700">
                   {t('SORTEOS.subtitle', 'Explora todas nuestras rifas y juegos disponibles')}
                 </h5>
-                <h3 className="display-four d-block n4-clr">
-                  {t('SORTEOS.title', 'Sorteos')}{' '}
+                <h3 className="display-four d-block nw1-clr">
+                  {t('SORTEOS.title', 'Promociones')}{' '}
                   <span className="act4-clr act4-underline">{t('SORTEOS.titleHighlight', '& Pick 3')}</span>
                 </h3>
               </div>
@@ -401,7 +401,7 @@ const SorteosPage = () => {
           </div>
 
           {/* Filters Bar */}
-          <div className="nw3-border radius24 n0-bg p-xxl-5 p-4 mb-xxl-10 mb-8">
+          <div className="nw3-border radius24 bg2-color p-xxl-5 p-4 mb-xxl-10 mb-8">
             <div className="row g-3 align-items-center">
               <div className="col-12 col-lg-5">{renderTypeFilterButtons()}</div>
 
@@ -412,13 +412,13 @@ const SorteosPage = () => {
                     setFilterStatus(e.target.value as FilterStatus);
                     setPage(1);
                   }}
-                  className="form-select fw_600 n4-clr"
+                  className="form-select fw_600 nw1-clr"
                   style={{
                     borderRadius: '12px',
                     fontSize: '13px',
                     height: '44px',
-                    background: 'var(--n0)',
-                    border: '1px solid var(--nw3)',
+                    background: 'var(--bg1)',
+                    border: '1px solid var(--nw4)',
                   }}
                 >
                   <option value="all">{t('SORTEOS.statusAll', 'Estado: Todos')}</option>
@@ -432,13 +432,13 @@ const SorteosPage = () => {
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as SortBy)}
-                  className="form-select fw_600 n4-clr"
+                  className="form-select fw_600 nw1-clr"
                   style={{
                     borderRadius: '12px',
                     fontSize: '13px',
                     height: '44px',
-                    background: 'var(--n0)',
-                    border: '1px solid var(--nw3)',
+                    background: 'var(--bg1)',
+                    border: '1px solid var(--nw4)',
                   }}
                 >
                   <option value="newest">{t('SORTEOS.sortNewest', 'Más recientes')}</option>
@@ -463,14 +463,14 @@ const SorteosPage = () => {
                       setSearchQuery(e.target.value);
                       setPage(1);
                     }}
-                    placeholder={t('SORTEOS.searchPlaceholder', 'Buscar sorteo...')}
-                    className="form-control fw_600 n4-clr"
+                    placeholder={t('SORTEOS.searchPlaceholder', 'Buscar promoción...')}
+                    className="form-control fw_600 nw1-clr"
                     style={{
                       borderRadius: '12px',
                       fontSize: '13px',
                       height: '44px',
-                      background: 'var(--n0)',
-                      border: '1px solid var(--nw3)',
+                      background: 'var(--bg1)',
+                      border: '1px solid var(--nw4)',
                       paddingLeft: '40px',
                     }}
                   />
@@ -481,7 +481,7 @@ const SorteosPage = () => {
 
           {/* Results count */}
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <span className="n3-clr fw_600 fs-eight">
+            <span className="nw2-clr fw_600 fs-eight">
               {filteredLotteries.length} {t('SORTEOS.results', 'resultados')}
               {searchQuery && <span> — &quot;{searchQuery}&quot;</span>}
             </span>
@@ -534,9 +534,9 @@ const SorteosPage = () => {
 
           {!isLoading && paginatedLotteries.length === 0 && (
             <div className="text-center py-5">
-              <GameControllerIcon weight="thin" className="n3-clr" style={{ fontSize: '64px', marginBottom: '16px' }} />
-              <h4 className="n3-clr">{t('SORTEOS.noResults', 'No se encontraron sorteos')}</h4>
-              <p className="n3-clr" style={{ fontSize: '14px' }}>
+              <GameControllerIcon weight="thin" className="nw3-clr" style={{ fontSize: '64px', marginBottom: '16px' }} />
+              <h4 className="nw1-clr">{t('SORTEOS.noResults', 'No se encontraron promociones')}</h4>
+              <p className="nw3-clr" style={{ fontSize: '14px' }}>
                 {t('SORTEOS.noResultsDesc', 'Intenta con otros filtros o busca algo diferente')}
               </p>
             </div>
@@ -552,12 +552,12 @@ const SorteosPage = () => {
               <button
                 disabled={page === 1}
                 onClick={() => setPage(p => p - 1)}
-                className="border-0 fw_600 px-3 py-2 nw3-border n4-clr"
+                className="border-0 fw_600 px-3 py-2 nw4-border nw1-clr"
                 style={{
                   borderRadius: '12px',
                   fontSize: '13px',
                   cursor: page === 1 ? 'not-allowed' : 'pointer',
-                  background: 'var(--n0)',
+                  background: 'var(--bg2)',
                   opacity: page === 1 ? 0.4 : 1,
                 }}
               >
@@ -574,9 +574,9 @@ const SorteosPage = () => {
                     borderRadius: '12px',
                     fontSize: '13px',
                     cursor: 'pointer',
-                    background: page === p ? 'var(--s1)' : 'var(--n0)',
-                    color: page === p ? 'var(--n0)' : 'var(--n4)',
-                    border: page === p ? 'none' : '1px solid var(--nw3)',
+                    background: page === p ? 'var(--s1)' : 'var(--bg2)',
+                    color: page === p ? 'var(--n0)' : 'var(--nw1)',
+                    border: page === p ? 'none' : '1px solid var(--nw4)',
                   }}
                 >
                   {p}
@@ -585,12 +585,12 @@ const SorteosPage = () => {
               <button
                 disabled={page === totalPages}
                 onClick={() => setPage(p => p + 1)}
-                className="border-0 fw_600 px-3 py-2 nw3-border n4-clr"
+                className="border-0 fw_600 px-3 py-2 nw4-border nw1-clr"
                 style={{
                   borderRadius: '12px',
                   fontSize: '13px',
                   cursor: page === totalPages ? 'not-allowed' : 'pointer',
-                  background: 'var(--n0)',
+                  background: 'var(--bg2)',
                   opacity: page === totalPages ? 0.4 : 1,
                 }}
               >

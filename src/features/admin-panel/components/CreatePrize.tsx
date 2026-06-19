@@ -222,14 +222,14 @@ const CreatePrize: React.FC = () => {
 
               {/* Lottery ID (opcional) */}
               <div className="col-md-6">
-                <label className="form-label fw-semibold">{t('PRIZES_ADMIN.fields.lotteryId', 'ID de Lotería')}</label>
+                <label className="form-label fw-semibold">{t('PRIZES_ADMIN.fields.lotteryId', 'ID de Promoción')}</label>
                 <input
                   type="text"
                   name="lotteryId"
                   className="form-control"
                   value={formData.lotteryId}
                   onChange={handleInputChange}
-                  placeholder={t('PRIZES_ADMIN.placeholders.lotteryId', 'UUID de la lotería (opcional)')}
+                  placeholder={t('PRIZES_ADMIN.placeholders.lotteryId', 'UUID de la promoción (opcional)')}
                 />
               </div>
 

@@ -433,14 +433,14 @@ const LotteryDetailsPage = () => {
     return (
       <div>
         <NavbarBlack />
-        <section className="contest-carslide-section position-relative pt-120 pb-120">
+        <section className="contest-carslide-section bg1-color position-relative pt-120 pb-120">
           <div className="container">
             <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '400px' }}>
               <div className="text-center">
                 <div className="spinner-border text-primary mb-3" aria-live="polite">
                   <span className="visually-hidden">{t('COMMON.loading', 'Cargando...')}</span>
                 </div>
-                <p className="n3-clr">{t('LOTTERY_DETAILS.loading', 'Cargando detalles de la lotería...')}</p>
+                <p className="nw2-clr">{t('LOTTERY_DETAILS.loading', 'Cargando detalles de la promoción...')}</p>
               </div>
             </div>
           </div>
@@ -454,15 +454,15 @@ const LotteryDetailsPage = () => {
     return (
       <div>
         <NavbarBlack />
-        <section className="pt-120 pb-120">
+        <section className="bg1-color pt-120 pb-120">
           <div className="container">
             <div className="text-center" style={{ minHeight: '400px' }}>
-              <h3 className="n4-clr mb-4">{t('LOTTERY_DETAILS.notFound', 'Lotería no encontrada')}</h3>
-              <p className="n3-clr mb-4">
-                {t('LOTTERY_DETAILS.notFoundDesc', 'La lotería que buscas no existe o ha sido eliminada.')}
+              <h3 className="nw1-clr mb-4">{t('LOTTERY_DETAILS.notFound', 'Promoción no encontrada')}</h3>
+              <p className="nw2-clr mb-4">
+                {t('LOTTERY_DETAILS.notFoundDesc', 'La promoción que buscas no existe o ha sido eliminada.')}
               </p>
               <Link href="/landing-page" className="kewta-btn d-inline-flex align-items-center">
-                <span className="kew-text act4-bg n0-clr">{t('COMMON.backToHome', 'Volver al inicio')}</span>
+                <span className="kew-text p1-bg n4-clr">{t('COMMON.backToHome', 'Volver al inicio')}</span>
               </Link>
             </div>
           </div>
@@ -508,10 +508,10 @@ const LotteryDetailsPage = () => {
       <NavbarBlack />
 
       {/* Contest Car Slide Section */}
-      <section className="contest-carslide-section position-relative pt-120 pb-60">
+      <section className="contest-carslide-section bg1-color position-relative pt-120 pb-60">
         <div className="container">
           {/* Main Image Slider */}
-          <div className="contest-details-carslidewrap position-relative act4-bg radius24 overflow-hidden mb-6">
+          <div className="contest-details-carslidewrap position-relative bg2-color radius24 overflow-hidden mb-6">
             {images.length > 1 ? (
               <Swiper
                 modules={[Navigation, Thumbs, FreeMode]}
@@ -628,7 +628,7 @@ const LotteryDetailsPage = () => {
       </section>
 
       {/* Contest Details Section */}
-      <section className="pb-120">
+      <section className="bg1-color pb-120">
         <div className="container">
           <div className="row g-6">
             {/* Left Column - Lottery Info */}
@@ -644,7 +644,7 @@ const LotteryDetailsPage = () => {
                     <div className="d-flex align-items-center gap-2">
                       <CalendarIcon className="fs-four act4-clr" />
                       <div>
-                        <span className="d-block fs-eight n3-clr">{t('LOTTERY_DETAILS.draw', 'Sorteo')}</span>
+                        <span className="d-block fs-eight n3-clr">{t('LOTTERY_DETAILS.draw', 'Promoción')}</span>
                         <span className="fw_700 n4-clr">
                           {drawInfo.dayName} {drawInfo.time}
                         </span>
@@ -743,7 +743,7 @@ const LotteryDetailsPage = () => {
                       <div
                         className="position-relative"
                         style={{
-                          background: 'rgba(85, 74, 255, 0.2)',
+                          background: 'rgba(0, 229, 255, 0.2)',
                           height: '8px',
                           borderRadius: '4px',
                           width: '100%',
@@ -822,7 +822,7 @@ const LotteryDetailsPage = () => {
                                 width: '8px',
                                 height: '8px',
                                 borderRadius: '50%',
-                                backgroundColor: isConnected ? '#2ed573' : '#ffa502',
+                                backgroundColor: isConnected ? '#00E676' : '#ffa502',
                                 display: 'inline-block',
                                 animation: isConnected ? 'none' : 'pulse 1.5s infinite',
                               }}
@@ -896,7 +896,7 @@ const LotteryDetailsPage = () => {
                                     border: isSoldOut
                                       ? '2px solid #ff4757'
                                       : isValid && isAvailable
-                                        ? '2px solid #2ed573'
+                                        ? '2px solid #00E676'
                                         : '1px solid #444',
                                   }}
                                 />
@@ -927,11 +927,11 @@ const LotteryDetailsPage = () => {
                                         ✗ {t('LOTTERY_DETAILS.pick3Unavailable', 'Número no disponible, intenta otro')}
                                       </span>
                                     ) : isAvailable ? (
-                                      <span style={{ color: '#2ed573' }}>
+                                      <span style={{ color: '#00E676' }}>
                                         ✓ {t('LOTTERY_DETAILS.pick3Available', '¡Número disponible!')}
                                       </span>
                                     ) : (
-                                      <span style={{ color: '#2ed573' }}>
+                                      <span style={{ color: '#00E676' }}>
                                         ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Número seleccionado!')}
                                       </span>
                                     )
@@ -1119,7 +1119,7 @@ const LotteryDetailsPage = () => {
                       }
                       onClick={handleBuyNow}
                     >
-                      <span className="kew-text act4-bg n0-clr d-flex align-items-center justify-content-center gap-2 w-100">
+                      <span className="kew-text p1-bg n4-clr d-flex align-items-center justify-content-center gap-2 w-100">
                         {isReserving ? (
                           <>
                             <span className="spinner-border spinner-border-sm" aria-hidden="true" />
@@ -1189,7 +1189,7 @@ const LotteryDetailsPage = () => {
                     {/* Lottery Number Info */}
                     <div className="mt-4 text-center">
                       <span className="fs-eight n3-clr">
-                        {t('LOTTERY_DETAILS.lotteryNo', 'Lotería No.')}{' '}
+                        {t('LOTTERY_DETAILS.lotteryNo', 'Promoción No.')}{' '}
                         <strong className="n4-clr">{lottery.lotteryNo}</strong>
                       </span>
                     </div>

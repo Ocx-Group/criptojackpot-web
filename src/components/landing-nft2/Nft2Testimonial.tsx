@@ -64,14 +64,14 @@ const Nft2Testimonial = () => {
   }, []);
 
   return (
-    <section className="testimonial-sectionv8 overflow-visible testimonial-v1-before pt-120 pb-120">
+    <section className="testimonial-sectionv8 overflow-visible testimonial-v1-before bg1-color pt-120 pb-120">
       {/* <!--Section Header--> */}
       <div className="container">
         <div className="row g-xl-4 g-3 align-items-center justify-content-between mb-xxl-15 mb-xl-10 mb-8">
           <div className="col-lg-7 col-md-8 col-sm-9">
             <div className="section__title">
               <SubTitle text={t('TESTIMONIALS.sectionLabel')} />
-              <div className="display-four testimonial-heading d-block n4-clr">
+              <div className="display-four testimonial-heading d-block nw1-clr">
                 <span className="d-flex gap-1 flex-wrap">
                   {t('TESTIMONIALS.titleLine1')}{' '}
                   <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
@@ -115,7 +115,7 @@ const Nft2Testimonial = () => {
                       </Link>
                     </li>
                   </ul>
-                  <span className="d-block ar-talking" data-aos="zoom-in-right" data-aos-duration="1200">
+                  <span className="d-block ar-talking nw2-clr" data-aos="zoom-in-right" data-aos-duration="1200">
                     {t('TESTIMONIALS.reviews')}
                   </span>
                 </div>
@@ -124,7 +124,7 @@ const Nft2Testimonial = () => {
           </div>
           <div className="col-xl-3 col-lg-3 col-md-3 col-sm-3">
             <div className="testimonial-ratting" data-aos="zoom-in-down" data-aos-duration="1600">
-              <span className="n4-clr fw_700 mb-xxl-6 mb-xl-4 mb-3">Trustpilot</span>
+              <span className="nw1-clr fw_700 mb-xxl-6 mb-xl-4 mb-3">Trustpilot</span>
               <ul className="ratting d-flex align-items-center gap-1 mb-xxl-3 mb-2">
                 <li>
                   <Star weight="fill" className="ph-fill ph-star fs-five act4-clr"></Star>
@@ -142,7 +142,7 @@ const Nft2Testimonial = () => {
                   <StarHalf weight="fill" className="ph-fill ph-star-half fs-five act4-clr"></StarHalf>
                 </li>
               </ul>
-              <h4 className="n2-clr">
+              <h4 className="nw2-clr">
                 4.5- <span className="fs-six fw_600">(25,750Reviews)</span>
               </h4>
             </div>

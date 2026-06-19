@@ -129,7 +129,7 @@ const CheckoutExpiredModal: React.FC<CheckoutExpiredModalProps> = ({ isOpen, onC
               style={{ borderRadius: '12px' }}
             >
               <ArrowLeft size={18} />
-              {t('CHECKOUT.backToLotteries', 'Ver Otras Loterías')}
+              {t('CHECKOUT.backToLotteries', 'Ver Otras Promociones')}
             </button>
           </div>
         </div>

@@ -166,7 +166,7 @@ const CheckoutPage: React.FC = () => {
                 <ArrowLeft size={20} />
               </button>
               <div>
-                <h2 className="mb-0 n4-clr fw-bold">{t('CHECKOUT.title', 'Checkout')}</h2>
+                <h2 className="mb-0 nw1-clr fw-bold">{t('CHECKOUT.title', 'Checkout')}</h2>
                 <p className="mb-0 text-muted" style={{ fontSize: '13px' }}>
                   {t('CHECKOUT.subtitle', 'Completa tu compra de manera segura')}
                 </p>
@@ -188,7 +188,7 @@ const CheckoutPage: React.FC = () => {
           <div className="col-lg-8">
             {/* Tickets de loteria */}
             <div className="checkout-tickets mb-4">
-              <h5 className="mb-3 n4-clr fw-bold">{t('CHECKOUT.yourTickets', 'Tus Tickets')}</h5>
+              <h5 className="mb-3 nw1-clr fw-bold">{t('CHECKOUT.yourTickets', 'Tus Tickets')}</h5>
               {items.map(item => (
                 <LotteryTicketCard key={item.id} item={item} />
               ))}
@@ -215,7 +215,7 @@ const CheckoutPage: React.FC = () => {
               <button
                 onClick={handleConfirmPayment}
                 disabled={!selectedPaymentMethod || isProcessing || status !== 'pending'}
-                className="checkout-confirm-btn btn w-100 act4-bg n0-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
+                className="checkout-confirm-btn btn w-100 p1-bg n4-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
                 style={{
                   borderRadius: '14px',
                   fontSize: '16px',

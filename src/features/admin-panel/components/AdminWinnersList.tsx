@@ -41,7 +41,7 @@ const AdminWinnersList: React.FC = () => {
               <thead className="table-light">
                 <tr>
                   <th>Usuario</th>
-                  <th>Lotería</th>
+                  <th>Promoción</th>
                   <th>Boleto</th>
                   <th>Premio</th>
                   <th>Valor</th>

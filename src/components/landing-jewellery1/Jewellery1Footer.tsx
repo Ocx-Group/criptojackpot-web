@@ -11,7 +11,7 @@ import MotionFadeTopToDown from '../motionEffect/MotionFadeTopToDown';
 const Jewellery1Footer = () => {
   const { t } = useTranslation();
   return (
-    <footer className="footer-section4 n4-bg position-relative cus-z1 overflow-hidden">
+    <footer className="footer-section4 bg1-color position-relative cus-z1 overflow-hidden">
       <div className="container pt-120 pb-120">
         <div className="row g-6 justify-content-between align-items-center">
           <MotionFadeLeft className="col-lg-5">

@@ -1,10 +1,18 @@
 'use client';
-import loginImage from 'public/images/background/back-register.png';
-import logoBlack from 'public/images/logo/blue-logo.png';
+import logoBlue from 'public/images/logo/blue-logo.png';
 import { useLoginForm } from '@/features/auth/hooks/useLoginForm';
 import { GoogleLoginButton } from '@/features/auth/components/GoogleLoginButton';
 import { GOOGLE_CLIENT_ID } from '@/components/Providers';
-import { EyeIcon, EyeSlashIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  ArrowRightIcon,
+  EnvelopeSimpleIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  LightningIcon,
+  LockKeyIcon,
+  ShieldCheckIcon,
+  TrophyIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
@@ -14,135 +22,191 @@ const LoginSection = () => {
   const { formData, isPasswordShow, isLoading, handleInputChange, togglePasswordVisibility, handleSubmit } =
     useLoginForm();
 
+  const features = [
+    {
+      icon: <ShieldCheckIcon weight="bold" />,
+      title: t('LOGIN.feature1Title', 'Pagos 100% seguros'),
+      desc: t('LOGIN.feature1Desc', 'Transacciones cripto verificadas y protegidas.'),
+    },
+    {
+      icon: <LightningIcon weight="bold" />,
+      title: t('LOGIN.feature2Title', 'Promociones transparentes'),
+      desc: t('LOGIN.feature2Desc', 'Resultados auditables y al instante.'),
+    },
+    {
+      icon: <TrophyIcon weight="bold" />,
+      title: t('LOGIN.feature3Title', 'Premios reales'),
+      desc: t('LOGIN.feature3Desc', 'Miles de ganadores en toda la comunidad.'),
+    },
+  ];
+
+  const stats = [
+    { value: '100%', label: t('LOGIN.statTransparent', 'Transparente') },
+    { value: '24/7', label: t('LOGIN.statAvailable', 'Disponible') },
+    { value: 'Cripto', label: t('LOGIN.statCrypto', 'Pagos') },
+  ];
+
   return (
-    <section className="login-section position-relative">
+    <section className="login-section position-relative overflow-hidden">
+      {/* Ambient glow orbs */}
+      <span className="login-orb login-orb--cyan" aria-hidden="true" />
+      <span className="login-orb login-orb--green" aria-hidden="true" />
+
       <div className="container">
-        <div className="row justify-content-center align-items-center">
-          <div className="col-lg-4 col-md-8 col-11">
-            <div className="left-logwrap d-center">
-              <div className="authentication-cmn">
-                <div className="container">
-                  <Link href="/public" className="text-center mb-xxl-10 d-block">
-                    <Image src={logoBlack} alt="img" />
-                  </Link>
-                </div>
-                <div className="log-title mb-xxl-10 mb-xl-7 mb-6">
-                  <span className="n3-clr">
-                    {t('LOGIN.newUser')}{' '}
-                    <Link href="/register" className="s1-clr s1-texthover">
-                      {t('LOGIN.createAccount')}
-                    </Link>
-                  </span>
-                </div>
-                <form onSubmit={handleSubmit} className="form-cmn-action">
-                  <div className="row g-6">
-                    <div className="col-lg-12">
-                      <div className="form-cmn">
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder={t('LOGIN.emailPlaceholder')}
-                        />
-                      </div>
+        <div className="row align-items-center justify-content-center g-0 login-row">
+          {/* Brand showcase */}
+          <div className="col-lg-6 d-none d-lg-block">
+            <div className="login-hero">
+              <Link href="/" className="login-hero__logo">
+                <Image src={logoBlue} alt="CriptoJackpot" priority />
+              </Link>
+
+              <span className="login-hero__eyebrow s1-clr fw_700">
+                {t('LOGIN.heroEyebrow', 'BIENVENIDO DE NUEVO')}
+              </span>
+              <h2 className="login-hero__title nw1-clr fw_700">
+                {t('LOGIN.heroTitle', 'Tu próxima gran')}{' '}
+                <span className="act4-clr act4-underline">{t('LOGIN.heroHighlight', 'oportunidad')}</span>{' '}
+                {t('LOGIN.heroTitleEnd', 'te espera')}
+              </h2>
+              <p className="login-hero__sub nw3-clr">
+                {t('LOGIN.heroSub', 'Accede a tu cuenta y participa en promociones y Pick 3 con pagos en criptomonedas.')}
+              </p>
+
+              <ul className="login-hero__features">
+                {features.map(feature => (
+                  <li key={feature.title} className="login-feature">
+                    <span className="login-feature__icon d-center">{feature.icon}</span>
+                    <div>
+                      <span className="login-feature__title nw1-clr fw_700 d-block">{feature.title}</span>
+                      <span className="login-feature__desc nw3-clr">{feature.desc}</span>
                     </div>
-                    <div className="col-lg-12">
-                      <div className="position-relative">
-                        <div className="form-cmn">
-                          <input
-                            type={isPasswordShow ? 'text' : 'password'}
-                            name="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            className="password-field"
-                            placeholder={t('LOGIN.passwordPlaceholder')}
-                            style={{ paddingRight: '45px' }}
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={togglePasswordVisibility}
-                          aria-label={isPasswordShow ? 'Ocultar contrase\u00f1a' : 'Mostrar contrase\u00f1a'}
-                          style={{
-                            cursor: 'pointer',
-                            position: 'absolute',
-                            right: '15px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            zIndex: 100,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            pointerEvents: 'auto',
-                            background: 'transparent',
-                            border: 'none',
-                            padding: 0,
-                          }}
-                        >
-                          {isPasswordShow ? (
-                            <EyeIcon size={20} weight="bold" style={{ color: '#ffffff' }} />
-                          ) : (
-                            <EyeSlashIcon size={20} weight="bold" style={{ color: '#ffffff' }} />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="col-lg-12 d-flex justify-content-between align-items-center mt-xxl-6 mt-3">
-                      <label className="d-flex align-items-center gap-2 n3-clr fs-eight" style={{ cursor: 'pointer' }}>
-                        <input
-                          type="checkbox"
-                          name="rememberMe"
-                          checked={formData.rememberMe}
-                          onChange={handleInputChange}
-                          style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                        />
-                        {t('LOGIN.rememberMe', 'Recordarme')}
-                      </label>
-                      <Link
-                        href="/forgot-password"
-                        className="text-decoration-underline act4-texthover fw_600 fs-eight s1-texthover"
-                      >
-                        {t('LOGIN.forgetPassword')}
-                      </Link>
-                    </div>
-                    <div className="col-lg-12">
-                      <button
-                        type="submit"
-                        className="cmn-btn s1-bg radius12 w-100 fw_600 justify-content-center d-inline-flex align-items-center gap-2 py-xxl-4 py-3 px-xl-6 px-5 n0-clr mt-1"
-                        disabled={isLoading}
-                      >
-                        <span className="fw_600 n0-clr">{isLoading ? t('LOGIN.loading') : t('LOGIN.loginButton')}</span>
-                      </button>
-                    </div>
-                    {GOOGLE_CLIENT_ID && (
-                      <div className="col-lg-12">
-                        <div className="d-flex align-items-center gap-3 my-2">
-                          <hr className="flex-grow-1 border-secondary" />
-                          <span className="n3-clr fs-eight">{t('LOGIN.orContinueWith', 'o continuar con')}</span>
-                          <hr className="flex-grow-1 border-secondary" />
-                        </div>
-                        <GoogleLoginButton />
-                      </div>
-                    )}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="login-hero__stats">
+                {stats.map(stat => (
+                  <div key={stat.label} className="login-stat">
+                    <span className="login-stat__value fw_700">{stat.value}</span>
+                    <span className="login-stat__label nw3-clr fw_600">{stat.label}</span>
                   </div>
-                </form>
+                ))}
               </div>
             </div>
           </div>
-          <div className="col-lg-8">
-            <div className="log-thumbwrap">
-              <div className="thumb">
-                <Image
-                  src={loginImage}
-                  alt="img"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                  }}
-                />
+
+          {/* Auth card */}
+          <div className="col-xxl-5 col-lg-6 col-md-8 col-11">
+            <div className="login-card">
+              <Link href="/" className="login-card__logo d-lg-none text-center mb-6 d-block">
+                <Image src={logoBlue} alt="CriptoJackpot" />
+              </Link>
+
+              <div className="login-card__head mb-xxl-8 mb-6">
+                <h3 className="nw1-clr fw_700 mb-2">{t('LOGIN.loginButton', 'Iniciar sesión')}</h3>
+                <span className="nw3-clr">
+                  {t('LOGIN.newUser')}{' '}
+                  <Link href="/register" className="s1-clr fw_600 s1-texthover login-link">
+                    {t('LOGIN.createAccount')}
+                  </Link>
+                </span>
               </div>
+
+              <form onSubmit={handleSubmit} className="form-cmn-action">
+                <div className="row g-5">
+                  <div className="col-12">
+                    <label className="login-label nw2-clr fw_600 mb-2 d-block">
+                      {t('LOGIN.emailLabel', 'Correo electrónico')}
+                    </label>
+                    <div className="form-cmn login-field">
+                      <span className="login-field__icon d-center">
+                        <EnvelopeSimpleIcon size={20} weight="bold" />
+                      </span>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder={t('LOGIN.emailPlaceholder')}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-12">
+                    <label className="login-label nw2-clr fw_600 mb-2 d-block">
+                      {t('LOGIN.passwordLabel', 'Contraseña')}
+                    </label>
+                    <div className="form-cmn login-field">
+                      <span className="login-field__icon d-center">
+                        <LockKeyIcon size={20} weight="bold" />
+                      </span>
+                      <input
+                        type={isPasswordShow ? 'text' : 'password'}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="password-field"
+                        placeholder={t('LOGIN.passwordPlaceholder')}
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="login-field__toggle d-center"
+                        aria-label={isPasswordShow ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      >
+                        {isPasswordShow ? (
+                          <EyeIcon size={20} weight="bold" />
+                        ) : (
+                          <EyeSlashIcon size={20} weight="bold" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <label className="login-remember d-flex align-items-center gap-2 nw3-clr fs-eight">
+                      <input
+                        type="checkbox"
+                        name="rememberMe"
+                        checked={formData.rememberMe}
+                        onChange={handleInputChange}
+                      />
+                      {t('LOGIN.rememberMe', 'Recordarme')}
+                    </label>
+                    <Link href="/forgot-password" className="login-link s1-clr fw_600 fs-eight s1-texthover">
+                      {t('LOGIN.forgetPassword')}
+                    </Link>
+                  </div>
+
+                  <div className="col-12">
+                    <button type="submit" className="login-submit w-100 d-center gap-2 fw_700" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm" style={{ width: 18, height: 18 }} />
+                          {t('LOGIN.loading')}
+                        </>
+                      ) : (
+                        <>
+                          {t('LOGIN.loginButton')}
+                          <ArrowRightIcon size={18} weight="bold" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {GOOGLE_CLIENT_ID && (
+                    <div className="col-12">
+                      <div className="login-divider d-flex align-items-center gap-3">
+                        <span className="login-divider__line" />
+                        <span className="nw3-clr fs-eight">{t('LOGIN.orContinueWith', 'o continuar con')}</span>
+                        <span className="login-divider__line" />
+                      </div>
+                      <GoogleLoginButton />
+                    </div>
+                  )}
+                </div>
+              </form>
             </div>
           </div>
         </div>

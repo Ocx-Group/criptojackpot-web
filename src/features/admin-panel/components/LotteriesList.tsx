@@ -71,16 +71,16 @@ const LotteriesList: React.FC = () => {
     <div className="col-lg-9">
       <div className="user-panel-wrapper">
         <div className="d-flex justify-content-between align-items-center mb-xxl-10 mb-6">
-          <h3 className="n4-clr fw_700 mb-0">{t('LOTTERIES_ADMIN.title', 'Gestión de Loterías')}</h3>
+          <h3 className="n4-clr fw_700 mb-0">{t('LOTTERIES_ADMIN.title', 'Gestión de Promociones')}</h3>
           <Link href="/admin/lotteries/create" className="btn btn-primary">
             <Plus size={18} className="me-2" />
-            {t('LOTTERIES_ADMIN.create.button', 'Crear Lotería')}
+            {t('LOTTERIES_ADMIN.create.button', 'Crear Promoción')}
           </Link>
         </div>
 
         <div className="card border-0 shadow-sm">
           <div className="card-header bg-white py-3">
-            <h5 className="mb-0">{t('LOTTERIES_ADMIN.list.title', 'Lista de Loterías')}</h5>
+            <h5 className="mb-0">{t('LOTTERIES_ADMIN.list.title', 'Lista de Promociones')}</h5>
           </div>
           <div className="card-body p-0">
             {lotteries && lotteries.length > 0 ? (
@@ -92,7 +92,7 @@ const LotteriesList: React.FC = () => {
                       <th>{t('LOTTERIES_ADMIN.columns.name', 'Nombre')}</th>
                       <th>{t('LOTTERIES_ADMIN.columns.prize', 'Premio')}</th>
                       <th>{t('LOTTERIES_ADMIN.columns.price', 'Precio')}</th>
-                      <th>{t('LOTTERIES_ADMIN.columns.drawDate', 'Sorteo')}</th>
+                      <th>{t('LOTTERIES_ADMIN.columns.drawDate', 'Promoción')}</th>
                       <th>{t('LOTTERIES_ADMIN.columns.tickets', 'Tickets')}</th>
                       <th>{t('LOTTERIES_ADMIN.columns.sold', 'Vendidos')}</th>
                       <th>{t('LOTTERIES_ADMIN.columns.status', 'Estado')}</th>
@@ -213,13 +213,13 @@ const LotteriesList: React.FC = () => {
             ) : (
               <div className="text-center py-5">
                 <TicketIcon size={48} className="text-muted mb-3" />
-                <h5 className="text-muted">{t('LOTTERIES_ADMIN.empty', 'No hay loterías creadas')}</h5>
+                <h5 className="text-muted">{t('LOTTERIES_ADMIN.empty', 'No hay promociones creadas')}</h5>
                 <p className="text-muted mb-4">
-                  {t('LOTTERIES_ADMIN.emptyMessage', 'Comienza creando tu primera lotería')}
+                  {t('LOTTERIES_ADMIN.emptyMessage', 'Comienza creando tu primera promoción')}
                 </p>
                 <Link href="/admin/lotteries/create" className="btn btn-primary">
                   <Plus size={18} className="me-2" />
-                  {t('LOTTERIES_ADMIN.create.button', 'Crear Lotería')}
+                  {t('LOTTERIES_ADMIN.create.button', 'Crear Promoción')}
                 </Link>
               </div>
             )}
@@ -272,7 +272,7 @@ const LotteriesList: React.FC = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">{t('LOTTERIES_ADMIN.delete.title', 'Eliminar Lotería')}</h5>
+                <h5 className="modal-title">{t('LOTTERIES_ADMIN.delete.title', 'Eliminar Promoción')}</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -282,7 +282,7 @@ const LotteriesList: React.FC = () => {
               </div>
               <div className="modal-body">
                 <p>
-                  {t('LOTTERIES_ADMIN.delete.confirm', '¿Estás seguro de que deseas eliminar la lotería')}{' '}
+                  {t('LOTTERIES_ADMIN.delete.confirm', '¿Estás seguro de que deseas eliminar la promoción')}{' '}
                   <strong>{lotteryToDelete.title}</strong>?
                 </p>
                 <p className="text-muted small">

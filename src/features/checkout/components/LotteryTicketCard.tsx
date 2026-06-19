@@ -61,7 +61,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
               <h4 className="mb-1 n0-clr fw-bold">{item.lotteryName}</h4>
               <div className="d-flex align-items-center gap-2 n0-clr" style={{ opacity: 0.9, fontSize: '12px' }}>
                 <Ticket size={14} />
-                <span>{t('CHECKOUT.lotteryTicket', 'Ticket de Lotería')}</span>
+                <span>{t('CHECKOUT.lotteryTicket', 'Ticket de Promoción')}</span>
               </div>
             </div>
           </div>
@@ -95,7 +95,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
                   key={number}
                   className="number-badge position-relative"
                   style={{
-                    background: 'linear-gradient(135deg, var(--act4) 0%, #8b5cf6 100%)',
+                    background: 'linear-gradient(135deg, var(--act4) 0%, #00E676 100%)',
                     borderRadius: '12px',
                     padding: '12px 20px',
                     minWidth: '70px',
@@ -137,7 +137,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
           >
             {/* Círculos decorativos a los lados */}
             <div
-              className="position-absolute n1-bg"
+              className="position-absolute bg1-color"
               style={{
                 width: '24px',
                 height: '24px',
@@ -148,7 +148,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
               }}
             />
             <div
-              className="position-absolute n1-bg"
+              className="position-absolute bg1-color"
               style={{
                 width: '24px',
                 height: '24px',

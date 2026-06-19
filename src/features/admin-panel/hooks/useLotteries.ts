@@ -42,13 +42,13 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
     onSuccess: () => {
       showNotification(
         'success',
-        t('LOTTERY_ADMIN.delete.success', 'Lotería eliminada'),
-        t('LOTTERY_ADMIN.delete.successMessage', 'La lotería se ha eliminado correctamente')
+        t('LOTTERY_ADMIN.delete.success', 'Promoción eliminada'),
+        t('LOTTERY_ADMIN.delete.successMessage', 'La promoción se ha eliminado correctamente')
       );
       queryClient.invalidateQueries({ queryKey: ['lotteries'] }).then();
     },
     onError: (error: Error) => {
-      const errorMessage = error.message || t('LOTTERY_ADMIN.delete.error', 'Error al eliminar la lotería');
+      const errorMessage = error.message || t('LOTTERY_ADMIN.delete.error', 'Error al eliminar la promoción');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });
@@ -62,7 +62,7 @@ export const useLotteries = (initialPagination?: PaginationRequest) => {
       showNotification(
         'success',
         t('LOTTERY_ADMIN.updateStatus.success', 'Estado actualizado'),
-        t('LOTTERY_ADMIN.updateStatus.successMessage', 'El estado de la lotería se ha actualizado')
+        t('LOTTERY_ADMIN.updateStatus.successMessage', 'El estado de la promoción se ha actualizado')
       );
       queryClient.invalidateQueries({ queryKey: ['lotteries'] }).then();
     },

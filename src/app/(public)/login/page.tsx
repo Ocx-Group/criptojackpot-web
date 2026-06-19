@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Iniciar Sesión',
-  description: 'Inicia sesión en CriptoJackpot para participar en rifas y sorteos con criptomonedas.',
+  description: 'Inicia sesión en CriptoJackpot para participar en rifas y promociones con criptomonedas.',
   alternates: {
     canonical: 'https://criptojackpot.com/login',
   },

@@ -123,7 +123,7 @@ const Nft2Banner = () => {
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path d="M1 5C22.8731 2.55684 81.2954 -1.30336 140 2.80115" stroke="#FF650E" />
+                            <path d="M1 5C22.8731 2.55684 81.2954 -1.30336 140 2.80115" stroke="#00E5FF" />
                           </svg>
                         </span>
                       </span>

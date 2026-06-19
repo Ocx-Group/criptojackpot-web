@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Recuperar Contraseña',
-  description: 'Recupera tu contraseña de CriptoJackpot para volver a participar en rifas y sorteos.',
+  description: 'Recupera tu contraseña de CriptoJackpot para volver a participar en rifas y promociones.',
   alternates: {
     canonical: 'https://criptojackpot.com/forgot-password',
   },

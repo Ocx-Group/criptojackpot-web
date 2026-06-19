@@ -85,8 +85,8 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       queryClient.invalidateQueries({ queryKey: ['prizes'] });
       showNotification(
         'success',
-        t('LOTTERIES_ADMIN.create.success', 'Lotería creada exitosamente'),
-        t('LOTTERIES_ADMIN.create.successMessage', 'La lotería se ha creado y está disponible')
+        t('LOTTERIES_ADMIN.create.success', 'Promoción creada exitosamente'),
+        t('LOTTERIES_ADMIN.create.successMessage', 'La promoción se ha creado y está disponible')
       );
       setTimeout(() => {
         router.push('/admin/lotteries');
@@ -94,7 +94,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
     },
     onError: (error: Error) => {
       const errorMessage =
-        error.message || t('LOTTERIES_ADMIN.create.error', 'Error al crear la lotería. Intente nuevamente.');
+        error.message || t('LOTTERIES_ADMIN.create.error', 'Error al crear la promoción. Intente nuevamente.');
       showNotification('error', t('COMMON.error', 'Error'), errorMessage);
     },
   });

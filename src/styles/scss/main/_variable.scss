@@ -3,16 +3,17 @@
   --body-font: var(--body-font);
   --transition: all 0.5s ease-in-out;
 
-  /* Color styles */
-  --p1: rgba(174, 254, 58, 1);
-  --p1-border: rgba(223, 255, 94, 0.3);
+  /* Color styles — Paleta Corporativa Cripto (ver PALETTE_MIGRATION.md)
+     Fondo obsidiana #0B0E14 · Verde neón #00E676 · Cian eléctrico #00E5FF · Oro líquido #FFD700 */
+  --p1: #00e676; // Verde neón — acento/CTA primario (compra de tickets)
+  --p1-border: rgba(0, 230, 118, 0.3);
 
-  --s1: rgba(85, 74, 255, 1);
-  --act1: rgba(254, 68, 69, 1);
-  --act2: rgba(19, 19, 19, 1);
-  --act3: rgba(254, 201, 47, 1);
-  --act4: rgba(255, 101, 14, 1);
-  --act5: rgba(14, 14, 14, 1);
+  --s1: #00e5ff; // Cian eléctrico — secundario/urgencia
+  --act1: #ff4757; // Rojo — error/peligro
+  --act2: #0b0e14; // Obsidiana oscuro
+  --act3: #ffd700; // Oro líquido — CTA secundario/badges/premios
+  --act4: #00e5ff; // Cian eléctrico — highlights/urgencia (antes naranja)
+  --act5: #0b0e14; // Obsidiana oscuro
 
   --nw1: rgba(255, 255, 255, 1);
   --nw2: rgba(244, 244, 244, 1);
@@ -24,10 +25,10 @@
   --n2: rgba(26, 26, 26, 1);
   --n3: rgba(78, 78, 78, 1);
   --n4: rgba(0, 0, 0, 1);
-  --n5: #0e0e0e;
+  --n5: #0b0e14; // Obsidiana
 
-  --bg1: #1c1d20;
-  --bg2: #262629;
+  --bg1: #0b0e14; // Fondo obsidiana dominante (80%)
+  --bg2: #141821; // Fondo obsidiana elevado
 
   --borderd: #dadada;
 

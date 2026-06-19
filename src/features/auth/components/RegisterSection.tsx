@@ -1,10 +1,23 @@
 'use client';
-import registerImage from 'public/images/background/back-register.png';
-import logo from 'public/images/logo/blue-logo.png';
+import logoBlue from 'public/images/logo/blue-logo.png';
 import { useRegisterForm } from '@/features/auth/hooks/useRegisterForm';
 import { GoogleLoginButton } from '@/features/auth/components/GoogleLoginButton';
 import { GOOGLE_CLIENT_ID } from '@/components/Providers';
-import { CaretRightIcon, EyeIcon, EyeSlashIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  ArrowRightIcon,
+  EnvelopeSimpleIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  GlobeHemisphereWestIcon,
+  HouseLineIcon,
+  IdentificationCardIcon,
+  LightningIcon,
+  LockKeyIcon,
+  MapPinIcon,
+  ShieldCheckIcon,
+  TrophyIcon,
+  UserIcon,
+} from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
@@ -39,77 +52,135 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
     }
   }, [referralCode, setReferralCode]);
 
+  const features = [
+    {
+      icon: <ShieldCheckIcon weight="bold" />,
+      title: t('LOGIN.feature1Title', 'Pagos 100% seguros'),
+      desc: t('LOGIN.feature1Desc', 'Transacciones cripto verificadas y protegidas.'),
+    },
+    {
+      icon: <LightningIcon weight="bold" />,
+      title: t('LOGIN.feature2Title', 'Promociones transparentes'),
+      desc: t('LOGIN.feature2Desc', 'Resultados auditables y al instante.'),
+    },
+    {
+      icon: <TrophyIcon weight="bold" />,
+      title: t('LOGIN.feature3Title', 'Premios reales'),
+      desc: t('LOGIN.feature3Desc', 'Miles de ganadores en toda la comunidad.'),
+    },
+  ];
+
+  const stats = [
+    { value: '100%', label: t('LOGIN.statTransparent', 'Transparente') },
+    { value: '24/7', label: t('LOGIN.statAvailable', 'Disponible') },
+    { value: 'Cripto', label: t('LOGIN.statCrypto', 'Pagos') },
+  ];
+
   return (
-    <section
-      className="register-section position-relative overflow-hidden"
-      style={{
-        backgroundColor: '#000000',
-        minHeight: '100vh',
-      }}
-    >
-      <div className="container-fluid p-0 h-100">
-        <div className="row g-0 min-vh-100">
-          {/* Form Column */}
-          <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center order-2 order-lg-1">
-            <div className="w-100 py-4 py-md-5 px-3 px-sm-4 px-md-5" style={{ maxWidth: '560px' }}>
-              {/* Logo */}
-              <Link href="/public" className="d-block text-center mb-4">
-                <Image src={logo} alt="logo" className="img-fluid" style={{ maxWidth: '120px', height: 'auto' }} />
+    <section className="login-section login-section--register position-relative overflow-hidden">
+      {/* Ambient glow orbs */}
+      <span className="login-orb login-orb--cyan" aria-hidden="true" />
+      <span className="login-orb login-orb--green" aria-hidden="true" />
+
+      <div className="container">
+        <div className="row align-items-center justify-content-center g-0 login-row">
+          {/* Brand showcase */}
+          <div className="col-lg-6 d-none d-lg-block">
+            <div className="login-hero">
+              <Link href="/" className="login-hero__logo">
+                <Image src={logoBlue} alt="CriptoJackpot" priority />
               </Link>
 
-              {/* Title */}
-              <div className="text-center mb-4">
-                <h3
-                  className="mb-2"
-                  style={{
-                    fontSize: '1.35rem',
-                    fontWeight: 600,
-                    color: 'rgba(255,255,255,0.7)',
-                  }}
-                >
-                  {t('REGISTER.title')}
-                </h3>
-                <span className="n3-clr" style={{ fontSize: '0.95rem' }}>
-                  {t('REGISTER.alreadyHaveAccount')}
-                  <Link href="/login" className="s1-clr fw_500 s1-texthover">
+              <span className="login-hero__eyebrow s1-clr fw_700">
+                {t('REGISTER.heroEyebrow', 'ÚNETE A CRIPTOJACKPOT')}
+              </span>
+              <h2 className="login-hero__title nw1-clr fw_700">
+                {t('REGISTER.heroTitle', 'Crea tu cuenta y empieza a')}{' '}
+                <span className="act4-clr act4-underline">{t('REGISTER.heroHighlight', 'ganar')}</span>{' '}
+                {t('REGISTER.heroTitleEnd', 'hoy mismo')}
+              </h2>
+              <p className="login-hero__sub nw3-clr">
+                {t(
+                  'REGISTER.heroSub',
+                  'Regístrate gratis y participa en promociones y Pick 3 con pagos en criptomonedas.'
+                )}
+              </p>
+
+              <ul className="login-hero__features">
+                {features.map(feature => (
+                  <li key={feature.title} className="login-feature">
+                    <span className="login-feature__icon d-center">{feature.icon}</span>
+                    <div>
+                      <span className="login-feature__title nw1-clr fw_700 d-block">{feature.title}</span>
+                      <span className="login-feature__desc nw3-clr">{feature.desc}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="login-hero__stats">
+                {stats.map(stat => (
+                  <div key={stat.label} className="login-stat">
+                    <span className="login-stat__value fw_700">{stat.value}</span>
+                    <span className="login-stat__label nw3-clr fw_600">{stat.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Auth card */}
+          <div className="col-xxl-5 col-lg-6 col-md-9 col-11">
+            <div className="login-card">
+              <Link href="/" className="login-card__logo d-lg-none text-center mb-6 d-block">
+                <Image src={logoBlue} alt="CriptoJackpot" />
+              </Link>
+
+              <div className="login-card__head mb-xxl-7 mb-6">
+                <h3 className="nw1-clr fw_700 mb-2">{t('REGISTER.title')}</h3>
+                <span className="nw3-clr">
+                  {t('REGISTER.alreadyHaveAccount')}{' '}
+                  <Link href="/login" className="s1-clr fw_600 s1-texthover login-link">
                     {t('REGISTER.signIn')}
                   </Link>
                 </span>
               </div>
 
-              {/* Error Alert */}
               {error && (
-                <div className="alert alert-danger mb-3 py-2" role="alert" style={{ fontSize: '0.875rem' }}>
+                <div className="login-alert mb-4" role="alert">
                   {error}
                 </div>
               )}
 
-              {/* Form */}
               <form className="form-cmn-action" onSubmit={handleSubmit}>
-                <div className="row g-3">
-                  {/* Name Fields */}
+                <div className="row g-4">
+                  {/* Name + Last name */}
                   <div className="col-12 col-sm-6">
-                    <div className={`form-cmn ${fieldErrors.name ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.name ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <UserIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.namePlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.name && <span className="field-error-text">{fieldErrors.name.message}</span>}
                   </div>
                   <div className="col-12 col-sm-6">
-                    <div className={`form-cmn ${fieldErrors.lastName ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.lastName ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <UserIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="text"
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.lastNamePlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.lastName && <span className="field-error-text">{fieldErrors.lastName.message}</span>}
@@ -117,14 +188,16 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
 
                   {/* Email */}
                   <div className="col-12">
-                    <div className={`form-cmn ${fieldErrors.email ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.email ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <EnvelopeSimpleIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.emailPlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.email && <span className="field-error-text">{fieldErrors.email.message}</span>}
@@ -132,42 +205,28 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
 
                   {/* Password */}
                   <div className="col-12">
-                    <div className="position-relative">
-                      <div className={`form-cmn ${fieldErrors.password ? 'has-error' : ''}`}>
-                        <input
-                          type={isPasswordShow ? 'text' : 'password'}
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          className="py-2 w-100"
-                          placeholder={t('REGISTER.passwordPlaceholder')}
-                          style={{ paddingRight: '45px' }}
-                        />
-                      </div>
+                    <div className={`form-cmn login-field ${fieldErrors.password ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <LockKeyIcon size={20} weight="bold" />
+                      </span>
+                      <input
+                        type={isPasswordShow ? 'text' : 'password'}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="password-field"
+                        placeholder={t('REGISTER.passwordPlaceholder')}
+                      />
                       <button
                         type="button"
                         onClick={togglePasswordVisibility}
+                        className="login-field__toggle d-center"
                         aria-label={isPasswordShow ? t('REGISTER.hidePassword') : t('REGISTER.showPassword')}
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          right: '15px',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          zIndex: 100,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          background: 'transparent',
-                          border: 'none',
-                          padding: 0,
-                          lineHeight: 0,
-                        }}
                       >
                         {isPasswordShow ? (
-                          <EyeIcon size={20} weight="bold" style={{ color: '#ffffff' }} />
+                          <EyeIcon size={20} weight="bold" />
                         ) : (
-                          <EyeSlashIcon size={20} weight="bold" style={{ color: '#ffffff' }} />
+                          <EyeSlashIcon size={20} weight="bold" />
                         )}
                       </button>
                     </div>
@@ -176,10 +235,13 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
 
                   {/* Country */}
                   <div className="col-12">
-                    <div className={`form-cmn ${countryError ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${countryError ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <GlobeHemisphereWestIcon size={20} weight="bold" />
+                      </span>
                       <select
                         title="Country select"
-                        className="form-select py-2 w-100"
+                        className="form-select"
                         onChange={handleCountryChange}
                         value={selectedCountry?.id || ''}
                         disabled={isLoadingCountries}
@@ -197,16 +259,18 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                     {countryError && <span className="field-error-text">{t('REGISTER.errors.countryRequired')}</span>}
                   </div>
 
-                  {/* Identification and Phone */}
+                  {/* Identification + Phone */}
                   <div className="col-12 col-sm-6">
-                    <div className={`form-cmn ${fieldErrors.identification ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.identification ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <IdentificationCardIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="text"
                         name="identification"
                         value={formData.identification}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.identificationPlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.identification && (
@@ -214,9 +278,9 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                     )}
                   </div>
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn">
-                      <div className="input-group">
-                        <span className="input-group-text px-2 px-sm-3">+{selectedCountry?.phoneCode || ''}</span>
+                    <div className="form-cmn login-field">
+                      <div className="input-group login-input-group">
+                        <span className="input-group-text">+{selectedCountry?.phoneCode || ''}</span>
                         <input
                           type="tel"
                           name="phone"
@@ -229,29 +293,33 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                     </div>
                   </div>
 
-                  {/* State and City */}
+                  {/* State + City */}
                   <div className="col-12 col-sm-6">
-                    <div className={`form-cmn ${fieldErrors.state ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.state ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <MapPinIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="text"
                         name="state"
                         value={formData.state}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.statePlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.state && <span className="field-error-text">{fieldErrors.state.message}</span>}
                   </div>
                   <div className="col-12 col-sm-6">
-                    <div className={`form-cmn ${fieldErrors.city ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.city ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <MapPinIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="text"
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.cityPlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.city && <span className="field-error-text">{fieldErrors.city.message}</span>}
@@ -259,53 +327,55 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
 
                   {/* Address */}
                   <div className="col-12">
-                    <div className={`form-cmn ${fieldErrors.address ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.address ? 'has-error' : ''}`}>
+                      <span className="login-field__icon d-center">
+                        <HouseLineIcon size={20} weight="bold" />
+                      </span>
                       <input
                         type="text"
                         name="address"
                         value={formData.address}
                         onChange={handleInputChange}
                         placeholder={t('REGISTER.addressPlaceholder')}
-                        className="py-2 w-100"
                       />
                     </div>
                     {fieldErrors.address && <span className="field-error-text">{fieldErrors.address.message}</span>}
                   </div>
 
-                  {/* Submit Button */}
-                  <div className="col-12 mt-3">
-                    <button
-                      type="submit"
-                      className="w-100 radius12 s1-bg fw_600 nw1-clr d-flex align-items-center justify-content-between py-2 py-sm-3 px-3 px-sm-4"
-                      disabled={isLoading}
-                      style={{ transition: 'opacity 0.2s' }}
-                    >
-                      <span style={{ fontSize: '1rem' }}>
-                        {isLoading ? t('REGISTER.creatingAccount') : t('REGISTER.createAccount')}
-                      </span>
-                      <CaretRightIcon size={20} />
+                  {/* Submit */}
+                  <div className="col-12 mt-2">
+                    <button type="submit" className="login-submit w-100 d-center gap-2 fw_700" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm" style={{ width: 18, height: 18 }} />
+                          {t('REGISTER.creatingAccount')}
+                        </>
+                      ) : (
+                        <>
+                          {t('REGISTER.createAccount')}
+                          <ArrowRightIcon size={18} weight="bold" />
+                        </>
+                      )}
                     </button>
                   </div>
 
                   {/* Terms */}
-                  <div className="col-12 mt-2">
-                    <span className="n3-clr d-block text-center" style={{ fontSize: '0.8rem' }}>
+                  <div className="col-12">
+                    <span className="nw3-clr d-block text-center fs-eight">
                       {t('REGISTER.termsAndPrivacy')}
-                      <Link href="#" className="n4-clr text-decoration-none">
+                      <Link href="#" className="s1-clr login-link">
                         {t('REGISTER.termsLink')}
                       </Link>
                     </span>
                   </div>
 
-                  {/* Google Login */}
+                  {/* Google */}
                   {GOOGLE_CLIENT_ID && (
                     <div className="col-12">
-                      <div className="d-flex align-items-center gap-3 my-2">
-                        <hr className="flex-grow-1 border-secondary" />
-                        <span className="n3-clr" style={{ fontSize: '0.85rem' }}>
-                          {t('LOGIN.orContinueWith', 'o continuar con')}
-                        </span>
-                        <hr className="flex-grow-1 border-secondary" />
+                      <div className="login-divider d-flex align-items-center gap-3">
+                        <span className="login-divider__line" />
+                        <span className="nw3-clr fs-eight">{t('LOGIN.orContinueWith', 'o continuar con')}</span>
+                        <span className="login-divider__line" />
                       </div>
                       <GoogleLoginButton referralCode={referralCode} />
                     </div>
@@ -314,47 +384,7 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
               </form>
             </div>
           </div>
-
-          {/* Image Column */}
-          <div className="col-12 col-lg-6 d-none d-lg-flex order-1 order-lg-2 position-relative">
-            <div className="w-100 h-100 position-relative" style={{ minHeight: '100vh' }}>
-              <Image
-                src={registerImage}
-                alt="register"
-                fill
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                }}
-                priority
-                sizes="50vw"
-              />
-              {/* Subtle gradient overlay for polished blending */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 30%)',
-                  pointerEvents: 'none',
-                }}
-              />
-            </div>
-          </div>
         </div>
-      </div>
-
-      {/* Mobile Background Image */}
-      <div className="d-lg-none position-absolute top-0 start-0 w-100 h-100" style={{ zIndex: -1 }}>
-        <Image
-          src={registerImage}
-          alt="register background"
-          fill
-          style={{
-            objectFit: 'cover',
-            objectPosition: 'center',
-            opacity: 0.08,
-          }}
-        />
       </div>
     </section>
   );

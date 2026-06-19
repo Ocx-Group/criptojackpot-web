@@ -19,7 +19,7 @@ const DIRECTION_MAP: Record<WalletTransactionDirection, { label: string; color: 
 const TYPE_MAP: Record<WalletTransactionType, string> = {
   [WalletTransactionType.ReferralBonus]: 'Bono de Referido',
   [WalletTransactionType.ReferralPurchaseCommission]: 'Comisión de Compra',
-  [WalletTransactionType.LotteryPrize]: 'Premio de Lotería',
+  [WalletTransactionType.LotteryPrize]: 'Premio de Promoción',
   [WalletTransactionType.TicketPurchase]: 'Compra de Ticket',
   [WalletTransactionType.Withdrawal]: 'Retiro',
   [WalletTransactionType.WithdrawalRefund]: 'Reembolso de Retiro',

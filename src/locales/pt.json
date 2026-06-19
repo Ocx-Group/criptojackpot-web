@@ -11,11 +11,15 @@
     "step2Title2": "Ganhe",
     "step2Desc": "Compartilhe seu link de indicação. Cada vez que um amigo comprar um ticket, você ganha 1% de comissão sobre a compra — automaticamente.",
     "step3Title1": "Ganhe o",
-    "step3Title2": "Sorteio!",
-    "step3Desc": "Quando chegar a data do sorteio, um vencedor é escolhido aleatoriamente. Se o seu número for sorteado, você leva o prêmio! Simples, transparente e justo."
+    "step3Title2": "Promoção!",
+    "step3Desc": "Quando chegar a data da promoção, um vencedor é escolhido aleatoriamente. Se o seu número for selecionado, você leva o prêmio! Simples, transparente e justo."
   },
   "CONFIRM_EMAIL": {
     "title": "Confirmar E-mail",
+    "heroEyebrow": "QUASE LÁ",
+    "heroTitle": "Ative sua conta e comece a",
+    "heroHighlight": "jogar",
+    "heroSub": "Estamos confirmando seu e-mail para manter sua conta segura. Em instantes você estará dentro.",
     "verifying": "Verificando seu e-mail...",
     "success": "E-mail confirmado com sucesso!",
     "successMessage": "Sua conta foi ativada. Agora você pode fazer login.",
@@ -28,6 +32,10 @@
   },
   "FORGOT_PASSWORD": {
     "backToLogin": "Voltar ao Login",
+    "heroEyebrow": "RECUPERE SEU ACESSO",
+    "heroTitle": "Vamos te colocar de volta",
+    "heroHighlight": "no jogo",
+    "heroSub": "Redefina sua senha com segurança e volte a participar em segundos.",
     "description": "Insira seu endereço de e-mail e enviaremos instruções para redefinir sua senha.",
     "emailPlaceholder": "Endereço de e-mail",
     "errors": {
@@ -43,6 +51,22 @@
   },
   "LOGIN": {
     "createAccount": "Criar uma conta",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Senha",
+    "heroEyebrow": "BEM-VINDO DE VOLTA",
+    "heroTitle": "Sua próxima grande",
+    "heroHighlight": "oportunidade",
+    "heroTitleEnd": "espera por você",
+    "heroSub": "Acesse sua conta e participe de promoções e Pick 3 com pagamentos em criptomoedas.",
+    "feature1Title": "Pagamentos 100% seguros",
+    "feature1Desc": "Transações cripto verificadas e protegidas.",
+    "feature2Title": "Promoções transparentes",
+    "feature2Desc": "Resultados auditáveis e instantâneos.",
+    "feature3Title": "Prêmios reais",
+    "feature3Desc": "Milhares de ganhadores em toda a comunidade.",
+    "statTransparent": "Transparente",
+    "statAvailable": "Disponível",
+    "statCrypto": "Pagamentos",
     "emailPlaceholder": "Endereço de e-mail",
     "errors": {
       "emailRequired": "O e-mail é obrigatório",
@@ -81,8 +105,8 @@
     "Home": "Início",
     "How To Play": "Como Jogar",
     "Login": "Entrar",
-    "Lotteries": "Loterias",
-    "Sorteos": "Sorteios",
+    "Lotteries": "Promoções",
+    "Sorteos": "Promoções",
     "Multiproduct One": "Multiproduto Um",
     "Multiproduct Two": "Multiproduto Dois",
     "New Password": "Nova Senha",
@@ -210,6 +234,11 @@
   "REGISTER": {
     "addressPlaceholder": "Endereço",
     "alreadyHaveAccount": "Já tem uma conta?",
+    "heroEyebrow": "JUNTE-SE À CRIPTOJACKPOT",
+    "heroTitle": "Crie sua conta e comece a",
+    "heroHighlight": "ganhar",
+    "heroTitleEnd": "hoje mesmo",
+    "heroSub": "Cadastre-se grátis e participe de promoções e Pick 3 com pagamentos em criptomoedas.",
     "cityPlaceholder": "Cidade",
     "createAccount": "Criar conta",
     "creatingAccount": "Criando conta...",
@@ -249,6 +278,10 @@
   },
   "RESET_PASSWORD": {
     "backToLogin": "Voltar ao Login",
+    "heroEyebrow": "CONTA PROTEGIDA",
+    "heroTitle": "Crie uma senha",
+    "heroHighlight": "mais forte",
+    "heroSub": "Defina uma nova senha segura e recupere o acesso à sua conta instantaneamente.",
     "confirmPasswordPlaceholder": "Confirmar nova senha",
     "description": "Insira o código de segurança que você recebeu por e-mail e sua nova senha.",
     "emailLabel": "E-mail",
@@ -269,6 +302,21 @@
     "securityCodePlaceholder": "Código de segurança",
     "success": "Senha redefinida com sucesso! Redirecionando para o login...",
     "title": "Redefinir Senha"
+  },
+  "TWO_FACTOR": {
+    "title": "Verificação em duas etapas",
+    "description": "Insira o código de 6 dígitos do seu aplicativo autenticador",
+    "recoveryDescription": "Insira um dos seus códigos de recuperação",
+    "recoveryCodeLabel": "Código de recuperação",
+    "recoveryCodePlaceholder": "XXXX-XXXX",
+    "verify": "Verificar",
+    "useAuthenticator": "Usar código do autenticador",
+    "useRecoveryCode": "Usar código de recuperação",
+    "backToLogin": "Voltar ao Login",
+    "heroEyebrow": "VERIFICAÇÃO SEGURA",
+    "heroTitle": "Mais um passo para",
+    "heroHighlight": "proteger você",
+    "heroSub": "Confirme sua identidade com o código do seu app autenticador e mantenha sua conta segura."
   },
   "USERS_ADMIN": {
     "title": "Administração de Usuários",
@@ -320,49 +368,49 @@
     "error": "Erro"
   },
   "LOTTERIES_ADMIN": {
-    "title": "Gestão de Loterias",
+    "title": "Gestão de Promoções",
     "create": {
-      "title": "Criar Loteria",
-      "formTitle": "Nova Loteria",
-      "button": "Criar Loteria",
-      "submit": "Criar Loteria",
-      "success": "Loteria criada com sucesso",
-      "successMessage": "A loteria foi criada e está disponível",
-      "error": "Erro ao criar a loteria. Tente novamente."
+      "title": "Criar Promoção",
+      "formTitle": "Nova Promoção",
+      "button": "Criar Promoção",
+      "submit": "Criar Promoção",
+      "success": "Promoção criada com sucesso",
+      "successMessage": "A promoção foi criada e está disponível",
+      "error": "Erro ao criar a promoção. Tente novamente."
     },
     "list": {
-      "title": "Lista de Loterias"
+      "title": "Lista de Promoções"
     },
     "fields": {
-      "name": "Nome da Loteria",
+      "name": "Nome da Promoção",
       "description": "Descrição",
       "price": "Preço por Entrada",
       "totalTickets": "Total de Tickets",
-      "prize": "Prêmio do Sorteio",
-      "drawDate": "Data do Sorteio",
-      "drawTime": "Hora do Sorteio",
+      "prize": "Prêmio da Promoção",
+      "drawDate": "Data da Promoção",
+      "drawTime": "Hora da Promoção",
       "status": "Status",
-      "image": "Imagem da Loteria",
+      "image": "Imagem da Promoção",
       "preview": "Pré-visualização",
-      "type": "Tipo de Loteria",
+      "type": "Tipo de Promoção",
       "minNumber": "Número Mínimo",
       "maxNumber": "Número Máximo",
       "cryptoCurrency": "Criptomoeda de Pagamento"
     },
     "placeholders": {
       "name": "Ex: Digital Dreamscapes",
-      "description": "Descrição do sorteio",
+      "description": "Descrição da promoção",
       "selectPrize": "Selecione um prêmio"
     },
     "help": {
-      "status": "As loterias ativas estarão disponíveis para compra imediata",
+      "status": "As promoções ativas estarão disponíveis para compra imediata",
       "image": "Tamanho recomendado: 368x383 pixels. Formatos: JPG, PNG, WEBP",
       "noPrizes": "Não há prêmios disponíveis.",
       "createPrize": "Criar um agora",
       "imageFromPrize": "A imagem é herdada do prêmio selecionado",
       "pick3": "Pick3: 1000 números (000-999), 1 série. O usuário seleciona 1 número de 3 dígitos.",
-      "minNumber": "O menor número disponível na loteria",
-      "maxNumber": "O maior número disponível na loteria"
+      "minNumber": "O menor número disponível na promoção",
+      "maxNumber": "O maior número disponível na promoção"
     },
     "status": {
       "draft": "Rascunho",
@@ -377,24 +425,24 @@
       "name": "Nome",
       "prize": "Prêmio",
       "price": "Preço",
-      "drawDate": "Sorteio",
+      "drawDate": "Promoção",
       "tickets": "Tickets",
       "sold": "Vendidos",
       "status": "Status",
       "actions": "Ações"
     },
-    "empty": "Nenhuma loteria criada",
-    "emptyMessage": "Comece criando sua primeira loteria",
-    "confirmDelete": "Tem certeza de que deseja excluir esta loteria?",
+    "empty": "Nenhuma promoção criada",
+    "emptyMessage": "Comece criando sua primeira promoção",
+    "confirmDelete": "Tem certeza de que deseja excluir esta promoção?",
     "noImage": "Sem imagem",
     "delete": {
-      "success": "Loteria excluída",
-      "successMessage": "A loteria foi excluída com sucesso",
-      "error": "Erro ao excluir a loteria"
+      "success": "Promoção excluída",
+      "successMessage": "A promoção foi excluída com sucesso",
+      "error": "Erro ao excluir a promoção"
     },
     "updateStatus": {
       "success": "Status atualizado",
-      "successMessage": "O status da loteria foi atualizado",
+      "successMessage": "O status da promoção foi atualizado",
       "error": "Erro ao atualizar o status"
     },
     "errors": {
@@ -403,9 +451,9 @@
       "priceInvalid": "O preço deve ser maior que 0",
       "totalTicketsInvalid": "O total de tickets deve ser maior que 0",
       "prizeRequired": "Você deve selecionar um prêmio",
-      "drawDateRequired": "A data do sorteio é obrigatória",
-      "drawTimeRequired": "A hora do sorteio é obrigatória",
-      "drawDatePast": "A data do sorteio deve ser no futuro",
+      "drawDateRequired": "A data da promoção é obrigatória",
+      "drawTimeRequired": "A hora da promoção é obrigatória",
+      "drawDatePast": "A data da promoção deve ser no futuro",
       "imageRequired": "A imagem é obrigatória",
       "invalidImageType": "Formato de imagem inválido. Use JPG, PNG ou WEBP",
       "imageTooLarge": "A imagem é muito grande. Máximo 5MB",
@@ -470,7 +518,7 @@
       "actions": "Ações"
     },
     "empty": "Nenhum prêmio criado",
-    "emptyMessage": "Comece criando seu primeiro prêmio para os sorteios",
+    "emptyMessage": "Comece criando seu primeiro prêmio para as promoções",
     "confirmDelete": "Tem certeza de que deseja excluir este prêmio?",
     "delete": {
       "success": "Prêmio excluído",
@@ -517,7 +565,7 @@
     "title": "Checkout",
     "subtitle": "Conclua sua compra com segurança",
     "yourTickets": "Seus Tickets",
-    "lotteryTicket": "Ticket de Loteria",
+    "lotteryTicket": "Ticket de Promoção",
     "selectedNumbers": "Números Selecionados",
     "ticketQuantity": "Quantidade de Tickets",
     "pricePerTicket": "Preço por Ticket",
@@ -557,7 +605,7 @@
     "expiredTitle": "Tempo Expirado!",
     "expiredMessage": "O tempo de reserva dos seus números terminou. Os números foram liberados e podem ser selecionados por outros usuários.",
     "tryAgain": "Tentar Novamente",
-    "backToLotteries": "Ver Outras Loterias"
+    "backToLotteries": "Ver Outras Promoções"
   },
   "PAYMENT": {
     "title": "Carteiras Crypto",
@@ -614,7 +662,7 @@
     "empty": "Você ainda não tem transações",
     "typeReferralBonus": "Bônus de Indicação",
     "typeReferralPurchaseCommission": "Comissão de Indicação",
-    "typeLotteryPrize": "Prêmio de Loteria",
+    "typeLotteryPrize": "Prêmio de Promoção",
     "typeTicketPurchase": "Compra de Ticket",
     "typeWithdrawal": "Saque",
     "typeWithdrawalRefund": "Reembolso de Saque",
@@ -656,12 +704,12 @@
   },
   "BANNER": {
     "step1": "Participar",
-    "step2": "Sorteio",
+    "step2": "Promoção",
     "step3": "Ganhar",
     "titleLine1": "Descubra, Jogue",
     "titleLine2": "e",
     "titleHighlight": "Ganhe",
-    "description": "Explore e fique por dentro dos últimos lançamentos e sorteios. Participe agora e aproveite!",
+    "description": "Explore e fique por dentro dos últimos lançamentos e promoções. Participe agora e aproveite!",
     "joinNow": "Participe Agora",
     "endsIn": "Termina em",
     "currentBid": "Lance atual",
@@ -670,11 +718,11 @@
   },
   "LOTTERY_LIST": {
     "sectionLabel": "Tente sua sorte e ganhe",
-    "titleMain": "Loterias",
+    "titleMain": "Promoções",
     "titleHighlight": "Disponíveis",
     "titleEnd": "Agora",
     "viewMore": "Ver Mais",
-    "noLotteries": "Não há loterias disponíveis no momento",
+    "noLotteries": "Não há promoções disponíveis no momento",
     "perTicket": "POR TICKET",
     "remaining": "Restantes",
     "sold": "Vendido",
@@ -682,14 +730,14 @@
     "oneDay": "1 Dia",
     "days": "{{count}} Dias",
     "ended": "Encerrado",
-    "draw": "Sorteio"
+    "draw": "Promoção"
   },
   "CALL_TO_ACTION": {
     "sectionLabel": "Chamada Para Ação",
     "callAnytime": "LIGUE A QUALQUER HORA",
     "phone": "(629) 555-0129",
     "titleLine1": "Obtenha Seu",
-    "titleLine2": "Ticket de Loteria",
+    "titleLine2": "Ticket de Promoção",
     "titleHighlight": "Agora!",
     "listing": "Ver mais",
     "agreeWith": "Concordo com a",
@@ -700,17 +748,17 @@
   },
   "TESTIMONIALS": {
     "sectionLabel": "Triunfos",
-    "titleLine1": "Loteria",
+    "titleLine1": "Promoção",
     "titleHighlight": "de Sucesso!",
     "reviews": "Avaliações!",
-    "text": "Participar da loteria foi uma virada de jogo para mim. Ganhar o prêmio dos meus sonhos foi uma experiência indescritível. O caminho para a alegria começa aqui."
+    "text": "Participar da promoção foi uma virada de jogo para mim. Ganhar o prêmio dos meus sonhos foi uma experiência indescritível. O caminho para a alegria começa aqui."
   },
   "WINNERS_PAGE": {
     "sectionLabel": "Nossos Ganhadores",
     "title": "Felizes",
     "titleHighlight": "Ganhadores!",
     "subtitle": "Conheça os sortudos ganhadores que realizaram seus sonhos com o CriptoJackpot",
-    "lottery": "Loteria",
+    "lottery": "Promoção",
     "prize": "Prêmio",
     "wonOn": "Ganho em",
     "ticket": "Bilhete",
@@ -733,20 +781,20 @@
     "titleHighlight": "Respostas",
     "description": "Não hesite em nos enviar um e-mail se não encontrar o que procura.",
     "tab1": "Como o ganhador é escolhido?",
-    "tab2": "Posso assistir ao sorteio ao vivo?",
+    "tab2": "Posso assistir à promoção ao vivo?",
     "tab3": "Como serei notificado se ganhar?",
-    "tab1_q1": "📢 Como o ganhador do sorteio é selecionado?",
-    "tab1_a1": "O ganhador será selecionado de forma 100% transparente, utilizando os resultados oficiais da Loteria Nacional da Costa Rica. Assim que todos os números do sorteio forem vendidos, um e-mail será enviado a todos os participantes informando a data oficial do sorteio.",
+    "tab1_q1": "📢 Como o ganhador da promoção é selecionado?",
+    "tab1_a1": "O ganhador será selecionado de forma 100% transparente, utilizando os resultados oficiais da Loteria Nacional da Costa Rica. Assim que todos os números da promoção forem vendidos, um e-mail será enviado a todos os participantes informando a data oficial da promoção.",
     "tab1_q2": "🔹 Como o número vencedor é determinado?",
-    "tab1_a2": "O número vencedor é definido tomando como referência os resultados daquele dia na Loteria Nacional: o primeiro número corresponde ao número do bilhete e o segundo número corresponde à série. Cada participante tem um número e uma série atribuídos. Por exemplo, se o seu número é 11 e sua série é 46, e no dia do sorteio o primeiro número vencedor é 11 e o segundo é 46 → o ganhador será o número completo: 1146.",
+    "tab1_a2": "O número vencedor é definido tomando como referência os resultados daquele dia na Loteria Nacional: o primeiro número corresponde ao número do bilhete e o segundo número corresponde à série. Cada participante tem um número e uma série atribuídos. Por exemplo, se o seu número é 11 e sua série é 46, e no dia da promoção o primeiro número vencedor é 11 e o segundo é 46 → o ganhador será o número completo: 1146.",
     "tab1_q3": "✅ Por que o processo garante total transparência?",
     "tab1_a3": "O resultado é baseado em um evento oficial, público e verificável — os resultados da Loteria Nacional da Costa Rica — garantindo total confiança para todos os participantes.",
-    "tab2_q1": "📺 Posso assistir ao sorteio ao vivo?",
-    "tab2_a1": "Sim, claro ✅ O sorteio da Loteria Nacional da Costa Rica é transmitido ao vivo e em tempo real. Qualquer pessoa pode verificar o resultado em direto, garantindo total transparência.",
+    "tab2_q1": "📺 Posso assistir à promoção ao vivo?",
+    "tab2_a1": "Sim, claro ✅ A promoção da Loteria Nacional da Costa Rica é transmitida ao vivo e em tempo real. Qualquer pessoa pode verificar o resultado em direto, garantindo total transparência.",
     "tab2_q2": "🔹 Onde posso assistir?",
     "tab2_a2": "📺 TV nacional (Canal 13) · 🌐 Site oficial da Junta de Protección Social · 📱 Redes sociais e YouTube oficial da JPS.",
     "tab2_q3": "✅ Por que isso garante transparência?",
-    "tab2_a3": "Como o sorteio é transmitido em um canal oficial, público e verificável, qualquer participante pode confirmar o resultado em tempo real — sem intermediários, sem possibilidade de manipulação.",
+    "tab2_a3": "Como a promoção é transmitida em um canal oficial, público e verificável, qualquer participante pode confirmar o resultado em tempo real — sem intermediários, sem possibilidade de manipulação.",
     "tab3_q1": "📩 Como serei notificado se ganhar?",
     "tab3_a1": "Se você for o ganhador, será contatado diretamente para confirmar seu prêmio 🎉 através do e-mail cadastrado no momento da compra e por ligação telefônica para confirmar suas informações e combinar a entrega do prêmio.",
     "tab3_q2": "🔹 Quais meios serão usados para entrar em contato?",
@@ -754,20 +802,20 @@
     "tab3_q3": "✅ O que devo verificar antes de participar?",
     "tab3_a3": "Certifique-se de inserir corretamente seus dados (e-mail e telefone) ao se cadastrar, pois serão o meio oficial de contato caso você seja o ganhador.",
     "q1": "Como e quando os ganhadores são selecionados?",
-    "a1": "Os ganhadores são selecionados aleatoriamente toda semana. O sorteio acontece no domingo às 10h.",
-    "q2": "Posso assistir ao sorteio ao vivo?",
-    "a2": "Sim, você pode assistir ao sorteio ao vivo em nosso site ou através de nossas redes sociais.",
+    "a1": "Os ganhadores são selecionados aleatoriamente toda semana. A promoção acontece no domingo às 10h.",
+    "q2": "Posso assistir à promoção ao vivo?",
+    "a2": "Sim, você pode assistir à promoção ao vivo em nosso site ou através de nossas redes sociais.",
     "q3": "Como serei notificado se ganhar?",
     "a3": "Se você ganhar algum prêmio, entraremos em contato por e-mail ou telefone para confirmar seu prêmio."
   },
   "FOOTER": {
-    "disclaimer": "Os jogos de loteria são feitos para entreter e divertir. Se você ou alguém que você conhece tem um problema com jogo,",
+    "disclaimer": "Os jogos de promoção são feitos para entreter e divertir. Se você ou alguém que você conhece tem um problema com jogo,",
     "newsletter": "Assine nossa newsletter",
     "emailPlaceholder": "Digite seu endereço de e-mail",
     "getStarted": "Começar",
     "explore": "EXPLORAR",
     "ourLottery": "NOSSA",
-    "ourLotteryHighlight": "LOTERIA",
+    "ourLotteryHighlight": "PROMOÇÃO",
     "copyright": "Copyright © 2026",
     "designedBy": "Desenvolvido por"
   },
@@ -775,11 +823,11 @@
     "title": "Minha Lista de Desejos",
     "loading": "Carregando lista de desejos...",
     "empty": "Sua lista de desejos está vazia.",
-    "browseLotteries": "Ver Loterias",
-    "drawToday": "Sorteio Hoje",
-    "drawTomorrow": "Sorteio Amanhã",
-    "drawInDays": "Sorteio em {{days}} Dias",
-    "copyLink": "Copiar link da loteria",
+    "browseLotteries": "Ver Promoções",
+    "drawToday": "Promoção Hoje",
+    "drawTomorrow": "Promoção Amanhã",
+    "drawInDays": "Promoção em {{days}} Dias",
+    "copyLink": "Copiar link da promoção",
     "linkCopied": "Link copiado para a área de transferência!",
     "copyError": "Erro ao copiar o link",
     "sold": "Vendido",
@@ -810,16 +858,16 @@
   },
   "SEO": {
     "home": {
-      "title": "CriptoJackpot — Rifas e Sorteios com Cripto",
+      "title": "CriptoJackpot — Rifas e Promoções com Cripto",
       "description": "Descubra, jogue e ganhe com o CriptoJackpot. Participe de rifas com criptomoedas, escolha seus números da sorte, indique amigos e ganhe prêmios."
     },
     "login": {
       "title": "Entrar",
-      "description": "Faça login no CriptoJackpot para participar de rifas e sorteios com criptomoedas."
+      "description": "Faça login no CriptoJackpot para participar de rifas e promoções com criptomoedas."
     },
     "register": {
       "title": "Criar Conta",
-      "description": "Cadastre-se no CriptoJackpot e comece a participar de rifas e sorteios com criptomoedas."
+      "description": "Cadastre-se no CriptoJackpot e comece a participar de rifas e promoções com criptomoedas."
     },
     "forgotPassword": {
       "title": "Recuperar Senha",
@@ -831,7 +879,7 @@
     }
   },
   "SORTEOS": {
-    "title": "Sorteios",
+    "title": "Promoções",
     "titleHighlight": "& Pick 3",
     "subtitle": "Explore todas as nossas rifas e jogos disponíveis.",
     "filterAll": "Todos",
@@ -846,10 +894,10 @@
     "sortPriceLow": "Menor preço",
     "sortPriceHigh": "Maior preço",
     "sortMostSold": "Mais vendidos",
-    "searchPlaceholder": "Buscar sorteio...",
+    "searchPlaceholder": "Buscar promoção...",
     "results": "resultados",
     "clearFilters": "Limpar filtros",
-    "noResults": "Nenhum sorteio encontrado",
+    "noResults": "Nenhuma promoção encontrada",
     "noResultsDesc": "Tente outros filtros ou busque algo diferente",
     "playPick3": "Jogar Pick 3",
     "buyTicket": "Comprar Ticket",
@@ -874,10 +922,10 @@
     "noSeriesAvailable": "Nenhuma série disponível",
     "maxSeriesReached": "Limite atingido",
     "onlyXSeriesAvailable": "Apenas {{count}} séries disponíveis para este número",
-    "loading": "Carregando detalhes da loteria...",
-    "notFound": "Loteria não encontrada",
-    "notFoundDesc": "A loteria que você procura não existe ou foi removida.",
-    "draw": "Sorteio",
+    "loading": "Carregando detalhes da promoção...",
+    "notFound": "Promoção não encontrada",
+    "notFoundDesc": "A promoção que você procura não existe ou foi removida.",
+    "draw": "Promoção",
     "prize": "Prêmio Principal",
     "estimatedValue": "Valor estimado",
     "cashAlternative": "Alternativa em dinheiro",
@@ -909,6 +957,6 @@
     "addToCart": "Adicionar ao Carrinho",
     "connecting": "Conectando ao servidor...",
     "soldOut": "Esgotado!",
-    "lotteryNo": "Loteria Nº"
+    "lotteryNo": "Promoção Nº"
   }
 }

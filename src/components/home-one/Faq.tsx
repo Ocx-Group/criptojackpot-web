@@ -60,7 +60,7 @@ const Faq = ({ bgColor }: Props) => {
   };
 
   return (
-    <section className={` pt-120 pb-120 ${bgColor ? 'question-section' : ''}`}>
+    <section className={`bg1-color pt-120 pb-120 ${bgColor ? 'question-section' : ''}`}>
       {/* Section Header */}
       <div className="container">
         <div className="row g-xl-4 g-3 justify-content-center mb-xxl-10 mb-xl-8 mb-7">
@@ -75,11 +75,11 @@ const Faq = ({ bgColor }: Props) => {
                 <h5 className="s1-clr fw_700">{t('FAQ.sectionLabel')}</h5>
               </MotionFadeTopToDown>
               <MotionFadeDownToTop>
-                <h2 className="display-four d-block n4-clr" data-aos="fade-down-left" data-aos-duration="1600">
+                <h2 className="display-four d-block nw1-clr" data-aos="fade-down-left" data-aos-duration="1600">
                   {t('FAQ.title')} <span className="act4-clr act4-underline"> {t('FAQ.titleHighlight')} </span>
                 </h2>
               </MotionFadeDownToTop>
-              <p className="n3-clr fs18 mt-xxl-4 mt-3" data-aos="zoom-in-down" data-aos-duration="1800">
+              <p className="nw2-clr fs18 mt-xxl-4 mt-3" data-aos="zoom-in-down" data-aos-duration="1800">
                 {t('FAQ.description')}
               </p>
             </div>

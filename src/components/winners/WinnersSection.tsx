@@ -113,7 +113,7 @@ const WinnersSection = () => {
 
   if (isLoading) {
     return (
-      <section className="testimonial-sectionv8 overflow-visible pt-120 pb-120">
+      <section className="testimonial-sectionv8 overflow-visible bg1-color pt-120 pb-120">
         <div className="container text-center">
           <div className="spinner-border act4-clr" role="status">
             <span className="visually-hidden">{t('WINNERS_PAGE.loading')}</span>
@@ -125,24 +125,24 @@ const WinnersSection = () => {
 
   if (winners.length === 0) {
     return (
-      <section className="testimonial-sectionv8 overflow-visible pt-120 pb-120">
+      <section className="testimonial-sectionv8 overflow-visible bg1-color pt-120 pb-120">
         <div className="container text-center">
-          <Trophy size={80} weight="thin" className="n3-clr mb-4" />
-          <h3 className="n3-clr">{t('WINNERS_PAGE.noWinners')}</h3>
+          <Trophy size={80} weight="thin" className="nw3-clr mb-4" />
+          <h3 className="nw1-clr">{t('WINNERS_PAGE.noWinners')}</h3>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="testimonial-sectionv8 overflow-visible pt-120 pb-120">
+    <section className="testimonial-sectionv8 overflow-visible bg1-color pt-120 pb-120">
       {/* Section Header */}
       <div className="container">
         <div className="row g-xl-4 g-3 align-items-center justify-content-between mb-xxl-15 mb-xl-10 mb-8">
           <div className="col-lg-8 col-md-9">
             <div className="section__title">
               <SubTitle text={t('WINNERS_PAGE.sectionLabel')} />
-              <div className="display-four testimonial-heading d-block n4-clr">
+              <div className="display-four testimonial-heading d-block nw1-clr">
                 <span className="d-flex gap-1 flex-wrap">
                   {t('WINNERS_PAGE.title')}{' '}
                   <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
@@ -150,7 +150,7 @@ const WinnersSection = () => {
                   </span>
                 </span>
               </div>
-              <p className="n3-clr fs-six mt-3" data-aos="fade-up" data-aos-duration="1200">
+              <p className="nw2-clr fs-six mt-3" data-aos="fade-up" data-aos-duration="1200">
                 {t('WINNERS_PAGE.subtitle')}
               </p>
             </div>
@@ -160,8 +160,8 @@ const WinnersSection = () => {
               <div className="d-flex align-items-center gap-3">
                 <Trophy size={48} weight="fill" className="act4-clr" />
                 <div>
-                  <h2 className="n4-clr fw_700">{winners.length}</h2>
-                  <span className="n3-clr fw_600">{t('WINNERS_PAGE.sectionLabel')}</span>
+                  <h2 className="nw1-clr fw_700">{winners.length}</h2>
+                  <span className="nw2-clr fw_600">{t('WINNERS_PAGE.sectionLabel')}</span>
                 </div>
               </div>
             </div>

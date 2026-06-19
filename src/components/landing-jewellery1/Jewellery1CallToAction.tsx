@@ -17,7 +17,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
   const [isChecked, setIsChecked] = useState(true);
   const { t } = useTranslation();
   return (
-    <section className="call-tosectionv7 overflow-hidden n4-bg pt-120 pb-120 position-relative call-custom-space call-custom-spacev4">
+    <section className="call-tosectionv7 overflow-hidden bg2-color pt-120 pb-120 position-relative call-custom-space call-custom-spacev4">
       <div className="container">
         <div className="call-to-wrapper1 call-to-wrapperv4 pt-6 position-relative">
           <div className="row g-xl-0 g-0 justify-content-between">
