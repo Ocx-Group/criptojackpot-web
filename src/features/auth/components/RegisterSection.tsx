@@ -363,7 +363,7 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                   <div className="col-12">
                     <span className="nw3-clr d-block text-center fs-eight">
                       {t('REGISTER.termsAndPrivacy')}
-                      <Link href="#" className="s1-clr login-link">
+                      <Link href="/terms" className="s1-clr login-link">
                         {t('REGISTER.termsLink')}
                       </Link>
                     </span>

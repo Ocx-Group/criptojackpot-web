@@ -95,7 +95,7 @@ const Nft2Banner = () => {
                       </Link>
                     </MotionStaggerEffectUl>
                   </ul>
-                  <Link href="/landing-page" className="custom-bigarrow">
+                  <Link href="/sorteos" className="custom-bigarrow">
                     <span className="icon">
                       <svg width="137" height="16" viewBox="0 0 137 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path

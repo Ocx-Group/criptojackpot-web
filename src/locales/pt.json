@@ -318,6 +318,230 @@
     "heroHighlight": "proteger você",
     "heroSub": "Confirme sua identidade com o código do seu app autenticador e mantenha sua conta segura."
   },
+  "TERMS": {
+    "eyebrow": "MARCO LEGAL",
+    "title": "Termos e Condições",
+    "lastUpdated": "Última atualização: 19 de junho de 2026",
+    "intro": "Por favor, leia atentamente estes Termos e Condições antes de utilizar a CriptoJackpot. Eles regem o seu acesso e uso da Plataforma e a sua participação em nossas promoções.",
+    "contactNote": "Para qualquer dúvida sobre estes Termos, entre em contato conosco em support@criptojackpot.com.",
+    "backToHome": "Voltar ao início",
+    "blocks": [
+      {
+        "heading": "Aceitação dos Termos",
+        "paragraphs": [
+          "Estes Termos e Condições (\"Termos\") constituem um acordo juridicamente vinculativo entre você (\"usuário\") e a CriptoJackpot (\"a Plataforma\", \"nós\"). Ao acessar, registrar-se ou utilizar a Plataforma de qualquer forma, você declara ter lido, entendido e aceitado ficar obrigado por estes Termos e por nossa Política de Privacidade.",
+          "Se você não concordar com qualquer parte destes Termos, deve abster-se de utilizar a Plataforma."
+        ]
+      },
+      {
+        "heading": "Elegibilidade",
+        "paragraphs": [
+          "O uso da Plataforma é reservado exclusivamente a pessoas maiores de 18 anos (ou a maioridade legal aplicável em sua jurisdição) com plena capacidade legal para contratar."
+        ],
+        "bullets": [
+          "Você é o único responsável por verificar que sua participação nas promoções é legal em seu país, estado ou região de residência.",
+          "É proibido o uso da Plataforma a partir de jurisdições onde tal participação esteja restrita ou proibida.",
+          "Reservamo-nos o direito de solicitar documentação que comprove sua identidade e idade a qualquer momento, bem como de suspender contas que não cumpram estes requisitos."
+        ]
+      },
+      {
+        "heading": "Natureza do Serviço",
+        "paragraphs": [
+          "A CriptoJackpot oferece promoções de participação nas quais os usuários podem adquirir entradas para acessar a oportunidade de obter prêmios. A participação em qualquer promoção é voluntária e não garante a obtenção de prêmio algum.",
+          "A Plataforma atua como organizadora e facilitadora de tais promoções. As condições específicas de cada promoção (preço de participação, datas, mecânica de seleção e prêmios) são publicadas na própria promoção e fazem parte integrante destes Termos."
+        ]
+      },
+      {
+        "heading": "Registro e Conta de Usuário",
+        "paragraphs": [
+          "Para participar você deve criar uma conta fornecendo informações verdadeiras, exatas e atualizadas. Você é o único responsável por manter a confidencialidade de suas credenciais e por toda atividade realizada sob sua conta."
+        ],
+        "bullets": [
+          "Notifique-nos imediatamente sobre qualquer uso não autorizado de sua conta.",
+          "Não nos responsabilizamos por perdas decorrentes do descumprimento de suas obrigações de segurança.",
+          "É proibido criar múltiplas contas, falsificar identidades ou transferir sua conta a terceiros."
+        ]
+      },
+      {
+        "heading": "Pagamentos e Criptomoedas",
+        "paragraphs": [
+          "As participações podem ser adquiridas mediante criptomoedas ou outros métodos habilitados. Você reconhece e aceita que as transações com criptomoedas são, por sua natureza, irreversíveis e que o valor das criptomoedas é volátil."
+        ],
+        "bullets": [
+          "Você é responsável por enviar os fundos ao endereço e à rede corretos; não respondemos por perdas causadas por erros do usuário.",
+          "Salvo disposição em contrário da lei aplicável, as participações adquiridas não são reembolsáveis.",
+          "Não prestamos serviços de custódia, investimento ou consultoria financeira. As criptomoedas são utilizadas apenas como meio de pagamento."
+        ]
+      },
+      {
+        "heading": "Participação e Seleção de Ganhadores",
+        "paragraphs": [
+          "A seleção de ganhadores é realizada mediante mecanismos projetados para serem imparciais e verificáveis, conforme descrito em cada promoção. A participação não concede nenhum direito adquirido sobre um prêmio até que o resultado seja determinado e validado de acordo com as regras da promoção.",
+          "Nossas decisões quanto à validação de participações, à determinação de ganhadores e à entrega de prêmios são definitivas. Reservamo-nos o direito de anular participações obtidas de forma fraudulenta ou em violação destes Termos."
+        ]
+      },
+      {
+        "heading": "Conduta Proibida",
+        "bullets": [
+          "Utilizar a Plataforma para atividades ilícitas, fraudulentas ou de lavagem de dinheiro.",
+          "Empregar bots, scripts, exploits ou qualquer meio automatizado ou enganoso para obter vantagens.",
+          "Interferir com a segurança, integridade ou funcionamento da Plataforma.",
+          "Violar direitos de propriedade intelectual ou de terceiros."
+        ]
+      },
+      {
+        "heading": "Propriedade Intelectual",
+        "paragraphs": [
+          "Todo o conteúdo da Plataforma —incluindo marcas, logotipos, textos, gráficos, software e design— é de propriedade da CriptoJackpot ou de seus licenciantes e está protegido pela legislação aplicável. Não se concede nenhuma licença além do uso pessoal e não comercial da Plataforma."
+        ]
+      },
+      {
+        "heading": "Isenção de Garantias",
+        "paragraphs": [
+          "A Plataforma é fornecida \"no estado em que se encontra\" e \"conforme disponibilidade\", sem garantias de nenhum tipo, expressas ou implícitas. Não garantimos que o serviço seja ininterrupto, livre de erros ou seguro, nem que atenda às suas expectativas. O uso da Plataforma é por sua conta e risco."
+        ]
+      },
+      {
+        "heading": "Limitação de Responsabilidade",
+        "paragraphs": [
+          "Na máxima medida permitida por lei, a CriptoJackpot, seus diretores, funcionários e colaboradores não serão responsáveis por danos indiretos, incidentais, especiais, punitivos ou consequenciais, nem por perda de lucros, dados, fundos ou criptomoedas decorrente do uso ou da impossibilidade de uso da Plataforma.",
+          "Em todo caso, nossa responsabilidade total acumulada será limitada ao valor efetivamente pago por você à Plataforma nos três (3) meses anteriores ao fato que originou a reclamação."
+        ]
+      },
+      {
+        "heading": "Indenização",
+        "paragraphs": [
+          "Você concorda em defender, indenizar e isentar a CriptoJackpot de qualquer reclamação, dano, perda ou despesa (incluindo honorários legais razoáveis) decorrente do seu uso da Plataforma, do descumprimento destes Termos ou da violação de direitos de terceiros."
+        ]
+      },
+      {
+        "heading": "Suspensão e Rescisão",
+        "paragraphs": [
+          "Podemos suspender ou cancelar seu acesso à Plataforma, total ou parcialmente, a qualquer momento e sem aviso prévio, se considerarmos razoavelmente que você violou estes Termos ou que sua conduta pode prejudicar a Plataforma ou outros usuários."
+        ]
+      },
+      {
+        "heading": "Modificações",
+        "paragraphs": [
+          "Reservamo-nos o direito de modificar estes Termos a qualquer momento. As alterações entrarão em vigor a partir de sua publicação na Plataforma. O uso continuado do serviço após tais alterações implica sua aceitação dos Termos revisados."
+        ]
+      },
+      {
+        "heading": "Lei Aplicável e Resolução de Disputas",
+        "paragraphs": [
+          "Estes Termos serão regidos e interpretados de acordo com a legislação aplicável na jurisdição onde a CriptoJackpot tenha seu domicílio. Qualquer controvérsia será submetida aos tribunais competentes dessa jurisdição, renunciando as partes a qualquer outro foro que possa lhes corresponder."
+        ]
+      },
+      {
+        "heading": "Disposições Gerais",
+        "paragraphs": [
+          "Se qualquer disposição destes Termos for considerada inválida ou inexequível, o restante permanecerá em pleno vigor. A falta de exercício de um direito não constitui renúncia ao mesmo. Estes Termos, juntamente com a Política de Privacidade, constituem o acordo completo entre as partes."
+        ]
+      }
+    ]
+  },
+  "PRIVACY": {
+    "eyebrow": "PRIVACIDADE",
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última atualização: 19 de junho de 2026",
+    "intro": "Sua confiança é importante para nós. Esta Política explica como tratamos suas informações pessoais quando você utiliza a CriptoJackpot e participa de nossas promoções.",
+    "contactNote": "Para exercer seus direitos ou esclarecer dúvidas sobre privacidade, escreva-nos em support@criptojackpot.com.",
+    "backToHome": "Voltar ao início",
+    "blocks": [
+      {
+        "heading": "Introdução",
+        "paragraphs": [
+          "Na CriptoJackpot (\"a Plataforma\", \"nós\") respeitamos sua privacidade e nos comprometemos a proteger seus dados pessoais. Esta Política de Privacidade descreve quais informações coletamos, como as usamos e quais são seus direitos.",
+          "Ao utilizar a Plataforma você aceita as práticas descritas nesta Política. Se não concordar, pedimos que não utilize o serviço."
+        ]
+      },
+      {
+        "heading": "Informações que Coletamos",
+        "bullets": [
+          "Dados de registro: nome, sobrenome, e-mail e senha.",
+          "Dados de identificação e contato: documento de identidade, telefone, país, estado, cidade e endereço, quando necessários para a participação ou a verificação.",
+          "Dados de transações: histórico de participações, pagamentos e endereços de criptomoedas utilizados.",
+          "Dados técnicos: endereço IP, tipo de dispositivo, navegador, dados de uso e cookies."
+        ]
+      },
+      {
+        "heading": "Como Usamos suas Informações",
+        "bullets": [
+          "Criar e gerenciar sua conta e permitir sua participação nas promoções.",
+          "Processar pagamentos, validar participações e gerenciar a entrega de prêmios.",
+          "Verificar sua identidade e idade, e prevenir fraudes e uso indevido.",
+          "Cumprir obrigações legais, fiscais e regulatórias aplicáveis.",
+          "Melhorar a Plataforma, sua segurança e a experiência do usuário.",
+          "Enviar comunicações operacionais e, se você consentir, comunicações promocionais."
+        ]
+      },
+      {
+        "heading": "Base Legal do Tratamento",
+        "paragraphs": [
+          "Tratamos seus dados com base na execução do contrato (a prestação do serviço), no cumprimento de obrigações legais, em nosso interesse legítimo de prevenir fraudes e melhorar o serviço, e em seu consentimento quando exigido."
+        ]
+      },
+      {
+        "heading": "Como Compartilhamos as Informações",
+        "paragraphs": [
+          "Não vendemos seus dados pessoais. Podemos compartilhar informações apenas com:"
+        ],
+        "bullets": [
+          "Prestadores de serviços que atuam em nosso nome (pagamentos, infraestrutura, verificação, análise), sujeitos a obrigações de confidencialidade.",
+          "Autoridades competentes quando a lei exigir ou para proteger nossos direitos.",
+          "Terceiros no contexto de uma reestruturação, fusão ou venda, mantendo a proteção de seus dados."
+        ]
+      },
+      {
+        "heading": "Cookies e Tecnologias Semelhantes",
+        "paragraphs": [
+          "Utilizamos cookies e tecnologias semelhantes para o funcionamento da Plataforma, lembrar suas preferências e analisar o uso. Você pode configurar seu navegador para rejeitar cookies, embora algumas funções possam não estar disponíveis."
+        ]
+      },
+      {
+        "heading": "Segurança dos Dados",
+        "paragraphs": [
+          "Aplicamos medidas técnicas e organizacionais razoáveis para proteger seus dados contra acessos não autorizados, perda ou alteração. No entanto, nenhum sistema é completamente seguro, portanto não podemos garantir segurança absoluta."
+        ]
+      },
+      {
+        "heading": "Conservação dos Dados",
+        "paragraphs": [
+          "Conservamos seus dados pessoais pelo tempo necessário para as finalidades descritas e para cumprir nossas obrigações legais, contábeis e de prevenção de fraudes. Decorridos tais prazos, os dados são eliminados ou anonimizados."
+        ]
+      },
+      {
+        "heading": "Seus Direitos",
+        "paragraphs": [
+          "De acordo com a regulamentação aplicável, você pode exercer os seguintes direitos sobre seus dados:"
+        ],
+        "bullets": [
+          "Acesso, retificação e exclusão de seus dados.",
+          "Limitação ou oposição ao tratamento.",
+          "Portabilidade dos dados que você nos forneceu.",
+          "Retirar seu consentimento a qualquer momento, sem afetar a licitude do tratamento prévio."
+        ]
+      },
+      {
+        "heading": "Transferências Internacionais",
+        "paragraphs": [
+          "Seus dados poderão ser tratados em servidores localizados em diferentes países. Nesse caso, adotamos garantias adequadas para que suas informações recebam um nível de proteção equivalente ao exigido pela regulamentação aplicável."
+        ]
+      },
+      {
+        "heading": "Menores de Idade",
+        "paragraphs": [
+          "A Plataforma não é direcionada a menores de 18 anos e não coletamos conscientemente dados de menores. Se detectarmos que foram obtidos dados de um menor, os eliminaremos com a maior brevidade."
+        ]
+      },
+      {
+        "heading": "Alterações nesta Política",
+        "paragraphs": [
+          "Podemos atualizar esta Política de Privacidade periodicamente. Publicaremos a versão vigente na Plataforma e indicaremos sua data de atualização. O uso continuado do serviço implica a aceitação da Política revisada."
+        ]
+      }
+    ]
+  },
   "USERS_ADMIN": {
     "title": "Administração de Usuários",
     "usersList": "Lista de Usuários",

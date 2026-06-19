@@ -66,7 +66,7 @@ const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
         <div className="main-navbar main-navbar-white">
           <nav className="navbar-custom">
             <div className="d-flex align-items-center justify-content-between">
-              <Link href="" className="nav-brand d-xl-none">
+              <Link href="/" className="nav-brand d-xl-none">
                 <Image className="w-100" src={logoWhite} width={243} alt="logo" />
               </Link>
               <div className="d-flex gap-6">
@@ -114,7 +114,7 @@ const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
                     )}
                     {isAuthenticated && (
                       <li>
-                        <Link href="user-panel" className="cmn-circle" title={t('NAVBAR-BLACK.User Panel')}>
+                        <Link href="/user-panel" className="cmn-circle" title={t('NAVBAR-BLACK.User Panel')}>
                           <UserIcon className="ti ti-user" />
                         </Link>
                       </li>

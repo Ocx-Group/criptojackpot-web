@@ -58,7 +58,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
                   </span>
                 </span>
                 <div className="listing-checkwrap pt-120">
-                  <Link href="#0" className="listing-box position-relative">
+                  <Link href="/terms" className="listing-box position-relative">
                     <span className="text-uppercase fs-six fw_600 n0-clr"> {t('CALL_TO_ACTION.listing')} </span>
                     <span className="listing-arrow cmn-48 s1-bg radius-circle d-flex align-items-center justify-content-center">
                       <ArrowUpRightIcon weight="bold" className="ph-bold ph-arrow-up-right n0-clr"></ArrowUpRightIcon>
@@ -77,18 +77,21 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
                         </span>
                         <span className="nw2-clr text-check text-start">
                           {t('CALL_TO_ACTION.agreeWith')}{' '}
-                          <Link href="#" className="p1-clr">
+                          <Link href="/privacy" className="p1-clr">
                             {t('CALL_TO_ACTION.privacyPolicy')}
                           </Link>{' '}
                           {t('CALL_TO_ACTION.and')}
-                          <Link href="#" className="p1-clr">
+                          <Link href="/terms" className="p1-clr">
                             {t('CALL_TO_ACTION.termsOfConditions')}
                           </Link>
                         </span>
                       </label>
-                      <button type="submit" className="kewta-btn s1-bg radius100 py-xxl-4 py-2 px-xxl-10 px-6">
+                      <Link
+                        href="/privacy"
+                        className="kewta-btn s1-bg radius100 py-xxl-4 py-2 px-xxl-10 px-6 d-inline-flex align-items-center"
+                      >
                         <span className="fs-seven fw_700 n0-clr"> {t('CALL_TO_ACTION.submit')} </span>
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

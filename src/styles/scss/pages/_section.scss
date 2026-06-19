@@ -1223,6 +1223,11 @@
 }
 
 .current-lottery-itemv13 {
+  // Divisores sutiles sobre la card obsidiana
+  .border-top {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
   .cart-added {
     position: absolute;
     right: 20px;
@@ -1266,7 +1271,7 @@
     width: 100%;
     height: 100%;
     content: '';
-    border: 1px solid var(--nw3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
     z-index: -1;
     transition: all 0.4s;
@@ -1277,6 +1282,7 @@
       top: 12px;
       left: -12px;
       opacity: 1;
+      border-color: var(--s1);
     }
   }
 }
@@ -1292,12 +1298,12 @@
 }
 
 .lottery-skeleton-block {
-  // Shimmer gris visible sobre las cards blancas (n0-bg)
+  // Shimmer claro visible sobre las cards obsidiana (bg2-color)
   background: linear-gradient(
     90deg,
-    rgba(11, 14, 20, 0.06) 25%,
-    rgba(11, 14, 20, 0.14) 50%,
-    rgba(11, 14, 20, 0.06) 75%
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.04) 75%
   );
   background-size: 1200px 100%;
   animation: lottery-skeleton-shimmer 1.6s ease-in-out infinite;
@@ -2174,6 +2180,127 @@
 
     .login-row {
       min-height: initial;
+    }
+  }
+}
+
+//Legal documents (Terms / Privacy) — obsidiana premium
+.legal-section {
+  position: relative;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(0, 229, 255, 0.06), transparent 40%),
+    var(--bg1);
+  padding: 160px 0 120px;
+  min-height: 100vh;
+
+  .login-orb {
+    opacity: 0.35;
+  }
+
+  &__head {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+  }
+
+  &__eyebrow {
+    display: inline-block;
+    letter-spacing: 2px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+
+  &__title {
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  &__updated {
+    font-size: 14px;
+  }
+
+  .legal-card {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(160deg, rgba(20, 24, 33, 0.92), rgba(11, 14, 20, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 48px 48px 40px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+
+    &__intro {
+      font-size: 17px;
+      line-height: 1.7;
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    &__contact {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 15px;
+    }
+  }
+
+  .legal-block {
+    & + & {
+      margin-top: 32px;
+    }
+
+    &__heading {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    &__num {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    &__text {
+      font-size: 15px;
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+
+    &__list {
+      margin: 4px 0 0;
+      padding-left: 0;
+      list-style: none;
+
+      li {
+        position: relative;
+        padding-left: 26px;
+        font-size: 15px;
+        line-height: 1.7;
+        margin-bottom: 10px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 4px;
+          top: 11px;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--s1);
+        }
+      }
+    }
+  }
+
+  @include maxQuery(991) {
+    padding: 120px 0 80px;
+
+    .legal-card {
+      padding: 32px 22px 28px;
     }
   }
 }

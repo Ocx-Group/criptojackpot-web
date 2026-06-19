@@ -40,7 +40,7 @@ const Jewellery1Footer = () => {
                 <div className="d-flex align-items-center gap-xl-4 gap-3">
                   {t('FOOTER.explore')}
                   <Link
-                    href="/landing-page"
+                    href="/sorteos"
                     className="kewta-btn cmn-60 d-inline-flex align-items-center justify-content-center"
                   >
                     <div className="kew-arrow p1-bg">
