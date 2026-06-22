@@ -687,6 +687,40 @@
     }
   }
 
+  // Móvil: cada paso como tarjeta con acento cian, mejor separación y número contenido
+  @include maxQuery(767) {
+    padding-top: 64px;
+    padding-bottom: 64px;
+
+    .work-itemv14 {
+      background: var(--bg2);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-left: 3px solid var(--s1);
+      border-radius: 16px;
+      padding: 26px 22px;
+      overflow: hidden;
+
+      h2 {
+        margin-bottom: 10px !important;
+        font-size: 26px;
+      }
+
+      p {
+        margin-bottom: 0;
+        max-width: 100%;
+      }
+
+      .number-shadow {
+        font-size: 92px;
+        line-height: 1;
+        top: auto;
+        bottom: -20px;
+        right: 8px;
+        opacity: 0.06;
+      }
+    }
+  }
+
   @include maxQuery(575) {
     .work-item1 {
       padding-left: 0px;
