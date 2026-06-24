@@ -9,9 +9,10 @@ const Odometer = dynamic(() => import("react-odometerjs"), {
 
 interface CounterProps {
   value: number;
+  format?: string;
 }
 
-const Counter = ({ value }: CounterProps) => {
+const Counter = ({ value, format = "(,ddd).dd" }: CounterProps) => {
   const [odometerValue, setOdometerValue] = useState(0);
   const [ref, inView] = useInView();
 
@@ -25,7 +26,7 @@ const Counter = ({ value }: CounterProps) => {
 
   return (
     <span ref={ref} className="countdown-font">
-      {inView ? <Odometer className="countdown-font" value={odometerValue} format="(,ddd).dd" /> : 0}
+      {inView ? <Odometer className="countdown-font" value={odometerValue} format={format} /> : 0}
     </span>
   );
 };

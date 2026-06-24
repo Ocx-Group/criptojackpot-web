@@ -1256,6 +1256,18 @@
   background: rgba(244, 244, 244, 0.5);
 }
 
+// Vista /sorteos — el navbar es fijo (forceDark); aseguramos que el encabezado
+// no quede cortado debajo del navbar en tablet/móvil.
+.sorteos-section {
+  @include maxQuery(1199) {
+    padding-top: 120px;
+  }
+
+  @include maxQuery(575) {
+    padding-top: 110px;
+  }
+}
+
 .current-lottery-itemv13 {
   // Divisores sutiles sobre la card obsidiana
   .border-top {

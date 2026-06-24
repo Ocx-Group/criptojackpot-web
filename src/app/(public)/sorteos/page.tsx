@@ -176,7 +176,7 @@ const SorteosPage = () => {
       <CartSidebar />
       <CartButton />
 
-      <section className="current-lotteryv13 bg1-color pt-120 pb-120" style={{ minHeight: '100vh' }}>
+      <section className="current-lotteryv13 sorteos-section bg1-color pt-120 pb-120" style={{ minHeight: '100vh' }}>
         <div className="container">
           {/* Header */}
           <div className="row g-xl-4 g-3 align-items-center justify-content-between mb-xxl-15 mb-xl-10 mb-8">

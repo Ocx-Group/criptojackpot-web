@@ -483,9 +483,7 @@
       },
       {
         "heading": "Cómo Compartimos la Información",
-        "paragraphs": [
-          "No vendemos tus datos personales. Podemos compartir información únicamente con:"
-        ],
+        "paragraphs": ["No vendemos tus datos personales. Podemos compartir información únicamente con:"],
         "bullets": [
           "Proveedores de servicios que actúan por cuenta nuestra (pagos, infraestructura, verificación, analítica), sujetos a obligaciones de confidencialidad.",
           "Autoridades competentes cuando la ley lo exija o para proteger nuestros derechos.",
@@ -512,9 +510,7 @@
       },
       {
         "heading": "Tus Derechos",
-        "paragraphs": [
-          "Conforme a la normativa aplicable, puedes ejercer los siguientes derechos sobre tus datos:"
-        ],
+        "paragraphs": ["Conforme a la normativa aplicable, puedes ejercer los siguientes derechos sobre tus datos:"],
         "bullets": [
           "Acceso, rectificación y supresión de tus datos.",
           "Limitación u oposición al tratamiento.",
@@ -938,7 +934,8 @@
     "endsIn": "Termina en",
     "currentBid": "Oferta actual",
     "buyNow": "Comprar Ahora",
-    "scroll": "Desplazar"
+    "scroll": "Desplazar",
+    "ticketsRemaining": "Tickets disponibles"
   },
   "LOTTERY_LIST": {
     "sectionLabel": "Prueba tu suerte y gana",
@@ -1105,7 +1102,7 @@
   "SORTEOS": {
     "title": "Promociones",
     "titleHighlight": "& Pick 3",
-    "subtitle": "Explora todas nuestras rifas y juegos disponibles",
+    "subtitle": "Explora todos nuestros juegos disponibles",
     "filterAll": "Todos",
     "filterStandard": "Rifas",
     "typeStandard": "Rifa",

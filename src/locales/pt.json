@@ -938,7 +938,8 @@
     "endsIn": "Termina em",
     "currentBid": "Lance atual",
     "buyNow": "Comprar Agora",
-    "scroll": "Rolar"
+    "scroll": "Rolar",
+    "ticketsRemaining": "Bilhetes disponíveis"
   },
   "LOTTERY_LIST": {
     "sectionLabel": "Tente sua sorte e ganhe",
@@ -1105,7 +1106,7 @@
   "SORTEOS": {
     "title": "Promoções",
     "titleHighlight": "& Pick 3",
-    "subtitle": "Explore todas as nossas rifas e jogos disponíveis.",
+    "subtitle": "Explore todos os nossos jogos disponíveis.",
     "filterAll": "Todos",
     "filterStandard": "Rifas",
     "typeStandard": "Rifa",

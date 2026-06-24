@@ -483,9 +483,7 @@
       },
       {
         "heading": "How We Share Information",
-        "paragraphs": [
-          "We do not sell your personal data. We may share information only with:"
-        ],
+        "paragraphs": ["We do not sell your personal data. We may share information only with:"],
         "bullets": [
           "Service providers acting on our behalf (payments, infrastructure, verification, analytics), subject to confidentiality obligations.",
           "Competent authorities when required by law or to protect our rights.",
@@ -938,7 +936,8 @@
     "endsIn": "Ends in",
     "currentBid": "Current bid",
     "buyNow": "Buy Now",
-    "scroll": "Scroll"
+    "scroll": "Scroll",
+    "ticketsRemaining": "Tickets available"
   },
   "LOTTERY_LIST": {
     "sectionLabel": "Try your luck and win",
@@ -1105,7 +1104,7 @@
   "SORTEOS": {
     "title": "Promotions",
     "titleHighlight": "& Pick 3",
-    "subtitle": "Explore all our raffles and games.",
+    "subtitle": "Explore all games.",
     "filterAll": "All",
     "filterStandard": "Raffles",
     "typeStandard": "Raffle",

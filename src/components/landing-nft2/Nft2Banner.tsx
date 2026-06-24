@@ -8,7 +8,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { lotteryService } from '@/services';
-import { Lottery } from '@/interfaces/lottery';
+import { Lottery, LotteryStatus } from '@/interfaces/lottery';
 import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import Counter from '../Counter';
 import MotionFade from '../motionEffect/MotionFade';
@@ -27,6 +27,16 @@ const Nft2Banner = () => {
       .filter(l => l.prizes?.[0]?.mainImageUrl)
       .map(l => ({ src: l.prizes[0].mainImageUrl, alt: l.title }));
   }, [lotteriesResponse]);
+
+  const activeLottery = useMemo(() => {
+    const items = lotteriesResponse?.data?.items || [];
+    return items.find(l => l.status === LotteryStatus.Active) ?? items[0];
+  }, [lotteriesResponse]);
+
+  const remainingTickets = useMemo(() => {
+    if (!activeLottery) return 0;
+    return Math.max(activeLottery.maxTickets - activeLottery.soldTickets, 0);
+  }, [activeLottery]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -157,29 +167,10 @@ const Nft2Banner = () => {
                   <div className="odometer__items" data-aos="zoom-in-down" data-aos-duration="1000">
                     <div className="cont d-flex align-items-center">
                       <span className="odometer display-four p1-clr fw_800">
-                        <Counter value={100} />
+                        <Counter value={remainingTickets} format="(,ddd)" />
                       </span>
-                      <span className="plus__icon display-four p1-clr fw_800">k</span>
-                      <span className="plus__icon display-four p1-clr fw_800">+</span>
                     </div>
-                  </div>
-                  <div className="odometer__items" data-aos="zoom-in-down" data-aos-duration="1000">
-                    <div className="cont d-flex align-items-center">
-                      <span className="odometer display-four p1-clr fw_800">
-                        <Counter value={32} />
-                      </span>
-                      <span className="plus__icon display-four p1-clr fw_800">k</span>
-                      <span className="plus__icon display-four p1-clr fw_800">+</span>
-                    </div>
-                  </div>
-                  <div className="odometer__items" data-aos="zoom-in-down" data-aos-duration="1000">
-                    <div className="cont d-flex align-items-center">
-                      <span className="odometer display-four p1-clr fw_800">
-                        <Counter value={12} />
-                      </span>
-                      <span className="plus__icon display-four p1-clr fw_800">k</span>
-                      <span className="plus__icon display-four p1-clr fw_800">+</span>
-                    </div>
+                    <span className="nw2-clr fs18 d-block mt-2">{t('BANNER.ticketsRemaining')}</span>
                   </div>
                 </div>
               </div>
