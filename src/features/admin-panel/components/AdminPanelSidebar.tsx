@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { sidebarItems } from 'public/data/sidebarItems';
-import { SignOutIcon } from '@phosphor-icons/react';
+import { CaretDownIcon, ListIcon, SignOutIcon } from '@phosphor-icons/react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/userStore';
 
@@ -11,6 +12,12 @@ const AdminPanelSidebar = () => {
   const path = usePathname();
   const { logout } = useAuth();
   const user = useUserStore(state => state.user);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Close the mobile menu whenever the route changes
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [path]);
 
   const handleLogout = () => {
     logout();
@@ -19,10 +26,31 @@ const AdminPanelSidebar = () => {
   const displayName = user ? `${user.name || ''} ${user.lastName || ''}`.trim() || user.email : 'Administrador';
   const displayEmail = user?.email ?? '';
 
+  const activeItem = sidebarItems.find(
+    item => path === item.href || (item.href !== '/admin' && path.startsWith(item.href))
+  );
+  const toggleLabel = activeItem?.label ?? 'Menú';
+
   return (
     <div className="col-lg-3 pe-lg-10">
-      <div className="user-panel-sidebar">
+      <div className="user-panel-sidebar sidebar-sticky">
         <div className="user-panel-sidebar-inner">
+          {/* Mobile toggle */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(open => !open)}
+            className={`sidebar-mobile-toggle border radius12 px-4 py-3 n4-clr fw_700 mb-0 ${mobileOpen ? 'open' : ''}`}
+            aria-expanded={mobileOpen}
+            aria-controls="admin-sidebar-collapsible"
+          >
+            <span className="d-flex align-items-center gap-2">
+              <ListIcon weight="bold" className="fs-five" />
+              {toggleLabel}
+            </span>
+            <CaretDownIcon weight="bold" className="sidebar-mobile-caret fs-five" />
+          </button>
+
+          <div id="admin-sidebar-collapsible" className={`sidebar-collapsible ${mobileOpen ? 'open' : ''}`}>
           {/* Admin Profile Info */}
           <div className="profile-info mb-xxl-10 mb-6 p-xxl-6 p-4 radius16 act4-bg d-flex align-items-center gap-xxl-4 gap-3">
             <div className="content">
@@ -60,6 +88,7 @@ const AdminPanelSidebar = () => {
               </button>
             </li>
           </ul>
+          </div>
         </div>
       </div>
     </div>

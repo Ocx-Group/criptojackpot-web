@@ -2,11 +2,13 @@
 
 import miller from 'public/images/man-global/devid-miller.png';
 import {
+  CaretDownIcon,
   GiftIcon,
   HeadsetIcon,
   HeartIcon,
   InfoIcon,
   LightningIcon,
+  ListIcon,
   ShieldCheckIcon,
   SignOutIcon,
   TicketIcon,
@@ -16,6 +18,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserStore } from '@/store/userStore';
 import { useProfilePhoto } from '@/hooks/useProfilePhoto';
@@ -26,6 +29,12 @@ const UserPanelSidebar = () => {
   const path = usePathname();
   const { user } = useUserStore();
   const { logout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Close the mobile menu whenever the route changes
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [path]);
 
   const { profileImage, uploading, uploadError, fileInputRef, handleFileSelect, openFileSelector, clearError } =
     useProfilePhoto({
@@ -107,10 +116,29 @@ const UserPanelSidebar = () => {
     },
   ];
 
+  const activeItem = sidebarItems.find(item => item.href === path);
+  const toggleLabel = activeItem?.text ?? t('SIDEBAR.menuToggle');
+
   return (
-    <div className="col-xxl-3 col-xl-4 col-lg-4 col-md-8 relative">
+    <div className="col-xxl-3 col-xl-4 col-lg-4 col-12 relative">
       <div className="user-panel-sidebarwrap sidebar-sticky">
         <div className="user-panel-sideinner win40-ragba border radius24 py-xxl-10 py-xl-8 py-lg-6 py-5 px-xxl-8 px-xl-6 px-5">
+          {/* Mobile toggle */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(open => !open)}
+            className={`sidebar-mobile-toggle border radius12 px-4 py-3 n4-clr fw_700 ${mobileOpen ? 'open' : ''}`}
+            aria-expanded={mobileOpen}
+            aria-controls="user-sidebar-collapsible"
+          >
+            <span className="d-flex align-items-center gap-2">
+              <ListIcon weight="bold" className="fs-five" />
+              {toggleLabel}
+            </span>
+            <CaretDownIcon weight="bold" className="sidebar-mobile-caret fs-five" />
+          </button>
+
+          <div id="user-sidebar-collapsible" className={`sidebar-collapsible ${mobileOpen ? 'open' : ''}`}>
           <div className="user-profile-thumb position-relative text-center border-bottom pb-xxl-5 pb-4 mb-xxl-6 mb-5">
             <input
               ref={fileInputRef}
@@ -206,6 +234,7 @@ const UserPanelSidebar = () => {
               </li>
             </ul>
           </nav>
+          </div>
         </div>
       </div>
     </div>

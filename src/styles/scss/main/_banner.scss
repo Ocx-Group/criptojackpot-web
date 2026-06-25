@@ -3923,6 +3923,40 @@
   }
 }
 
+// Sidebar mobile collapsible (client & admin panels)
+.sidebar-mobile-toggle {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  background: rgba(244, 244, 244, 100%);
+  .sidebar-mobile-caret {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  &.open .sidebar-mobile-caret {
+    transform: rotate(180deg);
+  }
+}
+@include maxQuery(991) {
+  .sidebar-sticky {
+    position: static;
+    top: auto;
+  }
+  .sidebar-mobile-toggle {
+    display: flex;
+  }
+  .sidebar-collapsible {
+    display: none;
+    margin-top: 16px;
+    &.open {
+      display: block;
+    }
+  }
+}
+
 //personal info
 .cmn-box-addingbg {
   .ch-form-one {
