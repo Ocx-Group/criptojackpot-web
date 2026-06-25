@@ -1069,6 +1069,7 @@
     "logout": "Log Out",
     "logoutLabel": "Logout",
     "items": {
+      "promotions": "Promotions",
       "personalInfo": "Personal Information",
       "security": "Security",
       "myTickets": "My Tickets",

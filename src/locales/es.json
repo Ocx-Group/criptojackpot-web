@@ -1067,6 +1067,7 @@
     "logout": "Cerrar Sesión",
     "logoutLabel": "Cerrar sesión",
     "items": {
+      "promotions": "Promociones",
       "personalInfo": "Información Personal",
       "security": "Seguridad",
       "myTickets": "Mis Tickets",

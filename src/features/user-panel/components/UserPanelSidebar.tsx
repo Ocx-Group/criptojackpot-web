@@ -2,6 +2,7 @@
 
 import miller from 'public/images/man-global/devid-miller.png';
 import {
+  GiftIcon,
   HeadsetIcon,
   HeartIcon,
   InfoIcon,
@@ -50,6 +51,12 @@ const UserPanelSidebar = () => {
   };
 
   const sidebarItems = [
+    {
+      id: 7781234,
+      href: '/sorteos',
+      icon: <GiftIcon weight="bold" className="ph-bold ph-gift fs-five" />,
+      text: t('SIDEBAR.items.promotions'),
+    },
     {
       id: 3434652,
       href: '/personal-info',
