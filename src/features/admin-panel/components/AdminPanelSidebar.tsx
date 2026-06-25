@@ -34,7 +34,7 @@ const AdminPanelSidebar = () => {
   return (
     <div className="col-lg-3 pe-lg-10">
       <div className="user-panel-sidebar sidebar-sticky">
-        <div className="user-panel-sidebar-inner">
+        <div className="user-panel-sidebar-inner win40-ragba border radius24 py-xxl-8 py-6 px-xxl-6 px-5">
           {/* Mobile toggle */}
           <button
             type="button"

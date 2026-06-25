@@ -119,11 +119,11 @@ const StatusView = ({
             style={{
               width: '56px',
               height: '56px',
-              background: isEnabled ? 'rgba(52, 168, 83, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+              background: isEnabled ? 'rgba(0, 230, 118, 0.15)' : 'rgba(0, 229, 255, 0.12)',
               flexShrink: 0,
             }}
           >
-            <ShieldCheckIcon weight="bold" size={28} style={{ color: isEnabled ? '#34A853' : 'var(--n3)' }} />
+            <ShieldCheckIcon weight="bold" size={28} style={{ color: isEnabled ? 'var(--p1)' : 'var(--s1)' }} />
           </div>
           <div>
             <h5 className="n4-clr fw_700 mb-1">{t('SECURITY.twoFactorAuth')}</h5>

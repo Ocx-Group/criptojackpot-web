@@ -172,7 +172,11 @@ const UserPanelSidebar = () => {
                 className="radius-circle"
                 width={100}
                 height={100}
-                style={{ objectFit: 'cover' }}
+                style={{
+                  objectFit: 'cover',
+                  border: '3px solid var(--s1)',
+                  boxShadow: '0 0 0 4px rgba(0, 229, 255, 0.12)',
+                }}
                 priority
               />
 
@@ -204,7 +208,7 @@ const UserPanelSidebar = () => {
               <span className="fs20 fw_700 n4-clr d-block mb-1" title={getFullName()}>
                 {getFullName()}
               </span>
-              <span className="n3-clr" title={user?.email}>
+              <span className="s1-clr" title={user?.email}>
                 {user?.email || 'email@ejemplo.com'}
               </span>
             </div>

@@ -3860,7 +3860,8 @@
   background: rgba(244, 244, 244, 40%);
 }
 .win40-ragba {
-  background: rgba(244, 244, 244, 100%);
+  // Panel-only surface → obsidian elevated for the dark dashboard
+  background: var(--bg2);
 }
 .ticket-border {
   border-bottom: 1px solid var(--nw4);
@@ -3872,7 +3873,10 @@
         position: absolute;
         top: -20px;
         right: -10px;
-        border: 1px solid var(--nw4);
+        border: 1px solid var(--s1);
+        border-radius: 50%;
+        background: var(--s1);
+        color: var(--n4);
         width: 30px;
         height: 30px;
         cursor: pointer;
@@ -3912,14 +3916,130 @@
     z-index: 9;
   }
 }
+// Panel pages (client & admin): dark dashboard — obsidian bg + dark elevated cards + light text
+.userpanel-section {
+  background-color: var(--bg1);
+  min-height: 100vh;
+  // Base text light so bare text (no color class) isn't invisible on dark cards
+  // (body sets color:var(--n2) dark; utility color classes still override this).
+  color: var(--nw1);
+
+  // Text flips (dark utility tokens → light on dark cards).
+  // Panel buttons use n0-clr/nw1-clr, so these never touch button labels.
+  .n1-clr,
+  .n2-clr,
+  .n4-clr {
+    color: var(--nw1) !important;
+  }
+  .n3-clr {
+    color: var(--nw2) !important;
+  }
+  .text-muted {
+    color: rgba(255, 255, 255, 0.55) !important;
+  }
+  .border,
+  .border-bottom,
+  .border-top {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  // Admin Bootstrap cards → obsidian elevated
+  .card {
+    --bs-card-bg: var(--bg2);
+    --bs-card-border-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--bg2);
+    color: var(--nw1);
+  }
+  .card-header,
+  .bg-white {
+    background-color: var(--bg2) !important;
+    color: var(--nw1) !important;
+  }
+
+  // Tables (admin lists)
+  .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--nw1);
+    --bs-table-border-color: rgba(255, 255, 255, 0.08);
+    color: var(--nw1);
+  }
+  .table-light,
+  .table > thead.table-light th,
+  .table > thead th {
+    --bs-table-bg: var(--bg1);
+    --bs-table-color: var(--nw2);
+    background-color: var(--bg1) !important;
+    color: var(--nw2) !important;
+  }
+  .table-hover > tbody > tr:hover > * {
+    --bs-table-bg: rgba(255, 255, 255, 0.04);
+    color: var(--nw1);
+  }
+
+  // Form fields on dark cards
+  .form-control,
+  .form-select,
+  .ch-form-items input,
+  .ch-form-items select,
+  .ch-form-items textarea {
+    background-color: var(--bg1) !important;
+    color: var(--nw1) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+  }
+  .form-control::placeholder,
+  .ch-form-items input::placeholder,
+  .ch-form-items textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4) !important;
+  }
+
+  // Primary actions → brand green (the "Unirse"/--p1 green), off-palette blue out
+  .btn-primary {
+    --bs-btn-bg: var(--p1);
+    --bs-btn-border-color: var(--p1);
+    --bs-btn-hover-bg: #00c965;
+    --bs-btn-hover-border-color: #00c965;
+    --bs-btn-active-bg: #00c965;
+    --bs-btn-color: var(--n4);
+    --bs-btn-hover-color: var(--n4);
+    color: var(--n4);
+  }
+  // Outline / secondary buttons legible on obsidian
+  .btn-outline-secondary,
+  .btn-outline-primary,
+  .btn-outline-dark {
+    --bs-btn-color: var(--nw1);
+    --bs-btn-border-color: rgba(255, 255, 255, 0.25);
+    --bs-btn-hover-bg: rgba(255, 255, 255, 0.08);
+    --bs-btn-hover-border-color: rgba(255, 255, 255, 0.4);
+    --bs-btn-hover-color: var(--nw1);
+    color: var(--nw1);
+  }
+
+  // Primary ACTION buttons → brand green CTA (the "Unirse"/--p1 green).
+  // Covers: kewta buttons (any accent bg), copy-link, crypto withdraw, cmn-btn.
+  // Excludes: secondary variants and the danger variant. Icon circles (.icon.s1-bg) keep cian.
+  .kewta-btn .kew-text,
+  .btn-copy,
+  .crypto-action-btn:not(.crypto-action-btn--danger),
+  .cmn-btn.s1-bg,
+  .cmn-btn:not(.secondary-alt):not(.third-alt) {
+    background: var(--p1) !important;
+    border-color: var(--p1) !important;
+    color: var(--n4) !important;
+    &:hover {
+      background: #00c965 !important;
+      color: var(--n4) !important;
+    }
+  }
+}
 .user-text-inner {
   .icon-rotate {
     transform: rotate(90deg);
   }
   &.active,
   &:hover {
-    background: rgba(255, 101, 14, 20%);
-    color: var(--n4);
+    background: rgba(0, 229, 255, 0.15);
+    color: var(--nw1);
   }
 }
 
@@ -3932,7 +4052,7 @@
   justify-content: space-between;
   gap: 12px;
   cursor: pointer;
-  background: rgba(244, 244, 244, 100%);
+  background: var(--bg2);
   .sidebar-mobile-caret {
     transition: transform 0.3s ease;
     flex-shrink: 0;

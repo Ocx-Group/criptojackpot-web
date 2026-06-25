@@ -117,7 +117,7 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
           <Link href="/admin/prizes" className="btn btn-outline-secondary btn-sm">
             <ArrowLeft size={16} />
           </Link>
-          <h3 className="n4-clr fw_700 mb-0">{t('PRIZES_ADMIN.edit.title', 'Editar Premio')}</h3>
+          <h3 className="nw1-clr fw_700 mb-0">{t('PRIZES_ADMIN.edit.title', 'Editar Premio')}</h3>
         </div>
 
         <div className="card border-0 shadow-sm mb-6">

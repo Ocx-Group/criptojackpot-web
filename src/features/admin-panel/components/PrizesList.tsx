@@ -200,7 +200,7 @@ const PrizesList: React.FC = () => {
     <div className="col-lg-9">
       <div className="user-panel-wrapper">
         <div className="d-flex justify-content-between align-items-center mb-xxl-10 mb-6">
-          <h3 className="n4-clr fw_700 mb-0">{t('PRIZES_ADMIN.title', 'Gestión de Premios')}</h3>
+          <h3 className="nw1-clr fw_700 mb-0">{t('PRIZES_ADMIN.title', 'Gestión de Premios')}</h3>
           <Link href="/admin/prizes/create" className="btn btn-primary">
             <Plus size={18} className="me-2" />
             {t('PRIZES_ADMIN.create.button', 'Crear Premio')}

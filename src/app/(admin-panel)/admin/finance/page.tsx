@@ -16,7 +16,7 @@ const FinancePage = () => {
   return (
     <div className="col-lg-9">
       <div className="user-panel-wrapper">
-        <h3 className="n4-clr fw_700 mb-xxl-10 mb-6">
+        <h3 className="nw1-clr fw_700 mb-xxl-10 mb-6">
           {t('FINANCE.title', 'Gestión de Finanzas')}
         </h3>
 

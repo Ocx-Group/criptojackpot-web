@@ -11,7 +11,7 @@ const AdminDashboard = () => {
   return (
     <div className="col-lg-9">
       <div className="user-panel-wrapper">
-        <h3 className="n4-clr fw_700 mb-xxl-10 mb-6">Dashboard de Administración</h3>
+        <h3 className="nw1-clr fw_700 mb-xxl-10 mb-6">Dashboard de Administración</h3>
         <StatsSection
           userStats={userStats.data}
           orderStats={orderStats.data}

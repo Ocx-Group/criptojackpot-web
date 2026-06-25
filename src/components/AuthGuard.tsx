@@ -14,7 +14,12 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
   const router = useRouter();
   const { isAuthenticated, isLoading, userRole, login } = useAuth();
 
+  // ⚠️ SOLO LOCAL: bypass de auth para QA visual de los paneles sin backend.
+  // Se activa con NEXT_PUBLIC_AUTH_BYPASS=true en .env.local (no commitear).
+  const authBypass = process.env.NEXT_PUBLIC_AUTH_BYPASS === 'true';
+
   useEffect(() => {
+    if (authBypass) return;
     if (isLoading) return;
 
     const checkAuth = () => {
@@ -50,7 +55,12 @@ export const AuthGuard = ({ children, requireAuth, requiredRole }: AuthGuardProp
     };
 
     checkAuth();
-  }, [requireAuth, requiredRole, router, isAuthenticated, isLoading, userRole, login]);
+  }, [requireAuth, requiredRole, router, isAuthenticated, isLoading, userRole, login, authBypass]);
+
+  // ⚠️ SOLO LOCAL: render directo del panel ignorando la sesión
+  if (authBypass) {
+    return <>{children}</>;
+  }
 
   // Mostrar loading mientras se carga la sesión
   if (isLoading) {

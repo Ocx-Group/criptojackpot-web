@@ -53,7 +53,7 @@ const EditTestimonial: React.FC<EditTestimonialProps> = ({ testimonialId }) => {
   return (
     <div className="col-lg-9">
       <div className="user-panel-wrapper">
-        <h3 className="n4-clr fw_700 mb-xxl-10 mb-6">{t('TESTIMONIALS_ADMIN.edit.title', 'Editar Reseña')}</h3>
+        <h3 className="nw1-clr fw_700 mb-xxl-10 mb-6">{t('TESTIMONIALS_ADMIN.edit.title', 'Editar Reseña')}</h3>
 
         <div className="card border-0 shadow-sm mb-6">
           <div className="card-header bg-white py-4 d-flex justify-content-between align-items-center">
