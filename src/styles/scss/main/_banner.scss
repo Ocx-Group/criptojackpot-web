@@ -3949,10 +3949,21 @@
     display: flex;
   }
   .sidebar-collapsible {
-    display: none;
-    margin-top: 16px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.25s ease,
+      margin-top 0.3s ease,
+      visibility 0.3s ease;
+    will-change: max-height, opacity;
     &.open {
-      display: block;
+      max-height: 1200px;
+      opacity: 1;
+      visibility: visible;
+      margin-top: 16px;
     }
   }
 }
