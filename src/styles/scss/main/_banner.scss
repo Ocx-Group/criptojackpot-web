@@ -3924,8 +3924,9 @@
 }
 
 // Sidebar mobile collapsible (client & admin panels)
+// Visibility is driven by Bootstrap d-none/d-block/d-lg-* utilities in the JSX
+// (guaranteed to ship in bootstrap.min.css). These rules only add styling.
 .sidebar-mobile-toggle {
-  display: none;
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -3945,26 +3946,8 @@
     position: static;
     top: auto;
   }
-  .sidebar-mobile-toggle {
-    display: flex;
-  }
   .sidebar-collapsible {
-    overflow: hidden;
-    max-height: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      max-height 0.3s ease,
-      opacity 0.25s ease,
-      margin-top 0.3s ease,
-      visibility 0.3s ease;
-    will-change: max-height, opacity;
-    &.open {
-      max-height: 1200px;
-      opacity: 1;
-      visibility: visible;
-      margin-top: 16px;
-    }
+    margin-top: 16px;
   }
 }
 

@@ -39,7 +39,9 @@ const AdminPanelSidebar = () => {
           <button
             type="button"
             onClick={() => setMobileOpen(open => !open)}
-            className={`sidebar-mobile-toggle border radius12 px-4 py-3 n4-clr fw_700 mb-0 ${mobileOpen ? 'open' : ''}`}
+            className={`sidebar-mobile-toggle d-flex d-lg-none border radius12 px-4 py-3 n4-clr fw_700 mb-0 ${
+              mobileOpen ? 'open' : ''
+            }`}
             aria-expanded={mobileOpen}
             aria-controls="admin-sidebar-collapsible"
           >
@@ -50,7 +52,10 @@ const AdminPanelSidebar = () => {
             <CaretDownIcon weight="bold" className="sidebar-mobile-caret fs-five" />
           </button>
 
-          <div id="admin-sidebar-collapsible" className={`sidebar-collapsible ${mobileOpen ? 'open' : ''}`}>
+          <div
+            id="admin-sidebar-collapsible"
+            className={`sidebar-collapsible d-lg-block ${mobileOpen ? 'd-block' : 'd-none'}`}
+          >
           {/* Admin Profile Info */}
           <div className="profile-info mb-xxl-10 mb-6 p-xxl-6 p-4 radius16 act4-bg d-flex align-items-center gap-xxl-4 gap-3">
             <div className="content">

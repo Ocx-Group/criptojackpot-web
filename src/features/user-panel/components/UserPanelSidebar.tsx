@@ -127,7 +127,9 @@ const UserPanelSidebar = () => {
           <button
             type="button"
             onClick={() => setMobileOpen(open => !open)}
-            className={`sidebar-mobile-toggle border radius12 px-4 py-3 n4-clr fw_700 ${mobileOpen ? 'open' : ''}`}
+            className={`sidebar-mobile-toggle d-flex d-lg-none border radius12 px-4 py-3 n4-clr fw_700 ${
+              mobileOpen ? 'open' : ''
+            }`}
             aria-expanded={mobileOpen}
             aria-controls="user-sidebar-collapsible"
           >
@@ -138,7 +140,10 @@ const UserPanelSidebar = () => {
             <CaretDownIcon weight="bold" className="sidebar-mobile-caret fs-five" />
           </button>
 
-          <div id="user-sidebar-collapsible" className={`sidebar-collapsible ${mobileOpen ? 'open' : ''}`}>
+          <div
+            id="user-sidebar-collapsible"
+            className={`sidebar-collapsible d-lg-block ${mobileOpen ? 'd-block' : 'd-none'}`}
+          >
           <div className="user-profile-thumb position-relative text-center border-bottom pb-xxl-5 pb-4 mb-xxl-6 mb-5">
             <input
               ref={fileInputRef}
