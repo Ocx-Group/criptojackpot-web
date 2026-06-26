@@ -73,7 +73,7 @@ function WalletCard({ wallet, logoUrl, onCopy, onSetDefault, onDelete, isDeletin
     <div
       className={`crypto-wallet-card radius16 position-relative overflow-hidden h-100${wallet.isDefault ? ' crypto-wallet-card--default' : ''}`}
       style={{
-        background: `linear-gradient(135deg, ${color}45 0%, ${color}22 45%, var(--n0) 80%)`,
+        background: `linear-gradient(135deg, ${color}45 0%, ${color}22 45%, var(--bg2) 80%)`,
         border: `1.5px solid ${color}70`,
       }}
     >
