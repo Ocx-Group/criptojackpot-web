@@ -89,7 +89,7 @@ const StatsSection = ({ userStats, orderStats, isLoading }: StatsSectionProps) =
               <div className="d-flex align-items-center justify-content-between">
                 <div>
                   <p className="text-muted mb-2">{stat.label}</p>
-                  <h3 className="fw-bold mb-0">{stat.value}</h3>
+                  <h3 className="nw1-clr fw-bold mb-0">{stat.value}</h3>
                   <ChangeLabel value={stat.change} />
                 </div>
                 <div className="act4-bg rounded-circle p-3">

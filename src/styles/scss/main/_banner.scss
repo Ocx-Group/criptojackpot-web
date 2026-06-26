@@ -3934,8 +3934,20 @@
   .n3-clr {
     color: var(--nw2) !important;
   }
+  // Bare headings (no color class) inherit a dark default from the theme → light
+  // them up. :where() keeps specificity at 0 so any explicit color class wins.
+  :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--nw1);
+  }
   .text-muted {
     color: rgba(255, 255, 255, 0.55) !important;
+  }
+  // Sidebar menu links + their inner <span> labels: force light on the dark
+  // sidebar. The label <span> doesn't reliably inherit through the template's
+  // anchor color rules, leaving text invisible (only the active row showed).
+  .user-sidebar .user-text-inner,
+  .user-sidebar .user-text-inner span {
+    color: var(--nw1) !important;
   }
   .border,
   .border-bottom,

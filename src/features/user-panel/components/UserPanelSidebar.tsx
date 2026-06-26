@@ -222,7 +222,7 @@ const UserPanelSidebar = () => {
                     href={item.href}
                     className={`${
                       path === item.href ? 'active' : ''
-                    } py-xxl-3 py-2 px-xxl-5 px-xl-4 px-3 radius12 n4-clr fw_600 d-flex align-items-center gap-xxl-3 gap-2 user-text-inner`}
+                    } py-xxl-3 py-2 px-xxl-5 px-xl-4 px-3 radius12 nw1-clr fw_600 d-flex align-items-center gap-xxl-3 gap-2 user-text-inner`}
                     aria-current={path === item.href ? 'page' : undefined}
                   >
                     {item.icon}
@@ -234,7 +234,7 @@ const UserPanelSidebar = () => {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="py-xxl-3 py-2 px-xxl-5 px-xl-4 px-3 radius12 n4-clr fw_600 d-flex align-items-center gap-xxl-3 gap-2 user-text-inner w-full border-0 bg-transparent text-start"
+                  className="py-xxl-3 py-2 px-xxl-5 px-xl-4 px-3 radius12 nw1-clr fw_600 d-flex align-items-center gap-xxl-3 gap-2 user-text-inner w-full border-0 bg-transparent text-start"
                   aria-label={t('SIDEBAR.logoutLabel')}
                 >
                   <SignOutIcon weight="bold" className="ph-bold ph-sign-out fs-five" />
