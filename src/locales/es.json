@@ -1038,7 +1038,18 @@
     "ourLottery": "NUESTRA",
     "ourLotteryHighlight": "PROMOCIÓN",
     "copyright": "Copyright © 2026",
-    "designedBy": "Diseñado por"
+    "designedBy": "Diseñado por",
+    "chasingFortunes": "Persiguiendo Fortunas",
+    "exploreWord": "Explora",
+    "ourWord": "Nuestros",
+    "lotteryWord": "Premios",
+    "sayHello": "Saluda",
+    "participantNow": "Participa Ahora",
+    "exploreNow": "Explorar Ahora",
+    "home": "Inicio",
+    "lotteries": "Promociones",
+    "termsService": "Términos y Servicio",
+    "privacyPolicy": "Política de Privacidad"
   },
   "WISH_LIST": {
     "title": "Mi Lista de Deseos",

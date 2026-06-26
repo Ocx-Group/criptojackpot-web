@@ -127,7 +127,7 @@ const UserPanelSidebar = () => {
           <button
             type="button"
             onClick={() => setMobileOpen(open => !open)}
-            className={`sidebar-mobile-toggle d-flex d-lg-none border radius12 px-4 py-3 n4-clr fw_700 ${
+            className={`sidebar-mobile-toggle d-flex d-lg-none border radius12 px-4 py-3 nw1-clr fw_700 ${
               mobileOpen ? 'open' : ''
             }`}
             aria-expanded={mobileOpen}

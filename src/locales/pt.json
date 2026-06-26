@@ -483,9 +483,7 @@
       },
       {
         "heading": "Como Compartilhamos as Informações",
-        "paragraphs": [
-          "Não vendemos seus dados pessoais. Podemos compartilhar informações apenas com:"
-        ],
+        "paragraphs": ["Não vendemos seus dados pessoais. Podemos compartilhar informações apenas com:"],
         "bullets": [
           "Prestadores de serviços que atuam em nosso nome (pagamentos, infraestrutura, verificação, análise), sujeitos a obrigações de confidencialidade.",
           "Autoridades competentes quando a lei exigir ou para proteger nossos direitos.",
@@ -1042,7 +1040,18 @@
     "ourLottery": "NOSSA",
     "ourLotteryHighlight": "PROMOÇÃO",
     "copyright": "Copyright © 2026",
-    "designedBy": "Desenvolvido por"
+    "designedBy": "Desenvolvido por",
+    "chasingFortunes": "Perseguindo Fortunas",
+    "exploreWord": "Explore",
+    "ourWord": "Nossos",
+    "lotteryWord": "Prêmios",
+    "sayHello": "Diga Olá",
+    "participantNow": "Participe Agora",
+    "exploreNow": "Explorar Agora",
+    "home": "Início",
+    "lotteries": "Promoções",
+    "termsService": "Termos e Serviço",
+    "privacyPolicy": "Política de Privacidade"
   },
   "WISH_LIST": {
     "title": "Minha Lista de Desejos",

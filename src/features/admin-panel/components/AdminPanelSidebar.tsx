@@ -39,7 +39,7 @@ const AdminPanelSidebar = () => {
           <button
             type="button"
             onClick={() => setMobileOpen(open => !open)}
-            className={`sidebar-mobile-toggle d-flex d-lg-none border radius12 px-4 py-3 n4-clr fw_700 mb-0 ${
+            className={`sidebar-mobile-toggle d-flex d-lg-none border radius12 px-4 py-3 nw1-clr fw_700 mb-0 ${
               mobileOpen ? 'open' : ''
             }`}
             aria-expanded={mobileOpen}

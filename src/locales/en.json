@@ -1040,7 +1040,18 @@
     "ourLottery": "OUR",
     "ourLotteryHighlight": "PROMOTION",
     "copyright": "Copyright © 2026",
-    "designedBy": "Designed By"
+    "designedBy": "Designed By",
+    "chasingFortunes": "Chasing Fortunes",
+    "exploreWord": "Explore",
+    "ourWord": "Our",
+    "lotteryWord": "Prizes",
+    "sayHello": "Say Hello",
+    "participantNow": "Participate Now",
+    "exploreNow": "Explore Now",
+    "home": "Home",
+    "lotteries": "Promotions",
+    "termsService": "Terms & Service",
+    "privacyPolicy": "Privacy Policy"
   },
   "WISH_LIST": {
     "title": "My Wish List",

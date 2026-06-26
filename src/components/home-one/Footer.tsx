@@ -1,11 +1,17 @@
-import bannerCar3 from '@/../public/images/banner/banner-car3.png';
+'use client';
+
+import bannerCar3 from '@/../public/images/global/ball-shape19-2.png';
 import chnagingIcon from '@/../public/images/global/chnaging-icon.png';
 import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import { siteConfig } from '@/utils/siteConfig';
 import MotionFadeRight from '../motionEffect/MotionFadeRight';
 
 function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="footer-section1 n5-bg position-relative overflow-hidden">
       <div className="footer-top pt-120 pb-120">
@@ -15,33 +21,32 @@ function Footer() {
               <div className="footer-content1">
                 <div className="d-flex align-items-center gap-xxl-3 gap-2 mb-xxl-24 mb-4">
                   <Image src={chnagingIcon} alt="img" />
-                  <span className="nw1-clr fw_700 fs20"> Chasing Fortunes </span>
+                  <span className="nw1-clr fw_700 fs20"> {t('FOOTER.chasingFortunes')} </span>
                 </div>
                 <div className="section__title mb-xxl-15 mb-xl-10 mb-8">
                   <div className="display-one d-block n0-clr">
-                    Explore
+                    {t('FOOTER.exploreWord')}
                     <div className="d-flex align-items-center gap-2">
                       <span className="d-block" data-aos="zoom-in-right" data-aos-duration="1200">
-                        Our
+                        {t('FOOTER.ourWord')}
                       </span>
                       <span className="act4-clr act4-underline" data-aos="zoom-in-left" data-aos-duration="1000">
-                        Lottery
+                        {t('FOOTER.lotteryWord')}
                       </span>
-                    </div>{' '}
-                    Hub
+                    </div>
                   </div>
                 </div>
                 <div className="say-helow pb-xxl-5 pb-5 d-flex flex-wrap gap-3 align-items-center justify-content-between">
                   <div className="mails">
-                    <span className="nw4-clr d-block mb-xxl-2 mb-0"> Say Hello </span>
-                    <Link href="#0" className="fs20 fw_600 nw1-clr">
+                    <span className="nw4-clr d-block mb-xxl-2 mb-0"> {t('FOOTER.sayHello')} </span>
+                    <Link href={`mailto:${siteConfig.contactEmail}`} className="fs20 fw_600 nw1-clr">
                       {' '}
-                      cruz@example.com{' '}
+                      {siteConfig.contactEmail}{' '}
                     </Link>
                   </div>
-                  <Link href="/landing-page" className="kewta-btn d-inline-flex align-items-center">
+                  <Link href="/sorteos" className="kewta-btn d-inline-flex align-items-center">
                     <span className="kew-text p1-bg n4-clr">
-                      Participant Now
+                      {t('FOOTER.participantNow')}
                       <ArrowUpRightIcon className="ph-bold ph-arrow-up-right n4-clr"></ArrowUpRightIcon>
                     </span>
                   </Link>
@@ -56,7 +61,7 @@ function Footer() {
                       <span className="icon mb-1">
                         <ArrowUpRightIcon className="ph-bold ph-arrow-up-right n0-clr fs-three"></ArrowUpRightIcon>
                       </span>
-                      <span className="d-block n0-clr fw_700"> Explore Now </span>
+                      <span className="d-block n0-clr fw_700"> {t('FOOTER.exploreNow')} </span>
                     </span>
                   </Link>
                 </div>
@@ -81,10 +86,10 @@ function Footer() {
           <div className="d-flex flex-wrap gap-4 align-items-center justify-content-md-between justify-content-center">
             <ul className="linkfooter flex-wrap justify-content-center">
               <li>
-                <Link href="/"> Home </Link>
+                <Link href="/"> {t('FOOTER.home')} </Link>
               </li>
               <li>
-                <Link href="/landing-page"> Lotteries </Link>
+                <Link href="/landing-page"> {t('FOOTER.lotteries')} </Link>
               </li>
             </ul>
             <ul className="social d-flex align-items-center gap-3">
@@ -136,16 +141,16 @@ function Footer() {
           <div className="d-flex flex-wrap gap-3 align-items-center justify-content-md-between justify-content-center">
             <ul className="pri-link d-flex align-items-center gap-xxl-6 gap-sm-6 gap-3">
               <li>
-                <Link href="terms-condition"> Terms & Service </Link>
+                <Link href="/terms"> {t('FOOTER.termsService')} </Link>
               </li>
               <li>
-                <Link href="#"> Privacy Policy </Link>
+                <Link href="/privacy"> {t('FOOTER.privacyPolicy')} </Link>
               </li>
             </ul>
             <p className="footer-copyright flex-wrap justify-content-center">
               <span className="copy n0-clr">
                 {' '}
-                Copyright &copy; 2026 <Link href="#">Criptojackpot</Link>{' '}
+                {t('FOOTER.copyright')} <Link href="#">Criptojackpot</Link>{' '}
               </span>
               <span className="midbor"> </span>
             </p>
