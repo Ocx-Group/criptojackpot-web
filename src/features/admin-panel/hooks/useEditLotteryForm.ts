@@ -47,6 +47,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
       terms: '',
       cryptoCurrencyId: '',
       cryptoCurrencySymbol: '',
+      referralCommissionPercentage: 1,
     },
   });
 
@@ -105,6 +106,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
         terms: lottery.terms || '',
         cryptoCurrencyId: lottery.cryptoCurrencyId || '',
         cryptoCurrencySymbol: lottery.cryptoCurrencySymbol || '',
+        referralCommissionPercentage: lottery.referralCommissionPercentage ?? 1,
       });
     }
   }, [lottery, reset]);
@@ -178,6 +180,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
           terms: data.terms,
           cryptoCurrencyId: data.cryptoCurrencyId,
           cryptoCurrencySymbol: data.cryptoCurrencySymbol,
+          referralCommissionPercentage: data.referralCommissionPercentage,
           prizeId: data.prizeId,
         };
 

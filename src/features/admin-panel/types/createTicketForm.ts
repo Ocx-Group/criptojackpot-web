@@ -25,6 +25,8 @@ export interface CreateTicketFormData {
   // Crypto currency
   cryptoCurrencyId: string;
   cryptoCurrencySymbol: string;
+  // Porcentaje de comisión de referido (ej. 1 = 1%)
+  referralCommissionPercentage: number;
 }
 
 /**

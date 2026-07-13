@@ -25,6 +25,10 @@ export const createTicketSchema = (t: TFunction) =>
         .string()
         .min(1, t('LOTTERIES_ADMIN.errors.cryptoCurrencyRequired', 'La criptomoneda es requerida')),
       cryptoCurrencySymbol: z.string().min(1),
+      referralCommissionPercentage: z
+        .number()
+        .min(0, t('LOTTERIES_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100'))
+        .max(100, t('LOTTERIES_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100')),
     })
     .refine(
       data => {

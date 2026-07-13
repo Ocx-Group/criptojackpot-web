@@ -20,6 +20,7 @@ export interface Lottery {
   minimumAge?: number;
   cryptoCurrencyId: string;
   cryptoCurrencySymbol: string;
+  referralCommissionPercentage: number;
   restrictedCountries: string[];
   prizes: Prize[];
   createdAt: string;
@@ -51,6 +52,7 @@ export interface CreateLotteryRequest {
   minimumAge?: number;
   cryptoCurrencyId: string;
   cryptoCurrencySymbol: string;
+  referralCommissionPercentage: number;
   restrictedCountries: string[];
   prizeId?: string;
 }

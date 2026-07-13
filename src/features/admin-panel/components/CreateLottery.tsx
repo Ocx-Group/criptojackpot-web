@@ -128,6 +128,35 @@ const CreateLottery: React.FC = () => {
                 />
               </div>
 
+              {/* Comisión de referido */}
+              <div className="col-md-6">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.referralCommission', 'Comisión de Referido (%)')}{' '}
+                  <span className="text-danger">*</span>
+                </label>
+                <div className="input-group">
+                  <input
+                    type="number"
+                    name="referralCommissionPercentage"
+                    className="form-control"
+                    value={formData.referralCommissionPercentage}
+                    onChange={handleInputChange}
+                    placeholder="1"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    required
+                  />
+                  <span className="input-group-text">%</span>
+                </div>
+                <div className="form-text">
+                  {t(
+                    'LOTTERIES_ADMIN.help.referralCommission',
+                    'Porcentaje pagado al referidor por cada compra. 0 desactiva la comisión.'
+                  )}
+                </div>
+              </div>
+
               {/* Criptomoneda */}
               <div className="col-md-6">
                 <label className="form-label fw-semibold">

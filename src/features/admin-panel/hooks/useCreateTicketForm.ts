@@ -71,6 +71,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       restrictedCountries: [],
       cryptoCurrencyId: '',
       cryptoCurrencySymbol: '',
+      referralCommissionPercentage: 1,
     },
   });
 
@@ -159,6 +160,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
           minimumAge: data.hasAgeRestriction ? data.minimumAge : undefined,
           cryptoCurrencyId: data.cryptoCurrencyId,
           cryptoCurrencySymbol: data.cryptoCurrencySymbol,
+          referralCommissionPercentage: data.referralCommissionPercentage,
           restrictedCountries: data.restrictedCountries,
           prizeId: data.prizeId,
         };

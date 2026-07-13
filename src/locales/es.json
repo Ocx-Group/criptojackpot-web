@@ -615,7 +615,8 @@
       "type": "Tipo de Promoción",
       "minNumber": "Número Mínimo",
       "maxNumber": "Número Máximo",
-      "cryptoCurrency": "Criptomoneda de Pago"
+      "cryptoCurrency": "Criptomoneda de Pago",
+      "referralCommission": "Comisión de Referido (%)"
     },
     "placeholders": {
       "name": "Ej: Digital Dreamscapes",
@@ -630,7 +631,8 @@
       "imageFromPrize": "La imagen se hereda del premio seleccionado",
       "pick3": "Pick3: 1000 números (000-999), 1 serie. El usuario selecciona 1 número de 3 dígitos.",
       "minNumber": "El número más bajo disponible en la promoción",
-      "maxNumber": "El número más alto disponible en la promoción"
+      "maxNumber": "El número más alto disponible en la promoción",
+      "referralCommission": "Porcentaje pagado al referidor por cada compra. 0 desactiva la comisión."
     },
     "status": {
       "draft": "Borrador",
@@ -677,7 +679,8 @@
       "imageRequired": "La imagen es requerida",
       "invalidImageType": "Formato de imagen no válido. Use JPG, PNG o WEBP",
       "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB",
-      "pick3Config": "Pick3 debe tener núm. mínimo=0, núm. máximo=999, totalTickets=1000"
+      "pick3Config": "Pick3 debe tener núm. mínimo=0, núm. máximo=999, totalTickets=1000",
+      "referralCommissionInvalid": "La comisión debe estar entre 0 y 100"
     },
     "types": {
       "standard": "Estándar",

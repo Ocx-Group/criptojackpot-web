@@ -29,6 +29,10 @@ export const createCreateLotterySchema = (t: TFunction) =>
         .string()
         .min(1, t('LOTTERY_ADMIN.errors.cryptoCurrencyRequired', 'La criptomoneda es requerida')),
       cryptoCurrencySymbol: z.string().min(1),
+      referralCommissionPercentage: z
+        .number()
+        .min(0, t('LOTTERY_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100'))
+        .max(100, t('LOTTERY_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100')),
     })
     .refine(data => data.maxNumber > data.minNumber, {
       message: t('LOTTERY_ADMIN.errors.maxNumberInvalid', 'El número máximo debe ser mayor al mínimo'),
@@ -81,6 +85,10 @@ export const createEditLotterySchema = (t: TFunction) =>
       .string()
       .min(1, t('LOTTERIES_ADMIN.errors.cryptoCurrencyRequired', 'La criptomoneda es requerida')),
     cryptoCurrencySymbol: z.string().min(1),
+    referralCommissionPercentage: z
+      .number()
+      .min(0, t('LOTTERIES_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100'))
+      .max(100, t('LOTTERIES_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100')),
   });
 
 export type EditLotterySchemaType = z.infer<ReturnType<typeof createEditLotterySchema>>;

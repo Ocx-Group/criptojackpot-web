@@ -15,4 +15,5 @@ export interface EditLotteryFormData {
   terms: string;
   cryptoCurrencyId: string;
   cryptoCurrencySymbol: string;
+  referralCommissionPercentage: number;
 }
