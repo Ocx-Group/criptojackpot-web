@@ -62,7 +62,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
                 <div className="mt-1 d-flex flex-wrap gap-1">
                   {item.numbers.map(({ number, quantity }) => (
                     <span key={number} className="badge n1-bg n4-clr" style={{ fontSize: '9px', padding: '3px 6px' }}>
-                      #{formatLotteryNumber(number, item.lotteryType)}
+                      #{formatLotteryNumber(number, item.lotteryType, item.lotteryMaxNumber)}
                       {quantity > 1 && ` ×${quantity}`}
                     </span>
                   ))}

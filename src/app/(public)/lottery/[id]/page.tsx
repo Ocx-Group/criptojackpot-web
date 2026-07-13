@@ -19,7 +19,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -55,9 +55,25 @@ const LotteryDetailsPage = () => {
   const [pick3Number, setPick3Number] = useState<string>('');
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
+  // Paginación y búsqueda del tablero de números (rifas grandes, ej. 0000-9999)
+  const [numberPage, setNumberPage] = useState(0);
+  const [numberSearch, setNumberSearch] = useState('');
+
   // Cart store
   const { addItem: addCartItem, setIsOpen: setCartOpen } = useCartStore();
   const showNotification = useNotificationStore(state => state.show);
+
+  const {
+    data: lottery,
+    isLoading,
+    error,
+  } = useQuery<Lottery, Error>({
+    queryKey: ['lottery', lotteryId],
+    queryFn: async () => {
+      return lotteryService.getLotteryById(lotteryId);
+    },
+    enabled: !!lotteryId,
+  });
 
   // Conexión WebSocket al LotteryHub (auth via HttpOnly cookies)
   const {
@@ -70,7 +86,7 @@ const LotteryDetailsPage = () => {
     clearError,
     clearReservations: _clearReservations, // Para uso futuro
     clearCurrentOrder: _clearCurrentOrder, // Para uso futuro
-  } = useLotteryHub(lotteryId);
+  } = useLotteryHub(lotteryId, lottery?.totalSeries);
 
   // Estado de carga para reservas
   const [isReserving, setIsReserving] = useState(false);
@@ -97,20 +113,17 @@ const LotteryDetailsPage = () => {
     }
   }, [reservations]);
 
-  const {
-    data: lottery,
-    isLoading,
-    error,
-  } = useQuery<Lottery, Error>({
-    queryKey: ['lottery', lotteryId],
-    queryFn: async () => {
-      return lotteryService.getLotteryById(lotteryId);
-    },
-    enabled: !!lotteryId,
-  });
-
   // Pick3: detect game type and sync inputs to selectedNumbers
   const isPick3 = lottery?.type === LotteryType.Pick3;
+
+  // Dígitos para mostrar los números (Pick3: 3, rifas 0000-9999: 4, legacy 00-99: 2)
+  const numberDigits = isPick3 ? 3 : Math.max(2, String(lottery?.maxNumber ?? 99).length);
+
+  // Índice de disponibilidad por número (el hub solo envía números no completamente disponibles)
+  const availableByNumber = useMemo(
+    () => new Map(availableNumbers.map(n => [n.number, n])),
+    [availableNumbers]
+  );
 
   useEffect(() => {
     if (!isPick3) return;
@@ -170,8 +183,8 @@ const LotteryDetailsPage = () => {
 
   // Obtener series disponibles para un número
   const getAvailableSeries = (num: number): number => {
-    const hubNumber = availableNumbers.find(n => n.number === num);
-    // Si hay info del hub, usar availableSeries; sino, usar totalSeries de la lotería
+    const hubNumber = availableByNumber.get(num);
+    // Si hay info del hub, usar availableSeries; sino, el número está completamente disponible
     return hubNumber?.availableSeries ?? lottery?.totalSeries ?? 1;
   };
 
@@ -265,6 +278,7 @@ const LotteryDetailsPage = () => {
         lotteryName: lottery.title,
         lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
         lotteryType: lottery.type,
+        lotteryMaxNumber: lottery.maxNumber,
         ticketPrice: lottery.ticketPrice,
         numbers,
         orderId: currentOrder.orderId,
@@ -396,9 +410,9 @@ const LotteryDetailsPage = () => {
     // Aquí podrías redirigir al checkout directamente
   };
 
-  // Formatear número según tipo de lotería
+  // Formatear número según tipo de lotería (rellena con ceros según el rango)
   const formatNumber = (num: number): string => {
-    return num.toString().padStart(isPick3 ? 3 : 2, '0');
+    return num.toString().padStart(numberDigits, '0');
   };
 
   // Validar si una URL de imagen es válida
@@ -483,13 +497,37 @@ const LotteryDetailsPage = () => {
   const ticketQuantity = selectedEntries.reduce((sum, [, qty]) => sum + qty, 0);
   const totalPrice = (lottery.ticketPrice * ticketQuantity).toFixed(2);
 
-  // Generar números según el rango de la lotería (minNumber a maxNumber)
-  const allNumbers = Array.from({ length: lottery.maxNumber - lottery.minNumber + 1 }, (_, i) => lottery.minNumber + i);
+  // Tablero paginado: con rangos grandes (ej. 10,000 números) no se renderiza todo de golpe
+  const NUMBERS_PAGE_SIZE = 100;
+  const totalNumbers = lottery.maxNumber - lottery.minNumber + 1;
+  const totalNumberPages = Math.ceil(totalNumbers / NUMBERS_PAGE_SIZE);
+  const isSearching = numberSearch.trim() !== '';
+
+  let visibleNumbers: number[];
+  if (isSearching) {
+    // Buscar números cuya representación (con ceros) empiece por lo escrito, ej. "75" → 7500-7599
+    const query = numberSearch.trim();
+    visibleNumbers = [];
+    for (let n = lottery.minNumber; n <= lottery.maxNumber && visibleNumbers.length < NUMBERS_PAGE_SIZE; n++) {
+      if (String(n).padStart(numberDigits, '0').startsWith(query)) {
+        visibleNumbers.push(n);
+      }
+    }
+  } else {
+    const clampedPage = Math.min(numberPage, totalNumberPages - 1);
+    const pageStart = lottery.minNumber + clampedPage * NUMBERS_PAGE_SIZE;
+    const pageEnd = Math.min(pageStart + NUMBERS_PAGE_SIZE - 1, lottery.maxNumber);
+    visibleNumbers = Array.from({ length: pageEnd - pageStart + 1 }, (_, i) => pageStart + i);
+  }
+
+  const pageRangeLabel = visibleNumbers.length > 0
+    ? `${formatNumber(visibleNumbers[0])} – ${formatNumber(visibleNumbers[visibleNumbers.length - 1])}`
+    : '';
 
   // Debug: Estado del botón "Agregar al carrito"
   const pick3NumberValue = isPick3 ? parseInt(pick3Number, 10) : NaN;
   const pick3NumInfo = isPick3 && !isNaN(pick3NumberValue)
-    ? availableNumbers.find(n => n.number === pick3NumberValue)
+    ? availableByNumber.get(pick3NumberValue)
     : null;
   const isPick3Unavailable = isPick3 && pick3NumInfo?.isExhausted === true;
 
@@ -947,6 +985,25 @@ const LotteryDetailsPage = () => {
                         </div>
                       ) : (
                         <>
+                          {/* Buscador de números (rangos grandes) */}
+                          {totalNumbers > NUMBERS_PAGE_SIZE && (
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              maxLength={numberDigits}
+                              value={numberSearch}
+                              onChange={e => {
+                                const val = e.target.value;
+                                if (val === '' || new RegExp(`^\\d{1,${numberDigits}}$`).test(val)) {
+                                  setNumberSearch(val);
+                                }
+                              }}
+                              placeholder={t('LOTTERY_DETAILS.searchNumber', 'Busca tu número, ej. 7575')}
+                              className="form-control form-control-sm mb-2"
+                              aria-label={t('LOTTERY_DETAILS.searchNumber', 'Busca tu número, ej. 7575')}
+                            />
+                          )}
+
                           {/* Numbers Grid - Compacto sin scroll */}
                           <div
                             className="number-grid"
@@ -956,10 +1013,10 @@ const LotteryDetailsPage = () => {
                               gap: '2px',
                             }}
                           >
-                            {allNumbers.map(num => {
+                            {visibleNumbers.map(num => {
                               const qty = selectedNumbers[num] || 0;
                               const isSelected = qty > 0;
-                              const hubNumber = availableNumbers.find(n => n.number === num);
+                              const hubNumber = availableByNumber.get(num);
                               const isExhausted = hubNumber?.isExhausted ?? false;
                               const availableSeries = hubNumber?.availableSeries ?? lottery.totalSeries;
 
@@ -1015,6 +1072,40 @@ const LotteryDetailsPage = () => {
                               );
                             })}
                           </div>
+
+                          {/* Sin resultados de búsqueda */}
+                          {isSearching && visibleNumbers.length === 0 && (
+                            <p className="n3-clr text-center my-2 mb-0" style={{ fontSize: '12px' }}>
+                              {t('LOTTERY_DETAILS.noNumbersFound', 'No hay números que coincidan con la búsqueda')}
+                            </p>
+                          )}
+
+                          {/* Controles de paginación */}
+                          {!isSearching && totalNumberPages > 1 && (
+                            <div className="d-flex align-items-center justify-content-between mt-2">
+                              <button
+                                className="btn btn-sm n0-bg n4-clr border"
+                                onClick={() => setNumberPage(p => Math.max(0, p - 1))}
+                                disabled={numberPage === 0}
+                                style={{ fontSize: '12px', padding: '2px 10px' }}
+                                aria-label={t('LOTTERY_DETAILS.prevPage', 'Página anterior')}
+                              >
+                                ‹
+                              </button>
+                              <span className="n3-clr" style={{ fontSize: '11px' }}>
+                                {pageRangeLabel} · {numberPage + 1}/{totalNumberPages}
+                              </span>
+                              <button
+                                className="btn btn-sm n0-bg n4-clr border"
+                                onClick={() => setNumberPage(p => Math.min(totalNumberPages - 1, p + 1))}
+                                disabled={numberPage >= totalNumberPages - 1}
+                                style={{ fontSize: '12px', padding: '2px 10px' }}
+                                aria-label={t('LOTTERY_DETAILS.nextPage', 'Página siguiente')}
+                              >
+                                ›
+                              </button>
+                            </div>
+                          )}
 
                           {/* Selected Numbers with Quantity Control */}
                           {selectedEntries.length > 0 && (

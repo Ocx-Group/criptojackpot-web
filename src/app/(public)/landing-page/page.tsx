@@ -9,9 +9,9 @@ import NavbarBlack from '@/components/navbar/NavbarBlack';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'CriptoJackpot — Rifas y Promociones con Cripto',
+  title: 'CriptoJackpot — Promociones con Cripto',
   description:
-    'Descubre, juega y gana con CriptoJackpot. Participa en rifas con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
+    'Descubre, juega y gana con CriptoJackpot. Participa en promociones con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
   alternates: {
     canonical: 'https://criptojackpot.com',
   },

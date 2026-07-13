@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Winners — CriptoJackpot',
   description:
-    'Meet our lucky winners who have won amazing prizes with CriptoJackpot. Discover the latest lottery and raffle winners.',
+    'Meet our lucky winners who have won amazing prizes with CriptoJackpot. Discover the latest promotion winners.',
   alternates: {
     canonical: 'https://criptojackpot.com/winners',
   },

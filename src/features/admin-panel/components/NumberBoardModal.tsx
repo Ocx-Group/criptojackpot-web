@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, ArrowLeft, RefreshCw } from 'lucide-react';
+import { X, ArrowLeft, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { useNumberBoard } from '@/features/admin-panel/hooks';
 import type { NumberSummaryItem } from '@/services/lotteryNumberService';
 import { formatSeries } from '@/utils/formatSeries';
@@ -31,6 +31,8 @@ const COLORS = {
   blueDark: '#1e3a5f',
 };
 
+const BOARD_PAGE_SIZE = 100;
+
 const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryTitle, onClose }) => {
   const { t } = useTranslation();
   const {
@@ -42,6 +44,10 @@ const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryT
     seriesDetail,
     isSeriesLoading,
   } = useNumberBoard(lotteryId);
+
+  // Paginación y búsqueda para tableros grandes (ej. rifas de 10,000 números)
+  const [boardPage, setBoardPage] = useState(0);
+  const [boardSearch, setBoardSearch] = useState('');
 
   const totalSlots = boardData?.totalSlots ?? 0;
   const soldCount = boardData?.soldCount ?? 0;
@@ -59,6 +65,23 @@ const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryT
     const digits = String(maxNum).length;
     return String(n).padStart(digits, '0');
   };
+
+  const boardDigits = String(boardData?.maxNumber ?? 99).length;
+  const allBoardNumbers = boardData?.numbers ?? [];
+  const isSearchingBoard = boardSearch.trim() !== '';
+
+  const filteredNumbers = isSearchingBoard
+    ? allBoardNumbers.filter((item) =>
+        String(item.number).padStart(boardDigits, '0').startsWith(boardSearch.trim())
+      )
+    : allBoardNumbers;
+
+  const totalBoardPages = Math.max(1, Math.ceil(filteredNumbers.length / BOARD_PAGE_SIZE));
+  const currentBoardPage = Math.min(boardPage, totalBoardPages - 1);
+  const visibleBoardNumbers = filteredNumbers.slice(
+    currentBoardPage * BOARD_PAGE_SIZE,
+    (currentBoardPage + 1) * BOARD_PAGE_SIZE
+  );
 
   const getGridCols = (): number => {
     const totalNumbers = (boardData?.maxNumber ?? 99) - (boardData?.minNumber ?? 0) + 1;
@@ -255,6 +278,36 @@ const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryT
                   <p style={{ color: COLORS.textSecondary, fontSize: 13, marginBottom: 14 }}>
                     {t('NUMBER_BOARD.selectNumber', 'Selecciona un número para ver sus series')}
                   </p>
+
+                  {/* Buscador (tableros grandes) */}
+                  {allBoardNumbers.length > BOARD_PAGE_SIZE && (
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={boardDigits}
+                      value={boardSearch}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '' || new RegExp(`^\\d{1,${boardDigits}}$`).test(val)) {
+                          setBoardSearch(val);
+                          setBoardPage(0);
+                        }
+                      }}
+                      placeholder={t('NUMBER_BOARD.searchNumber', 'Buscar número, ej. 7575')}
+                      style={{
+                        width: '100%',
+                        marginBottom: 14,
+                        padding: '8px 12px',
+                        borderRadius: 8,
+                        border: `1px solid ${COLORS.borderLight}`,
+                        background: COLORS.cardBg,
+                        color: COLORS.textPrimary,
+                        fontFamily: 'monospace',
+                        fontSize: 13,
+                      }}
+                    />
+                  )}
+
                   <div
                     style={{
                       display: 'grid',
@@ -262,7 +315,7 @@ const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryT
                       gap: 8,
                     }}
                   >
-                    {boardData.numbers.map((item) => {
+                    {visibleBoardNumbers.map((item) => {
                       const intensity = getNumberIntensity(item);
                       const isActive = selectedNumber === item.number;
                       const totalSeriesForNum = boardData.totalSeries;
@@ -315,6 +368,69 @@ const NumberBoardModal: React.FC<NumberBoardModalProps> = ({ lotteryId, lotteryT
                       );
                     })}
                   </div>
+
+                  {/* Sin resultados */}
+                  {isSearchingBoard && filteredNumbers.length === 0 && (
+                    <p style={{ color: COLORS.textSecondary, fontSize: 12, marginTop: 12, textAlign: 'center' }}>
+                      {t('NUMBER_BOARD.noResults', 'No hay números que coincidan con la búsqueda')}
+                    </p>
+                  )}
+
+                  {/* Paginación */}
+                  {totalBoardPages > 1 && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginTop: 14,
+                        gap: 8,
+                      }}
+                    >
+                      <button
+                        onClick={() => setBoardPage(Math.max(0, currentBoardPage - 1))}
+                        disabled={currentBoardPage === 0}
+                        style={{
+                          background: 'transparent',
+                          border: `1px solid ${COLORS.borderLight}`,
+                          color: currentBoardPage === 0 ? COLORS.textDark : COLORS.textSecondary,
+                          borderRadius: 8,
+                          padding: '6px 10px',
+                          cursor: currentBoardPage === 0 ? 'not-allowed' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                        aria-label={t('NUMBER_BOARD.prevPage', 'Página anterior')}
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+                      <span style={{ fontSize: 12, color: COLORS.textSecondary }}>
+                        {visibleBoardNumbers.length > 0 &&
+                          `${formatNumber(visibleBoardNumbers[0].number)} – ${formatNumber(
+                            visibleBoardNumbers[visibleBoardNumbers.length - 1].number
+                          )} · `}
+                        {currentBoardPage + 1}/{totalBoardPages}
+                      </span>
+                      <button
+                        onClick={() => setBoardPage(Math.min(totalBoardPages - 1, currentBoardPage + 1))}
+                        disabled={currentBoardPage >= totalBoardPages - 1}
+                        style={{
+                          background: 'transparent',
+                          border: `1px solid ${COLORS.borderLight}`,
+                          color:
+                            currentBoardPage >= totalBoardPages - 1 ? COLORS.textDark : COLORS.textSecondary,
+                          borderRadius: 8,
+                          padding: '6px 10px',
+                          cursor: currentBoardPage >= totalBoardPages - 1 ? 'not-allowed' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                        aria-label={t('NUMBER_BOARD.nextPage', 'Página siguiente')}
+                      >
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Series detail panel */}

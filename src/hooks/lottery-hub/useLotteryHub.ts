@@ -10,7 +10,7 @@ import { createHubConnection, startConnection, stopConnection } from './connecti
 import { registerHubEventHandlers, unregisterHubEventHandlers } from './hubEventHandlers';
 import type { LotteryHubReturn } from './types';
 
-export const useLotteryHub = (lotteryId: string): LotteryHubReturn => {
+export const useLotteryHub = (lotteryId: string, totalSeries?: number): LotteryHubReturn => {
   const [availableNumbers, setAvailableNumbers] = useState<AvailableNumberDto[]>([]);
   const [reservations, setReservations] = useState<NumberReservationDto[]>([]);
   const [currentOrder, setCurrentOrder] = useState<ReservationWithOrderDto | null>(null);
@@ -21,6 +21,11 @@ export const useLotteryHub = (lotteryId: string): LotteryHubReturn => {
   const connectionRef = useRef<signalR.HubConnection | null>(null);
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(false);
+
+  // El servidor solo envía números no completamente disponibles; los handlers
+  // necesitan totalSeries para insertar entradas nuevas al recibir eventos.
+  const totalSeriesRef = useRef(totalSeries ?? 1);
+  totalSeriesRef.current = totalSeries ?? totalSeriesRef.current;
 
   useEffect(() => {
     // Marcar como montado
@@ -60,6 +65,7 @@ export const useLotteryHub = (lotteryId: string): LotteryHubReturn => {
       setError,
       setIsConnected,
       setCurrentOrder,
+      getTotalSeries: () => totalSeriesRef.current,
     });
 
     // Handler especial para reconexión (necesita lotteryId)

@@ -55,6 +55,22 @@ export const createTicketSchema = (t: TFunction) =>
         ),
         path: ['type'],
       }
+    )
+    .refine(
+      data => {
+        // Standard raffle (type=0) must have fixed config: 0000-9999, 10000 tickets, 1 series
+        if (data.type === 0) {
+          return data.minNumber === 0 && data.maxNumber === 9999 && data.totalTickets === 10000;
+        }
+        return true;
+      },
+      {
+        message: t(
+          'LOTTERIES_ADMIN.errors.standardConfig',
+          'La promoción estándar debe tener minNumber=0, maxNumber=9999, totalTickets=10000'
+        ),
+        path: ['type'],
+      }
     );
 
 export type TicketSchemaType = z.infer<ReturnType<typeof createTicketSchema>>;

@@ -88,6 +88,14 @@ const CreateLottery: React.FC = () => {
                     {t('LOTTERIES_ADMIN.help.pick3', 'Pick3: 1000 numbers (000-999), 1 series, users select 3 numbers')}
                   </div>
                 )}
+                {formData.type === LotteryType.Standard && (
+                  <div className="form-text text-info">
+                    {t(
+                      'LOTTERIES_ADMIN.help.standard',
+                      'Promoción: 10,000 números (0000-9999), 1 serie. Cada ticket son dos parejas del 00 al 99 vendidas como un número de 4 cifras'
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Precio y Total de Tickets */}
@@ -121,11 +129,14 @@ const CreateLottery: React.FC = () => {
                   className="form-control"
                   value={formData.totalTickets}
                   onChange={handleInputChange}
-                  placeholder="1000"
+                  placeholder="10000"
                   min="1"
                   required
-                  disabled={formData.type === LotteryType.Pick3}
+                  disabled
                 />
+                <div className="form-text">
+                  {t('LOTTERIES_ADMIN.help.totalTicketsFixed', 'Definido automáticamente por el tipo de promoción')}
+                </div>
               </div>
 
               {/* Comisión de referido */}
@@ -197,10 +208,10 @@ const CreateLottery: React.FC = () => {
                   className="form-control"
                   value={formData.minNumber}
                   onChange={handleInputChange}
-                  placeholder="1"
+                  placeholder="0"
                   min="0"
                   required
-                  disabled={formData.type === LotteryType.Pick3}
+                  disabled
                 />
                 <div className="form-text">
                   {t('LOTTERIES_ADMIN.help.minNumber', 'El número más bajo disponible en la promoción')}
@@ -217,10 +228,10 @@ const CreateLottery: React.FC = () => {
                   className="form-control"
                   value={formData.maxNumber}
                   onChange={handleInputChange}
-                  placeholder="49"
+                  placeholder="9999"
                   min="1"
                   required
-                  disabled={formData.type === LotteryType.Pick3}
+                  disabled
                 />
                 <div className="form-text">
                   {t('LOTTERIES_ADMIN.help.maxNumber', 'El número más alto disponible en la promoción')}

@@ -104,7 +104,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
                   }}
                 >
                   <span className="n0-clr fw-bold" style={{ fontSize: '24px' }}>
-                    {formatLotteryNumber(number, item.lotteryType)}
+                    {formatLotteryNumber(number, item.lotteryType, item.lotteryMaxNumber)}
                   </span>
                   {quantity > 1 && (
                     <span

@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Crear Cuenta',
   description:
-    'Regístrate en CriptoJackpot y comienza a participar en rifas y promociones con criptomonedas. Refiere amigos y gana comisiones.',
+    'Regístrate en CriptoJackpot y comienza a participar en promociones con criptomonedas. Refiere amigos y gana comisiones.',
   alternates: {
     canonical: 'https://criptojackpot.com/register',
   },

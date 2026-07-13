@@ -19,13 +19,16 @@ export interface HubEventCallbacks {
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   setIsConnected: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentOrder: React.Dispatch<React.SetStateAction<ReservationWithOrderDto | null>>;
+  /** Total de series de la lotería; requerido para upserts (el servidor solo envía números no disponibles) */
+  getTotalSeries: () => number;
 }
 
 /**
  * Registra todos los event handlers del hub
  */
 export const registerHubEventHandlers = (connection: signalR.HubConnection, callbacks: HubEventCallbacks): void => {
-  const { setAvailableNumbers, setReservations, setError, setIsConnected, setCurrentOrder } = callbacks;
+  const { setAvailableNumbers, setReservations, setError, setIsConnected, setCurrentOrder, getTotalSeries } =
+    callbacks;
 
   // Recibir números disponibles al unirse
   connection.on('ReceiveAvailableNumbers', (_lotteryGuid: string, numbers: AvailableNumberDto[]) => {
@@ -36,7 +39,7 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
   connection.on(
     'NumberReserved',
     (_lotteryGuid: string, _numberId: number, _numberGuid: string, number: number, series: number) => {
-      setAvailableNumbers(prev => updateNumberOnReserve(prev, number));
+      setAvailableNumbers(prev => updateNumberOnReserve(prev, number, getTotalSeries()));
       console.log(`El servidor asignó la serie ${series} para el número ${number}`);
     }
   );
@@ -53,7 +56,7 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
   connection.on(
     'NumberSold',
     (_lotteryGuid: string, _numberId: number, _numberGuid: string, number: number, _series: number) => {
-      setAvailableNumbers(prev => updateNumberOnSold(prev, number));
+      setAvailableNumbers(prev => updateNumberOnSold(prev, number, getTotalSeries()));
     }
   );
 
@@ -64,7 +67,7 @@ export const registerHubEventHandlers = (connection: signalR.HubConnection, call
 
   // Múltiples números vendidos
   connection.on('NumbersSold', (_lotteryGuid: string, numbers: NumberStatusDto[]) => {
-    setAvailableNumbers(prev => updateNumbersOnBulkSold(prev, numbers));
+    setAvailableNumbers(prev => updateNumbersOnBulkSold(prev, numbers, getTotalSeries()));
   });
 
   // Confirmación de reserva individual

@@ -13,6 +13,7 @@ export interface CartItem {
   lotteryName: string;
   lotteryImage?: string;
   lotteryType?: number;
+  lotteryMaxNumber?: number; // Para formatear los números con los dígitos correctos (ej. 9999 → 4 dígitos)
   ticketPrice: number;
   numbers: CartItemNumber[];
   addedAt: number; // Timestamp cuando se agregó

@@ -630,6 +630,8 @@
       "createPrize": "Crear uno ahora",
       "imageFromPrize": "La imagen se hereda del premio seleccionado",
       "pick3": "Pick3: 1000 números (000-999), 1 serie. El usuario selecciona 1 número de 3 dígitos.",
+      "standard": "Promoción: 10,000 números (0000-9999), 1 serie. Cada ticket son dos parejas del 00 al 99 vendidas como un número de 4 cifras",
+      "totalTicketsFixed": "Definido automáticamente por el tipo de promoción",
       "minNumber": "El número más bajo disponible en la promoción",
       "maxNumber": "El número más alto disponible en la promoción",
       "referralCommission": "Porcentaje pagado al referidor por cada compra. 0 desactiva la comisión."
@@ -680,6 +682,7 @@
       "invalidImageType": "Formato de imagen no válido. Use JPG, PNG o WEBP",
       "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB",
       "pick3Config": "Pick3 debe tener núm. mínimo=0, núm. máximo=999, totalTickets=1000",
+      "standardConfig": "La promoción estándar debe tener núm. mínimo=0, núm. máximo=9999, totalTickets=10000",
       "referralCommissionInvalid": "La comisión debe estar entre 0 y 100"
     },
     "types": {
@@ -868,7 +871,7 @@
     "empty": "Aún no tienes tickets comprados",
     "loading": "Cargando tickets...",
     "error": "Error al cargar los tickets",
-    "raffle": "Rifa"
+    "raffle": "Promoción"
   },
   "TRANSACTIONS": {
     "title": "Todas las Transacciones",
@@ -1095,16 +1098,16 @@
   },
   "SEO": {
     "home": {
-      "title": "CriptoJackpot — Rifas y Promociones con Cripto",
-      "description": "Descubre, juega y gana con CriptoJackpot. Participa en rifas con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios."
+      "title": "CriptoJackpot — Promociones con Cripto",
+      "description": "Descubre, juega y gana con CriptoJackpot. Participa en promociones con criptomonedas, elige tus números de la suerte, refiere amigos y gana premios."
     },
     "login": {
       "title": "Iniciar Sesión",
-      "description": "Inicia sesión en CriptoJackpot para participar en rifas y promociones con criptomonedas."
+      "description": "Inicia sesión en CriptoJackpot para participar en promociones con criptomonedas."
     },
     "register": {
       "title": "Crear Cuenta",
-      "description": "Regístrate en CriptoJackpot y comienza a participar en rifas y promociones con criptomonedas."
+      "description": "Regístrate en CriptoJackpot y comienza a participar en promociones con criptomonedas."
     },
     "forgotPassword": {
       "title": "Recuperar Contraseña",
@@ -1184,6 +1187,10 @@
     "pick3Available": "¡Número disponible!",
     "pick3Unavailable": "Número no disponible, intenta otro",
     "selectNumbers": "Selecciona tus números",
+    "searchNumber": "Busca tu número, ej. 7575",
+    "noNumbersFound": "No hay números que coincidan con la búsqueda",
+    "prevPage": "Página anterior",
+    "nextPage": "Página siguiente",
     "clearAll": "Limpiar",
     "selectedNumbers": "Seleccionados",
     "quantity": "Cantidad",

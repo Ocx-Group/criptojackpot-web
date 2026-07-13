@@ -20,6 +20,9 @@ import { getFirstFieldError } from '@/utils/getFirstFieldError';
 /** Pick3 preset values */
 const PICK3_PRESET = { minNumber: 0, maxNumber: 999, totalTickets: 1000 } as const;
 
+/** Standard raffle preset: two 00-99 pairs sold as one 4-digit number (0000-9999), 1 series */
+const STANDARD_PRESET = { minNumber: 0, maxNumber: 9999, totalTickets: 10000 } as const;
+
 export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -58,12 +61,12 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       price: 0,
       drawDate: '',
       drawTime: '',
-      totalTickets: 0,
+      totalTickets: STANDARD_PRESET.totalTickets,
       status: 'active',
       prizeId: undefined,
-      // Valores por defecto para campos de lottery
-      minNumber: 1,
-      maxNumber: 49,
+      // Valores por defecto para campos de lottery (rifa estándar: 0000-9999)
+      minNumber: STANDARD_PRESET.minNumber,
+      maxNumber: STANDARD_PRESET.maxNumber,
       terms: '',
       type: LotteryType.Standard,
       hasAgeRestriction: true,
@@ -112,14 +115,13 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       setValue(name as keyof CreateTicketFormData, value as any, { shouldValidate: false });
     }
 
-    // Auto-configure fields when lottery type changes to Pick3
+    // Auto-configure fields when lottery type changes (both types have fixed presets)
     if (name === 'type') {
       const numValue = Number(value);
-      if (numValue === LotteryType.Pick3) {
-        setValue('minNumber', PICK3_PRESET.minNumber, { shouldValidate: false });
-        setValue('maxNumber', PICK3_PRESET.maxNumber, { shouldValidate: false });
-        setValue('totalTickets', PICK3_PRESET.totalTickets, { shouldValidate: false });
-      }
+      const preset = numValue === LotteryType.Pick3 ? PICK3_PRESET : STANDARD_PRESET;
+      setValue('minNumber', preset.minNumber, { shouldValidate: false });
+      setValue('maxNumber', preset.maxNumber, { shouldValidate: false });
+      setValue('totalTickets', preset.totalTickets, { shouldValidate: false });
     }
   };
 

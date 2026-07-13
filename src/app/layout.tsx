@@ -13,20 +13,20 @@ const siteUrl = 'https://criptojackpot.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'CriptoJackpot — Rifas y Promociones con Cripto',
+    default: 'CriptoJackpot — Promociones con Cripto',
     template: '%s | CriptoJackpot',
   },
   description:
-    'Participa en rifas y promociones con criptomonedas. Elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
+    'Participa en promociones con criptomonedas. Elige tus números de la suerte, refiere amigos y gana premios. Simple, transparente y justo.',
   keywords: [
-    'rifas cripto',
+    'promociones cripto',
     'promociones criptomonedas',
     'promotion crypto',
-    'crypto raffle',
+    'crypto promotion',
     'bitcoin promotion',
     'cripto jackpot',
     'promociones online',
-    'rifas online',
+    'sorteos online',
     'ganar criptomonedas',
     'win crypto',
   ],
@@ -50,21 +50,21 @@ export const metadata: Metadata = {
     alternateLocale: 'en_US',
     url: siteUrl,
     siteName: 'CriptoJackpot',
-    title: 'CriptoJackpot — Rifas y Promociones con Cripto',
-    description: 'Participa en rifas y promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
+    title: 'CriptoJackpot — Promociones con Cripto',
+    description: 'Participa en promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
     images: [
       {
         url: '/images/logo/blue-logo.png',
         width: 1200,
         height: 630,
-        alt: 'CriptoJackpot - Rifas y Promociones con Cripto',
+        alt: 'CriptoJackpot - Promociones con Cripto',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CriptoJackpot — Rifas y Promociones con Cripto',
-    description: 'Participa en rifas y promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
+    title: 'CriptoJackpot — Promociones con Cripto',
+    description: 'Participa en promociones con criptomonedas. Elige tus números, refiere amigos y gana premios.',
     images: ['/images/logo/blue-logo.png'],
   },
   alternates: {
