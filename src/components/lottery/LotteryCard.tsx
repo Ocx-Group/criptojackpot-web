@@ -28,7 +28,7 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
   const soldPercent =
     lottery.maxTickets === 0 ? 0 : Number.parseFloat(((lottery.soldTickets / lottery.maxTickets) * 100).toFixed(1));
   const remaining = lottery.maxTickets - lottery.soldTickets;
-  const typeLabel = isPick3 ? 'Pick 3' : t('SORTEOS.typeStandard', 'Rifa');
+  const typeLabel = isPick3 ? 'Pick 3' : t('SORTEOS.typeStandard', 'Promoción');
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();

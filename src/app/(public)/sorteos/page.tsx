@@ -117,7 +117,7 @@ const SorteosPage = () => {
       {
         key: 'standard',
         icon: <TicketIcon weight="bold" className="fs-five" />,
-        label: t('SORTEOS.filterStandard', 'Rifas'),
+        label: t('SORTEOS.filterStandard', 'Promociones'),
         count: stats.standard,
       },
       { key: 'pick3', icon: <HashIcon weight="bold" className="fs-five" />, label: 'Pick 3', count: stats.pick3 },
@@ -183,7 +183,7 @@ const SorteosPage = () => {
             <div className="col-lg-8">
               <div className="section__title">
                 <h5 className="s1-clr fw_700">
-                  {t('SORTEOS.subtitle', 'Explora todas nuestras rifas y juegos disponibles')}
+                  {t('SORTEOS.subtitle', 'Explora todas nuestras promociones y juegos disponibles')}
                 </h5>
                 <h3 className="display-four d-block nw1-clr">
                   {t('SORTEOS.title', 'Promociones')}{' '}
