@@ -7,6 +7,7 @@ import { X, Trash2, Clock, ShoppingCart, CreditCard } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useCheckoutStore } from '@/store/checkoutStore';
 import { CartItem } from '@/interfaces/cart';
+import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
 
 /**
  * Componente para mostrar el timer de un item individual
@@ -92,7 +93,7 @@ const CartItemCard: React.FC<{
         <div className="d-flex flex-wrap gap-1">
           {item.numbers.map(({ number, quantity }) => (
             <span key={number} className="badge act4-bg n0-clr" style={{ fontSize: '10px', padding: '4px 6px' }}>
-              {number.toString().padStart(2, '0')}
+              {formatLotteryNumber(number, item.lotteryType, item.lotteryMaxNumber)}
               {quantity > 1 && <span className="ms-1">×{quantity}</span>}
             </span>
           ))}
@@ -184,7 +185,7 @@ const CartSidebar: React.FC = () => {
 
       {/* Sidebar */}
       <div
-        className="cart-sidebar n1-bg"
+        className="cart-sidebar bg2-color"
         style={{
           position: 'fixed',
           top: 0,
@@ -199,14 +200,17 @@ const CartSidebar: React.FC = () => {
         }}
       >
         {/* Header */}
-        <div className="cart-header p-4 border-bottom d-flex justify-content-between align-items-center">
+        <div
+          className="cart-header p-4 border-bottom d-flex justify-content-between align-items-center"
+          style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+        >
           <div className="d-flex align-items-center gap-2">
             <ShoppingCart size={20} className="act4-clr" />
-            <h5 className="mb-0 fw-bold n4-clr">{t('CART.title', 'Carrito')}</h5>
+            <h5 className="mb-0 fw-bold nw1-clr">{t('CART.title', 'Carrito')}</h5>
             {totalItems > 0 && <span className="badge act4-bg n0-clr">{totalItems}</span>}
           </div>
           <button className="btn p-1" onClick={() => setIsOpen(false)}>
-            <X size={20} className="n4-clr" />
+            <X size={20} className="nw1-clr" />
           </button>
         </div>
 
@@ -214,8 +218,8 @@ const CartSidebar: React.FC = () => {
         <div className="cart-body flex-grow-1 p-3" style={{ overflowY: 'auto' }}>
           {items.length === 0 ? (
             <div className="text-center py-5">
-              <ShoppingCart size={48} className="text-muted mb-3" />
-              <p className="text-muted">{t('CART.empty', 'Tu carrito está vacío')}</p>
+              <ShoppingCart size={48} className="nw3-clr mb-3" />
+              <p className="nw3-clr">{t('CART.empty', 'Tu carrito está vacío')}</p>
             </div>
           ) : (
             <>
@@ -242,10 +246,10 @@ const CartSidebar: React.FC = () => {
               <span className="fs-4 fw-bold act4-clr">${totalPrice.toFixed(2)}</span>
             </div>
 
-            {/* Botones de acción */}
+            {/* Botones de acción — CTA de pago en verde (conversión) */}
             <button
               onClick={handleGoToCheckout}
-              className="btn w-100 act4-bg n0-clr fw-semibold py-2 mb-2 d-flex align-items-center justify-content-center gap-2"
+              className="btn w-100 p1-bg n4-clr fw-semibold py-2 mb-2 d-flex align-items-center justify-content-center gap-2"
             >
               <CreditCard size={18} />
               {t('CART.checkout', 'Proceder al Pago')}

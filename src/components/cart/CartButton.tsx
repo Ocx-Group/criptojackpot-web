@@ -23,9 +23,9 @@ const CartButton: React.FC = () => {
         height: '56px',
         borderRadius: '50%',
         background: 'var(--act4)',
-        color: '#fff',
+        color: 'var(--n4)',
         border: 'none',
-        boxShadow: '0 4px 12px rgba(85, 74, 255, 0.4)',
+        boxShadow: '0 4px 12px rgba(0, 229, 255, 0.4)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -35,11 +35,11 @@ const CartButton: React.FC = () => {
       }}
       onMouseEnter={e => {
         e.currentTarget.style.transform = 'scale(1.1)';
-        e.currentTarget.style.boxShadow = '0 6px 16px rgba(85, 74, 255, 0.5)';
+        e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 229, 255, 0.5)';
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = 'scale(1)';
-        e.currentTarget.style.boxShadow = '0 4px 12px rgba(85, 74, 255, 0.4)';
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 229, 255, 0.4)';
       }}
     >
       <ShoppingCart size={24} />
@@ -51,7 +51,7 @@ const CartButton: React.FC = () => {
             position: 'absolute',
             top: '-4px',
             right: '-4px',
-            background: '#ff4757',
+            background: 'var(--act1)',
             color: '#fff',
             fontSize: '11px',
             fontWeight: 700,

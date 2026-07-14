@@ -80,10 +80,10 @@ const CheckoutExpiredModal: React.FC<CheckoutExpiredModalProps> = ({ isOpen, onC
                 width: '60px',
                 height: '60px',
                 borderRadius: '50%',
-                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                backgroundColor: 'rgba(255, 71, 87, 0.2)',
               }}
             >
-              <AlertTriangle size={32} color="#ef4444" />
+              <AlertTriangle size={32} color="#FF4757" />
             </div>
           </div>
 
@@ -102,12 +102,12 @@ const CheckoutExpiredModal: React.FC<CheckoutExpiredModalProps> = ({ isOpen, onC
           <div
             className="expired-timer mx-auto mb-4 d-flex align-items-center justify-content-center gap-2 py-2 px-4 radius8"
             style={{
-              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              backgroundColor: 'rgba(255, 71, 87, 0.1)',
               display: 'inline-flex',
             }}
           >
-            <Clock size={16} color="#ef4444" />
-            <span className="fw-bold" style={{ color: '#ef4444', fontSize: '18px' }}>
+            <Clock size={16} color="#FF4757" />
+            <span className="fw-bold" style={{ color: 'var(--act1)', fontSize: '18px' }}>
               0:00
             </span>
           </div>

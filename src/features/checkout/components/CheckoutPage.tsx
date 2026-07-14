@@ -250,7 +250,7 @@ const CheckoutPage: React.FC = () => {
                 style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}
               >
                 <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
-                  <ShieldCheck size={14} color="#22c55e" />
+                  <ShieldCheck size={14} color="#00E676" />
                   <span>SSL Secured</span>
                 </div>
                 <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>

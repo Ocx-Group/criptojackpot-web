@@ -131,11 +131,11 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
 
         {discount > 0 && (
           <div className="d-flex justify-content-between align-items-center mb-2">
-            <span className="d-flex align-items-center gap-1" style={{ fontSize: '13px', color: '#22c55e' }}>
+            <span className="d-flex align-items-center gap-1" style={{ fontSize: '13px', color: 'var(--p1)' }}>
               <Percent size={12} />
               {t('CHECKOUT.discount', 'Descuento')}
             </span>
-            <span style={{ color: '#22c55e' }}>-${discount.toFixed(2)}</span>
+            <span style={{ color: 'var(--p1)' }}>-${discount.toFixed(2)}</span>
           </div>
         )}
 

@@ -175,13 +175,13 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       {/* Información de seguridad */}
       <div
         className="security-info mt-4 p-3 radius8 d-flex align-items-center gap-2"
-        style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)' }}
+        style={{ backgroundColor: 'rgba(0, 230, 118, 0.1)' }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E676" strokeWidth="2">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           <path d="M9 12l2 2 4-4" />
         </svg>
-        <span style={{ fontSize: '12px', color: '#22c55e' }}>
+        <span style={{ fontSize: '12px', color: 'var(--p1)' }}>
           {t('CHECKOUT.securePayment', 'Todos los pagos son procesados de forma segura con encriptación SSL')}
         </span>
       </div>

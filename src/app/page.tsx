@@ -42,7 +42,7 @@ const howItWorksJsonLd = {
       '@type': 'HowToStep',
       position: 2,
       name: 'Refiere y Gana',
-      text: 'Comparte tu enlace de referido. Cada vez que un amigo compre un ticket, ganas el 1% de comisión sobre su compra — de forma automática.',
+      text: 'Comparte tu enlace de referido. Cada vez que un amigo compre un ticket, ganas una comisión sobre su compra — de forma automática.',
     },
     {
       '@type': 'HowToStep',

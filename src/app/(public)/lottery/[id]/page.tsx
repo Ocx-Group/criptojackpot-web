@@ -860,7 +860,7 @@ const LotteryDetailsPage = () => {
                                 width: '8px',
                                 height: '8px',
                                 borderRadius: '50%',
-                                backgroundColor: isConnected ? '#00E676' : '#ffa502',
+                                backgroundColor: isConnected ? 'var(--p1)' : 'var(--act3)',
                                 display: 'inline-block',
                                 animation: isConnected ? 'none' : 'pulse 1.5s infinite',
                               }}
@@ -929,12 +929,12 @@ const LotteryDetailsPage = () => {
                                     height: '64px',
                                     maxWidth: '200px',
                                     borderRadius: '12px',
-                                    backgroundColor: '#1a1a2e',
-                                    color: isValid ? (isSoldOut ? '#ff4757' : '#ffa502') : '#fff',
+                                    backgroundColor: 'var(--bg2)',
+                                    color: isValid ? (isSoldOut ? 'var(--act1)' : 'var(--p1)') : '#fff',
                                     border: isSoldOut
-                                      ? '2px solid #ff4757'
+                                      ? '2px solid var(--act1)'
                                       : isValid && isAvailable
-                                        ? '2px solid #00E676'
+                                        ? '2px solid var(--p1)'
                                         : '1px solid #444',
                                   }}
                                 />
@@ -946,10 +946,10 @@ const LotteryDetailsPage = () => {
                                     borderRadius: '12px',
                                     background: isValid
                                       ? isSoldOut
-                                        ? 'linear-gradient(135deg, #ff4757, #c44569)'
-                                        : 'linear-gradient(135deg, #ff6348, #ffa502)'
-                                      : '#2a2a3e',
-                                    color: '#fff',
+                                        ? 'linear-gradient(135deg, var(--act1), #c44569)'
+                                        : 'linear-gradient(135deg, var(--p1), #00b45a)'
+                                      : 'var(--bg2)',
+                                    color: isValid && !isSoldOut ? 'var(--n4)' : '#fff',
                                     fontSize: '24px',
                                     letterSpacing: '6px',
                                     minWidth: '120px',
@@ -961,15 +961,15 @@ const LotteryDetailsPage = () => {
                                 <p className="mb-0" style={{ fontSize: '12px' }}>
                                   {isValid ? (
                                     isSoldOut ? (
-                                      <span style={{ color: '#ff4757' }}>
+                                      <span style={{ color: 'var(--act1)' }}>
                                         ✗ {t('LOTTERY_DETAILS.pick3Unavailable', 'Número no disponible, intenta otro')}
                                       </span>
                                     ) : isAvailable ? (
-                                      <span style={{ color: '#00E676' }}>
+                                      <span style={{ color: 'var(--p1)' }}>
                                         ✓ {t('LOTTERY_DETAILS.pick3Available', '¡Número disponible!')}
                                       </span>
                                     ) : (
-                                      <span style={{ color: '#00E676' }}>
+                                      <span style={{ color: 'var(--p1)' }}>
                                         ✓ {t('LOTTERY_DETAILS.pick3Ready', '¡Número seleccionado!')}
                                       </span>
                                     )
@@ -1053,7 +1053,7 @@ const LotteryDetailsPage = () => {
                                         position: 'absolute',
                                         top: '-4px',
                                         right: '-4px',
-                                        background: '#ff4757',
+                                        background: 'var(--act1)',
                                         color: '#fff',
                                         fontSize: '8px',
                                         fontWeight: 700,
