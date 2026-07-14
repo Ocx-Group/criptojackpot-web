@@ -109,8 +109,8 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
                 isSelected ? 'payment-option--selected' : ''
               } ${isDisabled ? 'payment-option--disabled' : ''}`}
               style={{
-                backgroundColor: isSelected ? 'rgba(var(--act4-rgb), 0.1)' : 'var(--n0)',
-                border: isSelected ? '2px solid var(--act4)' : '2px solid rgba(0,0,0,0.08)',
+                backgroundColor: isSelected ? 'rgba(0, 229, 255, 0.12)' : 'var(--bg1)',
+                border: isSelected ? '2px solid var(--act4)' : '2px solid rgba(255,255,255,0.1)',
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
                 opacity: isDisabled ? 0.5 : 1,
                 transition: 'all 0.2s ease',

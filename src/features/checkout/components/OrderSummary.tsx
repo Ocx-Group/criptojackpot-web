@@ -32,7 +32,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
   const finalTotal = totalAmount - discount + processingFee;
 
   return (
-    <div className="order-summary n0-bg p-4 radius16" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+    <div className="order-summary bg2-color p-4 radius16" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
       <h5 className="mb-4 n4-clr fw-bold d-flex align-items-center gap-2">
         <ShoppingBag size={20} className="act4-clr" />
         {t('CHECKOUT.orderSummary', 'Resumen del Pedido')}
@@ -48,7 +48,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
             <div
               key={item.id}
               className="order-item d-flex justify-content-between align-items-start py-3"
-              style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
             >
               <div className="flex-grow-1">
                 <h6 className="mb-1 n4-clr fw-semibold" style={{ fontSize: '13px' }}>
@@ -62,7 +62,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
                 </div>
                 <div className="mt-1 d-flex flex-wrap gap-1">
                   {item.numbers.map(({ number, quantity }) => (
-                    <span key={number} className="badge n1-bg n4-clr" style={{ fontSize: '9px', padding: '3px 6px' }}>
+                    <span key={number} className="badge bg1-color nw1-clr" style={{ fontSize: '9px', padding: '3px 6px' }}>
                       #{formatLotteryNumber(number, item.lotteryType, item.lotteryMaxNumber)}
                       {quantity > 1 && ` ×${quantity}`}
                     </span>
@@ -78,7 +78,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
       </div>
 
       {/* Estadísticas */}
-      <div className="order-stats p-3 radius8 mb-4" style={{ backgroundColor: 'rgba(var(--act4-rgb), 0.05)' }}>
+      <div className="order-stats p-3 radius8 mb-4" style={{ backgroundColor: 'rgba(0, 229, 255, 0.08)' }}>
         <div className="row g-3">
           <div className="col-6">
             <div className="d-flex align-items-center gap-2">
@@ -152,7 +152,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
         {/* Total final */}
         <div
           className="d-flex justify-content-between align-items-center pt-3 mt-3"
-          style={{ borderTop: '2px solid rgba(0,0,0,0.1)' }}
+          style={{ borderTop: '2px solid rgba(255,255,255,0.1)' }}
         >
           <span className="n4-clr fw-bold" style={{ fontSize: '16px' }}>
             {t('CHECKOUT.total', 'Total a Pagar')}

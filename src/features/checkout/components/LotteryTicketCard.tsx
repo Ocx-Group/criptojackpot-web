@@ -26,10 +26,10 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
     <div className="lottery-ticket-card mb-4">
       {/* Ticket Container con efecto de bordes dentados */}
       <div
-        className="ticket-container n0-bg position-relative overflow-hidden"
+        className="ticket-container bg2-color position-relative overflow-hidden"
         style={{
           borderRadius: '16px',
-          border: '2px dashed rgba(var(--act4-rgb), 0.3)',
+          border: '2px dashed rgba(0, 229, 255, 0.3)',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
         }}
       >
@@ -49,11 +49,11 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
                 width={60}
                 height={60}
                 className="rounded-circle"
-                style={{ objectFit: 'cover', border: '3px solid white' }}
+                style={{ objectFit: 'cover', border: '3px solid var(--s1)' }}
               />
             ) : (
               <div
-                className="d-flex align-items-center justify-content-center n0-bg rounded-circle"
+                className="d-flex align-items-center justify-content-center bg1-color rounded-circle"
                 style={{ width: '60px', height: '60px' }}
               >
                 <Trophy size={28} className="act4-clr" />
@@ -102,7 +102,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
                     padding: '12px 20px',
                     minWidth: '70px',
                     textAlign: 'center',
-                    boxShadow: '0 4px 12px rgba(var(--act4-rgb), 0.3)',
+                    boxShadow: '0 4px 12px rgba(0, 229, 255, 0.3)',
                   }}
                 >
                   <span className="n0-clr fw-bold" style={{ fontSize: '24px' }}>
@@ -134,7 +134,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
             style={{
               height: '2px',
               background:
-                'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(0,0,0,0.1) 8px, rgba(0,0,0,0.1) 16px)',
+                'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(255,255,255,0.12) 8px, rgba(255,255,255,0.12) 16px)',
             }}
           >
             {/* Círculos decorativos a los lados */}
@@ -180,7 +180,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
             </div>
             <div
               className="d-flex justify-content-between align-items-center pt-3 mt-2"
-              style={{ borderTop: '2px solid rgba(0,0,0,0.05)' }}
+              style={{ borderTop: '2px solid rgba(255,255,255,0.08)' }}
             >
               <span className="fw-bold n4-clr" style={{ fontSize: '15px' }}>
                 {t('CHECKOUT.subtotal', 'Subtotal')}
@@ -197,11 +197,11 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
           <div
             className="barcode-placeholder py-2 px-3 radius8 text-center"
             style={{
-              background: 'rgba(0,0,0,0.03)',
+              background: 'rgba(255,255,255,0.04)',
               fontFamily: 'monospace',
               fontSize: '10px',
               letterSpacing: '2px',
-              color: '#999',
+              color: 'rgba(255,255,255,0.55)',
             }}
           >
             {item.id.toUpperCase()}

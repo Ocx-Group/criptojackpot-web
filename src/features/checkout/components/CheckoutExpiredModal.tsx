@@ -42,7 +42,7 @@ const CheckoutExpiredModal: React.FC<CheckoutExpiredModalProps> = ({ isOpen, onC
       >
         {/* Modal Content */}
         <div
-          className="expired-modal n0-bg radius24 p-5 text-center position-relative overflow-hidden"
+          className="expired-modal bg2-color radius24 p-5 text-center position-relative overflow-hidden"
           style={{
             maxWidth: '420px',
             width: '90%',
@@ -88,7 +88,7 @@ const CheckoutExpiredModal: React.FC<CheckoutExpiredModalProps> = ({ isOpen, onC
           </div>
 
           {/* Título */}
-          <h3 className="mb-2 n4-clr fw-bold">{t('CHECKOUT.expiredTitle', '¡Tiempo Expirado!')}</h3>
+          <h3 className="mb-2 nw1-clr fw-bold">{t('CHECKOUT.expiredTitle', '¡Tiempo Expirado!')}</h3>
 
           {/* Mensaje */}
           <p className="text-muted mb-4" style={{ fontSize: '14px' }}>

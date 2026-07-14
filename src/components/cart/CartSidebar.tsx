@@ -71,11 +71,11 @@ const CartItemCard: React.FC<{
   const itemTotal = totalQuantity * item.ticketPrice;
 
   return (
-    <div className="cart-item p-3 mb-2 n0-bg radius8 border">
+    <div className="cart-item p-3 mb-2 bg1-color radius8 border">
       {/* Header del item */}
       <div className="d-flex justify-content-between align-items-start mb-2">
         <div className="flex-grow-1">
-          <h6 className="mb-1 fw-semibold n4-clr" style={{ fontSize: '13px' }}>
+          <h6 className="mb-1 fw-semibold nw1-clr" style={{ fontSize: '13px' }}>
             {getTranslatedTitle(item.lotteryName, item.lotteryTranslations, i18n.language)}
           </h6>
           <CartItemTimer item={item} onExpired={onExpired} />
@@ -240,10 +240,10 @@ const CartSidebar: React.FC = () => {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="cart-footer p-4 border-top n0-bg">
+          <div className="cart-footer p-4 border-top bg1-color">
             {/* Total */}
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <span className="fw-semibold n4-clr">{t('CART.total', 'Total')}</span>
+              <span className="fw-semibold nw1-clr">{t('CART.total', 'Total')}</span>
               <span className="fs-4 fw-bold act4-clr">${totalPrice.toFixed(2)}</span>
             </div>
 

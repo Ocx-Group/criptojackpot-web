@@ -195,7 +195,10 @@ const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Metodo de pago */}
-            <div className="checkout-payment n0-bg p-4 radius16" style={{ border: '1px solid rgba(0,0,0,0.08)' }}>
+            <div
+              className="checkout-payment bg2-color p-4 radius16"
+              style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+            >
               <PaymentMethodSelector
                 selectedMethod={selectedPaymentMethod}
                 onSelect={handlePaymentMethodSelect}
@@ -247,7 +250,7 @@ const CheckoutPage: React.FC = () => {
               {/* Logos de seguridad */}
               <div
                 className="security-badges d-flex align-items-center justify-content-center gap-3 mt-3 pt-3"
-                style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}
+                style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
               >
                 <div className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '10px' }}>
                   <ShieldCheck size={14} color="#00E676" />

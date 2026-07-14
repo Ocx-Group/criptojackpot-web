@@ -1,5 +1,83 @@
 /* ─── Checkout confirm button ──────────────────────────────── */
 
+/* Dark palette for the cart drawer and checkout surfaces. */
+.cart-sidebar {
+  color: var(--nw1);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+
+  .cart-item,
+  .cart-footer {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .text-muted {
+    color: rgba(255, 255, 255, 0.58) !important;
+  }
+
+  .alert-info {
+    color: var(--nw2);
+    background: rgba(0, 229, 255, 0.09);
+    border-color: rgba(0, 229, 255, 0.22);
+  }
+
+  .btn-outline-secondary {
+    color: var(--nw2);
+    border-color: rgba(255, 255, 255, 0.24);
+
+    &:hover {
+      color: var(--nw1);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.38);
+    }
+  }
+}
+
+.checkout-page {
+  color: var(--nw1);
+
+  .n4-clr {
+    color: var(--nw1) !important;
+  }
+
+  .p1-bg.n4-clr {
+    color: var(--n4) !important;
+  }
+
+  .text-muted {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  .checkout-payment,
+  .order-summary,
+  .ticket-container {
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22) !important;
+  }
+
+  .order-item:hover {
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .btn-outline-secondary {
+    color: var(--nw2);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+}
+
+.expired-modal {
+  color: var(--nw1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .text-muted {
+    color: rgba(255, 255, 255, 0.62) !important;
+  }
+
+  .btn-outline-secondary {
+    color: var(--nw2);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+}
+
 .checkout-confirm-btn {
   background-color: var(--p1) !important; // Verde neón — CTA de compra
   color: var(--n4) !important;
@@ -75,7 +153,7 @@
 
 .payment-option:hover:not(.payment-option--disabled) {
   transform: translateX(4px);
-  border-color: rgba(var(--act4-rgb), 0.3) !important;
+  border-color: rgba(0, 229, 255, 0.3) !important;
 }
 
 .payment-option--selected {
