@@ -3998,6 +3998,12 @@
     color: var(--nw1) !important;
     border-color: rgba(255, 255, 255, 0.12) !important;
   }
+  // Labels have a fixed dark color in the global theme, so they cannot inherit
+  // the light text color used by panel cards.
+  .form-label,
+  .form-check-label {
+    color: var(--nw1);
+  }
   .form-control::placeholder,
   .ch-form-items input::placeholder,
   .ch-form-items textarea::placeholder {
