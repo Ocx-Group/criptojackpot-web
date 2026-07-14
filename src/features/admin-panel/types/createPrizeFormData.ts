@@ -13,4 +13,9 @@ export interface CreatePrizeFormData {
   cashAlternative: number;
   isDeliverable: boolean;
   isDigital: boolean;
+  // Traducciones obligatorias (el español es el idioma base en name/description)
+  nameEn: string;
+  descriptionEn: string;
+  namePt: string;
+  descriptionPt: string;
 }

@@ -2,6 +2,8 @@
  * Interfaces para el carrito de compras de loterías
  */
 
+import { LotteryTranslation } from './lottery';
+
 export interface CartItemNumber {
   number: number;
   quantity: number; // Cantidad de series para este número
@@ -11,6 +13,7 @@ export interface CartItem {
   id: string; // UUID único del item en el carrito
   lotteryId: string;
   lotteryName: string;
+  lotteryTranslations?: Record<string, LotteryTranslation> | null; // Título traducido por idioma (snapshot)
   lotteryImage?: string;
   lotteryType?: number;
   lotteryMaxNumber?: number; // Para formatear los números con los dígitos correctos (ej. 9999 → 4 dígitos)

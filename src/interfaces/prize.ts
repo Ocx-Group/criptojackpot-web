@@ -18,6 +18,15 @@ export interface PrizeImageRequest {
   displayOrder: number;
 }
 
+/**
+ * Textos localizados de un premio, por código de idioma ("en", "pt").
+ * Los campos base (name/description) son el idioma por defecto (español).
+ */
+export interface PrizeTranslation {
+  name?: string;
+  description?: string;
+}
+
 export interface Prize {
   id: string;
   prizeGuid: string;
@@ -33,6 +42,7 @@ export interface Prize {
   cashAlternative?: number;
   isDeliverable: boolean;
   isDigital: boolean;
+  translations?: Record<string, PrizeTranslation> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -50,6 +60,7 @@ export interface CreatePrizeRequest {
   cashAlternative?: number;
   isDeliverable: boolean;
   isDigital: boolean;
+  translations?: Record<string, PrizeTranslation> | null;
 }
 
 export interface UpdatePrizeRequest {
@@ -62,4 +73,5 @@ export interface UpdatePrizeRequest {
   cashAlternative?: number;
   isDeliverable: boolean;
   isDigital: boolean;
+  translations?: Record<string, PrizeTranslation> | null;
 }

@@ -15,6 +15,7 @@ import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { lotteryService, prizeService, orderService } from '@/services';
 import { EditLotteryFormData } from '../types/editLotteryFormData';
 import { createEditLotterySchema } from '../schemas';
+import { buildLotteryTranslations, extractLotteryTranslationFields } from '../utils/lotteryTranslationFields';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useEditLotteryForm = (lotteryId: string) => {
@@ -48,6 +49,12 @@ export const useEditLotteryForm = (lotteryId: string) => {
       cryptoCurrencyId: '',
       cryptoCurrencySymbol: '',
       referralCommissionPercentage: 1,
+      titleEn: '',
+      descriptionEn: '',
+      termsEn: '',
+      titlePt: '',
+      descriptionPt: '',
+      termsPt: '',
     },
   });
 
@@ -107,6 +114,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
         cryptoCurrencyId: lottery.cryptoCurrencyId || '',
         cryptoCurrencySymbol: lottery.cryptoCurrencySymbol || '',
         referralCommissionPercentage: lottery.referralCommissionPercentage ?? 1,
+        ...extractLotteryTranslationFields(lottery.translations),
       });
     }
   }, [lottery, reset]);
@@ -181,6 +189,7 @@ export const useEditLotteryForm = (lotteryId: string) => {
           cryptoCurrencyId: data.cryptoCurrencyId,
           cryptoCurrencySymbol: data.cryptoCurrencySymbol,
           referralCommissionPercentage: data.referralCommissionPercentage,
+          translations: buildLotteryTranslations(data),
           prizeId: data.prizeId,
         };
 

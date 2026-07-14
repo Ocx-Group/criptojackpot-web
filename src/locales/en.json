@@ -483,7 +483,9 @@
       },
       {
         "heading": "How We Share Information",
-        "paragraphs": ["We do not sell your personal data. We may share information only with:"],
+        "paragraphs": [
+          "We do not sell your personal data. We may share information only with:"
+        ],
         "bullets": [
           "Service providers acting on our behalf (payments, infrastructure, verification, analytics), subject to confidentiality obligations.",
           "Competent authorities when required by law or to protect our rights.",
@@ -618,7 +620,12 @@
       "minNumber": "Minimum Number",
       "maxNumber": "Maximum Number",
       "cryptoCurrency": "Payment Cryptocurrency",
-      "referralCommission": "Referral Commission (%)"
+      "referralCommission": "Referral Commission (%)",
+      "translations": "Translations"
+    },
+    "translations": {
+      "english": "English",
+      "portuguese": "Portuguese"
     },
     "placeholders": {
       "name": "E.g: Digital Dreamscapes",
@@ -636,7 +643,8 @@
       "totalTicketsFixed": "Automatically set by the promotion type",
       "minNumber": "The lowest number available in the promotion",
       "maxNumber": "The highest number available in the promotion",
-      "referralCommission": "Percentage paid to the referrer on each purchase. 0 disables the commission."
+      "referralCommission": "Percentage paid to the referrer on each purchase. 0 disables the commission.",
+      "translations": "The content must be provided in Spanish, English and Portuguese so every user sees it in their language."
     },
     "status": {
       "draft": "Draft",
@@ -685,7 +693,8 @@
       "imageTooLarge": "Image is too large. Maximum 5MB",
       "pick3Config": "Pick3 must have minNumber=0, maxNumber=999, totalTickets=1000",
       "standardConfig": "Standard promotion must have minNumber=0, maxNumber=9999, totalTickets=10000",
-      "referralCommissionInvalid": "Commission must be between 0 and 100"
+      "referralCommissionInvalid": "Commission must be between 0 and 100",
+      "translationRequired": "Fill in the English and Portuguese translations"
     },
     "types": {
       "standard": "Standard",
@@ -714,7 +723,8 @@
       "brand": "Brand",
       "model": "Model",
       "image": "Prize Image",
-      "preview": "Preview"
+      "preview": "Preview",
+      "translations": "Translations"
     },
     "placeholders": {
       "name": "E.g: iPhone 15 Pro Max",
@@ -726,7 +736,8 @@
       "value": "Commercial value of the prize",
       "brand": "Optional: Product brand",
       "model": "Optional: Specific model",
-      "image": "Recommended size: 800x800 pixels. Formats: JPG, PNG, WEBP"
+      "image": "Recommended size: 800x800 pixels. Formats: JPG, PNG, WEBP",
+      "translations": "The content must be provided in Spanish, English and Portuguese so every user sees it in their language."
     },
     "categories": {
       "electronics": "Electronics",
@@ -758,7 +769,8 @@
       "valueInvalid": "Value must be greater than 0",
       "imageRequired": "Image is required",
       "invalidImageType": "Invalid image format. Use JPG, PNG or WEBP",
-      "imageTooLarge": "Image is too large. Maximum 5MB"
+      "imageTooLarge": "Image is too large. Maximum 5MB",
+      "translationRequired": "Fill in the English and Portuguese translations"
     }
   },
   "CART": {

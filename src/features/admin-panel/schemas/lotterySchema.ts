@@ -89,6 +89,17 @@ export const createEditLotterySchema = (t: TFunction) =>
       .number()
       .min(0, t('LOTTERIES_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100'))
       .max(100, t('LOTTERIES_ADMIN.errors.referralCommissionInvalid', 'La comisión debe estar entre 0 y 100')),
+    // Traducciones obligatorias (es/en/pt) para que el usuario siempre vea su idioma
+    titleEn: z.string().min(1, t('LOTTERIES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    descriptionEn: z
+      .string()
+      .min(1, t('LOTTERIES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    termsEn: z.string().min(1, t('LOTTERIES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    titlePt: z.string().min(1, t('LOTTERIES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    descriptionPt: z
+      .string()
+      .min(1, t('LOTTERIES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    termsPt: z.string().min(1, t('LOTTERIES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
   });
 
 export type EditLotterySchemaType = z.infer<ReturnType<typeof createEditLotterySchema>>;

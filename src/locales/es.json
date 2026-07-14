@@ -483,7 +483,9 @@
       },
       {
         "heading": "Cómo Compartimos la Información",
-        "paragraphs": ["No vendemos tus datos personales. Podemos compartir información únicamente con:"],
+        "paragraphs": [
+          "No vendemos tus datos personales. Podemos compartir información únicamente con:"
+        ],
         "bullets": [
           "Proveedores de servicios que actúan por cuenta nuestra (pagos, infraestructura, verificación, analítica), sujetos a obligaciones de confidencialidad.",
           "Autoridades competentes cuando la ley lo exija o para proteger nuestros derechos.",
@@ -510,7 +512,9 @@
       },
       {
         "heading": "Tus Derechos",
-        "paragraphs": ["Conforme a la normativa aplicable, puedes ejercer los siguientes derechos sobre tus datos:"],
+        "paragraphs": [
+          "Conforme a la normativa aplicable, puedes ejercer los siguientes derechos sobre tus datos:"
+        ],
         "bullets": [
           "Acceso, rectificación y supresión de tus datos.",
           "Limitación u oposición al tratamiento.",
@@ -616,7 +620,12 @@
       "minNumber": "Número Mínimo",
       "maxNumber": "Número Máximo",
       "cryptoCurrency": "Criptomoneda de Pago",
-      "referralCommission": "Comisión de Referido (%)"
+      "referralCommission": "Comisión de Referido (%)",
+      "translations": "Traducciones"
+    },
+    "translations": {
+      "english": "Inglés",
+      "portuguese": "Portugués"
     },
     "placeholders": {
       "name": "Ej: Digital Dreamscapes",
@@ -634,7 +643,8 @@
       "totalTicketsFixed": "Definido automáticamente por el tipo de promoción",
       "minNumber": "El número más bajo disponible en la promoción",
       "maxNumber": "El número más alto disponible en la promoción",
-      "referralCommission": "Porcentaje pagado al referidor por cada compra. 0 desactiva la comisión."
+      "referralCommission": "Porcentaje pagado al referidor por cada compra. 0 desactiva la comisión.",
+      "translations": "El contenido debe estar en español, inglés y portugués para que cada usuario lo vea en su idioma."
     },
     "status": {
       "draft": "Borrador",
@@ -683,7 +693,8 @@
       "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB",
       "pick3Config": "Pick3 debe tener núm. mínimo=0, núm. máximo=999, totalTickets=1000",
       "standardConfig": "La promoción estándar debe tener núm. mínimo=0, núm. máximo=9999, totalTickets=10000",
-      "referralCommissionInvalid": "La comisión debe estar entre 0 y 100"
+      "referralCommissionInvalid": "La comisión debe estar entre 0 y 100",
+      "translationRequired": "Completa las traducciones en inglés y portugués"
     },
     "types": {
       "standard": "Estándar",
@@ -712,7 +723,8 @@
       "brand": "Marca",
       "model": "Modelo",
       "image": "Imagen del Premio",
-      "preview": "Vista Previa"
+      "preview": "Vista Previa",
+      "translations": "Traducciones"
     },
     "placeholders": {
       "name": "Ej: iPhone 15 Pro Max",
@@ -724,7 +736,8 @@
       "value": "Valor comercial del premio",
       "brand": "Opcional: Marca del producto",
       "model": "Opcional: Modelo específico",
-      "image": "Tamaño recomendado: 800x800 píxeles. Formatos: JPG, PNG, WEBP"
+      "image": "Tamaño recomendado: 800x800 píxeles. Formatos: JPG, PNG, WEBP",
+      "translations": "El contenido debe estar en español, inglés y portugués para que cada usuario lo vea en su idioma."
     },
     "categories": {
       "electronics": "Electrónicos",
@@ -756,7 +769,8 @@
       "valueInvalid": "El valor debe ser mayor a 0",
       "imageRequired": "La imagen es requerida",
       "invalidImageType": "Formato de imagen no válido. Use JPG, PNG o WEBP",
-      "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB"
+      "imageTooLarge": "La imagen es demasiado grande. Máximo 5MB",
+      "translationRequired": "Completa las traducciones en inglés y portugués"
     }
   },
   "CART": {

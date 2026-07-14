@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { useMyTickets } from '@/features/user-panel/hooks/useMyTickets';
 import { TicketStatus } from '@/interfaces/ticket';
 import { formatSeries } from '@/utils/formatSeries';
+import { getLotteryText } from '@/utils/localizedContent';
 
 const PAGE_SIZE = 6;
 
 const UserPanelSection = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { tickets, lotteryMap, isLoading, error } = useMyTickets();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -62,7 +63,7 @@ const UserPanelSection = () => {
                         </div>
                         {lotteryMap.get(ticket.lotteryId) && (
                           <span className="fs14 fw_500 s1-clr d-block">
-                            {lotteryMap.get(ticket.lotteryId)!.title}
+                            {getLotteryText(lotteryMap.get(ticket.lotteryId)!, 'title', i18n.language)}
                           </span>
                         )}
                       </div>

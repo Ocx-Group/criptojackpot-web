@@ -16,4 +16,11 @@ export interface EditLotteryFormData {
   cryptoCurrencyId: string;
   cryptoCurrencySymbol: string;
   referralCommissionPercentage: number;
+  // Traducciones obligatorias (el español es el idioma base en name/description/terms)
+  titleEn: string;
+  descriptionEn: string;
+  termsEn: string;
+  titlePt: string;
+  descriptionPt: string;
+  termsPt: string;
 }

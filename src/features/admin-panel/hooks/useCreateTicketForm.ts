@@ -15,6 +15,7 @@ import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { lotteryService, prizeService, orderService } from '@/services';
 import { CreateTicketFormData, UseCreateTicketFormReturn } from '../types/createTicketForm';
 import { createTicketSchema } from '../schemas';
+import { buildLotteryTranslations } from '../utils/lotteryTranslationFields';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 /** Pick3 preset values */
@@ -75,6 +76,12 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
       cryptoCurrencyId: '',
       cryptoCurrencySymbol: '',
       referralCommissionPercentage: 1,
+      titleEn: '',
+      descriptionEn: '',
+      termsEn: '',
+      titlePt: '',
+      descriptionPt: '',
+      termsPt: '',
     },
   });
 
@@ -164,6 +171,7 @@ export const useCreateTicketForm = (): UseCreateTicketFormReturn => {
           cryptoCurrencySymbol: data.cryptoCurrencySymbol,
           referralCommissionPercentage: data.referralCommissionPercentage,
           restrictedCountries: data.restrictedCountries,
+          translations: buildLotteryTranslations(data),
           prizeId: data.prizeId,
         };
 

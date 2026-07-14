@@ -7,6 +7,7 @@ import { X, Trash2, Clock, ShoppingCart, CreditCard } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { useCheckoutStore } from '@/store/checkoutStore';
 import { CartItem } from '@/interfaces/cart';
+import { getTranslatedTitle } from '@/utils/localizedContent';
 import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
 
 /**
@@ -65,7 +66,7 @@ const CartItemCard: React.FC<{
   onRemove: (itemId: string) => void;
   onExpired: (itemId: string) => void;
 }> = ({ item, onRemove, onExpired }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const totalQuantity = item.numbers.reduce((sum, n) => sum + n.quantity, 0);
   const itemTotal = totalQuantity * item.ticketPrice;
 
@@ -75,7 +76,7 @@ const CartItemCard: React.FC<{
       <div className="d-flex justify-content-between align-items-start mb-2">
         <div className="flex-grow-1">
           <h6 className="mb-1 fw-semibold n4-clr" style={{ fontSize: '13px' }}>
-            {item.lotteryName}
+            {getTranslatedTitle(item.lotteryName, item.lotteryTranslations, i18n.language)}
           </h6>
           <CartItemTimer item={item} onExpired={onExpired} />
         </div>

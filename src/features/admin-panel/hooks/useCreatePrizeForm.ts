@@ -13,6 +13,7 @@ import { CreatePrizeRequest, PrizeType, PrizeImageRequest } from '@/interfaces/p
 import { prizeService, digitalOceanStorageService } from '@/services';
 import { CreatePrizeFormData } from '../types/createPrizeFormData';
 import { createCreatePrizeSchema } from '../schemas';
+import { buildPrizeTranslations } from '../utils/lotteryTranslationFields';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useCreatePrizeForm = () => {
@@ -43,6 +44,10 @@ export const useCreatePrizeForm = () => {
       cashAlternative: 0,
       isDeliverable: true,
       isDigital: false,
+      nameEn: '',
+      descriptionEn: '',
+      namePt: '',
+      descriptionPt: '',
     },
   });
 
@@ -161,6 +166,7 @@ export const useCreatePrizeForm = () => {
           cashAlternative: data.cashAlternative || undefined,
           isDeliverable: data.isDeliverable,
           isDigital: data.isDigital,
+          translations: buildPrizeTranslations(data),
         };
 
         createPrizeMutation.mutate(submitData);

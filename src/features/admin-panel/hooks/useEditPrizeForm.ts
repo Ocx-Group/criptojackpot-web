@@ -14,6 +14,7 @@ import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { prizeService, digitalOceanStorageService } from '@/services';
 import { EditPrizeFormData } from '../types/editPrizeFormData';
 import { createEditPrizeSchema } from '../schemas';
+import { buildPrizeTranslations, extractPrizeTranslationFields } from '../utils/lotteryTranslationFields';
 import { getFirstFieldError } from '@/utils/getFirstFieldError';
 
 export const useEditPrizeForm = (prizeId: string) => {
@@ -45,6 +46,10 @@ export const useEditPrizeForm = (prizeId: string) => {
       isDeliverable: true,
       isDigital: false,
       tier: 1,
+      nameEn: '',
+      descriptionEn: '',
+      namePt: '',
+      descriptionPt: '',
     },
   });
 
@@ -82,6 +87,7 @@ export const useEditPrizeForm = (prizeId: string) => {
         isDeliverable: prize.isDeliverable ?? true,
         isDigital: prize.isDigital ?? false,
         tier: prize.tier ?? 1,
+        ...extractPrizeTranslationFields(prize.translations),
       });
     }
   }, [isSuccess, prize, reset]);
@@ -201,6 +207,7 @@ export const useEditPrizeForm = (prizeId: string) => {
           cashAlternative: data.cashAlternative || undefined,
           isDeliverable: data.isDeliverable,
           isDigital: data.isDigital,
+          translations: buildPrizeTranslations(data),
         };
 
         updatePrizeMutation.mutate(submitData);

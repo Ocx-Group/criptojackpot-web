@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ShoppingBag, Ticket, Percent } from 'lucide-react';
 import { CheckoutItem } from '@/store/checkoutStore';
 import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
+import { getTranslatedTitle } from '@/utils/localizedContent';
 
 interface OrderSummaryProps {
   items: CheckoutItem[];
@@ -15,7 +16,7 @@ interface OrderSummaryProps {
  * Resumen de la orden para el checkout
  */
 const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const totalTickets = items.reduce((total, item) => {
     return total + item.numbers.reduce((sum, n) => sum + n.quantity, 0);
@@ -51,7 +52,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ items, totalAmount }) => {
             >
               <div className="flex-grow-1">
                 <h6 className="mb-1 n4-clr fw-semibold" style={{ fontSize: '13px' }}>
-                  {item.lotteryName}
+                  {getTranslatedTitle(item.lotteryName, item.lotteryTranslations, i18n.language)}
                 </h6>
                 <div className="d-flex align-items-center gap-2 text-muted" style={{ fontSize: '11px' }}>
                   <Ticket size={12} />

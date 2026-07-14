@@ -320,6 +320,66 @@ const EditLottery: React.FC<EditLotteryProps> = ({ lotteryId }) => {
                 />
               </div>
 
+              {/* Traducciones obligatorias (es/en/pt) */}
+              <div className="col-md-12">
+                <label className="form-label fw-semibold">
+                  {t('LOTTERIES_ADMIN.fields.translations', 'Traducciones')} <span className="text-danger">*</span>
+                </label>
+                <div className="form-text mb-3">
+                  {t(
+                    'LOTTERIES_ADMIN.help.translations',
+                    'El contenido debe estar en español, inglés y portugués para que cada usuario lo vea en su idioma.'
+                  )}
+                </div>
+                {(
+                  [
+                    { suffix: 'En', label: t('LOTTERIES_ADMIN.translations.english', 'Inglés') },
+                    { suffix: 'Pt', label: t('LOTTERIES_ADMIN.translations.portuguese', 'Portugués') },
+                  ] as const
+                ).map(({ suffix, label }) => (
+                  <div key={suffix} className="border rounded p-3 mb-3">
+                    <h6 className="fw-semibold mb-3">{label}</h6>
+                    <div className="mb-3">
+                      <label className="form-label">
+                        {t('LOTTERIES_ADMIN.fields.name', 'Nombre de la Promoción')}
+                      </label>
+                      <input
+                        type="text"
+                        name={`title${suffix}`}
+                        className="form-control"
+                        value={formData[`title${suffix}`] || ''}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">{t('LOTTERIES_ADMIN.fields.description', 'Descripción')}</label>
+                      <textarea
+                        name={`description${suffix}`}
+                        className="form-control"
+                        rows={3}
+                        value={formData[`description${suffix}`] || ''}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="form-label">
+                        {t('LOTTERIES_ADMIN.fields.terms', 'Términos y Condiciones')}
+                      </label>
+                      <textarea
+                        name={`terms${suffix}`}
+                        className="form-control"
+                        rows={4}
+                        value={formData[`terms${suffix}`] || ''}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               {/* Preview de la Lotería */}
               {selectedPrize && (
                 <div className="col-md-12">

@@ -1,5 +1,16 @@
 import { Prize } from './prize';
 
+/**
+ * Textos localizados de una promoción, por código de idioma ("en", "pt").
+ * Los campos base (title/description/terms) son el idioma por defecto (español);
+ * las traducciones faltantes caen al texto base.
+ */
+export interface LotteryTranslation {
+  title?: string;
+  description?: string;
+  terms?: string;
+}
+
 export interface Lottery {
   lotteryGuid: string;
   lotteryNo: string;
@@ -22,6 +33,7 @@ export interface Lottery {
   cryptoCurrencySymbol: string;
   referralCommissionPercentage: number;
   restrictedCountries: string[];
+  translations?: Record<string, LotteryTranslation> | null;
   prizes: Prize[];
   createdAt: string;
   updatedAt: string;
@@ -54,6 +66,7 @@ export interface CreateLotteryRequest {
   cryptoCurrencySymbol: string;
   referralCommissionPercentage: number;
   restrictedCountries: string[];
+  translations?: Record<string, LotteryTranslation> | null;
   prizeId?: string;
 }
 

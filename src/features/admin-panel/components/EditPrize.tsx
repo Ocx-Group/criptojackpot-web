@@ -175,6 +175,51 @@ const EditPrize: React.FC<EditPrizeProps> = ({ prizeId }) => {
                 />
               </div>
 
+              {/* Traducciones obligatorias (es/en/pt) */}
+              <div className="col-md-12">
+                <label className="form-label fw-semibold">
+                  {t('PRIZES_ADMIN.fields.translations', 'Traducciones')} <span className="text-danger">*</span>
+                </label>
+                <div className="form-text mb-3">
+                  {t(
+                    'PRIZES_ADMIN.help.translations',
+                    'El contenido debe estar en español, inglés y portugués para que cada usuario lo vea en su idioma.'
+                  )}
+                </div>
+                {(
+                  [
+                    { suffix: 'En', label: t('LOTTERIES_ADMIN.translations.english', 'Inglés') },
+                    { suffix: 'Pt', label: t('LOTTERIES_ADMIN.translations.portuguese', 'Portugués') },
+                  ] as const
+                ).map(({ suffix, label }) => (
+                  <div key={suffix} className="border rounded p-3 mb-3">
+                    <h6 className="fw-semibold mb-3">{label}</h6>
+                    <div className="mb-3">
+                      <label className="form-label">{t('PRIZES_ADMIN.fields.name', 'Nombre del Premio')}</label>
+                      <input
+                        type="text"
+                        name={`name${suffix}`}
+                        className="form-control"
+                        value={formData[`name${suffix}`] || ''}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="form-label">{t('PRIZES_ADMIN.fields.description', 'Descripción')}</label>
+                      <textarea
+                        name={`description${suffix}`}
+                        className="form-control"
+                        rows={3}
+                        value={formData[`description${suffix}`] || ''}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
               {/* Valor Estimado y Alternativa en Efectivo */}
               <div className="col-md-6">
                 <label className="form-label fw-semibold">

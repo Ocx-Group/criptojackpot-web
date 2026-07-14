@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Lottery, LotteryType } from '@/interfaces/lottery';
 import { useWishlist } from '@/features/user-panel/hooks/useWishlist';
 import { useNotificationStore } from '@/store/notificationStore';
+import { getLotteryText } from '@/utils/localizedContent';
 
 interface LotteryCardProps {
   lottery: Lottery;
@@ -20,10 +21,11 @@ interface LotteryCardProps {
  * El contenedor de columna/animación lo aporta el componente padre.
  */
 const LotteryCard = ({ lottery }: LotteryCardProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const showNotification = useNotificationStore(state => state.show);
   const { isInWishlist, toggleWishlist, isAdding, isRemoving, isAuthenticated } = useWishlist();
 
+  const lotteryTitle = getLotteryText(lottery, 'title', i18n.language);
   const isPick3 = lottery.type === LotteryType.Pick3;
   const soldPercent =
     lottery.maxTickets === 0 ? 0 : Number.parseFloat(((lottery.soldTickets / lottery.maxTickets) * 100).toFixed(1));
@@ -97,7 +99,7 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
         {lottery.prizes?.[0]?.mainImageUrl ? (
           <Image
             src={lottery.prizes[0].mainImageUrl}
-            alt={lottery.title}
+            alt={lotteryTitle}
             width={400}
             height={300}
             className="w-100"
@@ -106,7 +108,7 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
         ) : (
           <Image
             src={defaultImage}
-            alt={lottery.title}
+            alt={lotteryTitle}
             className="w-100"
             style={{ objectFit: 'cover', height: '300px' }}
           />
@@ -119,7 +121,7 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
         <div className="d-flex flex-wrap align-items-center justify-content-between pb-xxl-3 pb-sm-3 pb-2 gap-3">
           <h4>
             <Link href={`/lottery/${lottery.lotteryGuid}`} className="nw1-clr fw_700 act4-texthover">
-              {lottery.title}
+              {lotteryTitle}
             </Link>
           </h4>
           <Link href={`/lottery/${lottery.lotteryGuid}`} className="kewta-btn kewta-44 d-inline-flex align-items-center">

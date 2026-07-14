@@ -36,6 +36,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCartStore } from '@/store/cartStore';
 import { CartSidebar, CartButton } from '@/components/cart';
 import { useNotificationStore } from '@/store/notificationStore';
+import { getLotteryText, getPrizeText } from '@/utils/localizedContent';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -43,7 +44,7 @@ import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
 
 const LotteryDetailsPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const params = useParams();
   const lotteryId = params.id as string;
 
@@ -276,6 +277,7 @@ const LotteryDetailsPage = () => {
       addCartItem({
         lotteryId: lottery.lotteryGuid,
         lotteryName: lottery.title,
+        lotteryTranslations: lottery.translations,
         lotteryImage: lottery.prizes?.[0]?.mainImageUrl,
         lotteryType: lottery.type,
         lotteryMaxNumber: lottery.maxNumber,
@@ -428,14 +430,16 @@ const LotteryDetailsPage = () => {
     const prize = lottery.prizes[0];
     const images: { url: string; caption: string }[] = [];
 
+    const prizeName = getPrizeText(prize, 'name', i18n.language);
+
     if (isValidImageUrl(prize.mainImageUrl)) {
-      images.push({ url: prize.mainImageUrl, caption: prize.name });
+      images.push({ url: prize.mainImageUrl, caption: prizeName });
     }
 
     if (prize.additionalImages?.length) {
       prize.additionalImages.forEach(img => {
         if (isValidImageUrl(img.imageUrl)) {
-          images.push({ url: img.imageUrl, caption: img.caption || prize.name });
+          images.push({ url: img.imageUrl, caption: img.caption || prizeName });
         }
       });
     }
@@ -487,6 +491,10 @@ const LotteryDetailsPage = () => {
   }
 
   const mainPrize = lottery.prizes?.[0];
+  // Textos configurables resueltos al idioma seleccionado (fallback: español base)
+  const lotteryTitle = getLotteryText(lottery, 'title', i18n.language);
+  const lotteryDescription = getLotteryText(lottery, 'description', i18n.language);
+  const lotteryTerms = getLotteryText(lottery, 'terms', i18n.language);
   const images = getAllImages();
   const soldPercent = getSoldPercentage(lottery.soldTickets, lottery.maxTickets);
   const remaining = lottery.maxTickets - lottery.soldTickets;
@@ -565,7 +573,7 @@ const LotteryDetailsPage = () => {
                     <div className="cons-decar-items py-xxl-10 py-8">
                       <Image
                         src={img.url}
-                        alt={img.caption || lottery.title}
+                        alt={img.caption || lotteryTitle}
                         width={850}
                         height={500}
                         className="w-100"
@@ -584,7 +592,7 @@ const LotteryDetailsPage = () => {
                 {isValidImageUrl(mainPrize?.mainImageUrl) ? (
                   <Image
                     src={mainPrize?.mainImageUrl || PLACEHOLDER_IMAGE}
-                    alt={lottery.title}
+                    alt={lotteryTitle}
                     width={850}
                     height={500}
                     className="w-100"
@@ -597,7 +605,7 @@ const LotteryDetailsPage = () => {
                 ) : (
                   <Image
                     src={defaultImage}
-                    alt={lottery.title}
+                    alt={lotteryTitle}
                     width={850}
                     height={500}
                     className="w-100"
@@ -646,7 +654,7 @@ const LotteryDetailsPage = () => {
                     >
                       <Image
                         src={img.url}
-                        alt={img.caption || lottery.title}
+                        alt={img.caption || lotteryTitle}
                         width={200}
                         height={120}
                         className="w-100 h-100"
@@ -677,7 +685,7 @@ const LotteryDetailsPage = () => {
                   <div className="ans-title d-flex flex-wrap align-items-center justify-content-between gap-3 p-xxl-6 p-4">
                     <div>
                       <span className="badge act4-bg n0-clr fs-eight fw_600 mb-2">{getStatusText(lottery.status)}</span>
-                      <h2 className="n4-clr fw_700">{lottery.title}</h2>
+                      <h2 className="n4-clr fw_700">{lotteryTitle}</h2>
                     </div>
                     <div className="d-flex align-items-center gap-2">
                       <CalendarIcon className="fs-four act4-clr" />
@@ -700,8 +708,8 @@ const LotteryDetailsPage = () => {
                           {t('LOTTERY_DETAILS.prize', 'Premio Principal')}
                         </h4>
                         <div className="n0-bg radius16 p-4">
-                          <h3 className="act4-clr fw_700 mb-2">{mainPrize.name}</h3>
-                          <p className="n3-clr mb-3">{mainPrize.description}</p>
+                          <h3 className="act4-clr fw_700 mb-2">{getPrizeText(mainPrize, 'name', i18n.language)}</h3>
+                          <p className="n3-clr mb-3">{getPrizeText(mainPrize, 'description', i18n.language)}</p>
                           {mainPrize.estimatedValue > 0 && (
                             <div className="d-flex flex-wrap gap-4">
                               <div>
@@ -731,7 +739,7 @@ const LotteryDetailsPage = () => {
                     {/* Description */}
                     <div className="mb-6">
                       <h4 className="n4-clr fw_700 mb-3">{t('LOTTERY_DETAILS.description', 'Descripción')}</h4>
-                      <p className="n3-clr fs-six">{lottery.description}</p>
+                      <p className="n3-clr fs-six">{lotteryDescription}</p>
                     </div>
 
                     {/* Stats Grid */}
@@ -803,12 +811,12 @@ const LotteryDetailsPage = () => {
                     </div>
 
                     {/* Terms */}
-                    {lottery.terms && (
+                    {lotteryTerms && (
                       <div className="mb-4">
                         <h4 className="n4-clr fw_700 mb-3">{t('LOTTERY_DETAILS.terms', 'Términos y Condiciones')}</h4>
                         <div className="n0-bg radius12 p-4">
                           <p className="n3-clr fs-seven" style={{ whiteSpace: 'pre-line' }}>
-                            {lottery.terms}
+                            {lotteryTerms}
                           </p>
                         </div>
                       </div>

@@ -15,6 +15,15 @@ export const createCreatePrizeSchema = (t: TFunction) =>
     cashAlternative: z.number(),
     isDeliverable: z.boolean(),
     isDigital: z.boolean(),
+    // Traducciones obligatorias (es/en/pt) para que el usuario siempre vea su idioma
+    nameEn: z.string().min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    descriptionEn: z
+      .string()
+      .min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    namePt: z.string().min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    descriptionPt: z
+      .string()
+      .min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
   });
 
 export const createEditPrizeSchema = (t: TFunction) =>
@@ -31,6 +40,15 @@ export const createEditPrizeSchema = (t: TFunction) =>
     isDeliverable: z.boolean(),
     isDigital: z.boolean(),
     tier: z.number(),
+    // Traducciones obligatorias (es/en/pt) para que el usuario siempre vea su idioma
+    nameEn: z.string().min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    descriptionEn: z
+      .string()
+      .min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    namePt: z.string().min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
+    descriptionPt: z
+      .string()
+      .min(1, t('PRIZES_ADMIN.errors.translationRequired', 'Completa las traducciones en inglés y portugués')),
   });
 
 export type CreatePrizeSchemaType = z.infer<ReturnType<typeof createCreatePrizeSchema>>;

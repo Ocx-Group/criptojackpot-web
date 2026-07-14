@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Ticket, Gift, Trophy } from 'lucide-react';
 import { CheckoutItem } from '@/store/checkoutStore';
 import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
+import { getTranslatedTitle } from '@/utils/localizedContent';
 
 interface LotteryTicketCardProps {
   item: CheckoutItem;
@@ -16,9 +17,10 @@ interface LotteryTicketCardProps {
  * Diseño inspirado en un ticket real con efecto de papel
  */
 const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const totalQuantity = item.numbers.reduce((sum, n) => sum + n.quantity, 0);
   const itemTotal = totalQuantity * item.ticketPrice;
+  const lotteryTitle = getTranslatedTitle(item.lotteryName, item.lotteryTranslations, i18n.language);
 
   return (
     <div className="lottery-ticket-card mb-4">
@@ -43,7 +45,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
             {item.lotteryImage ? (
               <Image
                 src={item.lotteryImage}
-                alt={item.lotteryName}
+                alt={lotteryTitle}
                 width={60}
                 height={60}
                 className="rounded-circle"
@@ -58,7 +60,7 @@ const LotteryTicketCard: React.FC<LotteryTicketCardProps> = ({ item }) => {
               </div>
             )}
             <div>
-              <h4 className="mb-1 n0-clr fw-bold">{item.lotteryName}</h4>
+              <h4 className="mb-1 n0-clr fw-bold">{lotteryTitle}</h4>
               <div className="d-flex align-items-center gap-2 n0-clr" style={{ opacity: 0.9, fontSize: '12px' }}>
                 <Ticket size={14} />
                 <span>{t('CHECKOUT.lotteryTicket', 'Ticket de Promoción')}</span>
