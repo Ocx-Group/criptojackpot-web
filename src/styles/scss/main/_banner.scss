@@ -4003,6 +4003,67 @@
   .ch-form-items textarea::placeholder {
     color: rgba(255, 255, 255, 0.4) !important;
   }
+  // Help text under form fields: Bootstrap's default is dark gray → invisible
+  // on the dark cards. Colored variants (.text-info/.text-warning) still win.
+  .form-text {
+    color: var(--nw3);
+  }
+  // Native date/time picker icon renders dark on the now-dark inputs → invert
+  input[type='date']::-webkit-calendar-picker-indicator,
+  input[type='time']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+  // $ / % chips next to the dark inputs (Bootstrap default is light gray)
+  .input-group-text {
+    background-color: var(--bg1);
+    color: var(--nw2);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  // Former light sub-surfaces (form previews, image-upload boxes, detail
+  // panels, pagination footers) → dark elevated, so the section's light text
+  // stays readable. Badges keep bg-light: they pair it with dark text
+  // utilities (text-dark/text-success).
+  .bg-light:not(.badge) {
+    background-color: var(--bg1) !important;
+  }
+  // "Mis Tickets" card was a white n0-bg surface with text flipped light
+  .my-ticket-box.n0-bg {
+    background-color: var(--bg2);
+  }
+  // Upload icons sat on the former light boxes
+  .text-secondary {
+    color: var(--nw3) !important;
+  }
+
+  // Bootstrap modals default to a white panel; theme them like the dark cards
+  .modal-content {
+    background-color: var(--bg2);
+    color: var(--nw1);
+  }
+  .modal-header,
+  .modal-footer {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .btn-close {
+    filter: invert(1) grayscale(100%) brightness(150%);
+  }
+
+  // Alerts keep Bootstrap's light tint → text inside must go back to dark
+  // (undo the section-level light flips within them)
+  .alert {
+    :where(h1, h2, h3, h4, h5, h6) {
+      color: inherit;
+    }
+    .n1-clr,
+    .n2-clr,
+    .n4-clr {
+      color: inherit !important;
+    }
+    .text-muted {
+      color: rgba(33, 37, 41, 0.65) !important;
+    }
+  }
 
   // Primary actions → brand green (the "Unirse"/--p1 green), off-palette blue out
   .btn-primary {
