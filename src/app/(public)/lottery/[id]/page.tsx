@@ -550,7 +550,7 @@ const LotteryDetailsPage = () => {
     isPick3Unavailable;
 
   return (
-    <div>
+    <div className="lottery-details-page">
       <NavbarBlack />
 
       {/* Contest Car Slide Section */}

@@ -4850,6 +4850,71 @@
 }
 
 //contest details slider
+.lottery-details-page {
+  background: var(--bg1);
+
+  .contest-carslide-section::before {
+    background: var(--bg1);
+  }
+
+  > section {
+    color: var(--nw1);
+
+    .ans-qustion-wrap {
+      background: var(--bg2);
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.24);
+
+      .ans-title {
+        background: var(--bg1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    // The global n0/n3/n4 utilities describe light-theme surfaces. Inside the
+    // promotion detail they map to the equivalent obsidian surface/text roles.
+    .n0-bg {
+      background: var(--bg1);
+    }
+
+    .n4-clr {
+      color: var(--nw1) !important;
+    }
+
+    .p1-bg.n4-clr {
+      color: var(--n4) !important;
+    }
+
+    .n3-clr,
+    .text-muted {
+      color: rgba(255, 255, 255, 0.62) !important;
+    }
+
+    .border,
+    .form-control {
+      border-color: rgba(255, 255, 255, 0.14) !important;
+    }
+
+    .form-control {
+      background: var(--bg1);
+      color: var(--nw1);
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.42);
+      }
+    }
+
+    hr {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn.n0-bg:hover:not(:disabled) {
+      border-color: var(--s1) !important;
+      color: var(--s1) !important;
+    }
+  }
+}
+
 .contest-carslide-section {
   &::before {
     position: absolute;
