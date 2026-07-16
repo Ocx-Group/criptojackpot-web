@@ -1,6 +1,8 @@
 export interface OrderDetailDto {
   id: number;
   number: number;
+  /** Número con ceros a la izquierda tal como se generó en BD (ej. "0007"). Null solo en filas legacy. */
+  displayNumber?: string | null;
   series: number;
   unitPrice: number;
   quantity: number;

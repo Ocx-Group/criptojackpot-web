@@ -71,7 +71,7 @@ const UserPanelSection = () => {
                       <div className="d-flex align-items-center justify-content-between gap-3 pt-xl-3 pt-5 px-xxl-8 px-xl-6 px-sm-5 px-3">
                         <div className="ticket-in text-center">
                           <span className="fs18 fw_600 n4-clr d-block mb-2">{t('MY_TICKETS.number')}</span>
-                          <span className="s1-clr fw_600">{ticket.number}</span>
+                          <span className="s1-clr fw_600">{ticket.displayNumber ?? ticket.number}</span>
                         </div>
                         <div className="ticket-in text-center">
                           <span className="fs18 fw_600 n4-clr d-block mb-2">{t('MY_TICKETS.series')}</span>

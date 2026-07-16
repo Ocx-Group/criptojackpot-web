@@ -6,6 +6,8 @@ export enum NumberStatus {
 
 export interface AvailableNumberDto {
   number: number;
+  /** Número con ceros a la izquierda tal como se generó en BD (ej. "0007"). */
+  displayNumber?: string;
   availableSeries: number;
   totalSeries: number;
   isFullyAvailable: boolean;
@@ -17,6 +19,8 @@ export interface NumberReservationDto {
   lotteryNumberGuid: string;
   lotteryGuid: string;
   number: number;
+  /** Número con ceros a la izquierda tal como se generó en BD (ej. "0007"). */
+  displayNumber?: string;
   series: number;
   reservationExpiresAt: string;
   secondsRemaining: number;
@@ -26,6 +30,8 @@ export interface NumberStatusDto {
   numberId: number;
   lotteryNumberGuid: string;
   number: number;
+  /** Número con ceros a la izquierda tal como se generó en BD (ej. "0007"). */
+  displayNumber?: string;
   series: number;
   status: NumberStatus;
 }

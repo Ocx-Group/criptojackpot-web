@@ -134,7 +134,7 @@ const AdminOrdersList: React.FC = () => {
                                   <tbody>
                                     {order.items.map((detail, idx) => (
                                       <tr key={idx}>
-                                        <td>{detail.number}</td>
+                                        <td>{detail.displayNumber ?? detail.number}</td>
                                         <td>{formatSeries(detail.series)}</td>
                                         <td>${detail.unitPrice.toFixed(2)}</td>
                                         <td>{detail.quantity}</td>

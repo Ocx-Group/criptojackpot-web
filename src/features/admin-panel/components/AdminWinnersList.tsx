@@ -92,7 +92,7 @@ const AdminWinnersList: React.FC = () => {
                       <td>
                         <div className="d-flex align-items-center gap-1">
                           <Ticket size={14} className="text-muted" />
-                          <span>#{winner.number}</span>
+                          <span>#{winner.displayNumber ?? winner.number}</span>
                         </div>
                         <small className="text-muted">Serie: {formatSeries(winner.series)}</small>
                       </td>

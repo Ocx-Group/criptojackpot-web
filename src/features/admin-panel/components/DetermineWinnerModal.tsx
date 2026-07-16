@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNotificationStore } from '@/store/notificationStore';
 import { winnerService } from '@/services';
 import { Lottery } from '@/interfaces/lottery';
+import { formatLotteryNumber } from '@/utils/formatLotteryNumber';
 import { Trophy } from 'lucide-react';
 
 interface DetermineWinnerModalProps {
@@ -32,10 +33,12 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
         lotteryId: lottery.lotteryGuid,
         lotteryTitle: lottery.title,
         number: num,
+        numberDisplay: formatLotteryNumber(num, lottery.type, lottery.maxNumber),
         series: ser,
         prizeName: mainPrize?.name,
         prizeEstimatedValue: mainPrize?.cashAlternative,
         prizeImageUrl: mainPrize?.mainImageUrl,
+        lotteryType: lottery.type,
       });
     },
     onSuccess: () => {
@@ -103,14 +106,15 @@ const DetermineWinnerModal: React.FC<DetermineWinnerModalProps> = ({ lottery, on
                 </div>
                 <div className="col-md-6">
                   <label className="form-label fw-semibold">{t('WINNERS.determine.series', 'Serie')}</label>
+                  {/* Las series se generan desde 1 hasta totalSeries (nunca 0) */}
                   <input
                     type="number"
                     className="form-control"
                     value={series}
                     onChange={e => setSeries(e.target.value)}
-                    min={0}
-                    max={lottery.totalSeries - 1}
-                    placeholder={`0 - ${lottery.totalSeries - 1}`}
+                    min={1}
+                    max={lottery.totalSeries}
+                    placeholder={`1 - ${lottery.totalSeries}`}
                     required
                     disabled={determineMutation.isPending}
                   />
