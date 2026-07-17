@@ -107,7 +107,7 @@ const AdminTransactionsList: React.FC = () => {
                           <code className="small">{tx.userGuid?.substring(0, 8) || '-'}...</code>
                         </td>
                         <td>
-                          <span className="small">{typeName}</span>
+                          <span className="small nw1-clr">{typeName}</span>
                         </td>
                         <td>
                           <span className={`fw-semibold ${dirInfo.color}`}>{dirInfo.label}</span>
