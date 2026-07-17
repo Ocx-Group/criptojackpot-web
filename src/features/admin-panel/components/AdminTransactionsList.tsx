@@ -52,8 +52,11 @@ const AdminTransactionsList: React.FC = () => {
     <div>
       {/* Filters */}
       <div className="d-flex gap-3 mb-4 flex-wrap align-items-center">
-        <label className="fw-semibold">{t('FINANCE.filter_type', 'Filtrar por tipo')}:</label>
+        <label className="form-label fw-semibold mb-0" htmlFor="transactions-type-filter">
+          {t('FINANCE.filter_type', 'Filtrar por tipo')}:
+        </label>
         <select
+          id="transactions-type-filter"
           className="form-select"
           style={{ width: 'auto' }}
           value={typeFilter ?? ''}

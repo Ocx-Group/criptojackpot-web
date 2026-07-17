@@ -96,8 +96,11 @@ const AdminWithdrawalsList: React.FC = () => {
     <div>
       {/* Filters */}
       <div className="d-flex gap-3 mb-4 flex-wrap align-items-center">
-        <label className="fw-semibold">{t('FINANCE.filter_status', 'Filtrar por estado')}:</label>
+        <label className="form-label fw-semibold mb-0" htmlFor="withdrawals-status-filter">
+          {t('FINANCE.filter_status', 'Filtrar por estado')}:
+        </label>
         <select
+          id="withdrawals-status-filter"
           className="form-select"
           style={{ width: 'auto' }}
           value={statusFilter ?? ''}

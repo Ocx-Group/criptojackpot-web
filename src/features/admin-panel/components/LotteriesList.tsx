@@ -152,7 +152,7 @@ const LotteriesList: React.FC = () => {
                           <td>
                             <div className="d-flex flex-column gap-1">
                               <div>
-                                <span className="fw-semibold">{lottery.soldTickets}</span>
+                                <span className="fw-semibold nw1-clr">{lottery.soldTickets}</span>
                                 <small className="text-muted"> / {lottery.maxTickets}</small>
                               </div>
                               <div className="progress" style={{ height: '8px' }}>
