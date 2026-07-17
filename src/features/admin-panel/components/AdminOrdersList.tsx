@@ -103,7 +103,9 @@ const AdminOrdersList: React.FC = () => {
                             <small className="text-muted">{order.userEmail}</small>
                           </td>
                           <td>
-                            <span className="small">{order.lotteryTitle || order.lotteryId.substring(0, 8)}</span>
+                            <span className="small nw1-clr">
+                              {order.lotteryTitle || order.lotteryId.substring(0, 8)}
+                            </span>
                           </td>
                           <td>
                             <span className="fw-bold text-success">${order.totalAmount.toFixed(2)}</span>
