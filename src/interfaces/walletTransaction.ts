@@ -24,6 +24,8 @@ export enum WalletTransactionStatus {
 export interface WalletTransaction {
   transactionGuid: string;
   userGuid: string;
+  userName?: string;
+  userEmail?: string;
   amount: number;
   direction: WalletTransactionDirection;
   type: WalletTransactionType;

@@ -9,7 +9,8 @@ import {
   WalletTransactionType,
   WalletTransactionStatus,
 } from '@/interfaces/walletTransaction';
-import { ArrowsLeftRight } from '@phosphor-icons/react';
+import { ArrowsLeftRight, Copy } from '@phosphor-icons/react';
+import { toast } from 'react-toastify';
 
 const DIRECTION_MAP: Record<WalletTransactionDirection, { label: string; color: string }> = {
   [WalletTransactionDirection.Credit]: { label: 'Crédito', color: 'text-success' },
@@ -37,6 +38,11 @@ const STATUS_MAP: Record<WalletTransactionStatus, { label: string; badge: string
 const AdminTransactionsList: React.FC = () => {
   const { t } = useTranslation();
   const { transactions, isLoading, pagination, goToPage, typeFilter, setTypeFilter } = useAdminTransactions();
+
+  const copyUserGuid = async (userGuid: string) => {
+    await navigator.clipboard.writeText(userGuid);
+    toast.info(t('FINANCE.user_id_copied', 'ID de usuario copiado'));
+  };
 
   if (isLoading) {
     return (
@@ -104,7 +110,23 @@ const AdminTransactionsList: React.FC = () => {
                           <code className="small">{tx.transactionGuid.substring(0, 8)}...</code>
                         </td>
                         <td>
-                          <code className="small">{tx.userGuid?.substring(0, 8) || '-'}...</code>
+                          <div className="d-flex align-items-center gap-2" title={tx.userGuid}>
+                            <div>
+                              <div className="fw-semibold nw1-clr">
+                                {tx.userName?.trim() || `${tx.userGuid.substring(0, 8)}...`}
+                              </div>
+                              {tx.userEmail && <small className="text-muted">{tx.userEmail}</small>}
+                            </div>
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-link p-0 text-muted"
+                              onClick={() => copyUserGuid(tx.userGuid)}
+                              title={t('FINANCE.copy_user_id', 'Copiar ID de usuario')}
+                              aria-label={t('FINANCE.copy_user_id', 'Copiar ID de usuario')}
+                            >
+                              <Copy size={14} />
+                            </button>
+                          </div>
                         </td>
                         <td>
                           <span className="small nw1-clr">{typeName}</span>
