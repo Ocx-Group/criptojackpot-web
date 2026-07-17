@@ -26,7 +26,7 @@ const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
   const [scrollHeight, setScrollHeight] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isOverflowHidden, setIsOverflowHidden] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isLoading: isSessionLoading, logout } = useAuth();
   const cartCount = useCartStore(state => state.items.length);
 
   const { data: winners = [] } = useQuery({
@@ -88,14 +88,19 @@ const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
                   <Image className="w-auto" src={logoWhite} width={243} alt="logo" />
                 </Link>
                 <ul className="custom-nav d-xl-flex d-grid gap-4 gap-xl-5 gap-xxl-10">
-                  {navbarData.map(({ id, menuTitle, menuTitleKey, path }) => (
-                    <li
-                      key={`black-nav-menu-title-${id}`}
-                      className={`menu-item position-relative ${pathName === path ? 'active' : ''}`}
-                    >
-                      <Link href={path}> {menuTitleKey ? t(menuTitleKey) : menuTitle} </Link>
-                    </li>
-                  ))}
+                  {navbarData
+                    .filter(({ path }) => {
+                      const isGuestRoute = path === '/login' || path === '/register';
+                      return !isGuestRoute || (!isSessionLoading && !isAuthenticated);
+                    })
+                    .map(({ id, menuTitle, menuTitleKey, path }) => (
+                      <li
+                        key={`black-nav-menu-title-${id}`}
+                        className={`menu-item position-relative ${pathName === path ? 'active' : ''}`}
+                      >
+                        <Link href={path}> {menuTitleKey ? t(menuTitleKey) : menuTitle} </Link>
+                      </li>
+                    ))}
                   {hasWinners && (
                     <li className={`menu-item position-relative ${pathName === '/winners' ? 'active' : ''}`}>
                       <Link href="/winners"> {t('NAVBAR.Winners')} </Link>
@@ -123,33 +128,34 @@ const NavbarBlack = ({ forceDark = false }: NavbarBlackProps) => {
                   <div className="head-language">
                     <LanguageSelector />
                   </div>
-                  {isAuthenticated ? (
-                    <button
-                      onClick={logout}
-                      className="cmn-circle text-danger border-0 bg-transparent p-0"
-                      title={t('NAVBAR-BLACK.Logout')}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        padding: 0,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <SignOutIcon size={24} weight="bold" />
-                    </button>
-                  ) : (
-                    <Link href="/login" className="kewta-btn d-inline-flex align-items-center">
-                      <span className="kew-text p1-border n0-clr">{t('NAVBAR-BLACK.Join Now')}</span>
-                      <div className="kew-arrow p1-bg">
-                        <div className="kt-one">
-                          <ArrowRightIcon className="ti ti-arrow-right n4-clr" />
+                  {!isSessionLoading &&
+                    (isAuthenticated ? (
+                      <button
+                        onClick={logout}
+                        className="cmn-circle text-danger border-0 bg-transparent p-0"
+                        title={t('NAVBAR-BLACK.Logout')}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <SignOutIcon size={24} weight="bold" />
+                      </button>
+                    ) : (
+                      <Link href="/login" className="kewta-btn d-inline-flex align-items-center">
+                        <span className="kew-text p1-border n0-clr">{t('NAVBAR-BLACK.Join Now')}</span>
+                        <div className="kew-arrow p1-bg">
+                          <div className="kt-one">
+                            <ArrowRightIcon className="ti ti-arrow-right n4-clr" />
+                          </div>
+                          <div className="kt-two">
+                            <ArrowRightIcon className="ti ti-arrow-right n4-clr" />
+                          </div>
                         </div>
-                        <div className="kt-two">
-                          <ArrowRightIcon className="ti ti-arrow-right n4-clr" />
-                        </div>
-                      </div>
-                    </Link>
-                  )}
+                      </Link>
+                    ))}
                 </div>
               </div>
             </div>
