@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useNotificationStore } from '@/store/notificationStore';
 import { useUserStore } from '@/store/userStore';
@@ -152,7 +153,7 @@ export const useEditPrizeForm = (prizeId: string) => {
     try {
       const cdnUrl = await digitalOceanStorageService.uploadPrizeImage(file, userId);
       const newImage: PrizeImage = {
-        id: crypto.randomUUID(),
+        id: uuidv4(),
         imageUrl: cdnUrl,
         caption,
         displayOrder: formData.additionalImages.length,
@@ -168,7 +169,7 @@ export const useEditPrizeForm = (prizeId: string) => {
   const handleAddAdditionalImage = (image: Omit<PrizeImage, 'id'>) => {
     const newImage: PrizeImage = {
       ...image,
-      id: crypto.randomUUID(),
+      id: uuidv4(),
     };
     setValue('additionalImages', [...formData.additionalImages, newImage], { shouldValidate: false });
   };

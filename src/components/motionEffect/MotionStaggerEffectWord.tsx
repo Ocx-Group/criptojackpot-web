@@ -12,7 +12,7 @@ const MotionStaggerEffectWord = ({ text, className }: { text: string; className?
             opacity: 0,
             y: 70,
           }}
-          whileInView={{
+          animate={{
             opacity: 1,
             y: 0,
             transition: {
@@ -21,7 +21,6 @@ const MotionStaggerEffectWord = ({ text, className }: { text: string; className?
               stiffness: 50,
             },
           }}
-          viewport={{ once: true }}
         >
           <span>{char}</span>
         </motion.span>

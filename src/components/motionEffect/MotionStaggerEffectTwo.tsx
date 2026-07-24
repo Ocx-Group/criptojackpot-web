@@ -28,12 +28,12 @@ const MotionStaggerEffectTwo = ({
 }) => {
   return (
     <>
-      <motion.div viewport={{ once: true }}
+      <motion.div
         className={className}
         key={id}
         variants={variable}
         initial="initial"
-        whileInView="animate"
+        animate="animate"
         custom={id}
       >
         {children}

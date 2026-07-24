@@ -1742,6 +1742,7 @@
 .login-section {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh; // iOS Safari: 100vh includes the address bar and misplaces the viewport
   background:
     radial-gradient(circle at 18% 20%, rgba(0, 229, 255, 0.08), transparent 42%),
     radial-gradient(circle at 85% 85%, rgba(0, 230, 118, 0.07), transparent 45%),

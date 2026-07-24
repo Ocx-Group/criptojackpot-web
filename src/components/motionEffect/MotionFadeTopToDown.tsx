@@ -4,10 +4,9 @@ import { ReactNode } from 'react';
 const MotionFadeTopToDown = ({ children, className }: { children: ReactNode; className?: string }) => {
   return (
     <motion.div
-      viewport={{ once: true }}
       className={className}
       initial={{ opacity: 0, y: -100, scale: 0.5 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.7 } }}
+      animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.7 } }}
     >
       {children}
     </motion.div>

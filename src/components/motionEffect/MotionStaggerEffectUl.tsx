@@ -19,7 +19,7 @@ const variable = {
 const MotionStaggerEffectUl = ({ id, children, className }: { id: number; children: ReactNode; className?: string }) => {
   return (
     <>
-      <motion.li viewport={{ once: true }} className={className} key={id} variants={variable} initial="initial" whileInView="animate" custom={id}>
+      <motion.li className={className} key={id} variants={variable} initial="initial" animate="animate" custom={id}>
         {children}
       </motion.li>
     </>

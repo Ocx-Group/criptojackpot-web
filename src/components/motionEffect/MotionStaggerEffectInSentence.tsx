@@ -27,12 +27,12 @@ const MotionStaggerEffectInSentence = ({
 }) => {
   return (
     <>
-      <motion.span viewport={{ once: true }}
+      <motion.span
         className={className}
         key={id}
         variants={variable}
         initial="initial"
-        whileInView="animate"
+        animate="animate"
         custom={id}
       >
         {children !== " " ? children : "\u00A0"}

@@ -20,7 +20,9 @@ const variable = {
 const MotionStaggerEffectButton = ({ id, children, className }: { id: number; children: ReactNode; className?: string }) => {
   return (
     <>
-      <motion.button viewport={{ once: true }} className={className} key={id} variants={variable} initial="initial" whileInView="animate" custom={id}>
+      {/* Animate on mount (not whileInView): a button must never stay stuck
+          invisible/untappable if the IntersectionObserver misfires on iOS Safari. */}
+      <motion.button className={className} key={id} variants={variable} initial="initial" animate="animate" custom={id}>
         {children}
       </motion.button>
     </>

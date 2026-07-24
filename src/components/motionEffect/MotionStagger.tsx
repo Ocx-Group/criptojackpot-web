@@ -11,7 +11,7 @@ const MotionStagger = ({ id, children, className }: { id: number; children: Reac
         opacity: 0,
         y: 50,
       }}
-      whileInView={{
+      animate={{
         opacity: 1,
         y: 0,
         transition: {
@@ -20,7 +20,6 @@ const MotionStagger = ({ id, children, className }: { id: number; children: Reac
           ease: [0.6, -0.05, 0.01, 0.99],
         },
       }}
-      viewport={{ once: true, amount: 0.3 }}
     >
       {children}
     </motion.div>
