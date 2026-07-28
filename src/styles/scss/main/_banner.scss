@@ -4153,6 +4153,26 @@
     position: static;
     top: auto;
   }
+  .sidebar-mobile-toggle {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    min-height: 48px;
+    pointer-events: auto;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 229, 255, 0.15);
+
+    // Keep the button as the single touch target across the entire mobile bar.
+    span,
+    svg {
+      pointer-events: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--s1);
+      outline-offset: 3px;
+    }
+  }
   .sidebar-collapsible {
     margin-top: 16px;
   }
