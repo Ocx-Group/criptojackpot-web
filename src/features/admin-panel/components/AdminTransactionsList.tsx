@@ -11,6 +11,7 @@ import {
 } from '@/interfaces/walletTransaction';
 import { ArrowsLeftRight, Copy } from '@phosphor-icons/react';
 import { toast } from 'react-toastify';
+import { copyTextToClipboard } from '@/utils/clipboard';
 
 const DIRECTION_MAP: Record<WalletTransactionDirection, { label: string; color: string }> = {
   [WalletTransactionDirection.Credit]: { label: 'Crédito', color: 'text-success' },
@@ -40,8 +41,12 @@ const AdminTransactionsList: React.FC = () => {
   const { transactions, isLoading, pagination, goToPage, typeFilter, setTypeFilter } = useAdminTransactions();
 
   const copyUserGuid = async (userGuid: string) => {
-    await navigator.clipboard.writeText(userGuid);
-    toast.info(t('FINANCE.user_id_copied', 'ID de usuario copiado'));
+    try {
+      await copyTextToClipboard(userGuid);
+      toast.info(t('FINANCE.user_id_copied', 'ID de usuario copiado'));
+    } catch {
+      toast.error(t('FINANCE.copy_failed', 'No se pudo copiar el ID de usuario'));
+    }
   };
 
   if (isLoading) {

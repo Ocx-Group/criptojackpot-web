@@ -10,6 +10,7 @@ import { Lottery, LotteryType } from '@/interfaces/lottery';
 import { useWishlist } from '@/features/user-panel/hooks/useWishlist';
 import { useNotificationStore } from '@/store/notificationStore';
 import { getLotteryText } from '@/utils/localizedContent';
+import { copyTextToClipboard } from '@/utils/clipboard';
 
 interface LotteryCardProps {
   lottery: Lottery;
@@ -50,10 +51,14 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await navigator.clipboard.writeText(`${globalThis.location.origin}/lottery/${lottery.lotteryGuid}`);
+      await copyTextToClipboard(`${globalThis.location.origin}/lottery/${lottery.lotteryGuid}`);
       showNotification('success', t('WISHLIST.link_copied', '¡Enlace copiado!'), '');
     } catch {
-      showNotification('error', t('COMMON.error', 'Error'), '');
+      showNotification(
+        'error',
+        t('COMMON.error', 'Error'),
+        t('COMMON.copy_failed', 'No se pudo copiar el enlace. Intenta nuevamente.')
+      );
     }
   };
 

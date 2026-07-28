@@ -1307,6 +1307,20 @@
   }
 }
 
+// Touch devices (including iPhone/iPad Safari) do not have a stable hover
+// state. Keep essential card actions visible and below the type badge.
+@media (hover: none), (pointer: coarse) {
+  .current-lottery-itemv13 {
+    .cart-added {
+      top: 56px;
+      right: 12px;
+      z-index: 3;
+      visibility: visible;
+      transform: scale(1);
+    }
+  }
+}
+
 .current-lottery-v13before {
   transition: all 0.4s;
 

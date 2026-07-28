@@ -7,12 +7,17 @@ import { useSetup2Fa, TwoFactorStep } from '@/features/user-panel/hooks/useSetup
 import MotionFade from '@/components/motionEffect/MotionFade';
 import { useNotificationStore } from '@/store/notificationStore';
 import { TwoFactorSetupResponse } from '@/features/user-panel/types/twoFactor';
+import { copyTextToClipboard } from '@/utils/clipboard';
 
 /* ─── Shared helpers ─── */
 
-const copyText = (text: string, onCopied: () => void) => {
-  navigator.clipboard.writeText(text);
-  onCopied();
+const copyText = async (text: string, onCopied: () => void, onError: () => void) => {
+  try {
+    await copyTextToClipboard(text);
+    onCopied();
+  } catch {
+    onError();
+  }
 };
 
 const OtpField = ({
@@ -535,12 +540,28 @@ const SecuritySection = () => {
   const twoFa = useSetup2Fa();
 
   const handleCopy = (text: string) => {
-    copyText(text, () => showNotification('success', t('SECURITY.notifications.copied'), ''));
+    void copyText(
+      text,
+      () => showNotification('success', t('SECURITY.notifications.copied'), ''),
+      () =>
+        showNotification(
+          'error',
+          t('COMMON.error', 'Error'),
+          t('SECURITY.notifications.copyError', 'No se pudo copiar. Intenta nuevamente.')
+        )
+    );
   };
 
   const handleCopyAll = () => {
-    copyText(twoFa.recoveryCodes.join('\n'), () =>
-      showNotification('success', t('SECURITY.notifications.allCodesCopied'), '')
+    void copyText(
+      twoFa.recoveryCodes.join('\n'),
+      () => showNotification('success', t('SECURITY.notifications.allCodesCopied'), ''),
+      () =>
+        showNotification(
+          'error',
+          t('COMMON.error', 'Error'),
+          t('SECURITY.notifications.copyError', 'No se pudo copiar. Intenta nuevamente.')
+        )
     );
   };
 

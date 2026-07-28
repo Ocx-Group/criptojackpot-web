@@ -17,6 +17,7 @@ import { useNotificationStore } from '@/store/notificationStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { orderService, userCryptoWalletService } from '@/services';
 import { CryptoWallet } from '@/interfaces/cryptoWallet';
+import { copyTextToClipboard } from '@/utils/clipboard';
 
 /* ─── Types ─── */
 
@@ -240,9 +241,17 @@ export default function PaymentSection() {
     },
   });
 
-  const handleCopy = (address: string) => {
-    navigator.clipboard.writeText(address);
-    showNotification('success', t('PAYMENT.copied'), '');
+  const handleCopy = async (address: string) => {
+    try {
+      await copyTextToClipboard(address);
+      showNotification('success', t('PAYMENT.copied'), '');
+    } catch {
+      showNotification(
+        'error',
+        t('COMMON.error', 'Error'),
+        t('PAYMENT.copyError', 'No se pudo copiar la dirección. Intenta nuevamente.')
+      );
+    }
   };
 
   const handleSetDefault = (walletGuid: string) => {

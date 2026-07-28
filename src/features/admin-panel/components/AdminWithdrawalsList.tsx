@@ -6,6 +6,7 @@ import { useAdminWithdrawals } from '@/features/admin-panel/hooks';
 import { AdminWithdrawalRequest, WithdrawalRequestStatus } from '@/features/admin-panel/types/withdrawal';
 import { ArrowsDownUp, CheckCircle, XCircle, Eye, Copy } from '@phosphor-icons/react';
 import { toast } from 'react-toastify';
+import { copyTextToClipboard } from '@/utils/clipboard';
 
 const STATUS_MAP: Record<string, { label: string; badge: string }> = {
   Pending: { label: 'Pendiente', badge: 'badge bg-warning' },
@@ -76,10 +77,13 @@ const AdminWithdrawalsList: React.FC = () => {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
+  const copyToClipboard = async (text: string) => {
+    try {
+      await copyTextToClipboard(text);
       toast.info('Copiado al portapapeles');
-    });
+    } catch {
+      toast.error('No se pudo copiar al portapapeles');
+    }
   };
 
   if (isLoading) {

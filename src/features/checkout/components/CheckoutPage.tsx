@@ -80,7 +80,8 @@ const CheckoutPage: React.FC = () => {
     router.push('/personal-info');
   };
 
-  // Pago con crypto: abrir CoinPayments en nueva pestaña
+  // Pago con crypto: navegar en la misma pestaña. Safari puede bloquear una
+  // pestaña nueva si se abre después de esperar la respuesta de la API.
   const handleCryptoPayment = async (existingOrderId: string) => {
     const payResponse = await orderService.payOrder(existingOrderId);
 
@@ -88,19 +89,7 @@ const CheckoutPage: React.FC = () => {
       throw new Error(t('CHECKOUT.noCheckoutUrl', 'No se recibió la URL de pago. Intenta nuevamente.'));
     }
 
-    const link = document.createElement('a');
-    link.href = payResponse.checkoutUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    showNotification(
-      'info',
-      t('CHECKOUT.paymentWindowOpened', 'Página de pago abierta'),
-      t('CHECKOUT.paymentWindowOpenedDesc', 'Completa el pago en la nueva pestaña y vuelve aquí cuando termine.')
-    );
+    globalThis.location.assign(payResponse.checkoutUrl);
   };
 
   // Procesar el pago segun el metodo seleccionado

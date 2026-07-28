@@ -5,6 +5,7 @@ import { ReferralEarnings } from '@/services/walletService';
 import { useQuery } from '@tanstack/react-query';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useTranslation } from 'react-i18next';
+import { copyTextToClipboard } from '@/utils/clipboard';
 
 export const useReferralProgram = () => {
   const { t } = useTranslation();
@@ -31,10 +32,18 @@ export const useReferralProgram = () => {
     enabled: !!user?.id,
   });
 
-  const copyToClipboard = () => {
-    if (referralLink) {
-      navigator.clipboard.writeText(referralLink).then();
+  const copyToClipboard = async () => {
+    if (!referralLink) return;
+
+    try {
+      await copyTextToClipboard(referralLink);
       showNotification('success', t('REFERRAL_PROGRAM.linkCopied'), '');
+    } catch {
+      showNotification(
+        'error',
+        t('COMMON.error', 'Error'),
+        t('REFERRAL_PROGRAM.copyError', 'No se pudo copiar el enlace. Intenta nuevamente.')
+      );
     }
   };
 
