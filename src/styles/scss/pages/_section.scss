@@ -1946,9 +1946,11 @@
       font-size: 14px;
       transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 
+      // Contraste AA sobre el fondo de la card (rgba .4 quedaba casi ilegible).
       &::placeholder {
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.62);
         font-size: 14px;
+        opacity: 1; // Firefox aplica opacity: .54 por defecto
       }
 
       &:focus {
@@ -1956,6 +1958,10 @@
         background: rgba(0, 229, 255, 0.04);
         border: 1px solid var(--s1);
         box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.12);
+      }
+
+      &:focus::placeholder {
+        color: rgba(255, 255, 255, 0.45);
       }
     }
 
@@ -2057,6 +2063,12 @@
       box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.12);
     }
 
+    // Mientras no hay país elegido se lee como un placeholder, igual que el
+    // resto de campos; al seleccionar uno pasa a blanco pleno.
+    &:has(option[value='']:checked) {
+      color: rgba(255, 255, 255, 0.62);
+    }
+
     option {
       background-color: var(--bg2);
       color: #fff;
@@ -2064,7 +2076,10 @@
   }
 
   // Phone input group (country code + number)
-  .login-input-group {
+  // Se anida bajo .login-field a propósito: `.form-cmn .input-group ...` se declara
+  // más abajo en este archivo con la misma especificidad y ganaba por orden,
+  // dejando el campo con borde gris claro y texto al 50% de opacidad.
+  .login-field .login-input-group {
     .input-group-text {
       background: rgba(255, 255, 255, 0.06);
       color: #fff;
@@ -2086,13 +2101,18 @@
       font-size: 14px;
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(255, 255, 255, 0.62);
+        opacity: 1;
       }
 
       &:focus {
         background: rgba(0, 229, 255, 0.04);
         border-color: var(--s1);
         box-shadow: none;
+      }
+
+      &:focus::placeholder {
+        color: rgba(255, 255, 255, 0.45);
       }
     }
 
@@ -2194,8 +2214,9 @@
 
     &::placeholder {
       letter-spacing: 2px;
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.62);
       font-weight: 500;
+      opacity: 1;
     }
 
     &:focus {
@@ -2214,6 +2235,14 @@
     border-radius: 14px;
     padding: 12px 16px;
     font-size: 0.875rem;
+
+    // El reset global pinta todo span/li de var(--n2) (casi negro) y, al ser un
+    // selector directo, gana a la herencia. Hay que devolverles el color del padre.
+    span,
+    p,
+    li {
+      color: inherit;
+    }
   }
 
   // Register variant — taller form, keep hero anchored to top
@@ -2437,9 +2466,10 @@
 }
 
 .field-error-text {
-  color: #dc3545;
-  font-size: 0.75rem;
-  margin-top: 4px;
+  color: #ff6b78; // #dc3545 no llega a AA sobre los fondos obsidiana
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 5px;
   display: block;
 }
 
@@ -2477,31 +2507,59 @@
   border-radius: 14px;
   padding: 12px 16px;
   font-size: 0.875rem;
+
+  // El reset global (a, p, button, span, label, li) fija color: var(--n2) —casi
+  // negro— con un selector directo, que gana a la herencia del contenedor.
+  span,
+  p {
+    color: inherit;
+    font-size: inherit;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 // Checklist de requisitos de contraseña (espejo de las reglas del backend)
 .password-rules {
   list-style: none;
-  margin: 8px 0 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 14px;
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px 16px;
 
   li {
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    line-height: 1.4;
+    gap: 7px;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    transition: color 0.2s ease;
+
+    // Mismo motivo que arriba: sin esto el texto de cada regla se renderiza
+    // casi negro sobre la card oscura y solo se ve el icono.
+    span {
+      color: inherit;
+      font-size: inherit;
+      line-height: inherit;
+    }
+
+    svg {
+      flex-shrink: 0;
+    }
   }
 
   .is-pending {
-    color: var(--nw3);
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .is-met {
-    color: #22c55e;
+    color: #4ade80;
   }
 }
 
