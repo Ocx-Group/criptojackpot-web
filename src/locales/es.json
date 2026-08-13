@@ -258,7 +258,27 @@
       "serverError": "Error del servidor. Por favor, intenta más tarde.",
       "stateRequired": "El estado/provincia es requerido",
       "termsRequired": "Debes aceptar los términos y condiciones",
-      "weakPassword": "La contraseña debe tener al menos 8 caracteres"
+      "weakPassword": "La contraseña debe tener al menos 8 caracteres",
+      "emailRequired": "El correo electrónico es requerido",
+      "nameTooLong": "El nombre no puede superar los 100 caracteres",
+      "lastNameTooLong": "El apellido no puede superar los 100 caracteres",
+      "emailTooLong": "El correo no puede superar los 150 caracteres",
+      "passwordTooLong": "La contraseña no puede superar los 100 caracteres",
+      "passwordUppercase": "La contraseña debe incluir una letra mayúscula",
+      "passwordLowercase": "La contraseña debe incluir una letra minúscula",
+      "passwordDigit": "La contraseña debe incluir un número",
+      "passwordSpecial": "La contraseña debe incluir un carácter especial",
+      "identificationTooLong": "La identificación no puede superar los 50 caracteres",
+      "phoneTooLong": "El teléfono no puede superar los 20 caracteres",
+      "phoneInvalid": "El teléfono no es válido",
+      "stateTooLong": "El estado no puede superar los 100 caracteres",
+      "cityTooLong": "La ciudad no puede superar los 100 caracteres",
+      "addressTooLong": "La dirección no puede superar los 150 caracteres",
+      "referralCodeTooLong": "El código de referido no puede superar los 50 caracteres",
+      "missingRequiredFields": "Faltan campos obligatorios por completar",
+      "reviewHighlightedFields": "Revisa los campos marcados en rojo",
+      "summaryOne": "Falta 1 campo obligatorio, marcado abajo en rojo",
+      "summaryMany": "Faltan {{count}} campos obligatorios, marcados abajo en rojo"
     },
     "identificationPlaceholder": "Identificación",
     "lastNamePlaceholder": "Apellido",
@@ -274,7 +294,15 @@
     "termsAndPrivacy": "Al registrarme, acepto los ",
     "termsCheckbox": "Acepto los términos y condiciones",
     "termsLink": "Términos de servicio y Política de privacidad.",
-    "title": "Empezar es totalmente gratis"
+    "title": "Empezar es totalmente gratis",
+    "passwordRules": {
+      "length": "Al menos 8 caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "digit": "Un número",
+      "special": "Un carácter especial"
+    },
+    "requiredHint": "Los campos marcados con * son obligatorios."
   },
   "RESET_PASSWORD": {
     "backToLogin": "Volver al inicio de sesión",

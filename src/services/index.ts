@@ -24,6 +24,8 @@ import { WishListService } from './wishListService';
 import { WinnerService } from './winnerService';
 import { TestimonialService } from './testimonialService';
 
+export { ApiError, ApiValidationError, isApiError, isApiValidationError } from './apiError';
+
 export const authService = new AuthService();
 export const userService = new UserService();
 export const countryService = new CountryService();

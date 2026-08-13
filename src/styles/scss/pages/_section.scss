@@ -2443,6 +2443,68 @@
   display: block;
 }
 
+// Campos obligatorios: el asterisco del label/placeholder
+.field-required-mark {
+  color: #dc3545;
+}
+
+// Variante de .ch-form-items (panel de usuario / personal-info).
+// Los estilos de las cards oscuras fijan border-color con !important,
+// por eso el estado de error necesita la misma prioridad.
+.ch-form-items.has-error {
+  input,
+  select,
+  textarea {
+    border-color: #dc3545 !important;
+    transition: border-color 0.2s ease;
+  }
+
+  label {
+    color: #dc3545 !important;
+  }
+}
+
+// Resumen de errores encima del formulario.
+// Se declara completo (no solo como modificador) porque también se usa fuera de
+// .login-section, donde los estilos base de .login-alert no aplican.
+.login-alert--summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 71, 87, 0.12);
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  color: #ff8a94;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 0.875rem;
+}
+
+// Checklist de requisitos de contraseña (espejo de las reglas del backend)
+.password-rules {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .is-pending {
+    color: var(--nw3);
+  }
+
+  .is-met {
+    color: #22c55e;
+  }
+}
+
 .eye-icon {
   position: absolute;
   right: 10px;

@@ -258,7 +258,27 @@
       "serverError": "Erro no servidor. Por favor, tente novamente mais tarde.",
       "stateRequired": "O estado/província é obrigatório",
       "termsRequired": "Você deve aceitar os termos e condições",
-      "weakPassword": "A senha deve ter pelo menos 8 caracteres"
+      "weakPassword": "A senha deve ter pelo menos 8 caracteres",
+      "emailRequired": "O e-mail é obrigatório",
+      "nameTooLong": "O nome não pode ter mais de 100 caracteres",
+      "lastNameTooLong": "O sobrenome não pode ter mais de 100 caracteres",
+      "emailTooLong": "O e-mail não pode ter mais de 150 caracteres",
+      "passwordTooLong": "A senha não pode ter mais de 100 caracteres",
+      "passwordUppercase": "A senha deve conter uma letra maiúscula",
+      "passwordLowercase": "A senha deve conter uma letra minúscula",
+      "passwordDigit": "A senha deve conter um número",
+      "passwordSpecial": "A senha deve conter um caractere especial",
+      "identificationTooLong": "A identificação não pode ter mais de 50 caracteres",
+      "phoneTooLong": "O telefone não pode ter mais de 20 caracteres",
+      "phoneInvalid": "O telefone não é válido",
+      "stateTooLong": "O estado não pode ter mais de 100 caracteres",
+      "cityTooLong": "A cidade não pode ter mais de 100 caracteres",
+      "addressTooLong": "O endereço não pode ter mais de 150 caracteres",
+      "referralCodeTooLong": "O código de indicação não pode ter mais de 50 caracteres",
+      "missingRequiredFields": "Faltam campos obrigatórios a preencher",
+      "reviewHighlightedFields": "Revise os campos destacados em vermelho",
+      "summaryOne": "Falta 1 campo obrigatório, destacado em vermelho abaixo",
+      "summaryMany": "Faltam {{count}} campos obrigatórios, destacados em vermelho abaixo"
     },
     "identificationPlaceholder": "Identificação",
     "lastNamePlaceholder": "Sobrenome",
@@ -274,7 +294,15 @@
     "termsAndPrivacy": "Ao me cadastrar, aceito os ",
     "termsCheckbox": "Aceito os termos e condições",
     "termsLink": "Termos de Serviço e Política de Privacidade.",
-    "title": "Comece gratuitamente"
+    "title": "Comece gratuitamente",
+    "passwordRules": {
+      "length": "Pelo menos 8 caracteres",
+      "uppercase": "Uma letra maiúscula",
+      "lowercase": "Uma letra minúscula",
+      "digit": "Um número",
+      "special": "Um caractere especial"
+    },
+    "requiredHint": "Os campos marcados com * são obrigatórios."
   },
   "RESET_PASSWORD": {
     "backToLogin": "Voltar ao Login",

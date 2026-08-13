@@ -5,6 +5,8 @@ import { GoogleLoginButton } from '@/features/auth/components/GoogleLoginButton'
 import { GOOGLE_CLIENT_ID } from '@/components/Providers';
 import {
   ArrowRightIcon,
+  CheckCircleIcon,
+  CircleIcon,
   EnvelopeSimpleIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -17,11 +19,13 @@ import {
   ShieldCheckIcon,
   TrophyIcon,
   UserIcon,
+  WarningCircleIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { PASSWORD_RULES } from '@/features/auth/schemas';
 
 interface RegisterSectionProps {
   referralCode?: string | null;
@@ -30,16 +34,16 @@ interface RegisterSectionProps {
 const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
   const { t } = useTranslation();
   const {
-    formData,
+    register,
     countries,
     selectedCountry,
+    passwordValue,
     isPasswordShow,
     isLoading,
     isLoadingCountries,
+    isSubmitted,
     error,
     fieldErrors,
-    countryError,
-    handleInputChange,
     handleCountryChange,
     togglePasswordVisibility,
     handleSubmit,
@@ -51,6 +55,24 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
       setReferralCode(referralCode);
     }
   }, [referralCode, setReferralCode]);
+
+  // El teléfono se normaliza a dígitos mientras se escribe (el backend lo limita a 20).
+  const phoneField = register('phone');
+
+  const passwordRuleLabels: Record<string, string> = {
+    length: t('REGISTER.passwordRules.length', 'Al menos 8 caracteres'),
+    uppercase: t('REGISTER.passwordRules.uppercase', 'Una letra mayúscula'),
+    lowercase: t('REGISTER.passwordRules.lowercase', 'Una letra minúscula'),
+    digit: t('REGISTER.passwordRules.digit', 'Un número'),
+    special: t('REGISTER.passwordRules.special', 'Un carácter especial'),
+  };
+
+  const invalidFieldCount = useMemo(() => Object.keys(fieldErrors).length, [fieldErrors]);
+  // Si el backend ya devolvió un error, ese mensaje se muestra arriba; el resumen
+  // solo cuenta campos obligatorios que faltan por rellenar.
+  const showErrorSummary = isSubmitted && invalidFieldCount > 0 && !error;
+  const showPasswordRules = passwordValue.length > 0 || Boolean(fieldErrors.password);
+  const requiredMark = ' *';
 
   const features = [
     {
@@ -152,7 +174,26 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                 </div>
               )}
 
-              <form className="form-cmn-action" onSubmit={handleSubmit}>
+              {showErrorSummary && (
+                <div className="login-alert login-alert--summary mb-4" role="alert" aria-live="polite">
+                  <WarningCircleIcon size={18} weight="fill" />
+                  <span>
+                    {invalidFieldCount === 1
+                      ? t('REGISTER.errors.summaryOne', 'Falta 1 campo obligatorio, marcado abajo en rojo')
+                      : t(
+                          'REGISTER.errors.summaryMany',
+                          'Faltan {{count}} campos obligatorios, marcados abajo en rojo',
+                          { count: invalidFieldCount }
+                        )}
+                  </span>
+                </div>
+              )}
+
+              <p className="login-required-hint nw3-clr fs-eight mb-4">
+                {t('REGISTER.requiredHint', 'Los campos marcados con * son obligatorios.')}
+              </p>
+
+              <form className="form-cmn-action" onSubmit={handleSubmit} noValidate>
                 <div className="row g-4">
                   {/* Name + Last name */}
                   <div className="col-12 col-sm-6">
@@ -161,14 +202,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <UserIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="name"
                         type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.namePlaceholder')}
+                        {...register('name')}
+                        placeholder={t('REGISTER.namePlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.name)}
+                        aria-describedby={fieldErrors.name ? 'name-error' : undefined}
                       />
                     </div>
-                    {fieldErrors.name && <span className="field-error-text">{fieldErrors.name.message}</span>}
+                    {fieldErrors.name && (
+                      <span id="name-error" className="field-error-text">
+                        {fieldErrors.name.message}
+                      </span>
+                    )}
                   </div>
                   <div className="col-12 col-sm-6">
                     <div className={`form-cmn login-field ${fieldErrors.lastName ? 'has-error' : ''}`}>
@@ -176,14 +223,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <UserIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="lastName"
                         type="text"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.lastNamePlaceholder')}
+                        {...register('lastName')}
+                        placeholder={t('REGISTER.lastNamePlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.lastName)}
+                        aria-describedby={fieldErrors.lastName ? 'lastName-error' : undefined}
                       />
                     </div>
-                    {fieldErrors.lastName && <span className="field-error-text">{fieldErrors.lastName.message}</span>}
+                    {fieldErrors.lastName && (
+                      <span id="lastName-error" className="field-error-text">
+                        {fieldErrors.lastName.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* Email */}
@@ -193,14 +246,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <EnvelopeSimpleIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="email"
                         type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.emailPlaceholder')}
+                        {...register('email')}
+                        placeholder={t('REGISTER.emailPlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.email)}
+                        aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                       />
                     </div>
-                    {fieldErrors.email && <span className="field-error-text">{fieldErrors.email.message}</span>}
+                    {fieldErrors.email && (
+                      <span id="email-error" className="field-error-text">
+                        {fieldErrors.email.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* Password */}
@@ -210,12 +269,14 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <LockKeyIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="password"
                         type={isPasswordShow ? 'text' : 'password'}
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
+                        {...register('password')}
                         className="password-field"
-                        placeholder={t('REGISTER.passwordPlaceholder')}
+                        placeholder={t('REGISTER.passwordPlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.password)}
+                        aria-describedby={fieldErrors.password ? 'password-error' : 'password-rules'}
                       />
                       <button
                         type="button"
@@ -230,24 +291,51 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         )}
                       </button>
                     </div>
-                    {fieldErrors.password && <span className="field-error-text">{fieldErrors.password.message}</span>}
+                    {fieldErrors.password && (
+                      <span id="password-error" className="field-error-text">
+                        {fieldErrors.password.message}
+                      </span>
+                    )}
+                    {showPasswordRules && (
+                      <ul id="password-rules" className="password-rules" aria-live="polite">
+                        {PASSWORD_RULES.map(rule => {
+                          const isMet = rule.test(passwordValue);
+                          return (
+                            <li key={rule.id} className={isMet ? 'is-met' : 'is-pending'}>
+                              {isMet ? (
+                                <CheckCircleIcon size={14} weight="fill" />
+                              ) : (
+                                <CircleIcon size={14} weight="bold" />
+                              )}
+                              <span>{passwordRuleLabels[rule.id]}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
                   </div>
 
                   {/* Country */}
                   <div className="col-12">
-                    <div className={`form-cmn login-field ${countryError ? 'has-error' : ''}`}>
+                    <div className={`form-cmn login-field ${fieldErrors.countryId ? 'has-error' : ''}`}>
                       <span className="login-field__icon d-center">
                         <GlobeHemisphereWestIcon size={20} weight="bold" />
                       </span>
                       <select
-                        title="Country select"
+                        id="countryId"
+                        title={t('REGISTER.selectCountry')}
                         className="form-select"
                         onChange={handleCountryChange}
                         value={selectedCountry?.id || ''}
                         disabled={isLoadingCountries}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.countryId)}
+                        aria-describedby={fieldErrors.countryId ? 'countryId-error' : undefined}
                       >
                         <option value="" disabled>
-                          {isLoadingCountries ? t('REGISTER.loadingCountries') : t('REGISTER.selectCountry')}
+                          {isLoadingCountries
+                            ? t('REGISTER.loadingCountries')
+                            : t('REGISTER.selectCountry') + requiredMark}
                         </option>
                         {countries.map(country => (
                           <option key={country.id} value={country.id}>
@@ -256,7 +344,11 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         ))}
                       </select>
                     </div>
-                    {countryError && <span className="field-error-text">{t('REGISTER.errors.countryRequired')}</span>}
+                    {fieldErrors.countryId && (
+                      <span id="countryId-error" className="field-error-text">
+                        {fieldErrors.countryId.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* Identification + Phone */}
@@ -266,31 +358,46 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <IdentificationCardIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="identification"
                         type="text"
-                        name="identification"
-                        value={formData.identification}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.identificationPlaceholder')}
+                        {...register('identification')}
+                        placeholder={t('REGISTER.identificationPlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.identification)}
+                        aria-describedby={fieldErrors.identification ? 'identification-error' : undefined}
                       />
                     </div>
                     {fieldErrors.identification && (
-                      <span className="field-error-text">{fieldErrors.identification.message}</span>
+                      <span id="identification-error" className="field-error-text">
+                        {fieldErrors.identification.message}
+                      </span>
                     )}
                   </div>
                   <div className="col-12 col-sm-6">
-                    <div className="form-cmn login-field">
+                    <div className={`form-cmn login-field ${fieldErrors.phone ? 'has-error' : ''}`}>
                       <div className="input-group login-input-group">
                         <span className="input-group-text">+{selectedCountry?.phoneCode || ''}</span>
                         <input
+                          id="phone"
                           type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
+                          inputMode="numeric"
+                          {...phoneField}
+                          onChange={event => {
+                            event.target.value = event.target.value.replaceAll(/\D/g, '');
+                            return phoneField.onChange(event);
+                          }}
                           placeholder={t('REGISTER.phonePlaceholder')}
                           className="form-control"
+                          aria-invalid={Boolean(fieldErrors.phone)}
+                          aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
                         />
                       </div>
                     </div>
+                    {fieldErrors.phone && (
+                      <span id="phone-error" className="field-error-text">
+                        {fieldErrors.phone.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* State + City */}
@@ -300,14 +407,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <MapPinIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="state"
                         type="text"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.statePlaceholder')}
+                        {...register('state')}
+                        placeholder={t('REGISTER.statePlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.state)}
+                        aria-describedby={fieldErrors.state ? 'state-error' : undefined}
                       />
                     </div>
-                    {fieldErrors.state && <span className="field-error-text">{fieldErrors.state.message}</span>}
+                    {fieldErrors.state && (
+                      <span id="state-error" className="field-error-text">
+                        {fieldErrors.state.message}
+                      </span>
+                    )}
                   </div>
                   <div className="col-12 col-sm-6">
                     <div className={`form-cmn login-field ${fieldErrors.city ? 'has-error' : ''}`}>
@@ -315,14 +428,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <MapPinIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="city"
                         type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.cityPlaceholder')}
+                        {...register('city')}
+                        placeholder={t('REGISTER.cityPlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.city)}
+                        aria-describedby={fieldErrors.city ? 'city-error' : undefined}
                       />
                     </div>
-                    {fieldErrors.city && <span className="field-error-text">{fieldErrors.city.message}</span>}
+                    {fieldErrors.city && (
+                      <span id="city-error" className="field-error-text">
+                        {fieldErrors.city.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* Address */}
@@ -332,14 +451,20 @@ const RegisterSection = ({ referralCode }: RegisterSectionProps) => {
                         <HouseLineIcon size={20} weight="bold" />
                       </span>
                       <input
+                        id="address"
                         type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        placeholder={t('REGISTER.addressPlaceholder')}
+                        {...register('address')}
+                        placeholder={t('REGISTER.addressPlaceholder') + requiredMark}
+                        aria-required="true"
+                        aria-invalid={Boolean(fieldErrors.address)}
+                        aria-describedby={fieldErrors.address ? 'address-error' : undefined}
                       />
                     </div>
-                    {fieldErrors.address && <span className="field-error-text">{fieldErrors.address.message}</span>}
+                    {fieldErrors.address && (
+                      <span id="address-error" className="field-error-text">
+                        {fieldErrors.address.message}
+                      </span>
+                    )}
                   </div>
 
                   {/* Submit */}

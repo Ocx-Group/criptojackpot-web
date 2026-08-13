@@ -258,7 +258,27 @@
       "serverError": "Server error. Please try again later.",
       "stateRequired": "State is required",
       "termsRequired": "You must accept the terms and conditions",
-      "weakPassword": "Password must be at least 8 characters"
+      "weakPassword": "Password must be at least 8 characters",
+      "emailRequired": "Email is required",
+      "nameTooLong": "Name must not exceed 100 characters",
+      "lastNameTooLong": "Last name must not exceed 100 characters",
+      "emailTooLong": "Email must not exceed 150 characters",
+      "passwordTooLong": "Password must not exceed 100 characters",
+      "passwordUppercase": "Password must contain an uppercase letter",
+      "passwordLowercase": "Password must contain a lowercase letter",
+      "passwordDigit": "Password must contain a number",
+      "passwordSpecial": "Password must contain a special character",
+      "identificationTooLong": "Identification must not exceed 50 characters",
+      "phoneTooLong": "Phone must not exceed 20 characters",
+      "phoneInvalid": "Phone number is not valid",
+      "stateTooLong": "State must not exceed 100 characters",
+      "cityTooLong": "City must not exceed 100 characters",
+      "addressTooLong": "Address must not exceed 150 characters",
+      "referralCodeTooLong": "Referral code must not exceed 50 characters",
+      "missingRequiredFields": "Some required fields are missing",
+      "reviewHighlightedFields": "Please review the fields highlighted in red",
+      "summaryOne": "1 required field is missing, highlighted in red below",
+      "summaryMany": "{{count}} required fields are missing, highlighted in red below"
     },
     "identificationPlaceholder": "Identification",
     "lastNamePlaceholder": "Last name",
@@ -274,7 +294,15 @@
     "termsAndPrivacy": "By registering, I accept the ",
     "termsCheckbox": "I agree to the terms and conditions",
     "termsLink": "Terms of Service and Privacy Policy.",
-    "title": "Get started absolutely free"
+    "title": "Get started absolutely free",
+    "passwordRules": {
+      "length": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "digit": "One number",
+      "special": "One special character"
+    },
+    "requiredHint": "Fields marked with * are required."
   },
   "RESET_PASSWORD": {
     "backToLogin": "Back to Login",

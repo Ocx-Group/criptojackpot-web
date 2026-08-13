@@ -5,6 +5,7 @@ import { PaginatedResponse } from '@/interfaces/paginatedResponse';
 import { GetAllOptions } from '@/interfaces/getAllOptions';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
+import { ApiError, ApiErrorPayload, ApiValidationError, extractFieldErrors } from './apiError';
 
 export abstract class BaseService {
   protected apiClient: AxiosInstance;
@@ -117,16 +118,26 @@ export abstract class BaseService {
 
   protected handleError(error: unknown): never {
     if (this.isAxiosError(error)) {
-      const errorMessage = error.response?.data?.message || error.message || 'An error occurred';
+      const status = error.response?.status;
+      const payload = error.response?.data as ApiErrorPayload | undefined;
+      const errorMessage = payload?.message || payload?.title || error.message || 'An error occurred';
 
-      if (error.response?.status === 401) {
+      if (status === 401) {
         if (error.config?.url !== this.endpoint) {
           // Session expired - signOut is handled by the interceptor
-          throw new Error('The session has expired');
+          throw new ApiError('The session has expired', status);
         }
       }
 
-      throw new Error(errorMessage);
+      // Los errores de validación conservan el detalle por campo para que los
+      // formularios puedan marcar en rojo los inputs concretos en lugar de
+      // mostrar solo "One or more validation errors occurred".
+      const fieldErrors = extractFieldErrors(payload);
+      if (fieldErrors) {
+        throw new ApiValidationError(errorMessage, status, fieldErrors);
+      }
+
+      throw new ApiError(errorMessage, status);
     }
 
     if (error instanceof Error) {

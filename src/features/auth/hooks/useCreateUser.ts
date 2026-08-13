@@ -2,12 +2,32 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 import { useEffect } from 'react';
 
 import { countryService, userService } from '@/services';
+import { isApiError, isApiValidationError } from '@/services/apiError';
 import { Country } from '@/interfaces/country';
 import { User, CreateUserRequest } from '@/interfaces/user';
 import { useNotificationStore } from '@/store/notificationStore';
+
+/**
+ * Traduce el error del backend a un mensaje accionable.
+ * El 400 de validación llega con el texto genérico "One or more validation errors
+ * occurred"; en ese caso el detalle real se pinta campo a campo en el formulario,
+ * así que el toast solo invita a revisar los campos marcados.
+ */
+export function resolveCreateUserErrorMessage(error: unknown, t: TFunction): string {
+  if (isApiValidationError(error)) {
+    return t('REGISTER.errors.reviewHighlightedFields', 'Revisa los campos marcados en rojo');
+  }
+
+  if (isApiError(error) && error.status === 409) {
+    return t('REGISTER.errors.emailExists', 'Este correo electrónico ya está registrado');
+  }
+
+  return t('REGISTER.errors.serverError', 'Error al crear el usuario');
+}
 
 export interface CreateUserOptions {
   onSuccess?: (user: User) => void;
@@ -54,7 +74,7 @@ export const useCreateUser = (options?: CreateUserOptions) => {
     },
     onError: (error: Error) => {
       if (options?.showNotifications !== false) {
-        showNotification('error', t('REGISTER.errors.serverError', 'Error al crear el usuario'), '');
+        showNotification('error', resolveCreateUserErrorMessage(error, t), '');
       }
       options?.onError?.(error);
     },
@@ -69,7 +89,9 @@ export const useCreateUser = (options?: CreateUserOptions) => {
     isLoadingCountries,
     createUser: createMutation.mutate,
     isCreating: createMutation.isPending,
-    error: createMutation.error ? (createMutation.error as Error).message : null,
+    // Mensaje ya traducido: el backend devuelve "One or more validation errors
+    // occurred", que no le dice nada al usuario.
+    error: createMutation.error ? resolveCreateUserErrorMessage(createMutation.error, t) : null,
     findCountryById,
   };
 };
