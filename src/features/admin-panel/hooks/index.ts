@@ -10,6 +10,7 @@ export { useLotteries } from './useLotteries';
 export { useAdminOrders } from './useAdminOrders';
 export { useAdminTransactions } from './useAdminTransactions';
 export { useAdminWithdrawals } from './useAdminWithdrawals';
+export { useAdminSinpePayments, useSinpeConfig } from './useAdminSinpePayments';
 export { useNumberBoard } from './useNumberBoard';
 export { useAdminDashboard } from './useAdminDashboard';
 export { useTestimonials } from './useTestimonials';

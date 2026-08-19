@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Wallet, Bitcoin, Check, DollarSign } from 'lucide-react';
+import { Wallet, Bitcoin, Check, DollarSign, Smartphone } from 'lucide-react';
 import { PaymentMethod } from '@/store/checkoutStore';
-import { walletService } from '@/services';
+import { walletService, sinpeService } from '@/services';
+import { SinpeConfig } from '@/interfaces/sinpe';
 
 interface PaymentMethodSelectorProps {
   selectedMethod: PaymentMethod | null;
@@ -35,6 +36,7 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
   const { t } = useTranslation();
   const [balance, setBalance] = useState<number | null>(null);
   const [loadingBalance, setLoadingBalance] = useState(true);
+  const [sinpeConfig, setSinpeConfig] = useState<SinpeConfig | null>(null);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -48,6 +50,18 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       }
     };
     fetchBalance();
+  }, []);
+
+  // SINPE solo se ofrece si el admin lo habilitó y configuró el teléfono destino.
+  useEffect(() => {
+    const fetchSinpeConfig = async () => {
+      try {
+        setSinpeConfig(await sinpeService.getConfig());
+      } catch {
+        setSinpeConfig(null);
+      }
+    };
+    fetchSinpeConfig();
   }, []);
 
   const hasInsufficientFunds = balance !== null && balance < totalAmount;
@@ -86,6 +100,15 @@ const PaymentMethodSelector: React.FC<PaymentMethodSelectorProps> = ({
       icon: <Bitcoin size={28} />,
     },
   ];
+
+  if (sinpeConfig?.isEnabled) {
+    paymentOptions.push({
+      id: 'sinpe',
+      name: t('CHECKOUT.paymentMethods.sinpe', 'SINPE Móvil'),
+      description: t('CHECKOUT.paymentMethods.sinpeDesc', 'Transfiere y adjunta tu comprobante'),
+      icon: <Smartphone size={28} />,
+    });
+  }
 
   return (
     <div className="payment-method-selector">

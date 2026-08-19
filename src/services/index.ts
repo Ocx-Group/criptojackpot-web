@@ -20,11 +20,15 @@ import { UserCryptoWalletService } from './userCryptoWalletService';
 import { WalletService } from './walletService';
 import { TicketService } from './ticketService';
 import { OrderService } from './orderService';
+import { SinpeService } from './sinpeService';
 import { WishListService } from './wishListService';
 import { WinnerService } from './winnerService';
 import { TestimonialService } from './testimonialService';
 
 export { ApiError, ApiValidationError, isApiError, isApiValidationError } from './apiError';
+
+// Clase exportada por su validacion estatica de archivos (SinpeService.validateReceiptFile)
+export { SinpeService } from './sinpeService';
 
 export const authService = new AuthService();
 export const userService = new UserService();
@@ -40,6 +44,7 @@ export const userCryptoWalletService = new UserCryptoWalletService();
 export const walletService = new WalletService();
 export const ticketService = new TicketService();
 export const orderService = new OrderService();
+export const sinpeService = new SinpeService();
 export const wishListService = new WishListService();
 export const winnerService = new WinnerService();
 export const testimonialService = new TestimonialService();

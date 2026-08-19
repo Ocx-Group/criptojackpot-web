@@ -12,6 +12,9 @@ const ORDER_STATUS_MAP: Record<number, { label: string; badge: string }> = {
   1: { label: 'Completada', badge: 'badge bg-success' },
   2: { label: 'Expirada', badge: 'badge bg-secondary' },
   3: { label: 'Cancelada', badge: 'badge bg-danger' },
+  // Comprobante SINPE subido: la orden no expira y sus numeros siguen reservados
+  // hasta que un admin la revise en /admin/sinpe-payments.
+  4: { label: 'En revisión (SINPE)', badge: 'badge bg-info' },
 };
 
 const AdminOrdersList: React.FC = () => {

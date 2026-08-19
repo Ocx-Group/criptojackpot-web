@@ -3,9 +3,11 @@ import { persist } from 'zustand/middleware';
 import { CartItem } from '@/interfaces/cart';
 
 /**
- * Metodos de pago disponibles
+ * Metodos de pago disponibles.
+ * 'sinpe' es transferencia manual: el usuario adjunta un comprobante y un admin
+ * lo aprueba. Al enviarlo la orden queda congelada (PendingReview) en el backend.
  */
-export type PaymentMethod = 'crypto' | 'balance';
+export type PaymentMethod = 'crypto' | 'balance' | 'sinpe';
 
 /**
  * Estado del proceso de checkout

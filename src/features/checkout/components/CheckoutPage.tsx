@@ -6,8 +6,16 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, ShieldCheck, Loader2 } from 'lucide-react';
 import { useCheckoutStore, PaymentMethod } from '@/store/checkoutStore';
 import { useNotificationStore } from '@/store/notificationStore';
-import { orderService } from '@/services';
-import { CheckoutTimer, LotteryTicketCard, PaymentMethodSelector, OrderSummary } from '@/features/checkout/components';
+import { orderService, sinpeService } from '@/services';
+import { SinpePayment } from '@/interfaces/sinpe';
+import {
+  CheckoutTimer,
+  LotteryTicketCard,
+  PaymentMethodSelector,
+  OrderSummary,
+  SinpePaymentPanel,
+  SinpeSubmittedPanel,
+} from '@/features/checkout/components';
 
 /**
  * Pagina principal de checkout
@@ -38,6 +46,12 @@ const CheckoutPage: React.FC = () => {
 
   // Timer de urgencia: cuando llega a 0 solo se oculta, no expira nada
   const [showTimer, setShowTimer] = useState(true);
+
+  // SINPE: comprobante adjunto y datos opcionales para cotejar la transferencia
+  const [sinpeFile, setSinpeFile] = useState<File | null>(null);
+  const [sinpeSenderPhone, setSinpeSenderPhone] = useState('');
+  const [sinpeReference, setSinpeReference] = useState('');
+  const [sinpeSubmitted, setSinpeSubmitted] = useState<SinpePayment | null>(null);
 
   // Verificar si hay items al montar
   useEffect(() => {
@@ -80,6 +94,32 @@ const CheckoutPage: React.FC = () => {
     router.push('/personal-info');
   };
 
+  // SINPE Movil: subir comprobante y dejar la orden en revision.
+  // El backend la pasa a PendingReview, lo que congela su expiracion: los numeros
+  // siguen reservados (sin TTL) hasta que un admin apruebe o rechace.
+  const handleSinpePayment = async (existingOrderId: string) => {
+    if (!sinpeFile) {
+      throw new Error(t('SINPE.receiptRequired', 'Adjunta la imagen de tu comprobante para continuar.'));
+    }
+
+    const payment = await sinpeService.submitReceipt(existingOrderId, sinpeFile, {
+      senderPhone: sinpeSenderPhone,
+      referenceNumber: sinpeReference,
+    });
+
+    // La orden ya no expira: ocultar el timer de urgencia antes de limpiar el checkout.
+    setShowTimer(false);
+    setSinpeSubmitted(payment);
+    setStatus('success');
+    clearCheckout();
+
+    showNotification(
+      'success',
+      t('SINPE.submittedTitle', 'Comprobante enviado'),
+      t('SINPE.submittedShortDesc', 'Tus números quedan reservados mientras revisamos el pago.')
+    );
+  };
+
   // Pago con crypto: navegar en la misma pestaña. Safari puede bloquear una
   // pestaña nueva si se abre después de esperar la respuesta de la API.
   const handleCryptoPayment = async (existingOrderId: string) => {
@@ -113,6 +153,8 @@ const CheckoutPage: React.FC = () => {
 
       if (selectedPaymentMethod === 'balance') {
         await handleBalancePayment(existingOrderId);
+      } else if (selectedPaymentMethod === 'sinpe') {
+        await handleSinpePayment(existingOrderId);
       } else {
         await handleCryptoPayment(existingOrderId);
       }
@@ -125,10 +167,18 @@ const CheckoutPage: React.FC = () => {
     }
   };
 
+  // SINPE no cobra nada al instante: solo se puede enviar con el comprobante adjunto
+  const canSubmitPayment = selectedPaymentMethod !== null && (selectedPaymentMethod !== 'sinpe' || sinpeFile !== null);
+
   // Volver atras
   const handleGoBack = () => {
     router.back();
   };
+
+  // Comprobante SINPE enviado: la orden quedo congelada esperando revision del admin
+  if (sinpeSubmitted) {
+    return <SinpeSubmittedPanel payment={sinpeSubmitted} />;
+  }
 
   // Si no hay items y no esta en exito/procesando, no renderizar nada
   if (items.length === 0 && status !== 'success' && status !== 'processing') {
@@ -194,6 +244,18 @@ const CheckoutPage: React.FC = () => {
                 disabled={isProcessing || status !== 'pending'}
                 totalAmount={totalAmount}
               />
+
+              {selectedPaymentMethod === 'sinpe' && (
+                <SinpePaymentPanel
+                  totalAmount={totalAmount}
+                  onFileChange={setSinpeFile}
+                  senderPhone={sinpeSenderPhone}
+                  referenceNumber={sinpeReference}
+                  onSenderPhoneChange={setSinpeSenderPhone}
+                  onReferenceNumberChange={setSinpeReference}
+                  disabled={isProcessing || status !== 'pending'}
+                />
+              )}
             </div>
           </div>
 
@@ -206,13 +268,13 @@ const CheckoutPage: React.FC = () => {
               {/* Boton de pago */}
               <button
                 onClick={handleConfirmPayment}
-                disabled={!selectedPaymentMethod || isProcessing || status !== 'pending'}
+                disabled={!canSubmitPayment || isProcessing || status !== 'pending'}
                 className="checkout-confirm-btn btn w-100 p1-bg n4-clr fw-bold py-3 mt-4 d-flex align-items-center justify-content-center gap-2"
                 style={{
                   borderRadius: '14px',
                   fontSize: '16px',
                   transition: 'all 0.2s ease',
-                  opacity: !selectedPaymentMethod || isProcessing ? 0.7 : 1,
+                  opacity: !canSubmitPayment || isProcessing ? 0.7 : 1,
                 }}
               >
                 {isProcessing ? (
@@ -223,7 +285,9 @@ const CheckoutPage: React.FC = () => {
                 ) : (
                   <>
                     <ShieldCheck size={20} />
-                    {t('CHECKOUT.confirmPayment', 'Confirmar y Pagar')} ${totalAmount.toFixed(2)}
+                    {selectedPaymentMethod === 'sinpe'
+                      ? t('SINPE.submitReceipt', 'Enviar comprobante')
+                      : `${t('CHECKOUT.confirmPayment', 'Confirmar y Pagar')} $${totalAmount.toFixed(2)}`}
                   </>
                 )}
               </button>

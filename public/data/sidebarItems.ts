@@ -6,6 +6,7 @@ import {
   CloverIcon,
   TrophyIcon,
   ChatCircleTextIcon,
+  ReceiptIcon,
   IconProps,
 } from '@phosphor-icons/react';
 import React from 'react';
@@ -24,5 +25,6 @@ export const sidebarItems: SidebarItemData[] = [
   { id: 4, href: '/admin/prizes', Icon: GiftIcon, label: 'Premios' },
   { id: 5, href: '/admin/winners', Icon: TrophyIcon, label: 'Ganadores' },
   { id: 7, href: '/admin/finance', Icon: MoneyIcon, label: 'Finanzas' },
+  { id: 8, href: '/admin/sinpe-payments', Icon: ReceiptIcon, label: 'Pagos SINPE' },
   { id: 9, href: '/admin/testimonials', Icon: ChatCircleTextIcon, label: 'Reseñas' },
 ];
