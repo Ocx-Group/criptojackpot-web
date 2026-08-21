@@ -51,4 +51,5 @@ Thumbs.db
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-CLAUDE.MD
+*.MD
+*.md

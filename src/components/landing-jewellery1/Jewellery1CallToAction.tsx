@@ -1,6 +1,5 @@
 'use client';
 import callSum from '@/../public/images/global/call-sun.png';
-import globalPicon from '@/../public/images/global/global-picon.png';
 import jewelryCallto from '@/../public/images/global/dimond-v12.png';
 import { ArrowUpRightIcon, CheckIcon } from '@phosphor-icons/react/dist/ssr';
 import Image, { StaticImageData } from 'next/image';
@@ -21,28 +20,7 @@ const Jewellery1CallToAction = ({ image, title }: Props) => {
       <div className="container">
         <div className="call-to-wrapper1 call-to-wrapperv4 pt-6 position-relative">
           <div className="row g-xl-0 g-0 justify-content-between">
-            <div className="col-xl-5 col-lg-5 col-md-7">
-              <div className="section__title text-sm-start text-center">
-                <div
-                  className="subtitle-head mb-xxl-20 mb-xl-15 mb-lg-10 mb-md-5 mb-0 pb-7 d-flex flex-wrap justify-content-sm-start justify-content-center align-items-center gap-3"
-                  data-aos="zoom-in-down"
-                  data-aos-duration="1200"
-                >
-                  <Image src={globalPicon} alt="img" />
-                  <h5 className="p1-clr fw_700">{t('CALL_TO_ACTION.sectionLabel')}</h5>
-                </div>
-                <div className="callany">
-                  <span className="fs20 fw_700 n0-clr text-uppercase d-block mb-lg-3 mb-2">
-                    {' '}
-                    {t('CALL_TO_ACTION.callAnytime')}{' '}
-                  </span>
-                  <Link href="#" className="fs-seven fw_700 n0-clr">
-                    (629) 555-0129
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-7 col-lg-7" data-aos="zoom-in-down" data-aos-duration="1600">
+            <div className="col-xl-12 col-lg-12" data-aos="zoom-in-down" data-aos-duration="1600">
               <div className="callto-action-v4 text-sm-start text-center pt-120 mt-xxl-4 mt-0">
                 <span className="display-four d-block n0-clr">
                   {t('CALL_TO_ACTION.titleLine1')}
