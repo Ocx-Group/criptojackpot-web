@@ -199,8 +199,14 @@ const Nft2Testimonial = () => {
                   {item.staticImage ? (
                     <Image src={item.staticImage} alt={item.authorName} className="radius24" />
                   ) : item.imageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.imageUrl} alt={item.authorName} className="radius24 w-100" />
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.authorName}
+                      width={390}
+                      height={280}
+                      className="radius24 w-100"
+                      style={{ objectFit: 'cover', height: '280px' }}
+                    />
                   ) : (
                     <div className="radius24 w-100 d-flex align-items-center justify-content-center" style={{ height: '280px', backgroundColor: '#1a1a2e' }}>
                       <Quotes weight="light" className="ph-light ph-quotes act4-clr" style={{ fontSize: '64px' }} />
