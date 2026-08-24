@@ -96,8 +96,10 @@ const UserPanelSection = () => {
                       type="button"
                       onClick={() => setCurrentPage(prev => prev - 1)}
                       className="cmn-60 d-center radius-circle nw1-clr n2-bg"
+                      aria-label={t('COMMON.previous_page', 'Página anterior')}
+                      title={t('COMMON.previous_page', 'Página anterior')}
                     >
-                      <CaretLeftIcon className="ph ph-caret-left nw1-clr fs20" />
+                      <CaretLeftIcon className="ph ph-caret-left nw1-clr fs20" aria-hidden="true" />
                     </button>
                   </li>
                 )}
@@ -120,8 +122,10 @@ const UserPanelSection = () => {
                       type="button"
                       onClick={() => setCurrentPage(prev => prev + 1)}
                       className="cmn-60 d-center radius-circle nw1-clr n2-bg"
+                      aria-label={t('COMMON.next_page', 'Página siguiente')}
+                      title={t('COMMON.next_page', 'Página siguiente')}
                     >
-                      <CaretRightIcon className="ph ph-caret-right nw1-clr fs20" />
+                      <CaretRightIcon className="ph ph-caret-right nw1-clr fs20" aria-hidden="true" />
                     </button>
                   </li>
                 )}

@@ -618,11 +618,21 @@ const LotteryDetailsPage = () => {
             {/* Navigation Buttons */}
             {images.length > 1 && (
               <div className="click-slideluxry-button d-flex align-items-center justify-content-between w-100 px-4">
-                <button className="contest-prev cmn-60 d-center radius-circle n0-bg">
-                  <ArrowLeftIcon className="fs-four n4-clr" weight="bold" />
+                <button
+                  type="button"
+                  className="contest-prev cmn-60 d-center radius-circle n0-bg"
+                  aria-label={t('COMMON.previous_image', 'Imagen anterior')}
+                  title={t('COMMON.previous_image', 'Imagen anterior')}
+                >
+                  <ArrowLeftIcon className="fs-four n4-clr" weight="bold" aria-hidden="true" />
                 </button>
-                <button className="contest-next cmn-60 d-center radius-circle n0-bg">
-                  <ArrowRightIcon className="fs-four n4-clr" weight="bold" />
+                <button
+                  type="button"
+                  className="contest-next cmn-60 d-center radius-circle n0-bg"
+                  aria-label={t('COMMON.next_image', 'Imagen siguiente')}
+                  title={t('COMMON.next_image', 'Imagen siguiente')}
+                >
+                  <ArrowRightIcon className="fs-four n4-clr" weight="bold" aria-hidden="true" />
                 </button>
               </div>
             )}

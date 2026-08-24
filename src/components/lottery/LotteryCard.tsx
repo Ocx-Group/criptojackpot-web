@@ -32,6 +32,12 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
     lottery.maxTickets === 0 ? 0 : Number.parseFloat(((lottery.soldTickets / lottery.maxTickets) * 100).toFixed(1));
   const remaining = lottery.maxTickets - lottery.soldTickets;
   const typeLabel = isPick3 ? 'Pick 3' : t('SORTEOS.typeStandard', 'Promoción');
+  const wishlistLabel = `${
+    isInWishlist(lottery.lotteryGuid)
+      ? t('COMMON.remove_from_wishlist', 'Quitar de favoritos')
+      : t('COMMON.add_to_wishlist', 'Agregar a favoritos')
+  }: ${lotteryTitle}`;
+  const copyLinkLabel = `${t('COMMON.copy_link', 'Copiar enlace')}: ${lotteryTitle}`;
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -85,19 +91,29 @@ const LotteryCard = ({ lottery }: LotteryCardProps) => {
         {/* Action buttons */}
         <div className="cart-added d-grid align-items-center gap-xxl-3 gap-2">
           <button
+            type="button"
             onClick={handleWishlistToggle}
             disabled={isAdding || isRemoving}
             className="cmn-60 act3-bg d-center radius-circle n0-hover border-0"
             style={{ cursor: 'pointer' }}
+            aria-label={wishlistLabel}
+            title={wishlistLabel}
           >
-            <BookmarkSimpleIcon weight={isInWishlist(lottery.lotteryGuid) ? 'fill' : 'bold'} className="ph-bold fs-five" />
+            <BookmarkSimpleIcon
+              weight={isInWishlist(lottery.lotteryGuid) ? 'fill' : 'bold'}
+              className="ph-bold fs-five"
+              aria-hidden="true"
+            />
           </button>
           <button
+            type="button"
             onClick={handleCopyLink}
             className="cmn-60 act3-bg d-center radius-circle n0-hover border-0"
             style={{ cursor: 'pointer' }}
+            aria-label={copyLinkLabel}
+            title={copyLinkLabel}
           >
-            <LinkIcon weight="bold" className="ph-bold fs-five" />
+            <LinkIcon weight="bold" className="ph-bold fs-five" aria-hidden="true" />
           </button>
         </div>
 

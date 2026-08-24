@@ -105,9 +105,17 @@ const Nft2Banner = () => {
                       </Link>
                     </MotionStaggerEffectUl>
                   </ul>
-                  <Link href="/sorteos" className="custom-bigarrow">
+                  <Link href="/sorteos" className="custom-bigarrow" aria-label={t('COMMON.view_raffles', 'Ver sorteos')}>
                     <span className="icon">
-                      <svg width="137" height="16" viewBox="0 0 137 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg
+                        width="137"
+                        height="16"
+                        viewBox="0 0 137 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
                         <path
                           d="M136.707 8.70712C137.098 8.31659 137.098 7.68343 136.707 7.29291L130.343 0.928944C129.953 0.538419 129.319 0.538419 128.929 0.928943C128.538 1.31947 128.538 1.95263 128.929 2.34316L134.586 8.00001L128.929 13.6569C128.538 14.0474 128.538 14.6806 128.929 15.0711C129.319 15.4616 129.953 15.4616 130.343 15.0711L136.707 8.70712ZM-8.74228e-08 9L136 9.00001L136 7.00001L8.74228e-08 7L-8.74228e-08 9Z"
                           fill="white"

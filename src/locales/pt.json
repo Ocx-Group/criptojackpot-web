@@ -617,7 +617,15 @@
     "save": "Salvar",
     "edit": "Editar",
     "delete": "Excluir",
-    "error": "Erro"
+    "error": "Erro",
+    "add_to_wishlist": "Adicionar aos favoritos",
+    "remove_from_wishlist": "Remover dos favoritos",
+    "copy_link": "Copiar link",
+    "previous_page": "Página anterior",
+    "next_page": "Próxima página",
+    "previous_image": "Imagem anterior",
+    "next_image": "Próxima imagem",
+    "view_raffles": "Ver sorteios"
   },
   "LOTTERIES_ADMIN": {
     "title": "Gestão de Promoções",

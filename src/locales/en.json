@@ -617,7 +617,15 @@
     "save": "Save",
     "edit": "Edit",
     "delete": "Delete",
-    "error": "Error"
+    "error": "Error",
+    "add_to_wishlist": "Add to favorites",
+    "remove_from_wishlist": "Remove from favorites",
+    "copy_link": "Copy link",
+    "previous_page": "Previous page",
+    "next_page": "Next page",
+    "previous_image": "Previous image",
+    "next_image": "Next image",
+    "view_raffles": "View raffles"
   },
   "LOTTERIES_ADMIN": {
     "title": "Promotion Management",
